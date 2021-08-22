@@ -66,6 +66,7 @@ const CustomerTable = () => {
   const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
   const [customers, setCustomers] = useState([]);
+  const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
@@ -79,7 +80,10 @@ const CustomerTable = () => {
         store.dispatch(writeToken({ token }));
 
         setTimeout(() => {
-          if (isMounted()) setCustomers(listRecords);
+          if (isMounted()) {
+            setCustomers(listRecords);
+            setInitialLoadForm(true);
+          }
         }, 500);
         //
       } catch (error) {
@@ -94,7 +98,7 @@ const CustomerTable = () => {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (customers.length === 0) return <SpinLoader />;
+  if (!initialLoadForm) return <SpinLoader />;
 
   return (
     <>

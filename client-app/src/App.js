@@ -20,9 +20,10 @@ import RoomPricing from "./pages/room/pricing/RoomPricing";
 import RoomVariants from "./pages/room/variants/RoomVariants";
 import Payments from "./pages/functionality/payments/Payments";
 import Discounts from "./pages/functionality/discounts/Discounts";
+import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
-import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
+import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
 import {
   BrowserRouter as Router,
   Switch,
@@ -77,6 +78,7 @@ function App() {
                 path="/a/user-management/customers/:id"
                 component={CustomerForm}
               />
+
               <ProtectedRoute
                 path="/a/user-management/customers"
                 component={Customers}
@@ -102,9 +104,14 @@ function App() {
                 component={Products}
               />
               <ProtectedRoute
+                path="/a/reservation-management/reservations/:id"
+                component={ReservationDetails}
+              />
+              <ProtectedRoute
                 path="/a/reservation-management/reservations"
                 component={ActiveBooking}
               />
+
               <ProtectedRoute
                 path="/a/system-functionality/payments"
                 component={Payments}

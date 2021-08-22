@@ -135,8 +135,9 @@ const ActiveBookingTblRows = (props) => {
               <TableCell align="right">
                 <EditDeleteIconButton
                   rowId={row._id}
+                  showDelete={false}
                   handleDelete={handleDelete}
-                  linkPath={`/user-management/customers/${row._id}`}
+                  linkPath={`/a/reservation-management/reservations/${row._id}`}
                 />
               </TableCell>
               <TableCell align="right"></TableCell>

@@ -58,6 +58,7 @@ const EmployeeTable = () => {
   const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [employees, setEmployees] = useState([]);
+  const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
@@ -72,7 +73,10 @@ const EmployeeTable = () => {
         store.dispatch(writeToken({ token }));
 
         setTimeout(() => {
-          if (isMounted()) setEmployees(listRecords);
+          if (isMounted()) {
+            setEmployees(listRecords);
+            setInitialLoadForm(true);
+          }
         }, 500);
         //
       } catch (error) {
@@ -87,7 +91,7 @@ const EmployeeTable = () => {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (employees.length === 0) return <SpinLoader />;
+  if (!initialLoadForm) return <SpinLoader />;
 
   return (
     <>

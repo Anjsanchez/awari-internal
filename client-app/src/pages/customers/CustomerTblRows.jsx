@@ -99,7 +99,7 @@ const CustomerTblRows = (props) => {
                 <EditDeleteIconButton
                   rowId={row._id}
                   handleDelete={handleDelete}
-                  linkPath={`/user-management/customers/${row._id}`}
+                  linkPath={`/a/user-management/customers/${row._id}`}
                 />
               </TableCell>
               <TableCell align="right"></TableCell>

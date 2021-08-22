@@ -65,11 +65,12 @@ const headCells = [
 const ActiveBookingTable = () => {
   //..
   const isMounted = useMountedState();
+  const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [headers, setHeaders] = useState([]);
   const [tabValue, setTabValue] = useState(0);
   const [filteredHeaders, setFilteredHeaders] = useState([]);
-  const [page, setPage] = useState(0);
+  const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleSelectTabs = (event, newValue) => setTabValue(newValue);
 
@@ -99,6 +100,7 @@ const ActiveBookingTable = () => {
           if (isMounted()) {
             setHeaders(listRecords);
             setFilteredHeaders(listRecords);
+            setInitialLoadForm(true);
           }
         }, 500);
 
@@ -116,7 +118,7 @@ const ActiveBookingTable = () => {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (headers.length === 0) return <SpinLoader />;
+  if (!initialLoadForm) return <SpinLoader />;
 
   return (
     <>

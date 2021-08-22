@@ -19,13 +19,13 @@ const Payments = () => {
   const isMounted = useMountedState();
   const [paymentPerPage] = useState(5);
   const { enqueueSnackbar } = useSnackbar();
+  const [payment, setPayment] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [payment, setPayment] = useState([]);
-  const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [searchPayment, setSearchPayment] = useState("");
   const [selectedPayment, setSelectedPayment] = useState({});
   const [filteredPayment, setFilteredPayment] = useState([]);
+  const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   // Get current posts
   const indexOfLastPayment = currentPage * paymentPerPage;

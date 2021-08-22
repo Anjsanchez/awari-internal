@@ -139,7 +139,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={6}>
               <MaterialTextField
                 id="minimumCapacity"
-                label="Minimum Capacity"
+                label="Min Capacity"
                 type="number"
                 handleChange={handleChange}
                 errors={errors.minimumCapacity}
@@ -149,7 +149,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={6}>
               <MaterialTextField
                 id="maximumCapacity"
-                label="Maximum Capacity"
+                label="Max Capacity"
                 type="number"
                 handleChange={handleChange}
                 errors={errors.maximumCapacity}
