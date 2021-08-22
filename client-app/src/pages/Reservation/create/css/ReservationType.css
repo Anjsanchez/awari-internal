@@ -1,0 +1,26 @@
+.reservationtype-container,
+.reservationtype__select,
+.ant-select .reservationtype__select {
+  width: 100%;
+}
+
+.ant-select-selector {
+  height: 50px !important;
+  padding-top: 8px !important;
+  line-height: 45px !important;
+}
+
+.remark-input__wrapper {
+  max-width: 100%;
+}
+.remark__wrapper {
+  margin-top: 5px;
+}
+
+.remark__container {
+  display: flex;
+}
+
+.remark-input__wrapper.first {
+  max-width: 97%;
+}

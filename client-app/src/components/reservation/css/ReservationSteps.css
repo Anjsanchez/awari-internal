@@ -1,0 +1,11 @@
+.MuiStepper-root {
+  padding-top: 0;
+}
+
+.footer-label__span {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  color: #484848;
+  padding-left: 5px;
+}

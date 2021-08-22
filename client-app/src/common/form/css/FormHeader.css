@@ -1,0 +1,19 @@
+.formHeader-header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 24px;
+}
+.formHeader-header * {
+  font-family: "Poppins", sans-serif;
+}
+
+.link-icon {
+  display: flex;
+  text-decoration: none;
+  color: rgb(23, 43, 77) !important;
+  cursor: default;
+}
+
+.link-icon:hover {
+  text-decoration: underline;
+}

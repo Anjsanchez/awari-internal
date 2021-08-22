@@ -1,0 +1,126 @@
+.MuiGrid-spacing-xs-2.activeBooking-grid-container__wrapper {
+  margin-top: 20px;
+  background: white;
+}
+
+.activeBooking-container__wrapper {
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.activeBooking-card__wrapper {
+  width: 100%;
+  border-radius: 15px;
+  margin-bottom: 10px;
+}
+
+.activeBooking_span_title {
+  margin: 0px;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  color: rgb(33, 33, 33);
+  font-weight: 600;
+  display: block;
+}
+
+.activeBooking_span_child {
+  margin: 0px;
+  font-size: 0.8rem;
+  font-family: "Poppins", sans-serif;
+  color: rgb(33, 33, 33);
+  font-weight: 500;
+  line-height: 1.6;
+  display: block;
+}
+
+.activeBooking_span_subTitle {
+  margin: 0px;
+  display: block;
+  font-size: 0.75rem;
+  font-family: "Poppins", sans-serif;
+  color: rgb(158, 158, 158);
+  font-weight: 300;
+}
+
+.activeBooking_customer__wrapper {
+  padding-bottom: 5px;
+}
+.activeBooking-subheader__container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.activeBooking-subheader__wrapper {
+  margin: auto 0;
+}
+
+.activeBooking_span_subTitle.title {
+  position: relative;
+  top: -6px;
+}
+
+.activeBooking-container__wrapper .ant-card-body {
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 15px;
+
+  max-width: 240px;
+  min-width: 240px;
+  min-height: 260px;
+  max-height: 260px;
+}
+
+.activeBooking_span_child.title {
+  position: relative;
+  top: -3px;
+}
+
+.activeBooking-container__wrapper .ant-divider-with-text {
+  margin: 4px 0;
+}
+
+.activeBooking-container__wrapper
+  .ant-divider-with-text
+  .ant-divider-inner-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-size: 0.8rem;
+}
+
+/* rooms */
+.activeBooking-rooms__container {
+  justify-content: space-between;
+  display: flex;
+  margin-bottom: 10px;
+}
+.activeBooking-rooms__container:last-child {
+  margin-bottom: 0;
+}
+
+.activeBooking-rooms__container .activeBooking-rooms__name {
+  margin: auto 0;
+  min-width: 150px;
+  max-width: 150px;
+}
+
+.activeBooking-menuitem__span {
+  font-size: 0.85rem !important;
+  line-height: 1 !important;
+  min-height: 0 !important;
+}
+
+.activeBooking-button {
+  width: 50%;
+}
+
+.activeBooking-buttonGroup {
+  box-sizing: border-box;
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+}
