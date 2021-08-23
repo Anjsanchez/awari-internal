@@ -2,7 +2,7 @@ import React from "react";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { TableBody, TableCell, TableRow } from "@material-ui/core";
-import ActiveButton from "./../../../../../common/form/ActiveButton";
+import ActiveButton from "../../../../../common/form/ActiveButton";
 
 const useStyles = makeStyles((theme) => ({
   selected: {
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReservationDetailsPaymentTableRow = (props) => {
+const ReservationDetailsRoomTableRow = (props) => {
   const classes = useStyles();
 
   const {
@@ -71,6 +71,8 @@ const ReservationDetailsPaymentTableRow = (props) => {
                 index % 2 ? { background: "#fafafa" } : { background: "white" }
               }
             >
+              <TableCell component="th" scope="row" padding="none"></TableCell>
+              <TableCell component="th" scope="row" padding="none"></TableCell>
               <TableCell component="th" id={labelId} scope="row" padding="none">
                 {renderPaymentRemark(row.type)}
               </TableCell>
@@ -83,6 +85,8 @@ const ReservationDetailsPaymentTableRow = (props) => {
               <TableCell align="right">
                 {moment(row.createdDate).format("YYYY-MM-DD hh:mm A")}
               </TableCell>
+
+              <TableCell align="right"></TableCell>
             </TableRow>
           );
         })}
@@ -95,4 +99,4 @@ const ReservationDetailsPaymentTableRow = (props) => {
   );
 };
 
-export default ReservationDetailsPaymentTableRow;
+export default ReservationDetailsRoomTableRow;

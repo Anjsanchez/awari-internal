@@ -3,13 +3,20 @@ import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
-import MTable from "./../../../../../components/table/MTable";
+import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
-import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
-import { GetReservationPayments } from "./../../../../../utils/services/pages/reservation/ReservationPayment";
+import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
+import { GetReservationPayments } from "../../../../../utils/services/pages/reservation/ReservationPayment";
 
 const headCells = [
+  {
+    id: "1",
+    numeric: false,
+    disablePadding: true,
+    label: "",
+    enableSort: true,
+  },
   {
     id: "type",
     numeric: false,
@@ -37,6 +44,13 @@ const headCells = [
     disablePadding: false,
     label: "Payment Date",
     enableSort: true,
+  },
+  {
+    id: "12",
+    numeric: true,
+    disablePadding: false,
+    label: "",
+    enableSort: false,
   },
 ];
 
@@ -85,7 +99,7 @@ const ReservationDetailsPaymentTable = () => {
       <MTable
         rows={payments}
         xCells={headCells}
-        TblBody={ReservationDetailsPaymentTableRow}
+        TblBody={ReservationDetailsRoomTableRow}
         page={page}
         onChangePage={handleChangePage}
         onResetPage={handleResetPage}

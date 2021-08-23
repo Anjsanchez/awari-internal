@@ -3,6 +3,7 @@ import { Grid } from "@material-ui/core";
 import "./css/ReservationDetailsTabDetails.css";
 import ReservationDetailsLeftTab from "./ReservationDetailsLeftTab";
 import ReservationDetailsLeftTabBilling from "./ReservationDetailsLeftTabBilling";
+import ReservationDetailsRightTabRoom from "./rooms/ReservationDetailsRightTabRoom";
 import ReservationDetailsRightTabPayment from "./payment/ReservationDetailsRightTabPayment";
 
 const ReservationDetailsTabDetails = () => {
@@ -15,6 +16,7 @@ const ReservationDetailsTabDetails = () => {
         </Grid>
         <Grid item xs={12} md={8}>
           <ReservationDetailsRightTabPayment />
+          <ReservationDetailsRightTabRoom />
         </Grid>
       </Grid>
     </div>

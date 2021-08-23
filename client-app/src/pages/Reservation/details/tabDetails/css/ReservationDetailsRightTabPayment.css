@@ -1,3 +1,26 @@
 .reservationdetails-grid__wrapper .MuiIconButton-root {
   color: #b39ddb;
 }
+
+.reservationdetails-grid__wrapper .MuiTableContainer-root {
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+}
+
+.reservationdetails-grid__wrapper
+  .MuiTableContainer-root::-webkit-scrollbar-track {
+  -webkit-box-shadow: none !important;
+  background-color: transparent !important;
+  color: red;
+}
+
+.reservationdetails-grid__wrapper .MuiTableContainer-root::-webkit-scrollbar {
+  width: 3px !important;
+  background-color: transparent;
+  color: red;
+}
+
+.reservationdetails-grid__wrapper
+  .MuiTableContainer-root::-webkit-scrollbar-thumb {
+  background-color: #eeeeee;
+}

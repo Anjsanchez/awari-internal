@@ -244,6 +244,12 @@ export default function MTable(props) {
             aria-label="enhanced table"
             size="small"
           >
+            <colgroup>
+              <col width="5%" />
+              <col width="5%" />
+              <col width="5%" />
+              <col width="5%" />
+            </colgroup>
             <MTableColumn
               headCells={headCells}
               classes={classes}
