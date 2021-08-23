@@ -1,0 +1,122 @@
+.reservationdetails__container .reservationdetails-grid__wrapper {
+  padding-top: 24px;
+  padding-left: 24px;
+}
+
+.reservationdetails__container .reservationdetails-grid__wrapper.first {
+  padding-left: 0px;
+}
+
+.reservationDetails-card__wrapper {
+  border-radius: 10px;
+}
+
+.reservationDetails-card__wrapper .ant-card-body {
+  padding: 0;
+}
+.reservationDetails-title__wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+}
+
+.reservationDetails-title__spanHeader,
+.reservationDetails-footer__spanHeader {
+  display: block;
+  margin: 0px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgb(33, 33, 33);
+  font-family: "Poppins", sans-serif;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.reservationDetails-title__spanSubHeader {
+  display: block;
+  margin: 0px;
+  font-size: 0.775rem;
+  font-weight: 400;
+  color: rgb(158, 158, 158);
+  font-family: "Poppins", sans-serif;
+  line-height: 1.57;
+  text-align: left;
+}
+
+.reservationDetails-title-avatar__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reservationDetails-title-span__wrapper {
+  margin-left: 15px;
+}
+
+.reservationDetails-body__wrapper {
+  padding: 20px;
+}
+
+.reservationDetails-body__span__detail,
+.reservationDetails-footer__span__detail {
+  position: absolute;
+  right: 10px;
+  margin: 0px;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: rgb(158, 158, 158);
+  font-family: "Poppins", sans-serif;
+  line-height: 1.57;
+  text-align: left;
+}
+
+.reservationDetails-body__wrapper .MuiListItem-gutters {
+  padding: 10px;
+}
+
+.reservationDetails-body__span__label {
+  padding-left: 10px;
+  margin: 0px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: rgb(33, 33, 33);
+  font-family: "Poppins", sans-serif;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.reservationDetails-body__span__icon {
+  transform: scale(1);
+  color: #747474;
+}
+
+.reservationDetails-body__wrapper .MuiListItem-button:hover {
+  text-decoration: none;
+  background-color: #e3f2fd;
+}
+
+.reservationDetails-footer__wrapper {
+  padding: 24px;
+}
+
+.reservationDetails-footer-span__wrapper {
+  text-align: center;
+}
+
+.reservationDetails-footer__spanHeader {
+  font-size: 1.1rem;
+  display: inline;
+  position: relative;
+  top: 7px;
+}
+
+.reservationDetails-footer__span__detail {
+  position: static;
+}
+
+@media screen and (max-width: 960px) {
+  .reservationdetails__container .reservationdetails-grid__wrapper {
+    padding-left: 0px;
+  }
+}

@@ -1,6 +1,7 @@
 import React from "react";
-import FormHeader from "./../../../common/form/FormHeader";
 import { BsAspectRatioFill } from "react-icons/bs";
+import FormHeader from "./../../../common/form/FormHeader";
+import ReservationDetailsTabs from "./ReservationDetailsTabs";
 
 const ReservationDetails = () => {
   return (
@@ -13,7 +14,8 @@ const ReservationDetails = () => {
         SecondIcon={BsAspectRatioFill}
         isVisibleBtn={false}
       />
-      hello!
+
+      <ReservationDetailsTabs />
     </div>
   );
 };

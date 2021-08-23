@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
   },
   z: {
     "&.MuiSpeedDialAction-fab": {
-      background: "#EDE7F6",
+      background: "white",
     },
   },
   x: {
-    color: "#5E35B1",
+    color: "#9575CD",
   },
 }));
 
@@ -84,6 +84,7 @@ export default function SpeedDials() {
       <SpeedDial
         ariaLabel="SpeedDial example"
         className={classes.speedDial}
+        FabProps={{ size: "small" }}
         icon={icon}
         onClick={handleOpen}
         onClose={handleClose}

@@ -9,7 +9,7 @@ const EditDeleteIconButton = (props) => {
   return (
     <>
       <Link to={linkPath}>
-        <Tooltip title="Edit" placement="top">
+        <Tooltip title="View" placement="top">
           <IconButton
             edge="start"
             color="inherit"

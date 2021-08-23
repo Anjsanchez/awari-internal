@@ -121,17 +121,27 @@ export default function MTable(props) {
   //..
   const classes = useStyles();
   const headCells = props.xCells;
-  const { TblBody, rows, origin = "", page, onChangePage, onResetPage } = props;
+  const {
+    TblBody,
+    rows,
+    origin = "",
+    page,
+    onChangePage,
+    onResetPage,
+    isSubTable = false,
+  } = props;
   const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("");
   const [selected, setSelected] = useState([]);
   const [searched, setSearched] = useState("");
-  const [orderBy, setOrderBy] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [openDialog, setOpenDialog] = useState(false);
   const [filteredRows, setFilteredRows] = useState([]);
 
   useEffect(() => {
     setFilteredRows(rows);
+
+    if (isSubTable) setRowsPerPage(rows.length);
   }, [rows]);
 
   const requestSearch = (searchedVal) => {
@@ -208,20 +218,25 @@ export default function MTable(props) {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
+  const elevationValue = isSubTable === true ? 0 : 3;
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper} elevation={3}>
-        <MDialog
-          openDialog={openDialog}
-          handleClose={handleDelete}
-          dialogText={dialog}
-        />
-        <MTableToolbar
-          searched={searched}
-          requestSearch={requestSearch}
-          cancelSearch={cancelSearch}
-          numSelected={selected.length}
-        />
+      <Paper className={classes.paper} elevation={elevationValue}>
+        {!isSubTable && (
+          <>
+            <MDialog
+              openDialog={openDialog}
+              handleClose={handleDelete}
+              dialogText={dialog}
+            />
+            <MTableToolbar
+              searched={searched}
+              requestSearch={requestSearch}
+              cancelSearch={cancelSearch}
+              numSelected={selected.length}
+            />
+          </>
+        )}
         <TableContainer>
           <Table
             className={classes.table}
@@ -255,28 +270,32 @@ export default function MTable(props) {
             />
           </Table>
         </TableContainer>
-        <div className={classes.footerDiv}>
-          <Typography
-            color="inherit"
-            variant="subtitle1"
-            component="div"
-            className={classes.footerdiv_selected}
-          ></Typography>
+        {!isSubTable && (
+          <>
+            <div className={classes.footerDiv}>
+              <Typography
+                color="inherit"
+                variant="subtitle1"
+                component="div"
+                className={classes.footerdiv_selected}
+              ></Typography>
 
-          <TablePagination
-            rowsPerPageOptions={[10, 25, 50]}
-            component="div"
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={onChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            classes={{
-              toolbar: classes.footerdiv_pagination,
-              caption: classes.footerdiv_pagination,
-            }}
-          />
-        </div>
+              <TablePagination
+                rowsPerPageOptions={[10, 25, 50]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+                classes={{
+                  toolbar: classes.footerdiv_pagination,
+                  caption: classes.footerdiv_pagination,
+                }}
+              />
+            </div>
+          </>
+        )}
       </Paper>
     </div>
   );

@@ -1,10 +1,10 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { TableBody, TableCell, TableRow, Checkbox } from "@material-ui/core";
-import { Link } from "react-router-dom";
 import moment from "moment";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 import ActiveButton from "./../../../common/form/ActiveButton";
 import EditDeleteIconButton from "../../../common/form/EditDeleteIconButton";
+import { TableBody, TableCell, TableRow, Checkbox } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   selected: {
@@ -111,19 +111,21 @@ const ActiveBookingTblRows = (props) => {
                 />
               </TableCell>
               <TableCell component="th" id={labelId} scope="row" padding="none">
-                <span className={`${classes.rowSpan} ${classes.linkName}`}>
-                  {row.customer.firstName} {row.customer.lastName}
-                </span>
+                <Link
+                  to={`/a/reservation-management/reservations/${row._id}`}
+                  className={`${classes.rowSpan} ${classes.linkName}`}
+                >
+                  <span className={`${classes.rowSpan} ${classes.linkName}`}>
+                    {row.customer.firstName} {row.customer.lastName}
+                  </span>
+                </Link>
               </TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>
                   {row.reservationType.name}
                 </span>
               </TableCell>
-              <TableCell align="right">
-                {RenderRoomCount(row)}
-                {/* <span className={classes.rowSpan}>{row.roomCount}</span> */}
-              </TableCell>
+              <TableCell align="right">{RenderRoomCount(row)}</TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>
                   {moment(row.createdDate).format("MMMM Do, YYYY")}

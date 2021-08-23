@@ -1,0 +1,26 @@
+.details-tab__wrapper {
+  display: flex;
+  border-bottom: 1px solid rgb(238, 238, 238);
+  overflow: hidden;
+}
+
+.details-tab__wrapper .MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
+  margin-bottom: 0 !important;
+  margin-right: 15px;
+}
+
+.details-tab__wrapper .MuiTab-labelIcon {
+  min-height: 48px;
+}
+
+.details-tab__wrapper .MuiTab-textColorSecondary.Mui-selected {
+  color: #b39ddb;
+}
+
+.details-tab__wrapper .MuiTab-wrapper {
+  flex-direction: row;
+}
+
+.details-tab__wrapper .MuiTab-textColorSecondary {
+  color: #747474;
+}

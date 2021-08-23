@@ -65,7 +65,7 @@ const FormHeader = (props) => {
                   <Link color="inherit" to="/" className="link-icon">
                     <MdDashboard
                       size={"20px"}
-                      color={"rgb(86, 100, 210)"}
+                      color={"#B39DDB"}
                       className={classes.btnLink}
                     />
                     <strong className={classes.formHeader_header_emp}>
@@ -75,7 +75,7 @@ const FormHeader = (props) => {
                   <Typography color="inherit" className="link-icon">
                     <SecondIcon
                       size={"20px"}
-                      color={"rgb(86, 100, 210)"}
+                      color={"#B39DDB"}
                       className={classes.btnLink}
                     />
                     <strong className={classes.formHeader_header_emp}>

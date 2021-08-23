@@ -20,19 +20,19 @@ const ActiveButton = (props) => {
   //..
   const classes = useStyles();
 
-  const { value } = props;
+  const { value, textTrue = "Active", textFalse = "Inactive" } = props;
 
   if (value === true) {
     return (
       <span className={`${classes.rowSpan} ${classes.spanContainerActive}`}>
-        Active
+        {textTrue}
       </span>
     );
   }
 
   return (
     <span className={`${classes.rowSpan} ${classes.spanContainerInactive}`}>
-      Inactive
+      {textFalse}
     </span>
   );
 };

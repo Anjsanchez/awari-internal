@@ -1,51 +1,52 @@
+import { Spin } from "antd";
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
-import SpinLoader from "./../../common/Spin";
-import EmployeeTblRows from "./EmployeeTblRows";
-import MTable from "../../components/table/MTable";
+import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
-import { store } from "../../utils/store/configureStore";
-import { writeToken } from "../../utils/store/pages/users";
-import { getEmployees } from "../../utils/services/pages/EmployeeService";
+import MTable from "./../../../../../components/table/MTable";
+import { store } from "../../../../../utils/store/configureStore";
+import { writeToken } from "../../../../../utils/store/pages/users";
+import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
+import { GetReservationPayments } from "./../../../../../utils/services/pages/reservation/ReservationPayment";
 
 const headCells = [
   {
-    id: "firstName",
+    id: "1",
     numeric: false,
     disablePadding: true,
-    label: "Full name",
+    label: "",
     enableSort: true,
   },
   {
-    id: "username",
-    numeric: true,
-    disablePadding: false,
-    label: "Username",
+    id: "type",
+    numeric: false,
+    disablePadding: true,
+    label: "Remark",
     enableSort: true,
   },
   {
-    id: "rolename",
+    id: "paymentType",
     numeric: true,
     disablePadding: false,
-    label: "Role",
+    label: "Type",
     enableSort: false,
   },
   {
-    id: "isActive",
+    id: "Amount",
     numeric: true,
     disablePadding: false,
-    label: "Status",
+    label: "Amount",
     enableSort: true,
   },
   {
-    id: "Action",
+    id: "createdDate",
     numeric: true,
     disablePadding: false,
-    label: "Action",
-    enableSort: false,
+    label: "Payment Date",
+    enableSort: true,
   },
   {
-    id: "1",
+    id: "12",
     numeric: true,
     disablePadding: false,
     label: "",
@@ -53,12 +54,12 @@ const headCells = [
   },
 ];
 
-const EmployeeTable = () => {
+const ReservationDetailsPaymentTable = () => {
   //..
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
-  const [employees, setEmployees] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -68,14 +69,13 @@ const EmployeeTable = () => {
     //..
     async function fetchData() {
       try {
-        const { data } = await getEmployees();
+        const { data } = await GetReservationPayments();
         const { token, listRecords } = data;
 
         store.dispatch(writeToken({ token }));
-
         setTimeout(() => {
           if (isMounted()) {
-            setEmployees(listRecords);
+            setPayments(listRecords);
             setInitialLoadForm(true);
           }
         }, 500);
@@ -85,27 +85,28 @@ const EmployeeTable = () => {
           variant: "error",
         });
         return () => {
-          setEmployees({});
+          setPayments({});
         };
       }
     }
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!initialLoadForm) return <SpinLoader />;
+  if (!initialLoadForm) return <Spin className="spin-loader__center " />;
 
   return (
     <>
       <MTable
-        rows={employees}
+        rows={payments}
         xCells={headCells}
-        TblBody={EmployeeTblRows}
+        TblBody={ReservationDetailsPaymentTableRow}
         page={page}
         onChangePage={handleChangePage}
         onResetPage={handleResetPage}
+        isSubTable={true}
       />
     </>
   );
 };
 
-export default EmployeeTable;
+export default ReservationDetailsPaymentTable;
