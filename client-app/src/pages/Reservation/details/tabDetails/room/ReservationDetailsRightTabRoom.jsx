@@ -1,11 +1,17 @@
-import React from "react";
 import { Card } from "antd";
+import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
-import BorderColorIcon from "@material-ui/icons/BorderColor";
+import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
+import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsRoomTable";
 
 const ReservationDetailsRightTabRoom = () => {
+  const [visible, setVisible] = useState({ value: false, action: "add" });
+
+  const handleVisibleModal = ({ value, action }) =>
+    setVisible({ value, action });
+
   return (
     <div className="reservationdetails-grid__wrapper">
       <Card className="reservationDetails-card__wrapper" hoverable>
@@ -18,15 +24,31 @@ const ReservationDetailsRightTabRoom = () => {
             </div>
           </div>
           <div>
-            <IconButton aria-label="delete" size="small">
-              <BorderColorIcon />
+            <IconButton
+              aria-label="Modify"
+              size="small"
+              onClick={() =>
+                handleVisibleModal({ value: true, action: "update" })
+              }
+            >
+              <VisibilityTwoToneIcon />
+            </IconButton>
+            <IconButton
+              aria-label="create"
+              size="small"
+              onClick={() => handleVisibleModal({ value: true, action: "add" })}
+            >
+              <BorderColorTwoToneIcon />
             </IconButton>
           </div>
         </div>
 
         <Divider light />
         <div className="reservationDetails-body__wrapper">
-          <ReservationDetailsRoomTable />
+          <ReservationDetailsRoomTable
+            onVisible={handleVisibleModal}
+            visible={visible}
+          />
         </div>
       </Card>
     </div>

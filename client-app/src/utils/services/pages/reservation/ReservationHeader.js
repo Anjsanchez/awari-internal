@@ -17,6 +17,11 @@ export function GetHeaderWithRoomCount() {
   return http.get(apiEndpoint + "/includesRoomCount");
 }
 
+export function GetHeadersWithFullDetails(headerId) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);
+}
+
 export function saveHeader(h) {
   http.SetJwt();
   if (h.id) {

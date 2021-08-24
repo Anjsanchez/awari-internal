@@ -6,7 +6,7 @@ import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsPaymentTable from "./ReservationDetailsPaymentTable";
 
-const ReservationDetailsRightTabPayment = (props) => {
+const ReservationDetailsRightTabPayment = () => {
   const [visible, setVisible] = useState({ value: false, action: "add" });
 
   const handleVisibleModal = ({ value, action }) =>
@@ -46,7 +46,6 @@ const ReservationDetailsRightTabPayment = (props) => {
         <Divider light />
         <div className="reservationDetails-body__wrapper">
           <ReservationDetailsPaymentTable
-            headerId={props.headerId}
             onVisible={handleVisibleModal}
             visible={visible}
           />

@@ -6,6 +6,7 @@ using API.Contracts.pages.functionality;
 using API.Contracts.pages.reservation;
 using API.Data.ApiResponse;
 using API.Dto.reservations.header;
+using API.Dto.reservations.line;
 using API.Dto.reservations.payment;
 using API.helpers.api;
 using API.Migrations.Configurations;
@@ -26,11 +27,15 @@ namespace API.Controllers.reservation
     {
 
         private readonly IReservationHeaderRepository _repo;
+        private readonly IReservationRoomLineRepository _lineRepo;
+        private readonly IReservationPaymentRepository _paymentRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationHeadersController(IReservationHeaderRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationHeadersController(IReservationHeaderRepository repo, IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _paymentRepo = paymentRepo;
+            _lineRepo = lineRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -51,15 +56,14 @@ namespace API.Controllers.reservation
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult> GetReservationHeaderById(Guid id)
+        public async Task<ActionResult> GetReservationHeaderById(Guid headerId)
         {
-            var reservationHeader = await _repo.FindById(id);
+            var reservationHeader = await _repo.FindById(headerId);
 
             if (reservationHeader == null)
                 return NotFound("ReservationHeader Not found");
 
             var mappedReservationHeader = _map.Map<ReservationHeader, reservationHeaderReadDto>(reservationHeader);
-
             return Ok(new GenericResponse<reservationHeaderReadDto>()
             {
                 singleRecord = mappedReservationHeader,
@@ -75,6 +79,25 @@ namespace API.Controllers.reservation
             return Ok(new GenericResponse<reservationHeaderReadDto>()
             {
                 listRecords = reservationHeaders,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("includesFullDetails")]
+        public async Task<ActionResult> GetHeadersWithFullDetails(Guid headerId)
+        {
+            var reservationHeader = await _repo.FindById(headerId);
+            var reservationLines = await _lineRepo.GetLineByHeaderId(headerId);
+            var reservationPayment = await _paymentRepo.GetPaymentByHeaderId(headerId);
+
+            var mappedDto = _map.Map<ReservationHeader, reservationHeaderReadDto>(reservationHeader);
+            var mappedLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(reservationLines.ToList());
+            var mappedPayments = _map.Map<List<ReservationPayment>, List<reservationPaymentReadDto>>(reservationPayment.ToList());
+            return Ok(new ReserverationHeaderResponse()
+            {
+                header = mappedDto,
+                rooms = mappedLines,
+                payments = mappedPayments,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }

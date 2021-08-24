@@ -41,8 +41,34 @@ const ReservationDetailsRoomTableRow = (props) => {
     emptyRows,
   } = props;
 
+  const renderEndDate = (date) => {
+    //
+    var dateInMoment = moment(date).format("YYYY-MM-DD");
+
+    var isSameDay = moment(date).isSame(moment(), "day");
+    if (isSameDay)
+      return (
+        <ActiveButton value={true} isWarning={true} textTrue={dateInMoment} />
+      );
+
+    var isAfter = moment(date).isSameOrAfter(moment(), "day");
+    if (isAfter) return <ActiveButton value={false} textFalse={dateInMoment} />;
+
+    return <span style={{ padding: "5px 10px" }}>{dateInMoment} </span>;
+  };
+
+  const renderStartDate = (date) => {
+    //
+    var dateInMoment = moment(date).format("YYYY-MM-DD");
+
+    var isAfter = moment(date).isSameOrAfter(moment(), "day");
+    if (isAfter) return <ActiveButton value={true} textTrue={dateInMoment} />;
+
+    return <span style={{ padding: "5px 10px" }}>{dateInMoment} </span>;
+  };
+
   return (
-    <TableBody>
+    <TableBody style={{ width: "100%" }}>
       {stableSort(rows, getComparator(order, orderBy))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((row, index) => {
@@ -53,7 +79,7 @@ const ReservationDetailsRoomTableRow = (props) => {
           return (
             <TableRow
               hover
-              onClick={(event) => handleClick(event, row._id)}
+              onClick={(event) => handleClick(event, row._id, row)}
               role="checkbox"
               aria-checked={isItemSelected}
               tabIndex={-1}
@@ -72,14 +98,16 @@ const ReservationDetailsRoomTableRow = (props) => {
                 <span className={classes.rowSpan}>{row.pax}</span>
               </TableCell>
               <TableCell align="right">
-                <span className={classes.rowSpan}>{row.totalAmount}</span>
+                <span className={classes.rowSpan}>
+                  {Intl.NumberFormat().format(
+                    Number(row.totalAmount).toFixed(2)
+                  )}
+                </span>
               </TableCell>
               <TableCell align="right">
-                {moment(row.startDate).format("YYYY-MM-DD")}
+                {renderStartDate(row.startDate)}
               </TableCell>
-              <TableCell align="right">
-                {moment(row.endDate).format("YYYY-MM-DD")}
-              </TableCell>
+              <TableCell align="right">{renderEndDate(row.endDate)}</TableCell>
 
               <TableCell align="right"></TableCell>
             </TableRow>

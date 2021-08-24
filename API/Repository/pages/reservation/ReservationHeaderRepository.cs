@@ -14,6 +14,7 @@ namespace API.Repository.pages.reservation
     {
         private readonly resortDbContext _db;
 
+
         public ReservationHeaderRepository(resortDbContext db)
         {
             _db = db;
@@ -56,6 +57,19 @@ namespace API.Repository.pages.reservation
             var z = xpayments.Where(n => n.customerId == customerId).ToList();
 
             return z;
+        }
+
+        public async Task<ReservationHeader> GetHeadersWithFullDetails(Guid HeaderId)
+        {
+            var headers = await _db.ReservationHeaders
+                .Include(n => n.Customer)
+                .Include(n => n.reservationType)
+                .Include(n => n.user)
+                .FirstOrDefaultAsync(n => n._id == HeaderId);
+
+
+
+            return headers;
         }
 
         public async Task<List<reservationHeaderReadDto>> GetHeaderWithRoomCount()

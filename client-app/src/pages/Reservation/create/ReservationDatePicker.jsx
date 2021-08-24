@@ -24,7 +24,7 @@ const ReservationDatePicker = () => {
     }
 
     loadDate();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const typeInStore = useSelector(
     (state) => state.entities.createReservation.header

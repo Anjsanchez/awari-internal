@@ -2,7 +2,7 @@ import React from "react";
 import MaterialTextField from "./../MaterialTextField";
 
 const AInput = (props) => {
-  const { label, id, values, errors, handleChange } = props;
+  const { label, id, values, errors, handleChange, type = "text" } = props;
 
   return (
     <div className="remark__container">
@@ -15,6 +15,7 @@ const AInput = (props) => {
             size="small"
             id={id}
             key={id}
+            type={type}
             label=""
             handleChange={handleChange}
             errors={errors}

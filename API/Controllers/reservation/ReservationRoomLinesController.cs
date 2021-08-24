@@ -68,7 +68,7 @@ namespace API.Controllers.reservation
             });
         }
 
-        [HttpGet("ByCustomerId")]
+        [HttpGet("ByHeaderId")]
         public async Task<ActionResult> GetHeaderByCustomerId(Guid headerId)
         {
             var reservationRoomLines = await _repo.GetLineByHeaderId(headerId);

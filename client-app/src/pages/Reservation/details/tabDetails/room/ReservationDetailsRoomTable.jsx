@@ -6,8 +6,10 @@ import React, { useEffect, useState } from "react";
 import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
+import ReservationDetailsRoomModal from "./ReservationDetailsRoomModal";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
-import { GetRoomLines } from "./../../../../../utils/services/pages/reservation/ReservationLines";
+import { GetPaymentByHeaderId } from "../../../../../utils/services/pages/reservation/ReservationPayment";
+import { GetRoomLinesByHeaderId } from "../../../../../utils/services/pages/reservation/ReservationLines";
 
 const headCells = [
   {
@@ -22,17 +24,17 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "Room",
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: "pax",
     numeric: true,
     disablePadding: false,
     label: "Pax",
-    enableSort: false,
+    enableSort: true,
   },
   {
-    id: "amount",
+    id: "totalAmount",
     numeric: true,
     disablePadding: false,
     label: "Total",
@@ -61,32 +63,60 @@ const headCells = [
   },
 ];
 
-const ReservationDetailsPaymentTable = () => {
+const ReservationDetailsRoomTable = (props) => {
   //..
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [rooms, setRooms] = useState([]);
+  const [selectedRoom, setSelectedRoom] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
 
+  const onSuccessEdit = (obj) => {
+    console.log("edit", obj);
+    // const paymentsx = [...payments];
+    // const index = paymentsx.findIndex((x) => x._id === obj._id);
+
+    // paymentsx[index] = { ...paymentsx[index] };
+    // paymentsx[index].amount = obj.amount;
+    // paymentsx[index].type = obj.type;
+    // paymentsx[index].payment = obj.payment;
+
+    // setPayments(paymentsx);
+  };
+
+  const onSuccessAdd = (obj) => {
+    console.log("add", obj);
+
+    // setPayments((prevState) => {
+    //   return [...prevState, obj];
+    // });
+  };
+
+  const onSuccessDelete = (obj) => {
+    console.log("Delete", obj);
+    // const paymentsx = [...payments];
+
+    // const p = paymentsx.filter((m) => m._id !== obj._id);
+    // setPayments(p);
+  };
+
+  const headerInStore = store.getState().entities.reservationDetails;
+  const selectedRow = (obj) => setSelectedRoom(obj);
+
   useEffect(() => {
     //..
     async function fetchData() {
       try {
-        const { data } = await GetRoomLines();
-        const { token, listRecords } = data;
-
-        console.log(data);
-        store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {
-            setRooms(listRecords);
+            setRooms(headerInStore.rooms);
             setInitialLoadForm(true);
           }
-        }, 500);
+        }, 600);
         //
       } catch (error) {
         enqueueSnackbar("An error occured while calling the server.", {
@@ -104,6 +134,15 @@ const ReservationDetailsPaymentTable = () => {
 
   return (
     <>
+      <ReservationDetailsRoomModal
+        headerId={headerInStore.header._id}
+        selectedPayment={selectedRoom}
+        onVisible={props.onVisible}
+        visible={props.visible}
+        onSuccessEdit={onSuccessEdit}
+        onSuccessAdd={onSuccessAdd}
+        onSuccessDelete={onSuccessDelete}
+      />
       <MTable
         rows={rooms}
         xCells={headCells}
@@ -112,9 +151,10 @@ const ReservationDetailsPaymentTable = () => {
         onChangePage={handleChangePage}
         onResetPage={handleResetPage}
         isSubTable={true}
+        selectedRow={selectedRow}
       />
     </>
   );
 };
 
-export default ReservationDetailsPaymentTable;
+export default ReservationDetailsRoomTable;

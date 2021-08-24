@@ -2,21 +2,22 @@ import moment from "moment";
 import { Select } from "antd";
 import { Modal, Divider } from "antd";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
 import "../css/ReservationDetailsPaymentModal.css";
-import MDialog from "./../../../../../common/MDialog";
+import React, { useEffect, useState } from "react";
+import MDialog from "../../../../../common/MDialog";
 import { makeStyles } from "@material-ui/core/styles";
-import AInput from "./../../../../../common/antd/AInput";
+import AInput from "../../../../../common/antd/AInput";
+import UseDetailsRoomForm from "./validation/UseDetailsRoomForm";
 import { store } from "../../../../../utils/store/configureStore";
 import ActiveButton from "../../../../../common/form/ActiveButton";
+import MaterialButton from "./../../../../../common/MaterialButton";
 import { writeToken } from "../../../../../utils/store/pages/users";
 import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
-import UseDetailsPaymentForm from "./validation/UseDetailsPaymentForm";
 import { ButtonGroup, List, ListItem, Button } from "@material-ui/core";
+import ReservationDetailsRoomSteps from "./ReservationDetailsRoomSteps";
+import RDetailsRoomFormValidate from "./validation/RDetailsRoomFormValidate";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
-import RDetailsPaymentFormValidate from "./validation/RDetailsPaymentFormValidate";
-import { getPayments } from "./../../../../../utils/services/pages/functionality/PaymentService";
-import MaterialButton from "./../../../../../common/MaterialButton";
+import { getPayments } from "../../../../../utils/services/pages/functionality/PaymentService";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReservationDetailsPaymentModal = (props) => {
+const ReservationDetailsRoomModal = (props) => {
   const classes = useStyles();
   const {
     onVisible,
@@ -64,8 +65,8 @@ const ReservationDetailsPaymentModal = (props) => {
     onDecideOfAction,
     handleResetValue,
     handleDialogCancel,
-  } = UseDetailsPaymentForm(
-    RDetailsPaymentFormValidate,
+  } = UseDetailsRoomForm(
+    RDetailsRoomFormValidate,
     headerId,
     onVisible,
     onSuccessEdit,
@@ -216,7 +217,6 @@ const ReservationDetailsPaymentModal = (props) => {
           <AInput
             label="AMOUNT"
             id="amount"
-            type="number"
             errors={errors.amount}
             values={values.amount}
             handleChange={handleChange}
@@ -281,10 +281,10 @@ const ReservationDetailsPaymentModal = (props) => {
         onCancel={() => onVisible({ value: false, action: "cancel" })}
         footer={<Footer />}
       >
-        {ModalContent()}
+        <ReservationDetailsRoomSteps />
       </Modal>
     </>
   );
 };
 
-export default ReservationDetailsPaymentModal;
+export default ReservationDetailsRoomModal;

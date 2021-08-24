@@ -14,13 +14,32 @@ const useStyles = makeStyles((theme) => ({
     padding: "5px 10px",
     borderRadius: "20px",
   },
+  spanContainerWarning: {
+    color: "#F57C00",
+    background: "#FFF3E0",
+    padding: "5px 10px",
+    borderRadius: "20px",
+  },
 }));
 
 const ActiveButton = (props) => {
   //..
   const classes = useStyles();
 
-  const { value, textTrue = "Active", textFalse = "Inactive" } = props;
+  const {
+    value,
+    textTrue = "Active",
+    textFalse = "Inactive",
+    isWarning = false,
+  } = props;
+
+  if (isWarning) {
+    return (
+      <span className={`${classes.rowSpan} ${classes.spanContainerWarning}`}>
+        {textTrue}
+      </span>
+    );
+  }
 
   if (value === true) {
     return (

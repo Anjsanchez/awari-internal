@@ -10,5 +10,6 @@ namespace API.Contracts.pages.reservation
     {
         Task<List<ReservationHeader>> GetHeaderByCustomerID(Guid customerId);
         Task<List<reservationHeaderReadDto>> GetHeaderWithRoomCount();
+        Task<ReservationHeader> GetHeadersWithFullDetails(Guid HeaderId);
     }
 }

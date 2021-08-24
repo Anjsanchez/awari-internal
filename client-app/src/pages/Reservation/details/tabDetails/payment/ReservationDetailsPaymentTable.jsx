@@ -5,10 +5,8 @@ import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
 import MTable from "./../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
-import { writeToken } from "../../../../../utils/store/pages/users";
 import ReservationDetailsPaymentModal from "./ReservationDetailsPaymentModal";
 import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
-import { GetPaymentByHeaderId } from "./../../../../../utils/services/pages/reservation/ReservationPayment";
 
 const headCells = [
   {
@@ -90,22 +88,20 @@ const ReservationDetailsPaymentTable = (props) => {
     const p = paymentsx.filter((m) => m._id !== obj._id);
     setPayments(p);
   };
+
+  const headerInStore = store.getState().entities.reservationDetails;
   const selectedRow = (obj) => setSelectedPayment(obj);
 
   useEffect(() => {
     //..
     async function fetchData() {
       try {
-        const { data } = await GetPaymentByHeaderId(props.headerId);
-        const { token, listRecords } = data;
-
-        store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {
-            setPayments(listRecords);
+            setPayments(headerInStore.payments);
             setInitialLoadForm(true);
           }
-        }, 500);
+        }, 300);
         //
       } catch (error) {
         enqueueSnackbar("An error occured while calling the server.", {
@@ -124,7 +120,7 @@ const ReservationDetailsPaymentTable = (props) => {
   return (
     <>
       <ReservationDetailsPaymentModal
-        headerId={props.headerId}
+        headerId={headerInStore.header._id}
         selectedPayment={selectedPayment}
         onVisible={props.onVisible}
         visible={props.visible}

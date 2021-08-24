@@ -12,9 +12,9 @@ export function GetRoomLines() {
   return http.get(apiEndpoint);
 }
 
-export function GetRoomLinesByHeaderId() {
+export function GetRoomLinesByHeaderId(headerId) {
   http.SetJwt();
-  return http.get(apiEndpoint + "/byHeaderId");
+  return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);
 }
 
 export function saveHeader(h) {

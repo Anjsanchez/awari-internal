@@ -46,7 +46,7 @@ const ReservationDetailsTabs = (props) => {
         </div>
       </div>
       <TabPanel value={value} index={0}>
-        <ReservationDetailsTabDetails headerId={props.headerId} />
+        <ReservationDetailsTabDetails />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Page2
