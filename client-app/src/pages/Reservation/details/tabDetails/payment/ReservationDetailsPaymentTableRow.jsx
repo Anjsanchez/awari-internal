@@ -49,7 +49,7 @@ const ReservationDetailsPaymentTableRow = (props) => {
   };
 
   return (
-    <TableBody>
+    <TableBody style={{ width: "100%" }}>
       {stableSort(rows, getComparator(order, orderBy))
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
         .map((row, index) => {
@@ -60,7 +60,7 @@ const ReservationDetailsPaymentTableRow = (props) => {
           return (
             <TableRow
               hover
-              onClick={(event) => handleClick(event, row._id)}
+              onClick={(event) => handleClick(event, row._id, row)}
               role="checkbox"
               aria-checked={isItemSelected}
               tabIndex={-1}
@@ -71,6 +71,7 @@ const ReservationDetailsPaymentTableRow = (props) => {
                 index % 2 ? { background: "#fafafa" } : { background: "white" }
               }
             >
+              <TableCell component="th" scope="row" padding="none"></TableCell>
               <TableCell component="th" id={labelId} scope="row" padding="none">
                 {renderPaymentRemark(row.type)}
               </TableCell>
@@ -78,11 +79,15 @@ const ReservationDetailsPaymentTableRow = (props) => {
                 <span className={classes.rowSpan}>{row.payment.name}</span>
               </TableCell>
               <TableCell align="right">
-                <span className={classes.rowSpan}>{row.amount}</span>
+                <span className={classes.rowSpan}>
+                  {Intl.NumberFormat().format(Number(row.amount).toFixed(2))}
+                </span>
               </TableCell>
               <TableCell align="right">
                 {moment(row.createdDate).format("YYYY-MM-DD hh:mm A")}
               </TableCell>
+
+              <TableCell align="right"></TableCell>
             </TableRow>
           );
         })}

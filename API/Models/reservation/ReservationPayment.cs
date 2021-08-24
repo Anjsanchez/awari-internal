@@ -30,7 +30,9 @@ namespace API.Models.reservation
         public Payment payment { get; set; }
 
 
-        public Int32 paymentRefNum { get; set; }
+        [Required]
+        [StringLength(100)]
+        public string paymentRefNum { get; set; }
 
 
         [Required]

@@ -21,7 +21,7 @@ const MDialog = (props) => {
 
   if (!dialogText.subTitle.trim())
     dialogText.subTitle =
-      "The data indicated in the form will be saved in the database. Are you sure you want to proceed?";
+      "This action is irreversible. Are you sure you want to proceed?";
 
   return (
     <>

@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210823124653_addPriceOnResravation")]
+    partial class addPriceOnResravation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -370,10 +372,8 @@ namespace API.Migrations
                     b.Property<Guid>("paymentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("paymentRefNum")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("paymentRefNum")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("reservationHeaderId")
                         .HasColumnType("uniqueidentifier");

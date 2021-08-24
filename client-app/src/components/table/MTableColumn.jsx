@@ -8,7 +8,8 @@ import {
 } from "@material-ui/core";
 
 const MTableColumn = (props) => {
-  const { classes, order, orderBy, headCells, onRequestSort } = props;
+  const { classes, order, orderBy, headCells, onRequestSort, isSubTable } =
+    props;
 
   const RenderSortLabel = (e) => {
     const { id, enableSort } = e.headCell;
@@ -50,7 +51,7 @@ const MTableColumn = (props) => {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox"></TableCell>
+        {!isSubTable && <TableCell padding="checkbox"></TableCell>}
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}

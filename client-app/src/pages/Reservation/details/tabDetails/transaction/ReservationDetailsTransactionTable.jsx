@@ -3,12 +3,11 @@ import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
-import MTable from "./../../../../../components/table/MTable";
+import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
-import ReservationDetailsPaymentModal from "./ReservationDetailsPaymentModal";
-import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
-import { GetPaymentByHeaderId } from "./../../../../../utils/services/pages/reservation/ReservationPayment";
+import ReservationDetailsRoomTableRow from "./ReservationDetailsTransactionTableRow";
+import { GetRoomLines } from "../../../../../utils/services/pages/reservation/ReservationLines";
 
 const headCells = [
   {
@@ -40,6 +39,13 @@ const headCells = [
     enableSort: true,
   },
   {
+    id: "isDiscounted",
+    numeric: true,
+    disablePadding: false,
+    label: "Is Discounted",
+    enableSort: true,
+  },
+  {
     id: "createdDate",
     numeric: true,
     disablePadding: false,
@@ -55,54 +61,29 @@ const headCells = [
   },
 ];
 
-const ReservationDetailsPaymentTable = (props) => {
+const ReservationDetailsTransactionTable = () => {
   //..
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
-  const [payments, setPayments] = useState([]);
-  const [selectedPayment, setSelectedPayment] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
 
-  const onSuccessEdit = (obj) => {
-    const paymentsx = [...payments];
-    const index = paymentsx.findIndex((x) => x._id === obj._id);
-
-    paymentsx[index] = { ...paymentsx[index] };
-    paymentsx[index].amount = obj.amount;
-    paymentsx[index].type = obj.type;
-    paymentsx[index].payment = obj.payment;
-
-    setPayments(paymentsx);
-  };
-
-  const onSuccessAdd = (obj) =>
-    setPayments((prevState) => {
-      return [...prevState, obj];
-    });
-
-  const onSuccessDelete = (obj) => {
-    const paymentsx = [...payments];
-
-    const p = paymentsx.filter((m) => m._id !== obj._id);
-    setPayments(p);
-  };
-  const selectedRow = (obj) => setSelectedPayment(obj);
-
   useEffect(() => {
     //..
     async function fetchData() {
       try {
-        const { data } = await GetPaymentByHeaderId(props.headerId);
+        const { data } = await GetRoomLines();
         const { token, listRecords } = data;
 
+        console.log(data);
         store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {
-            setPayments(listRecords);
+            setRooms(listRecords);
             setInitialLoadForm(true);
           }
         }, 500);
@@ -112,7 +93,7 @@ const ReservationDetailsPaymentTable = (props) => {
           variant: "error",
         });
         return () => {
-          setPayments({});
+          setRooms({});
         };
       }
     }
@@ -123,27 +104,17 @@ const ReservationDetailsPaymentTable = (props) => {
 
   return (
     <>
-      <ReservationDetailsPaymentModal
-        headerId={props.headerId}
-        selectedPayment={selectedPayment}
-        onVisible={props.onVisible}
-        visible={props.visible}
-        onSuccessEdit={onSuccessEdit}
-        onSuccessAdd={onSuccessAdd}
-        onSuccessDelete={onSuccessDelete}
-      />
       <MTable
-        rows={payments}
+        rows={rooms}
         xCells={headCells}
-        TblBody={ReservationDetailsPaymentTableRow}
+        TblBody={ReservationDetailsRoomTableRow}
         page={page}
         onChangePage={handleChangePage}
         onResetPage={handleResetPage}
         isSubTable={true}
-        selectedRow={selectedRow}
       />
     </>
   );
 };
 
-export default ReservationDetailsPaymentTable;
+export default ReservationDetailsTransactionTable;

@@ -15,7 +15,7 @@ namespace API.Dto.reservations.payment
         public string type { get; set; }
         public float amount { get; set; }
         public Payment payment { get; set; }
-        public Int32 paymentRefNum { get; set; }
+        public string paymentRefNum { get; set; }
         public User user { get; set; }
         public DateTime createdDate { get; set; }
 

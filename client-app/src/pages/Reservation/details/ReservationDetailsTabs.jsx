@@ -6,7 +6,7 @@ import WatchLaterTwoToneIcon from "@material-ui/icons/WatchLaterTwoTone";
 import FolderOpenTwoToneIcon from "@material-ui/icons/FolderOpenTwoTone";
 import ReservationDetailsTabDetails from "./tabDetails/ReservationDetailsTabDetails";
 
-const ReservationDetailsTabs = () => {
+const ReservationDetailsTabs = (props) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => setValue(newValue);
@@ -46,7 +46,7 @@ const ReservationDetailsTabs = () => {
         </div>
       </div>
       <TabPanel value={value} index={0}>
-        <ReservationDetailsTabDetails />
+        <ReservationDetailsTabDetails headerId={props.headerId} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Page2

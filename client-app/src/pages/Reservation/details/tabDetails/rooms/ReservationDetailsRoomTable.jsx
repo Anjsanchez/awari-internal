@@ -7,7 +7,7 @@ import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
-import { GetReservationPayments } from "../../../../../utils/services/pages/reservation/ReservationPayment";
+import { GetRoomLines } from "./../../../../../utils/services/pages/reservation/ReservationLines";
 
 const headCells = [
   {
@@ -18,31 +18,38 @@ const headCells = [
     enableSort: true,
   },
   {
-    id: "type",
+    id: "room",
     numeric: false,
     disablePadding: true,
-    label: "Remark",
+    label: "Room",
     enableSort: true,
   },
   {
-    id: "paymentType",
+    id: "pax",
     numeric: true,
     disablePadding: false,
-    label: "Type",
+    label: "Pax",
     enableSort: false,
   },
   {
-    id: "Amount",
+    id: "amount",
     numeric: true,
     disablePadding: false,
-    label: "Amount",
+    label: "Total",
     enableSort: true,
   },
   {
-    id: "createdDate",
+    id: "startDate",
     numeric: true,
     disablePadding: false,
-    label: "Payment Date",
+    label: "IN",
+    enableSort: true,
+  },
+  {
+    id: "endDate",
+    numeric: true,
+    disablePadding: false,
+    label: "OUT",
     enableSort: true,
   },
   {
@@ -59,7 +66,7 @@ const ReservationDetailsPaymentTable = () => {
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
-  const [payments, setPayments] = useState([]);
+  const [rooms, setRooms] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -69,13 +76,14 @@ const ReservationDetailsPaymentTable = () => {
     //..
     async function fetchData() {
       try {
-        const { data } = await GetReservationPayments();
+        const { data } = await GetRoomLines();
         const { token, listRecords } = data;
 
+        console.log(data);
         store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {
-            setPayments(listRecords);
+            setRooms(listRecords);
             setInitialLoadForm(true);
           }
         }, 500);
@@ -85,7 +93,7 @@ const ReservationDetailsPaymentTable = () => {
           variant: "error",
         });
         return () => {
-          setPayments({});
+          setRooms({});
         };
       }
     }
@@ -97,7 +105,7 @@ const ReservationDetailsPaymentTable = () => {
   return (
     <>
       <MTable
-        rows={payments}
+        rows={rooms}
         xCells={headCells}
         TblBody={ReservationDetailsRoomTableRow}
         page={page}

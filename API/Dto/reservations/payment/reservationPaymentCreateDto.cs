@@ -25,7 +25,7 @@ namespace API.Dto.reservations.payment
         public Guid paymentId { get; set; }
 
 
-        public Int32 paymentRefNum { get; set; }
+        public string paymentRefNum { get; set; }
 
 
         [Required]

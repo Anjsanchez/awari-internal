@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReservationDetailsRoomTableRow = (props) => {
+const ReservationDetailsTransactionTableRow = (props) => {
   const classes = useStyles();
 
   const {
@@ -66,7 +66,7 @@ const ReservationDetailsRoomTableRow = (props) => {
             >
               <TableCell component="th" scope="row" padding="none"></TableCell>
               <TableCell component="th" id={labelId} scope="row" padding="none">
-                {row.room.roomLongName}
+                Jetski
               </TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>{row.pax}</span>
@@ -75,10 +75,10 @@ const ReservationDetailsRoomTableRow = (props) => {
                 <span className={classes.rowSpan}>{row.totalAmount}</span>
               </TableCell>
               <TableCell align="right">
-                {moment(row.startDate).format("YYYY-MM-DD")}
+                <ActiveButton textFalse="No" value={false} />
               </TableCell>
               <TableCell align="right">
-                {moment(row.endDate).format("YYYY-MM-DD")}
+                {moment(row.startDate).format("YYYY-MM-DD hh:mm A")}
               </TableCell>
 
               <TableCell align="right"></TableCell>
@@ -94,4 +94,4 @@ const ReservationDetailsRoomTableRow = (props) => {
   );
 };
 
-export default ReservationDetailsRoomTableRow;
+export default ReservationDetailsTransactionTableRow;

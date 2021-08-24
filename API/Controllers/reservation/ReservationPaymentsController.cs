@@ -80,6 +80,27 @@ namespace API.Controllers.reservation
             });
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteReservationPayment(Guid id)
+        {
+            var reservationPayment = await _repo.FindById(id);
+            if (reservationPayment == null)
+                return NotFound("Reservation Payment not found in the database");
+
+            await _repo.Delete(reservationPayment);
+            await _repo.Save();
+
+            var mappedCategory = _map.Map<ReservationPayment, reservationPaymentReadDto>(reservationPayment);
+
+            return Ok(new GenericResponse<reservationPaymentReadDto>()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
+                singleRecord = mappedCategory
+            });
+        }
+
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateReservationPayment(Guid id, reservationPaymentUpdateDto ReservationPaymentUpdateDto)
         {

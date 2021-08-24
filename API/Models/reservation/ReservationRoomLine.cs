@@ -28,6 +28,11 @@ namespace API.Models.reservation
         public Room room { get; set; }
 
 
+        public float grossAmount { get; set; }
+        public float totalDiscount { get; set; }
+        public float totalAmount { get; set; }
+
+
         public Int32 pax { get; set; }
 
 

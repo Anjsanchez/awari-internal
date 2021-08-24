@@ -25,9 +25,10 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
-        public Task<bool> Delete(ReservationPayment entity)
+        public async Task<bool> Delete(ReservationPayment entity)
         {
-            throw new NotImplementedException();
+            _db.ReservationPayments.Remove(entity);
+            return await Save();
         }
 
         public async Task<ICollection<ReservationPayment>> FindAll()

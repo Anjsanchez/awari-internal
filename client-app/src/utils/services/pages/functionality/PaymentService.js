@@ -14,10 +14,9 @@ export function getPayments() {
 
 export function savePayment(payment) {
   http.SetJwt();
-  if (payment.id) {
+  if (payment._id) {
     const body = { ...payment };
-    // delete body._id;
-    return http.put(paymentUrl(payment.id), body);
+    return http.put(paymentUrl(payment._id), body);
   }
   return http.post(apiEndpoint, payment);
 }

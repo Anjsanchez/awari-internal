@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { RiEditBoxFill, RiDeleteBin7Fill } from "react-icons/ri";
-import { IconButton, Tooltip } from "@material-ui/core";
 import { BsEyeFill } from "react-icons/bs";
+import { RiDeleteBin7Fill } from "react-icons/ri";
+import { IconButton, Tooltip } from "@material-ui/core";
 
 const EditDeleteIconButton = (props) => {
   const { rowId, handleDelete, linkPath, showDelete = true } = props;

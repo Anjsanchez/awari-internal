@@ -129,6 +129,7 @@ export default function MTable(props) {
     onChangePage,
     onResetPage,
     isSubTable = false,
+    selectedRow,
   } = props;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("");
@@ -142,7 +143,7 @@ export default function MTable(props) {
     setFilteredRows(rows);
 
     if (isSubTable) setRowsPerPage(rows.length);
-  }, [rows]);
+  }, [rows]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const requestSearch = (searchedVal) => {
     let filtered;
@@ -188,19 +189,21 @@ export default function MTable(props) {
     setOpenDialog(!openDialog);
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event, name, row) => {
+    // const selectedIndex = selected.indexOf(name);
     let newSelected = [];
 
-    if (selectedIndex === -1) {
-      newSelected = name;
-    } else if (selectedIndex === 0) {
-      newSelected = selected.slice(1);
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = selected.slice(0, -1);
-    }
+    // if (selectedIndex === -1) {
+    newSelected = name;
+    // } else if (selectedIndex === 0) {
+    //   newSelected = selected.slice(1);
+    // } else if (selectedIndex === selected.length - 1) {
+    //   newSelected = selected.slice(0, -1);
+    // }
 
     setSelected(newSelected);
+
+    if (selectedRow !== undefined) selectedRow(row);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -244,13 +247,8 @@ export default function MTable(props) {
             aria-label="enhanced table"
             size="small"
           >
-            <colgroup>
-              <col width="5%" />
-              <col width="5%" />
-              <col width="5%" />
-              <col width="5%" />
-            </colgroup>
             <MTableColumn
+              isSubTable={isSubTable}
               headCells={headCells}
               classes={classes}
               numSelected={selected.length}
@@ -273,6 +271,7 @@ export default function MTable(props) {
               rowsPerPage={rowsPerPage}
               handleClick={handleClick}
               handleDelete={handleDelete}
+              selectedRow={selectedRow}
             />
           </Table>
         </TableContainer>

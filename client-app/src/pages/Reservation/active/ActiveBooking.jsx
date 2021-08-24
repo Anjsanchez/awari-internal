@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import FormHeader from "../../../common/form/FormHeader";
+import React from "react";
 import { BsAspectRatioFill } from "react-icons/bs";
 import ActiveBookingTable from "./ActiveBookingTable";
+import FormHeader from "../../../common/form/FormHeader";
 
 const ActiveBooking = () => {
   return (

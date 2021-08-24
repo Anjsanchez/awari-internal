@@ -33,12 +33,14 @@ namespace API.Repository.pages.reservation
         {
             return await _db.ReservationRoomLines
                         .Include(n => n.user)
+                        .Include(n => n.room)
                         .ToListAsync();
         }
 
         public async Task<ReservationRoomLine> FindById(Guid id)
         {
             return await _db.ReservationRoomLines
+                        .Include(n => n.room)
                             .Include(n => n.user)
                             .FirstOrDefaultAsync(n => n._id == id);
         }

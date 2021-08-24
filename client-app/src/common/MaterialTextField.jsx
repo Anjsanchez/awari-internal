@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({
   textField: {
     [`& fieldset`]: {
-      borderRadius: 16,
+      borderRadius: 4,
     },
   },
 }));
@@ -22,11 +22,13 @@ const MaterialTextField = (props) => {
     type = "text",
     margin = "none",
     multiline = false,
+    size = "medium",
   } = props;
 
   return (
     <FormControl fullWidth margin={margin}>
       <TextField
+        size={size}
         multiline={multiline}
         id={id}
         name={id}
