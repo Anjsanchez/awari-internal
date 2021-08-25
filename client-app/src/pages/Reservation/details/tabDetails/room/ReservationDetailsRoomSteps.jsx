@@ -10,16 +10,11 @@ import Stepper from "@material-ui/core/Stepper";
 import StepLabel from "@material-ui/core/StepLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import StepContent from "@material-ui/core/StepContent";
-// import ReservationType from "./../../../create/ReservationType";
-import ReservationCustomer from "./../../../create/ReservationCustomer";
+import ReservationGuestCount from "./Steps/ReservationGuestCount";
+import ReservationDatePicker from "./Steps/ReservationDatePicker";
 import { store } from "../../../../../utils/store/configureStore";
-import {
-  refreshValues,
-  toggleLoading,
-} from "../../../../../utils/store/pages/RoomReservation";
-import { saveHeader } from "./../../../../../utils/services/pages/reservation/ReservationLines";
-import { writeToken } from "../../../../../utils/store/pages/users";
 import MaterialButton from "./../../../../../common/MaterialButton";
+import { toggleLoading } from "../../../../../utils/store/pages/RoomReservation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,15 +37,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSteps = () => ["Type", "Guest"];
+const getSteps = () => ["Date", "Guest", "Room", "Confirmation"];
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return null;
-    // return <ReservationDatePicker />;
+      return <ReservationDatePicker />;
     case 1:
-      return <ReservationCustomer />;
+      return <ReservationGuestCount />;
+    case 2:
+      return <h1>HElo</h1>;
     default:
       return "Unknown step";
   }
@@ -63,9 +59,7 @@ const ReservationDetailsRoomSteps = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [activeStep, setActiveStep] = useState(0);
 
-  const typeInStore = useSelector((state) => state.entities);
-  const { createReservation, user } = typeInStore;
-  const { type, voucher, customer } = createReservation.header;
+  const storeState = useSelector((state) => state.entities.createReservation);
 
   const handleNext = () =>
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -77,71 +71,47 @@ const ReservationDetailsRoomSteps = () => {
     setActiveStep(0);
   };
 
-  const customerViewModel = (mdl) => ({
-    customerId: mdl.customer._id,
-    reservationTypeId: mdl.type.key,
-    voucher: mdl.voucher,
-    userId: user.user.id,
-  });
+  // const customerViewModel = (mdl) => ({
+  //   customerId: mdl.customer._id,
+  //   reservationTypeId: mdl.type.key,
+  //   voucher: mdl.voucher,
+  //   userId: user.user.id,
+  // });
 
-  const handleDialogProceed = async () => {
-    //
-    store.dispatch(toggleLoading(true));
-    const mdl = customerViewModel(createReservation.header);
-    try {
-      const { data } = await saveHeader(mdl);
-      const { token } = data;
-      store.dispatch(writeToken({ token }));
+  // const handleDialogProceed = async () => {
+  //   //
+  //   store.dispatch(toggleLoading(true));
+  //   const mdl = customerViewModel(createReservation.header);
+  //   try {
+  //     const { data } = await saveHeader(mdl);
+  //     const { token } = data;
+  //     store.dispatch(writeToken({ token }));
 
-      setTimeout(() => {
-        enqueueSnackbar("Successfully updated records!", {
-          variant: "success",
-        });
+  //     setTimeout(() => {
+  //       enqueueSnackbar("Successfully updated records!", {
+  //         variant: "success",
+  //       });
 
-        store.dispatch(refreshValues());
-        setActiveStep(0);
-        hist.push("/");
-      }, 1000);
-    } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { variant: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
-      store.dispatch(toggleLoading(false));
-    }
-  };
+  //       store.dispatch(refreshValues());
+  //       setActiveStep(0);
+  //       hist.push("/");
+  //     }, 1000);
+  //   } catch (ex) {
+  //     if (ex && ex.status === 400) {
+  //       enqueueSnackbar(ex.data, { variant: "error" });
+  //     }
+  //     if (ex && ex.status === 500)
+  //       enqueueSnackbar(ex.data, { variant: "error" });
+  //     store.dispatch(toggleLoading(false));
+  //   }
+  // };
 
   const getDisabled = () => {
     //
-
-    if (activeStep === 0) {
-      const { name } = type;
-      if (name === null || name === "") return true;
-
-      const rType = name.toLowerCase();
-      if (rType === "day tour" || rType === "walk in" || rType === "restaurant")
-        return false;
-
-      if (voucher === null || voucher === "") return true;
-
-      return false;
-    }
-
     if (activeStep === 1)
-      return Object.keys(customer).length === 0 ? true : false;
+      return storeState.rooms.heads.adult === 0 ? true : false;
 
-    if (activeStep === 2 || activeStep === 3) return false;
-    return true;
-  };
-
-  const renderSpanLabel = () => {
-    const typeInlower = type.name.toLowerCase();
-
-    if (typeInlower === "day tour" || typeInlower === "restaurant")
-      return "This may now proceed with adding of the transactions.";
-
-    return "You can now proceed with adding a room in the reservation.";
+    return false;
   };
 
   return (
@@ -188,7 +158,9 @@ const ReservationDetailsRoomSteps = () => {
       </Stepper>
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <span className="footer-label__span">{renderSpanLabel()}</span>
+          <span className="footer-label__span">
+            You can now proceed with adding a room in the reservation.
+          </span>
           <div>
             <ButtonGroup
               className={classes.button}
@@ -196,7 +168,7 @@ const ReservationDetailsRoomSteps = () => {
               color="primary"
               aria-label="text primary button group"
             >
-              {!createReservation.isLoading && (
+              {!storeState.isLoading && (
                 <MaterialButton
                   onClick={handleReset}
                   className={classes.button}
@@ -208,9 +180,9 @@ const ReservationDetailsRoomSteps = () => {
               <MaterialButton
                 className={classes.button}
                 size="small"
-                disabled={createReservation.isLoading}
+                disabled={storeState.isLoading}
                 text="Proceed"
-                onClick={handleDialogProceed}
+                // onClick={handleDialogProceed}
               />
             </ButtonGroup>
           </div>

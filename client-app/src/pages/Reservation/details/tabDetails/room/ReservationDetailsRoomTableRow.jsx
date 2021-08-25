@@ -51,7 +51,7 @@ const ReservationDetailsRoomTableRow = (props) => {
         <ActiveButton value={true} isWarning={true} textTrue={dateInMoment} />
       );
 
-    var isAfter = moment(date).isSameOrAfter(moment(), "day");
+    var isAfter = moment(date).isSameOrBefore(moment(), "day");
     if (isAfter) return <ActiveButton value={false} textFalse={dateInMoment} />;
 
     return <span style={{ padding: "5px 10px" }}>{dateInMoment} </span>;
@@ -61,8 +61,12 @@ const ReservationDetailsRoomTableRow = (props) => {
     //
     var dateInMoment = moment(date).format("YYYY-MM-DD");
 
-    var isAfter = moment(date).isSameOrAfter(moment(), "day");
-    if (isAfter) return <ActiveButton value={true} textTrue={dateInMoment} />;
+    var isSameDay = moment(date).isSame(moment(), "day");
+    if (isSameDay) return <ActiveButton value={true} textTrue={dateInMoment} />;
+
+    var isAfter = moment(date).isSameOrBefore(moment(), "day");
+    if (isAfter)
+      return <ActiveButton isWarning={true} textTrue={dateInMoment} />;
 
     return <span style={{ padding: "5px 10px" }}>{dateInMoment} </span>;
   };

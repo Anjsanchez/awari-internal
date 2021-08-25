@@ -1,0 +1,44 @@
+.counter-btnGrp__container {
+  text-align: center;
+}
+
+.counter-spanHeader {
+  padding-bottom: 10px;
+}
+
+.counter-spanHeader__wrapper {
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.counter-span {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  color: rgb(23, 43, 77);
+  cursor: default;
+}
+
+.counter__wrapper {
+  display: flex;
+  padding-bottom: 10px;
+}
+
+.counter__container .MuiButton-containedSizeSmall {
+  font-size: 1.2rem;
+}
+
+.counter-spanHeader {
+  font-family: "Poppins", sans-serif;
+  margin: 0px 0px 0.35em;
+  font-weight: 500;
+  font-size: 1rem;
+  color: rgb(23, 43, 77);
+}
+.counter-span__wrapper {
+  width: 100%;
+  background-color: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

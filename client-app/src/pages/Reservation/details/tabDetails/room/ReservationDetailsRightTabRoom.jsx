@@ -2,6 +2,7 @@ import { Card } from "antd";
 import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
+import { store } from "../../../../../utils/store/configureStore";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsRoomTable";
@@ -11,6 +12,11 @@ const ReservationDetailsRightTabRoom = () => {
 
   const handleVisibleModal = ({ value, action }) =>
     setVisible({ value, action });
+
+  const storeData = store
+    .getState()
+    .entities.reservationDetails.header.reservationType.name.toLowerCase();
+  const isRestaurant = storeData === "restaurant" ? true : false;
 
   return (
     <div className="reservationdetails-grid__wrapper">
@@ -24,22 +30,28 @@ const ReservationDetailsRightTabRoom = () => {
             </div>
           </div>
           <div>
-            <IconButton
-              aria-label="Modify"
-              size="small"
-              onClick={() =>
-                handleVisibleModal({ value: true, action: "update" })
-              }
-            >
-              <VisibilityTwoToneIcon />
-            </IconButton>
-            <IconButton
-              aria-label="create"
-              size="small"
-              onClick={() => handleVisibleModal({ value: true, action: "add" })}
-            >
-              <BorderColorTwoToneIcon />
-            </IconButton>
+            {!isRestaurant && (
+              <>
+                <IconButton
+                  aria-label="Modify"
+                  size="small"
+                  onClick={() =>
+                    handleVisibleModal({ value: true, action: "update" })
+                  }
+                >
+                  <VisibilityTwoToneIcon />
+                </IconButton>
+                <IconButton
+                  aria-label="create"
+                  size="small"
+                  onClick={() =>
+                    handleVisibleModal({ value: true, action: "add" })
+                  }
+                >
+                  <BorderColorTwoToneIcon />
+                </IconButton>
+              </>
+            )}
           </div>
         </div>
 

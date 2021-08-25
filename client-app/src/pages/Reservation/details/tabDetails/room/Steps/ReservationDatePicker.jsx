@@ -1,9 +1,11 @@
 import moment from "moment";
 import { DatePicker } from "antd";
-import "./css/ReservationDatePicker.css";
-import { useSelector } from "react-redux";
 import { BsArrowRight } from "react-icons/bs";
+import "./../../css/ReservationDatePicker.css";
 import React, { useState, useEffect } from "react";
+import { store } from "../../../../../../utils/store/configureStore";
+import { roomLinesDateAdded } from "../../../../../../utils/store/pages/RoomReservation";
+
 const { RangePicker } = DatePicker;
 
 const ReservationDatePicker = () => {
@@ -13,22 +15,30 @@ const ReservationDatePicker = () => {
     toDate: moment(),
   });
 
+  const storeData = store.getState().entities;
+
   useEffect(() => {
-    function loadDate() {
-      const { fromDate, toDate } = typeInStore.date;
+    function initialLoadValues() {
+      const { fromDate, toDate } = storeData.createReservation.rooms.date;
 
-      const fDate = moment(fromDate, "yyyy-MM-DD");
-      const tDate = moment(toDate, "yyyy-MM-DD");
+      const frDate = moment(fromDate);
+      const tDate = moment(toDate);
+      var isSameDayFrom = moment(fromDate).isSame(moment(), "day");
+      var isSameDayTo = moment(toDate).isSame(moment(), "day");
 
-      setDate({ fromDate: fDate, toDate: tDate });
+      if (isSameDayFrom && isSameDayTo) return;
+
+      setDate({
+        fromDate: frDate,
+        toDate: tDate,
+      });
     }
+    initialLoadValues();
+  }, []);
 
-    loadDate();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const typeInStore = useSelector(
-    (state) => state.entities.createReservation.header
-  );
+  useEffect(() => {
+    store.dispatch(roomLinesDateAdded(date));
+  }, [date]);
 
   const onChangeDatePicker = (d) => setDate({ fromDate: d, toDate: d });
 
@@ -81,8 +91,9 @@ const ReservationDatePicker = () => {
       </div>
     );
   };
+
   const typeCondition = () => {
-    const { name } = typeInStore.type;
+    const { name } = storeData.reservationDetails.header.reservationType;
 
     if (name === "Day Tour" || name === "Restaurant") return RenderDatePicker();
 

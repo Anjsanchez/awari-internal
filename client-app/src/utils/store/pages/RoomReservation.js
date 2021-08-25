@@ -1,6 +1,7 @@
 // import { createSelector, createSlice } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
+import moment from "moment";
 
 const slice = createSlice({
   name: "createReservation",
@@ -12,6 +13,17 @@ const slice = createSlice({
       },
       voucher: "",
       customer: {},
+    },
+    rooms: {
+      date: {
+        fromDate: moment(),
+        toDate: moment(),
+      },
+      heads: {
+        adult: 0,
+        children: 0,
+        senior: 0,
+      },
     },
     isLoading: false,
     isVisible: false,
@@ -42,6 +54,14 @@ const slice = createSlice({
     headerCustomerAdded: (resx, action) => {
       resx.header.customer = action.payload;
     },
+    roomLinesHeadsAdded: (resx, action) => {
+      resx.rooms.heads = action.payload;
+    },
+    roomLinesDateAdded: (resx, action) => {
+      const { fromDate, toDate } = action.payload;
+      resx.rooms.date.fromDate = fromDate;
+      resx.rooms.date.toDate = toDate;
+    },
   },
 });
 
@@ -56,18 +76,7 @@ export const {
   refreshValues,
   headerCustomerAdded,
   toggleLoading,
+  roomLinesHeadsAdded,
+  roomLinesDateAdded,
 } = slice.actions;
 export default slice.reducer;
-
-// date: {
-//   fromDate: moment(),
-//   toDate: moment(),
-// },
-// reservationDateAdded: (resx, action) => {
-//   const { fromDate, toDate } = action.payload;
-//   resx.header.date.fromDate = fromDate;
-//   resx.header.date.toDate = toDate;
-// },
-
-// resx.header.date.fromDate = moment();
-// resx.header.date.toDate = moment();

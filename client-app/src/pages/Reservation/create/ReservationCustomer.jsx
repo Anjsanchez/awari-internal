@@ -114,7 +114,6 @@ const ReservationCustomer = () => {
         <div>
           <span>BIRTHDAY : </span>
           <span className="header-label__description">
-            {" "}
             {moment(birthday).format("MMMM Do, YYYY")}
           </span>
         </div>

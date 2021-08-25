@@ -14,8 +14,7 @@ const ReservationDetailsTabDetails = () => {
     .getState()
     .entities.reservationDetails.header.reservationType.name.toLowerCase();
 
-  if (typeInStore === "day tour" || typeInStore === "restaurant")
-    isWalkIn = true;
+  if (typeInStore === "day tour") isWalkIn = true;
 
   return (
     <div className="reservationdetails__container">
