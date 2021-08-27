@@ -15,6 +15,7 @@ import ReservationDatePicker from "./Steps/ReservationDatePicker";
 import { store } from "../../../../../utils/store/configureStore";
 import MaterialButton from "./../../../../../common/MaterialButton";
 import { toggleLoading } from "../../../../../utils/store/pages/RoomReservation";
+import ReservationRoomPicker from "./Steps/ReservationRoomPicker";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,7 +47,7 @@ function getStepContent(step) {
     case 1:
       return <ReservationGuestCount />;
     case 2:
-      return <h1>HElo</h1>;
+      return <ReservationRoomPicker />;
     default:
       return "Unknown step";
   }

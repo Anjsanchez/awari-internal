@@ -21,24 +21,32 @@
 
 .counter__wrapper {
   display: flex;
-  padding-bottom: 10px;
+  padding-bottom: 2px;
+  max-width: 299px;
 }
 
 .counter__container .MuiButton-containedSizeSmall {
-  font-size: 1.2rem;
+  font-size: 1rem;
 }
 
 .counter-spanHeader {
   font-family: "Poppins", sans-serif;
   margin: 0px 0px 0.35em;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: rgb(23, 43, 77);
 }
 .counter-span__wrapper {
-  width: 100%;
+  width: 100vw;
+  position: inherit;
   background-color: #fafafa;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media screen and (min-width: 600px) {
+  .counter__wrapper {
+    max-width: 397px;
+  }
 }

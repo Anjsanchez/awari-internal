@@ -1,6 +1,5 @@
 import moment from "moment";
 import { useSnackbar } from "notistack";
-import "./css/ReservationDatePicker.css";
 import { useSelector } from "react-redux";
 import { TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";

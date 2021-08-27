@@ -1,11 +1,9 @@
 import React from "react";
 import { Modal } from "antd";
-import { ButtonGroup } from "@material-ui/core";
 import "../css/ReservationDetailsPaymentModal.css";
 import MDialog from "../../../../../common/MDialog";
 import { makeStyles } from "@material-ui/core/styles";
 import UseDetailsRoomForm from "./validation/UseDetailsRoomForm";
-import MaterialButton from "./../../../../../common/MaterialButton";
 import ReservationDetailsRoomSteps from "./ReservationDetailsRoomSteps";
 import RDetailsRoomFormValidate from "./validation/RDetailsRoomFormValidate";
 const useStyles = makeStyles((theme) => ({
@@ -36,75 +34,20 @@ const ReservationDetailsRoomModal = (props) => {
     headerId,
     onSuccessEdit,
     onSuccessAdd,
-    selectedPayment,
     onSuccessDelete,
   } = props;
 
-  const {
-    askConfirmation,
-    handleChange,
-    values,
-    handleChangeInput,
-    handleSubmit,
-    errors,
-    isRequestOnGoing,
-    handleDelete,
-    handleValueOnLoad,
-    onDecideOfAction,
-    handleResetValue,
-    handleDialogCancel,
-  } = UseDetailsRoomForm(
-    RDetailsRoomFormValidate,
-    headerId,
-    onVisible,
-    onSuccessEdit,
-    onSuccessAdd,
-    onSuccessDelete
-  );
-
-  // useEffect(() => {
-  //   if (visible.action === "add") return handleResetValue();
-  //   if (selectedPayment.length === 0) return;
-  //   if (visible.action === "update") return handleValueOnLoad(selectedPayment);
-  // }, [visible.action]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const Footer = () => {
-    const isAdd = visible.action === "add" ? true : false;
-    const btnTextValue = isAdd ? "Create" : "Modify";
-
-    if (visible.action !== "add") if (selectedPayment.length === 0) return null;
-
-    return (
-      <div>
-        <ButtonGroup
-          className={classes.button}
-          variant="text"
-          color="primary"
-          aria-label="text primary button group"
-        >
-          {!isAdd && !isRequestOnGoing && (
-            <MaterialButton
-              onClick={handleDelete}
-              className={classes.button}
-              size="small"
-              color="secondary"
-              text="DELETE"
-            />
-          )}
-          <MaterialButton
-            size="small"
-            className={classes.button}
-            onClick={handleSubmit}
-            disabled={isRequestOnGoing}
-            text={btnTextValue}
-          />
-        </ButtonGroup>
-      </div>
+  const { askConfirmation, onDecideOfAction, handleDialogCancel } =
+    UseDetailsRoomForm(
+      RDetailsRoomFormValidate,
+      headerId,
+      onVisible,
+      onSuccessEdit,
+      onSuccessAdd,
+      onSuccessDelete
     );
-  };
-
   return (
-    <>
+    <div className="roomModal__container">
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -116,13 +59,17 @@ const ReservationDetailsRoomModal = (props) => {
         title="Room Reservation"
         centered
         visible={visible.value}
+        style={{
+          top: "2%",
+        }}
+        width="auto"
         onOk={onVisible}
         onCancel={() => onVisible({ value: false, action: "cancel" })}
-        footer={<Footer />}
+        footer={null}
       >
         <ReservationDetailsRoomSteps />
       </Modal>
-    </>
+    </div>
   );
 };
 

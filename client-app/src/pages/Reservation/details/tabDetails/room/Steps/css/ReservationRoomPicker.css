@@ -1,0 +1,79 @@
+.roomPicker__container {
+  min-width: 650px;
+}
+
+.rrPickerLbl {
+  display: block;
+  font-weight: 300;
+  font-size: 0.775rem;
+  top: -5px;
+  position: relative;
+}
+
+.roomPicker__container .counter-spanHeader {
+  padding-bottom: 5px;
+  cursor: default;
+}
+.picker-body__container .ant-collapse {
+  background-color: #e3f2fd;
+}
+
+.picker-body__container .ant-collapse > .ant-collapse-item {
+  border-bottom: 1px solid #d7ccc8;
+}
+
+.picker-body__container .ant-collapse-content-box {
+  padding: 0;
+}
+.picker-body__rooms {
+  padding: 10px;
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #d7ccc8;
+}
+.picker-body__rooms:last-of-type {
+  border-bottom: 0px;
+}
+
+.counter-spanHeader.rrRoomLbl {
+  font-size: 1rem;
+  margin-bottom: 0;
+  padding-bottom: 0px;
+}
+
+.picker-body-rooms__dateWrapper {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  overflow-x: auto;
+  max-width: 450px;
+}
+
+.picker-body-rooms__dateBox {
+  background-color: #fafafa;
+  width: 35px;
+  height: 100%;
+  cursor: pointer;
+  border: 1px solid #d7ccc8;
+  margin-left: 2px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  justify-content: center;
+}
+
+.picker-body-rooms__dateBox:hover {
+  background-color: #e3f2fd;
+  transition: background-color 0.4s ease-in;
+}
+
+.picker-body-rooms__dateBox.selected {
+  background-color: #e3f2fd;
+}
+
+.picker-body-rooms__dateBox.disabled {
+  cursor: not-allowed;
+  background-color: #bcaaa4;
+}

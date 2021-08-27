@@ -1,8 +1,8 @@
+import "./css/ReservationGuestCount.css";
 import React, { useState, useEffect } from "react";
 import Counter from "../../../../../../common/Counter";
 import { store } from "../../../../../../utils/store/configureStore";
 import { roomLinesHeadsAdded } from "../../../../../../utils/store/pages/RoomReservation";
-
 const ReservationGuestCount = () => {
   const [counter, setCounter] = useState({
     adult: 0,
@@ -48,7 +48,7 @@ const ReservationGuestCount = () => {
     });
 
   return (
-    <div>
+    <div className="guestCount__container on-scrollbar">
       <Counter
         name="adult"
         onIncrement={handleIncrement}

@@ -83,6 +83,8 @@ const Rooms = () => {
     roomsx[index].isPerPaxRoomType = obj.isPerPaxRoomType;
     roomsx[index].roomVariantId = obj.roomVariantId;
     roomsx[index].isActive = obj.isActive;
+    roomsx[index].minimumCapacity = obj.minimumCapacity;
+    roomsx[index].maximumCapacity = obj.maximumCapacity;
 
     setFilteredRooms(roomsx);
     setRooms(roomsx);

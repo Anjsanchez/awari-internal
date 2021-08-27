@@ -1,7 +1,7 @@
 import moment from "moment";
 import { DatePicker } from "antd";
+import "./css/ReservationDatePicker.css";
 import { BsArrowRight } from "react-icons/bs";
-import "./../../css/ReservationDatePicker.css";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
 import { roomLinesDateAdded } from "../../../../../../utils/store/pages/RoomReservation";
@@ -42,9 +42,8 @@ const ReservationDatePicker = () => {
 
   const onChangeDatePicker = (d) => setDate({ fromDate: d, toDate: d });
 
-  const onChangeRangePicker = (d) => {
-    setDate({ fromDate: d[0], toDate: d[1] });
-  };
+  const onChangeRangePicker = (d) =>
+    d === null ? null : setDate({ fromDate: d[0], toDate: d[1] });
 
   const disabledDate = (d) => d && d < moment().startOf("day");
 
