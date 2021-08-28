@@ -7,6 +7,7 @@ import { store } from "../../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import { GetRoomVariantHeader } from "../../../../../../utils/services/pages/reservation/ReservationHeader";
 import moment from "moment";
+import { Tooltip, Button } from "antd";
 
 const { Panel } = Collapse;
 const ReservationRoomPicker = () => {
@@ -18,6 +19,16 @@ const ReservationRoomPicker = () => {
   const [roomVariants, setRoomVariants] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [currentReservations, setCurrentReservations] = useState(false);
+
+  const [selectedStartDate, setSelectedStartDate] = useState({
+    room: {},
+    date: "",
+  });
+
+  const [selectedEndDate, setSelectedEndDate] = useState({
+    room: {},
+    date: "",
+  });
 
   const storeData = store.getState().entities.createReservation.rooms.date;
 
@@ -68,7 +79,7 @@ const ReservationRoomPicker = () => {
       const end = todateClone.add(1, "day");
 
       while (start.isSameOrBefore(end)) {
-        dates.push(start.format("MM-DD"));
+        dates.push(start.format("MM-DD-YYYY"));
         start.add(1, "days");
       }
       setDateRange(dates);
@@ -79,31 +90,185 @@ const ReservationRoomPicker = () => {
     fetchData();
   }, []);
 
+  let isFromContinous = false;
+  let xEndDate = "";
+
+  const checkIfStartGreaterThanEndDate = (startDate, currentDate) => {
+    const zStart = moment(startDate);
+    const zEnd = moment(currentDate);
+
+    if (zStart.isSameOrAfter(zEnd)) return true;
+
+    return false;
+  };
+
+  const getTag = (isCheckInOnly, isCheckOutOnly, isContResult) => {
+    if (isCheckInOnly) return "OUT";
+
+    if (isCheckOutOnly) return "IN";
+
+    if (isContResult) return "CONT";
+
+    return "";
+  };
+
+  const GetClassString = (
+    isContResult,
+    isCheckInOnly,
+    isCheckOutOnly,
+    date
+  ) => {
+    if (isCheckInOnly || isCheckOutOnly) return " checkInOnly";
+    if (isContResult) return " disabled";
+    return "";
+  };
+
+  const GetClassActive = (
+    isContResult,
+    isCheckInOnly,
+    isCheckOutOnly,
+    room,
+    date
+  ) => {
+    const dateInMoment = moment(date);
+    const dateSelected = moment(selectedStartDate.date);
+
+    if (Object.keys(selectedStartDate.room).length != 0)
+      if (dateInMoment.isBefore(dateSelected))
+        if (selectedStartDate.room._id === room._id) return " beforeStartDate";
+
+    if (isContResult || isCheckInOnly || isCheckOutOnly) return "";
+
+    if (Object.keys(selectedEndDate.room).length != 0) {
+      if (
+        selectedEndDate.room._id === room._id &&
+        selectedEndDate.date === date
+      )
+        return " active";
+    }
+
+    if (
+      selectedStartDate.room._id === room._id &&
+      selectedStartDate.date === date
+    )
+      return " active";
+  };
+
   const renderDates = (date, n) => {
-    let isReserved = false;
+    let isCheckInOnly = false;
+    let isCheckOutOnly = false;
     const dateInSubtring = date.substring(3, 5);
 
-    const zxx = currentReservations.filter((z) => z.room._id === n._id);
+    const curRsrv = currentReservations.filter((z) => z.room._id === n._id);
 
-    zxx.forEach((zx) => {
-      dateRange.forEach((n) => {
-        const z = moment(zx.startDate).format("MM-DD");
-        if (n === z) {
-          if (z === date) return (isReserved = true);
+    curRsrv.forEach((cur) => {
+      dateRange.forEach((dRange) => {
+        const zStart = moment(cur.startDate).format("MM-DD-YYYY");
+        const zEnd = moment(cur.endDate).format("MM-DD-YYYY");
+
+        if (dRange === zStart) {
+          if (zStart === date) {
+            isCheckInOnly = true;
+            xEndDate = zEnd;
+            return;
+          }
         }
+        if (dRange === zEnd) if (zEnd === date) return (isCheckOutOnly = true);
       });
     });
 
-    return (
-      <div
-        key={date}
-        className={`picker-body-rooms__dateBox ${isReserved ? "disabled" : ""}`}
-      >
-        <span className="picker-body-rooms__dateBox__span">
-          {dateInSubtring}
-        </span>
-      </div>
+    const isContResult = checkIfStartGreaterThanEndDate(xEndDate, date);
+
+    const className = GetClassString(
+      isContResult,
+      isCheckInOnly,
+      isCheckOutOnly,
+      date
     );
+
+    const classActive = GetClassActive(
+      isContResult,
+      isCheckInOnly,
+      isCheckOutOnly,
+      n,
+      date
+    );
+
+    if (isContResult === false) xEndDate = "";
+
+    const renderItems = () => {
+      return (
+        <div
+          key={date}
+          onClick={() =>
+            setSelectedDate(
+              date,
+              n,
+              isCheckInOnly,
+              isCheckOutOnly,
+              isContResult
+            )
+          }
+          className={`picker-body-rooms__dateBox ${className} ${classActive}`}
+        >
+          <span className="picker-body-rooms__dateBox__span">
+            {dateInSubtring}
+          </span>
+        </div>
+      );
+    };
+
+    const renderToolTip = () => {
+      if (isCheckInOnly || isCheckOutOnly) {
+        let toolTipMsg = "Check-OUT only";
+        if (isCheckOutOnly) toolTipMsg = "Check-IN only";
+        return (
+          <Tooltip
+            key={date}
+            placement="topLeft"
+            title={toolTipMsg}
+            arrowPointAtCenter
+          >
+            {renderItems()}
+          </Tooltip>
+        );
+      }
+
+      return renderItems();
+    };
+
+    return renderToolTip();
+  };
+
+  const setSelectedDate = (
+    date,
+    room,
+    isCheckInOnly,
+    isCheckOutOnly,
+    isContResult
+  ) => {
+    if (Object.keys(selectedStartDate.room).length != 0) {
+      const dateInMoment = moment(date);
+      const dateSelected = moment(selectedStartDate.date);
+
+      if (dateInMoment.isBefore(dateSelected))
+        if (selectedStartDate.room._id === room._id) return;
+    }
+
+    const tag = getTag(isCheckInOnly, isCheckOutOnly, isContResult);
+
+    if (tag === "IN" || tag === "OUT" || tag === "CONT") return;
+    if (date === selectedStartDate.date && room === selectedStartDate.room)
+      return setSelectedStartDate({ room: {}, date: "" });
+
+    //SELECTED-END-DATE
+    if (Object.keys(selectedEndDate.room).length == 0) {
+      if (selectedStartDate.room._id === room._id)
+        return setSelectedEndDate({ room, date });
+    }
+
+    setSelectedEndDate({ room: {}, date: "" });
+    setSelectedStartDate({ room, date });
   };
 
   const renderVariantPanels = (data) => {
@@ -145,6 +310,7 @@ const ReservationRoomPicker = () => {
 
       <div className="picker-body__container">
         <Collapse accordion>
+          {(xEndDate = "")}
           {roomVariants.map((n) => renderVariantPanels(n))}
         </Collapse>
       </div>

@@ -49,7 +49,7 @@
   align-items: center;
   height: 100%;
   overflow-x: auto;
-  max-width: 450px;
+  max-width: 400px;
 }
 
 .picker-body-rooms__dateBox {
@@ -76,5 +76,21 @@
 
 .picker-body-rooms__dateBox.disabled {
   cursor: not-allowed;
-  background-color: #bcaaa4;
+  background-color: #d7ccc8;
+  text-decoration: line-through !important;
+}
+
+.picker-body-rooms__dateBox.checkInOnly {
+  background-color: #ffecb3;
+}
+
+.picker-body-rooms__dateBox.active {
+  background-color: #e3f2fd;
+}
+
+.picker-body-rooms__dateBox.beforeStartDate {
+  background-color: #d7ccc8;
+  cursor: not-allowed;
+  text-decoration: line-through !important;
+  transition: background-color 0.2s ease-in;
 }
