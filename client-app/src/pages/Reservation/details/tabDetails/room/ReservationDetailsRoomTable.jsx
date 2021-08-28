@@ -123,7 +123,7 @@ const ReservationDetailsRoomTable = (props) => {
           variant: "error",
         });
         return () => {
-          setRooms({});
+          setRooms([]);
         };
       }
     }

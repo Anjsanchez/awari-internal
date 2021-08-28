@@ -1,11 +1,11 @@
-import moment from "moment";
 import { DatePicker } from "antd";
 import "./css/ReservationDatePicker.css";
 import { BsArrowRight } from "react-icons/bs";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
 import { roomLinesDateAdded } from "../../../../../../utils/store/pages/RoomReservation";
-
+import moment from "moment";
+import "moment-timezone";
 const { RangePicker } = DatePicker;
 
 const ReservationDatePicker = () => {
@@ -37,6 +37,10 @@ const ReservationDatePicker = () => {
   }, []);
 
   useEffect(() => {
+    // let localTime1 = date.fromDate
+    //   .tz("2000", "HHmm", "Asia/Singapore")
+    //   .format("dddd, MMMM Do YYYY HH:mm");
+    // console.log(localTime1.toString());
     store.dispatch(roomLinesDateAdded(date));
   }, [date]);
 

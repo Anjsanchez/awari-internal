@@ -7,9 +7,9 @@ function roomUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getRooms() {
+export function getRooms(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function GetRoomWithPricing() {

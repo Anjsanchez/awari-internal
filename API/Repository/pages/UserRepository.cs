@@ -33,11 +33,15 @@ namespace API.Repository
             throw new System.NotImplementedException();
         }
 
-        public async Task<ICollection<User>> FindAll()
+        public async Task<ICollection<User>> FindAll(bool isActiveOnly = false)
         {
             var Users = await _db.Users
                 .Include(q => q.Role)
                 .ToListAsync();
+
+            if (isActiveOnly)
+                Users = Users.Where(n => n.isActive == true).ToList();
+
             return Users;
         }
 

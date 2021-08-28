@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages;
 using API.Data;
@@ -27,9 +28,14 @@ namespace API.Repository.pages
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<Customer>> FindAll()
+        public async Task<ICollection<Customer>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.Customers.ToListAsync();
+            var custs = await _db.Customers.ToListAsync();
+
+            if (isActiveOnly)
+                custs = custs.Where(n => n.isActive == true).ToList();
+
+            return custs;
         }
 
         public async Task<Customer> FindById(Guid id)

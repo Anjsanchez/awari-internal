@@ -35,24 +35,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> getVariants()
+        public async Task<ActionResult> getVariants(bool isActiveOnly = false)
         {
             var variants = await _repo.FindAll();
-            var mappedVariants = _map.Map<List<RoomVariant>, List<roomVariantReadDto>>(variants.ToList());
+            if (isActiveOnly)
+                variants = variants.Where(n => n.isActive == true).ToList();
 
-            return Ok(new GenericResponse<roomVariantReadDto>()
-            {
-                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
-                Success = true,
-                listRecords = mappedVariants
-            });
-        }
-
-        [HttpGet]
-        [Route("active-variants")]
-        public async Task<ActionResult> getActiveVariants()
-        {
-            var variants = await _repo.getActiveVariants();
             var mappedVariants = _map.Map<List<RoomVariant>, List<roomVariantReadDto>>(variants.ToList());
 
             return Ok(new GenericResponse<roomVariantReadDto>()

@@ -32,7 +32,7 @@ namespace API.Repository.pages.reservation
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<ReservationHeader>> FindAll()
+        public async Task<ICollection<ReservationHeader>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationHeaders
                         .Include(n => n.Customer)

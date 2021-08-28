@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.functionality;
 using API.Data;
@@ -29,11 +30,16 @@ namespace API.Repository.pages.functionality
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<Payment>> FindAll()
+        public async Task<ICollection<Payment>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.Payments
+            var Payments = await _db.Payments
                 .Include(n => n.user)
                 .ToListAsync();
+
+            if (isActiveOnly)
+                Payments = Payments.Where(n => n.isActive == true).ToList();
+
+            return Payments;
         }
 
         public async Task<Payment> FindById(Guid id)

@@ -40,9 +40,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetRooms()
+        public async Task<ActionResult> GetRooms(bool isActiveOnly = false)
         {
             var rooms = await _repo.FindAll();
+            if (isActiveOnly)
+                rooms = rooms.Where(n => n.isActive == true).ToList();
+
             var mappedRooms = _map.Map<List<Room>, List<roomReadDto>>(rooms.ToList());
 
             return Ok(new GenericResponse<roomReadDto>()

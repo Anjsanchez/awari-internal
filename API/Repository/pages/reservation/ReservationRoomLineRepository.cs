@@ -29,7 +29,7 @@ namespace API.Repository.pages.reservation
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<ReservationRoomLine>> FindAll()
+        public async Task<ICollection<ReservationRoomLine>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationRoomLines
                         .Include(n => n.user)
@@ -45,6 +45,13 @@ namespace API.Repository.pages.reservation
                             .FirstOrDefaultAsync(n => n._id == id);
         }
 
+        public async Task<ICollection<ReservationRoomLine>> getLineByDates(DateTime fromDate, DateTime toDate)
+        {
+
+            var reservations = await FindAll();
+            return reservations.Where(n => n.startDate >= fromDate && n.endDate <= toDate).ToList();
+
+        }
 
         public async Task<List<ReservationRoomLine>> GetLineByHeaderId(Guid headerId)
         {

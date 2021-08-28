@@ -7,14 +7,9 @@ function roomVariantUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getRoomVariants() {
+export function getRoomVariants(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
-}
-
-export function getActiveVariants() {
-  http.SetJwt();
-  return http.get(apiEndpoint + "/active-variants");
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function saveRoomVariant(variant) {

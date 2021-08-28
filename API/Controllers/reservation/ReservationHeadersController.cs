@@ -4,14 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.functionality;
 using API.Contracts.pages.reservation;
+using API.Contracts.pages.rooms;
 using API.Data.ApiResponse;
 using API.Dto.reservations.header;
 using API.Dto.reservations.line;
 using API.Dto.reservations.payment;
+using API.Dto.rooms.room;
+using API.Dto.rooms.variant;
 using API.helpers.api;
 using API.Migrations.Configurations;
+using API.Models;
 using API.Models.functionality;
 using API.Models.reservation;
+using API.Models.rooms;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -26,14 +31,18 @@ namespace API.Controllers.reservation
     public class ReservationHeadersController : ControllerBase
     {
 
+        private readonly IRoomVariantRepository _variantRepo;
+        private readonly IRoomRepository _roomsRepo;
         private readonly IReservationHeaderRepository _repo;
         private readonly IReservationRoomLineRepository _lineRepo;
         private readonly IReservationPaymentRepository _paymentRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationHeadersController(IReservationHeaderRepository repo, IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationHeadersController(IRoomRepository roomsRepo, IReservationHeaderRepository repo, IRoomVariantRepository variantRepo, IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _roomsRepo = roomsRepo;
+            _variantRepo = variantRepo;
             _paymentRepo = paymentRepo;
             _lineRepo = lineRepo;
             _repo = repo;
@@ -80,6 +89,30 @@ namespace API.Controllers.reservation
             {
                 listRecords = reservationHeaders,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet]
+        [Route("includesRoom")]
+        public async Task<ActionResult> getRoomVariantHeader(DateTime fromDate, DateTime toDate)
+        {
+            toDate = toDate.AddHours(23);
+
+            var variants = await _variantRepo.FindAll(true);
+            var rooms = await _roomsRepo.FindAll(true);
+            var lines = await _lineRepo.getLineByDates(fromDate, toDate);
+
+            var mVariants = _map.Map<List<RoomVariant>, List<roomVariantReadDto>>(variants.ToList());
+            var mRooms = _map.Map<List<Room>, List<roomReadDto>>(rooms.ToList());
+            var mLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(lines.ToList());
+
+            return Ok(new RoomReservationCreation()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
+                rooms = mRooms,
+                lines = mLines,
+                variants = mVariants
             });
         }
 

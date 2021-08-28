@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.products;
 using API.Data;
@@ -30,11 +31,17 @@ namespace API.Repository.pages.products
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<ProductCategory>> FindAll()
+        public async Task<ICollection<ProductCategory>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.ProductCategories
+            var categories = await _db.ProductCategories
                 .Include(n => n.user)
                 .ToListAsync();
+
+
+            if (isActiveOnly)
+                categories = categories.Where(n => n.isActive == true).ToList();
+
+            return categories;
         }
 
         public async Task<ProductCategory> FindById(Guid id)

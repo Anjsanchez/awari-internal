@@ -31,7 +31,7 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
-        public async Task<ICollection<ReservationPayment>> FindAll()
+        public async Task<ICollection<ReservationPayment>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationPayments
                         .Include(n => n.reservationHeader)

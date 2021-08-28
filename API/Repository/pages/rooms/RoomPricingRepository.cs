@@ -31,13 +31,18 @@ namespace API.Repository.pages.rooms
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<RoomPricing>> FindAll()
+        public async Task<ICollection<RoomPricing>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.RoomPricings
+            var pricings = await _db.RoomPricings
                             .Include(n => n.room)
                             .Include(n => n.room.RoomVariant)
                             .Include(n => n.user)
                             .ToListAsync();
+
+            if (isActiveOnly)
+                pricings = pricings.Where(n => n.isActive == true).ToList();
+
+            return pricings;
         }
 
         public async Task<RoomPricing> FindById(Guid id)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.functionality;
 using API.Data;
@@ -29,11 +30,16 @@ namespace API.Repository.pages.functionality
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<Discount>> FindAll()
+        public async Task<ICollection<Discount>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.Discounts
+            var discounts = await _db.Discounts
                 .Include(n => n.user)
                 .ToListAsync();
+
+            if (isActiveOnly)
+                discounts = discounts.Where(n => n.isActive == true).ToList();
+
+            return discounts;
         }
 
         public async Task<Discount> FindById(Guid id)

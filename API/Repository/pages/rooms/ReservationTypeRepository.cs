@@ -30,12 +30,18 @@ namespace API.Repository.pages.rooms
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<Room>> FindAll()
+        public async Task<ICollection<Room>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.Rooms
+            var types = await _db.Rooms
                  .Include(n => n.user)
                  .Include(n => n.RoomVariant)
                  .ToListAsync();
+
+            if (isActiveOnly)
+                types = types.Where(n => n.isActive == true).ToList();
+
+            return types;
+
         }
 
         private async Task<ICollection<RoomPricing>> getAllRoomPricing()

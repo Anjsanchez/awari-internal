@@ -28,7 +28,7 @@ namespace API.Repository
             throw new System.NotImplementedException();
         }
 
-        public async Task<ICollection<Role>> FindAll()
+        public async Task<ICollection<Role>> FindAll(bool isActiveOnly = false)
         {
             return await _db.Roles.ToListAsync();
         }

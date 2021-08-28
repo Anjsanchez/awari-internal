@@ -6,7 +6,7 @@ namespace API.Contracts
 {
     public interface IRepositoryBase<T> where T : class
     {
-        Task<ICollection<T>> FindAll();
+        Task<ICollection<T>> FindAll(bool isActiveOnly = false);
         Task<T> FindById(Guid id);
         Task<bool> Create(T entity);
         Task<bool> Update(T entity);

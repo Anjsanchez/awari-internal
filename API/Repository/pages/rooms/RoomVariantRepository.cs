@@ -30,11 +30,16 @@ namespace API.Repository.pages.rooms
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<RoomVariant>> FindAll()
+        public async Task<ICollection<RoomVariant>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.RoomVariants
+            var variants = await _db.RoomVariants
                             .Include(n => n.user)
                             .ToListAsync();
+
+            if (isActiveOnly)
+                variants = variants.Where(n => n.isActive == true).ToList();
+
+            return variants;
         }
 
         public async Task<RoomVariant> FindById(Guid id)

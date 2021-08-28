@@ -29,7 +29,7 @@ namespace API.Repository.pages.reservation
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<ReservationType>> FindAll()
+        public async Task<ICollection<ReservationType>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationTypes
                          .ToListAsync();
