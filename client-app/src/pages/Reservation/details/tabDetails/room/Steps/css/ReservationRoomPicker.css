@@ -85,12 +85,19 @@
 }
 
 .picker-body-rooms__dateBox.active {
-  background-color: #e3f2fd;
+  /* background-color: #e3f2fd; */
+  background-color: #757575;
+  color: white;
 }
 
 .picker-body-rooms__dateBox.beforeStartDate {
   background-color: #d7ccc8;
   cursor: not-allowed;
   text-decoration: line-through !important;
+  transition: background-color 0.2s ease-in;
+}
+
+.picker-body-rooms__dateBox.middleSelectedDates {
+  background-color: #e3f2fd;
   transition: background-color 0.2s ease-in;
 }
