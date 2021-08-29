@@ -2,10 +2,6 @@
   text-align: center;
 }
 
-.counter-spanHeader {
-  padding-bottom: 10px;
-}
-
 .counter-spanHeader__wrapper {
   padding-left: 10px;
   padding-top: 5px;
@@ -31,7 +27,6 @@
 
 .counter-spanHeader {
   font-family: "Poppins", sans-serif;
-  margin: 0px 0px 0.35em;
   font-weight: 500;
   font-size: 0.875rem;
   color: rgb(23, 43, 77);

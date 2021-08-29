@@ -1,0 +1,8 @@
+.reservationtype-container .header-label__wrapper {
+  min-width: 400px;
+}
+
+.reservationtype-container .MuiListItem-button:hover {
+  text-decoration: none;
+  background-color: #e3f2fd;
+}

@@ -15,3 +15,7 @@
 .roomModal__container .MuiStepper-root {
   padding: 0px;
 }
+
+.roomServationMdl__container .ant-modal-body {
+  padding: 0px;
+}

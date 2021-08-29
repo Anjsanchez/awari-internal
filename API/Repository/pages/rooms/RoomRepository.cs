@@ -61,7 +61,7 @@ namespace API.Repository.pages.rooms
         public async Task<IEnumerable<Room>> GetRoomWithPricing()
         {
 
-            var room = await FindAll();
+            var room = await FindAll(true);
             var rmPricing = await getAllRoomPricing();
 
             var mapped = (from m in room
@@ -89,6 +89,15 @@ namespace API.Repository.pages.rooms
         {
             _db.Rooms.Update(entity);
             return await Save();
+        }
+
+        public async Task<IEnumerable<Room>> GetRoomWithMinAndMax(int pax)
+        {
+            var room = await GetRoomWithPricing();
+
+            var roomFilterd = room.Where(n => n.minimumCapacity <= pax && n.maximumCapacity >= pax);
+
+            return roomFilterd;
         }
     }
 }

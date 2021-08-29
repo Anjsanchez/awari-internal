@@ -8,6 +8,11 @@ import { writeToken } from "../../../../../../utils/store/pages/users";
 import { GetRoomVariantHeader } from "../../../../../../utils/services/pages/reservation/ReservationHeader";
 import moment from "moment";
 import { Tooltip, Button } from "antd";
+import {
+  roomLinesSelectedEndDateAdded,
+  roomLinesSelectedStartDateAdded,
+} from "../../../../../../utils/store/pages/createReservation";
+import { Grid } from "@material-ui/core";
 
 const { Panel } = Collapse;
 const ReservationRoomPicker = () => {
@@ -19,26 +24,28 @@ const ReservationRoomPicker = () => {
   const [roomVariants, setRoomVariants] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [currentReservations, setCurrentReservations] = useState(false);
-
   const [selectedStartDate, setSelectedStartDate] = useState({
     room: {},
     date: "",
   });
-
   const [selectedEndDate, setSelectedEndDate] = useState({
     room: {},
     date: "",
   });
 
-  const storeData = store.getState().entities.createReservation.rooms.date;
+  const storeData = store.getState().entities.createReservation.rooms;
 
   useEffect(() => {
     //..
     async function fetchData() {
+      const { adult, senior } = storeData.heads;
+      const totalPax = adult + senior;
+
       try {
         const { data } = await GetRoomVariantHeader(
-          storeData.fromDate,
-          storeData.toDate
+          storeData.date.fromDate,
+          storeData.date.toDate,
+          totalPax
         );
         const { token, variants, rooms, lines } = data;
 
@@ -69,7 +76,7 @@ const ReservationRoomPicker = () => {
 
     function setDateRangeOnLoad() {
       //
-      const { fromDate, toDate } = storeData;
+      const { fromDate, toDate } = storeData.date;
 
       const fromDateClone = fromDate.clone();
       const todateClone = toDate.clone();
@@ -86,9 +93,34 @@ const ReservationRoomPicker = () => {
       // dates.push(Number(start.format("YYYY-MM-DD")));
     }
 
+    function loadDefaultValue() {
+      if (Object.keys(storeData.selectedStartDate.room).length !== 0) {
+        setSelectedStartDate({
+          room: storeData.selectedStartDate.room,
+          date: storeData.selectedStartDate.date,
+        });
+      }
+
+      if (Object.keys(storeData.selectedEndDate.room).length !== 0) {
+        setSelectedEndDate({
+          room: storeData.selectedEndDate.room,
+          date: storeData.selectedEndDate.date,
+        });
+      }
+    }
+
     setDateRangeOnLoad();
     fetchData();
+    loadDefaultValue();
   }, []);
+
+  useEffect(() => {
+    store.dispatch(roomLinesSelectedStartDateAdded(selectedStartDate));
+  }, [selectedStartDate]);
+
+  useEffect(() => {
+    store.dispatch(roomLinesSelectedEndDateAdded(selectedEndDate));
+  }, [selectedEndDate]);
 
   let xEndDate = "";
 
@@ -124,6 +156,7 @@ const ReservationRoomPicker = () => {
 
     return closest;
   };
+
   const GetClassString = (
     isContResult,
     isCheckInOnly,
@@ -337,23 +370,49 @@ const ReservationRoomPicker = () => {
 
   if (!initialLoadForm)
     return (
-      <div className="roomPicker__container">
+      <div className="roomSpin__container">
         <Spin className="spin-loader__center " />
       </div>
     );
 
   return (
     <div className="roomPicker__container">
-      <div className="counter-spanHeader__wrapper">
-        <span className="counter-spanHeader">CLUSTER ROOM 1</span>
-        <span className="counter-spanHeader rrPickerLbl">ROOM</span>
-      </div>
+      <Grid container>
+        <Grid item xs={12}>
+          {Object.keys(selectedStartDate.room).length !== 0 && (
+            <div className="counter-spanHeader__wrapper">
+              <div className="counter-spanHeader__headerContainer">
+                <span className="counter-spanHeader">
+                  {selectedStartDate.room.roomLongName}
+                </span>
+                <span className="counter-spanHeader rrPickerLbl">ROOM</span>
+              </div>
+              <div className="counter-spanInLabel__container">
+                <div>
+                  <span className="counter-spanHeader rrInLabel">IN : </span>
+                  <span className="counter-spanHeader ">
+                    {moment(selectedStartDate.date).format("MMM DD")}
+                  </span>
+                </div>
+                {Object.keys(selectedEndDate.room).length !== 0 && (
+                  <div>
+                    <span className="counter-spanHeader rrInLabel">OUT : </span>
+                    <span className="counter-spanHeader">
+                      {moment(selectedEndDate.date).format("MMM DD")}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
-      <div className="picker-body__container">
-        <Collapse accordion>
-          {roomVariants.map((n) => renderVariantPanels(n))}
-        </Collapse>
-      </div>
+          <div className="picker-body__container">
+            <Collapse accordion>
+              {roomVariants.map((n) => renderVariantPanels(n))}
+            </Collapse>
+          </div>
+        </Grid>
+      </Grid>
     </div>
   );
 };

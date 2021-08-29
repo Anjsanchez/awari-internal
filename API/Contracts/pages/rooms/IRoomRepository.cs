@@ -9,5 +9,6 @@ namespace API.Contracts.pages.rooms
     {
         Task<Room> GetRoomByName(string roomName);
         Task<IEnumerable<Room>> GetRoomWithPricing();
+        Task<IEnumerable<Room>> GetRoomWithMinAndMax(Int32 pax);
     }
 }

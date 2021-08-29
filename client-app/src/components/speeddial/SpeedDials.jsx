@@ -9,7 +9,7 @@ import QueueSharpIcon from "@material-ui/icons/QueueSharp";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import ViewListSharpIcon from "@material-ui/icons/ViewListSharp";
 import MoreHorizSharpIcon from "@material-ui/icons/MoreHorizSharp";
-import { toggleVisible } from "../../utils/store/pages/RoomReservation";
+import { toggleVisible } from "../../utils/store/pages/createReservation";
 
 const useStyles = makeStyles((theme) => ({
   root: {

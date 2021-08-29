@@ -14,8 +14,11 @@ import ReservationGuestCount from "./Steps/ReservationGuestCount";
 import ReservationDatePicker from "./Steps/ReservationDatePicker";
 import { store } from "../../../../../utils/store/configureStore";
 import MaterialButton from "./../../../../../common/MaterialButton";
-import { toggleLoading } from "../../../../../utils/store/pages/RoomReservation";
+import { toggleLoading } from "../../../../../utils/store/pages/createReservation";
 import ReservationRoomPicker from "./Steps/ReservationRoomPicker";
+import ReservationDiscount from "./Steps/ReservationDiscount";
+import ReservationConfirmation from "./Steps/ReservationConfirmation";
+import ReservationAddOns from "./Steps/ReservationAddOns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,7 +41,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSteps = () => ["Date", "Guest", "Room", "Confirmation"];
+const getSteps = () => [
+  "Date",
+  "Guest",
+  "Room",
+  "Promotions",
+  "Add Ons",
+  "Confirmation",
+];
 
 function getStepContent(step) {
   switch (step) {
@@ -48,6 +58,12 @@ function getStepContent(step) {
       return <ReservationGuestCount />;
     case 2:
       return <ReservationRoomPicker />;
+    case 3:
+      return <ReservationDiscount />;
+    case 4:
+      return <ReservationAddOns />;
+    case 5:
+      return <ReservationConfirmation />;
     default:
       return "Unknown step";
   }
@@ -110,7 +126,25 @@ const ReservationDetailsRoomSteps = () => {
   const getDisabled = () => {
     //
     if (activeStep === 1)
-      return storeState.rooms.heads.adult === 0 ? true : false;
+      return storeState.rooms.heads.adult === 0 &&
+        storeState.rooms.heads.senior === 0
+        ? true
+        : false;
+
+    if (activeStep === 2) {
+      if (
+        Object.keys(storeState.rooms.selectedStartDate.room).length === 0 ||
+        Object.keys(storeState.rooms.selectedEndDate.room).length === 0
+      )
+        return true;
+
+      return false;
+    }
+
+    if (activeStep === 3) {
+      if (Object.keys(storeState.rooms.discount).length === 0) return true;
+      return false;
+    }
 
     return false;
   };

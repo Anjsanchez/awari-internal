@@ -12,6 +12,11 @@ export function getRoomPricings() {
   return http.get(apiEndpoint);
 }
 
+export function getRoomPricingsByRoomId(roomId) {
+  http.SetJwt();
+  return http.get(`${apiEndpoint}/byRoomId?roomId=${roomId}`);
+}
+
 export function getRoomPricingsByVariantId(variantId) {
   http.SetJwt();
   return http.get(`${apiEndpoint}/byRoomVariant?variantId=${variantId}`);

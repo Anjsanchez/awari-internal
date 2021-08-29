@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
 import { writeToken } from "../../../utils/store/pages/users";
 import { store } from "../../../utils/store/configureStore";
-import { headerTypeAdded } from "../../../utils/store/pages/RoomReservation";
+import { headerTypeAdded } from "../../../utils/store/pages/createReservation";
 import { GetReservationTypes } from "./../../../utils/services/pages/reservation/ReservationType";
 
 const ReservationType = React.memo(() => {

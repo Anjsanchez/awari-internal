@@ -24,6 +24,19 @@ const slice = createSlice({
         children: 0,
         senior: 0,
       },
+      selectedStartDate: {
+        room: {},
+        date: "",
+      },
+      selectedEndDate: {
+        room: {},
+        date: "",
+      },
+      discount: {},
+      addOns: {
+        mattress: 0,
+        remarks: "",
+      },
     },
     isLoading: false,
     isVisible: false,
@@ -62,6 +75,31 @@ const slice = createSlice({
       resx.rooms.date.fromDate = fromDate;
       resx.rooms.date.toDate = toDate;
     },
+    roomLinesSelectedStartDateAdded: (resx, action) => {
+      resx.rooms.selectedStartDate = action.payload;
+    },
+    roomLinesSelectedEndDateAdded: (resx, action) => {
+      resx.rooms.selectedEndDate = action.payload;
+    },
+    roomLinesSelectedDiscountAdded: (resx, action) => {
+      resx.rooms.discount = action.payload;
+    },
+    roomLinesSelectedReset: (resx, action) => {
+      resx.rooms.selectedStartDate = {
+        room: {},
+        date: "",
+      };
+      resx.rooms.selectedEndDate = {
+        room: {},
+        date: "",
+      };
+    },
+    roomLinesSelectedAddOnsMattress: (resx, action) => {
+      resx.rooms.addOns.mattress = action.payload;
+    },
+    roomLinesSelectedAddOnsRemark: (resx, action) => {
+      resx.rooms.addOns.remarks = action.payload;
+    },
   },
 });
 
@@ -78,5 +116,11 @@ export const {
   toggleLoading,
   roomLinesHeadsAdded,
   roomLinesDateAdded,
+  roomLinesSelectedStartDateAdded,
+  roomLinesSelectedEndDateAdded,
+  roomLinesSelectedReset,
+  roomLinesSelectedDiscountAdded,
+  roomLinesSelectedAddOnsMattress,
+  roomLinesSelectedAddOnsRemark,
 } = slice.actions;
 export default slice.reducer;

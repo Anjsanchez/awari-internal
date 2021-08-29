@@ -25,7 +25,9 @@ namespace API.Dto.reservations.line
         public float totalAmount { get; set; }
 
 
-        public Int32 pax { get; set; }
+        public Int32 adultPax { get; set; }
+        public Int32 seniorPax { get; set; }
+        public Int32 childrenPax { get; set; }
 
         public User user { get; set; }
 

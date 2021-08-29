@@ -1,13 +1,18 @@
-.roomPicker__container {
-  min-width: 650px;
-}
-
 .rrPickerLbl {
   display: block;
   font-weight: 300;
   font-size: 0.775rem;
   top: -5px;
   position: relative;
+}
+
+.counter-spanHeader__wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+.rrInLabel {
+  font-weight: 300;
+  font-size: 0.775rem;
 }
 
 .roomPicker__container .counter-spanHeader {
@@ -20,6 +25,17 @@
 
 .picker-body__container .ant-collapse > .ant-collapse-item {
   border-bottom: 1px solid #d7ccc8;
+}
+
+.picker-body__container
+  .ant-collapse
+  > .ant-collapse-item
+  > .ant-collapse-header,
+.roomSpin__container {
+  min-width: 540px;
+}
+.counter-spanInLabel__container {
+  text-align: right;
 }
 
 .picker-body__container .ant-collapse-content-box {
@@ -38,9 +54,12 @@
 }
 
 .counter-spanHeader.rrRoomLbl {
-  font-size: 1rem;
+  font-size: 0.85rem;
   margin-bottom: 0;
+  max-width: 110px;
+  margin-right: 10px;
   padding-bottom: 0px;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -100,4 +119,21 @@
 .picker-body-rooms__dateBox.middleSelectedDates {
   background-color: #e3f2fd;
   transition: background-color 0.2s ease-in;
+}
+
+@media screen and (max-width: 420px) {
+  .counter-spanHeader.rrRoomLbl {
+    font-size: 0.75rem;
+    text-align: center;
+    max-width: 100px;
+  }
+  .counter-spanHeader__headerContainer {
+    width: 140px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .counter-spanHeader.rrRoomLbl {
+    max-width: 80px;
+  }
 }

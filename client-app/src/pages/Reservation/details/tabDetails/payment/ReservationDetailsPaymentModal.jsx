@@ -7,16 +7,17 @@ import "../css/ReservationDetailsPaymentModal.css";
 import MDialog from "./../../../../../common/MDialog";
 import { makeStyles } from "@material-ui/core/styles";
 import AInput from "./../../../../../common/antd/AInput";
+import { ButtonGroup, List, ListItem } from "@material-ui/core";
 import { store } from "../../../../../utils/store/configureStore";
 import ActiveButton from "../../../../../common/form/ActiveButton";
 import { writeToken } from "../../../../../utils/store/pages/users";
+import MaterialButton from "./../../../../../common/MaterialButton";
 import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import UseDetailsPaymentForm from "./validation/UseDetailsPaymentForm";
-import { ButtonGroup, List, ListItem, Button } from "@material-ui/core";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import RDetailsPaymentFormValidate from "./validation/RDetailsPaymentFormValidate";
 import { getPayments } from "./../../../../../utils/services/pages/functionality/PaymentService";
-import MaterialButton from "./../../../../../common/MaterialButton";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",

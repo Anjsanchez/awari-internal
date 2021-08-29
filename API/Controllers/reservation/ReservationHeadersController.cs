@@ -94,12 +94,12 @@ namespace API.Controllers.reservation
 
         [HttpGet]
         [Route("includesRoom")]
-        public async Task<ActionResult> getRoomVariantHeader(DateTime fromDate, DateTime toDate)
+        public async Task<ActionResult> getRoomVariantHeader(DateTime fromDate, DateTime toDate, Int32 pax)
         {
             toDate = toDate.AddHours(23);
 
             var variants = await _variantRepo.FindAll(true);
-            var rooms = await _roomsRepo.FindAll(true);
+            var rooms = await _roomsRepo.GetRoomWithMinAndMax(pax);
             var lines = await _lineRepo.getLineByDates(fromDate, toDate);
 
             var mVariants = _map.Map<List<RoomVariant>, List<roomVariantReadDto>>(variants.ToList());

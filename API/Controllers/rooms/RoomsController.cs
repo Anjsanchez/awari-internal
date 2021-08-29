@@ -24,7 +24,7 @@ namespace API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 
     public class RoomsController : ControllerBase
     {
@@ -76,6 +76,20 @@ namespace API.Controllers
         public async Task<ActionResult> GetRoomWithPricing()
         {
             var rooms = await _repo.GetRoomWithPricing();
+            var mappedRooms = _map.Map<List<Room>, List<roomReadDto>>(rooms.ToList());
+
+            return Ok(new GenericResponse<roomReadDto>()
+            {
+                listRecords = mappedRooms,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [Route("byMinMaxPax")]
+        [HttpGet]
+        public async Task<ActionResult> GetRoomByMinMaxPax(Int32 pax)
+        {
+            var rooms = await _repo.GetRoomWithMinAndMax(pax);
             var mappedRooms = _map.Map<List<Room>, List<roomReadDto>>(rooms.ToList());
 
             return Ok(new GenericResponse<roomReadDto>()

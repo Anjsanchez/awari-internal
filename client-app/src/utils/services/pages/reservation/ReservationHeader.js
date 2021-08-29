@@ -22,12 +22,14 @@ export function GetHeadersWithFullDetails(headerId) {
   return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);
 }
 
-export function GetRoomVariantHeader(fromDate, toDate) {
+export function GetRoomVariantHeader(fromDate, toDate, pax) {
   const date = FormatDate(fromDate, toDate);
 
+  console.log("p", pax);
   http.SetJwt();
   return http.get(
-    apiEndpoint + `/includesRoom?fromDate=${date.start}&toDate=${date.end}`
+    apiEndpoint +
+      `/includesRoom?fromDate=${date.start}&toDate=${date.end}&pax=${pax}`
   );
 }
 
@@ -35,8 +37,8 @@ function FormatDate(fromDate, toDate) {
   const fromDateClone = fromDate.clone();
   const todateClone = toDate.clone();
 
-  const start = fromDateClone.subtract(2, "days").format("YYYY-MM-DD");
-  const end = todateClone.add(2, "day").format("YYYY-MM-DD");
+  const start = fromDateClone.subtract(3, "days").format("YYYY-MM-DD");
+  const end = todateClone.add(3, "day").format("YYYY-MM-DD");
 
   return { start, end };
 }

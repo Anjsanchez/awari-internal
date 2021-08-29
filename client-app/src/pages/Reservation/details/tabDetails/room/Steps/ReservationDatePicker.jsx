@@ -3,7 +3,10 @@ import "./css/ReservationDatePicker.css";
 import { BsArrowRight } from "react-icons/bs";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
-import { roomLinesDateAdded } from "../../../../../../utils/store/pages/RoomReservation";
+import {
+  roomLinesDateAdded,
+  roomLinesSelectedReset,
+} from "../../../../../../utils/store/pages/createReservation";
 import moment from "moment";
 import "moment-timezone";
 const { RangePicker } = DatePicker;
@@ -46,8 +49,10 @@ const ReservationDatePicker = () => {
 
   const onChangeDatePicker = (d) => setDate({ fromDate: d, toDate: d });
 
-  const onChangeRangePicker = (d) =>
-    d === null ? null : setDate({ fromDate: d[0], toDate: d[1] });
+  const onChangeRangePicker = (d) => {
+    store.dispatch(roomLinesSelectedReset());
+    return d === null ? null : setDate({ fromDate: d[0], toDate: d[1] });
+  };
 
   const disabledDate = (d) => d && d < moment().startOf("day");
 

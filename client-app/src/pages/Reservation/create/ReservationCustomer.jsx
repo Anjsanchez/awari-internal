@@ -8,7 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../../utils/store/configureStore";
 import { writeToken } from "../../../utils/store/pages/users";
 import { getCustomers } from "./../../../utils/services/pages/CustomerService";
-import { headerCustomerAdded } from "../../../utils/store/pages/RoomReservation";
+import { headerCustomerAdded } from "../../../utils/store/pages/createReservation";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {

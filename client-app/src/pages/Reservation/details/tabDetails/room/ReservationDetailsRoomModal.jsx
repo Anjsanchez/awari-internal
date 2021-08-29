@@ -58,6 +58,7 @@ const ReservationDetailsRoomModal = (props) => {
       <Modal
         title="Room Reservation"
         centered
+        className="roomServationMdl__container"
         visible={visible.value}
         style={{
           top: "2%",

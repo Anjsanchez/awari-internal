@@ -17,6 +17,11 @@ export function GetRoomWithPricing() {
   return http.get(apiEndpoint + "/byPricingAvailable");
 }
 
+export function GetRoomByPax(pax) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/byMinMaxPax?pax=" + pax);
+}
+
 export function saveRoom(room) {
   http.SetJwt();
   if (room.id) {

@@ -21,7 +21,7 @@ import { saveHeader } from "../../utils/services/pages/reservation/ReservationHe
 import {
   toggleLoading,
   refreshValues,
-} from "../../utils/store/pages/RoomReservation";
+} from "../../utils/store/pages/createReservation";
 
 const useStyles = makeStyles((theme) => ({
   root: {

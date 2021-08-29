@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ReservationSteps from "./ReservationSteps";
 import { store } from "../../utils/store/configureStore";
-import { toggleVisible } from "../../utils/store/pages/RoomReservation";
+import { toggleVisible } from "../../utils/store/pages/createReservation";
 
 const ReservationModal = () => {
   const [modalVisible, setModalVisible] = useState(true);
