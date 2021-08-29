@@ -1,7 +1,7 @@
 // import { createSelector, createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
-import moment from "moment";
 
 const slice = createSlice({
   name: "createReservation",
@@ -36,6 +36,11 @@ const slice = createSlice({
       addOns: {
         mattress: 0,
         remarks: "",
+      },
+      amountPrice: {
+        netDiscount: 0,
+        netAmount: 0,
+        grossAmount: 0,
       },
     },
     isLoading: false,
@@ -100,6 +105,21 @@ const slice = createSlice({
     roomLinesSelectedAddOnsRemark: (resx, action) => {
       resx.rooms.addOns.remarks = action.payload;
     },
+    roomLinesSelectedAmountAdded: (resx, action) => {
+      const { grossAmount, netAmount, netDiscount } = action.payload;
+      resx.rooms.amountPrice.grossAmount = grossAmount;
+      resx.rooms.amountPrice.netAmount = netAmount;
+      resx.rooms.amountPrice.netDiscount = netDiscount;
+    },
+    roomLinesResetValue: (re, action) => {
+      re.rooms.date = { fromDate: moment(), toDate: moment() };
+      re.rooms.heads = { adult: 0, children: 0, senior: 0 };
+      re.rooms.selectedStartDate = { room: {}, date: "" };
+      re.rooms.selectedEndDate = { room: {}, date: "" };
+      re.rooms.discount = {};
+      re.rooms.addOns = { mattress: 0, remarks: "" };
+      re.rooms.amountPrice = { netAmount: 0, netDiscount: 0, grossAmount: 0 };
+    },
   },
 });
 
@@ -122,5 +142,7 @@ export const {
   roomLinesSelectedDiscountAdded,
   roomLinesSelectedAddOnsMattress,
   roomLinesSelectedAddOnsRemark,
+  roomLinesSelectedAmountAdded,
+  roomLinesResetValue,
 } = slice.actions;
 export default slice.reducer;

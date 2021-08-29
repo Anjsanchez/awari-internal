@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210829142858_addedRemark")]
+    partial class addedRemark
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,9 +415,6 @@ namespace API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("discountId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("endDate")
                         .HasColumnType("datetime2");
 
@@ -452,8 +451,6 @@ namespace API.Migrations
                         .HasColumnName("createdBy");
 
                     b.HasKey("_id");
-
-                    b.HasIndex("discountId");
 
                     b.HasIndex("reservationHeaderId");
 
@@ -711,10 +708,6 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.reservation.ReservationRoomLine", b =>
                 {
-                    b.HasOne("API.Models.functionality.Discount", "discount")
-                        .WithMany()
-                        .HasForeignKey("discountId");
-
                     b.HasOne("API.Models.reservation.ReservationHeader", "reservationHeader")
                         .WithMany("ReservationRoomLine")
                         .HasForeignKey("reservationHeaderId")
@@ -732,8 +725,6 @@ namespace API.Migrations
                         .HasForeignKey("userId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("discount");
 
                     b.Navigation("reservationHeader");
 

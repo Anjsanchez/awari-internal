@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210829151941_addedDiscountInPaymentLine")]
+    partial class addedDiscountInPaymentLine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -413,7 +415,7 @@ namespace API.Migrations
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("discountId")
+                    b.Property<Guid>("discountId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("endDate")
@@ -713,7 +715,9 @@ namespace API.Migrations
                 {
                     b.HasOne("API.Models.functionality.Discount", "discount")
                         .WithMany()
-                        .HasForeignKey("discountId");
+                        .HasForeignKey("discountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Models.reservation.ReservationHeader", "reservationHeader")
                         .WithMany("ReservationRoomLine")

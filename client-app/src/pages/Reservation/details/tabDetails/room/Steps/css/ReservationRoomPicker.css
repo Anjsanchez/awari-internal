@@ -130,6 +130,14 @@
   .counter-spanHeader__headerContainer {
     width: 140px;
   }
+
+  .picker-body__container
+    .ant-collapse
+    > .ant-collapse-item
+    > .ant-collapse-header,
+  .roomSpin__container {
+    min-width: 0px;
+  }
 }
 
 @media screen and (max-width: 350px) {

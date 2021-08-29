@@ -34,6 +34,7 @@ namespace API.Repository.pages.reservation
             return await _db.ReservationRoomLines
                         .Include(n => n.user)
                         .Include(n => n.room)
+                        .Include(n => n.discount)
                         .ToListAsync();
         }
 

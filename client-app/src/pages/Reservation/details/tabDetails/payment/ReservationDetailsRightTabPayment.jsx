@@ -1,10 +1,11 @@
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsPaymentTable from "./ReservationDetailsPaymentTable";
+import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 
 const ReservationDetailsRightTabPayment = () => {
   const [visible, setVisible] = useState({ value: false, action: "add" });
@@ -24,22 +25,29 @@ const ReservationDetailsRightTabPayment = () => {
             </div>
           </div>
           <div>
-            <IconButton
-              aria-label="Modify"
-              size="small"
-              onClick={() =>
-                handleVisibleModal({ value: true, action: "update" })
-              }
-            >
-              <VisibilityTwoToneIcon />
-            </IconButton>
-            <IconButton
-              aria-label="create"
-              size="small"
-              onClick={() => handleVisibleModal({ value: true, action: "add" })}
-            >
-              <BorderColorTwoToneIcon />
-            </IconButton>
+            <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
+              <IconButton
+                aria-label="Modify"
+                size="small"
+                onClick={() =>
+                  handleVisibleModal({ value: true, action: "update" })
+                }
+              >
+                <EditLocationTwoToneIcon />
+              </IconButton>
+            </Tooltip>
+
+            <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
+              <IconButton
+                aria-label="create"
+                size="small"
+                onClick={() =>
+                  handleVisibleModal({ value: true, action: "add" })
+                }
+              >
+                <BorderColorTwoToneIcon />
+              </IconButton>
+            </Tooltip>
           </div>
         </div>
 

@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
     fontSize: "14px",
   },
+  btnGrp: {
+    fontSize: "14px",
+    marginLeft: "15px",
+    marginBottom: "15px",
+  },
   actionsContainer: {},
   resetContainer: {},
   button__wrapper: {
@@ -69,7 +74,7 @@ function getStepContent(step) {
   }
 }
 
-const ReservationDetailsRoomSteps = () => {
+const ReservationDetailsRoomSteps = ({ onDialogShow }) => {
   const steps = getSteps();
   const classes = useStyles();
   const hist = useHistory();
@@ -95,33 +100,29 @@ const ReservationDetailsRoomSteps = () => {
   //   userId: user.user.id,
   // });
 
-  // const handleDialogProceed = async () => {
-  //   //
-  //   store.dispatch(toggleLoading(true));
-  //   const mdl = customerViewModel(createReservation.header);
-  //   try {
-  //     const { data } = await saveHeader(mdl);
-  //     const { token } = data;
-  //     store.dispatch(writeToken({ token }));
-
-  //     setTimeout(() => {
-  //       enqueueSnackbar("Successfully updated records!", {
-  //         variant: "success",
-  //       });
-
-  //       store.dispatch(refreshValues());
-  //       setActiveStep(0);
-  //       hist.push("/");
-  //     }, 1000);
-  //   } catch (ex) {
-  //     if (ex && ex.status === 400) {
-  //       enqueueSnackbar(ex.data, { variant: "error" });
-  //     }
-  //     if (ex && ex.status === 500)
-  //       enqueueSnackbar(ex.data, { variant: "error" });
-  //     store.dispatch(toggleLoading(false));
-  //   }
-  // };
+  const handleDialogProceed = async () => {
+    //
+    try {
+      // const { data } = await saveHeader(mdl);
+      // const { token } = data;
+      // store.dispatch(writeToken({ token }));
+      // setTimeout(() => {
+      //   enqueueSnackbar("Successfully updated records!", {
+      //     variant: "success",
+      //   });
+      //   store.dispatch(refreshValues());
+      //   setActiveStep(0);
+      //   hist.push("/");
+      // }, 1000);
+    } catch (ex) {
+      if (ex && ex.status === 400) {
+        enqueueSnackbar(ex.data, { variant: "error" });
+      }
+      if (ex && ex.status === 500)
+        enqueueSnackbar(ex.data, { variant: "error" });
+      store.dispatch(toggleLoading(false));
+    }
+  };
 
   const getDisabled = () => {
     //
@@ -191,14 +192,16 @@ const ReservationDetailsRoomSteps = () => {
           </Step>
         ))}
       </Stepper>
+
       {activeStep === steps.length && (
         <Paper square elevation={0} className={classes.resetContainer}>
-          <span className="footer-label__span">
-            You can now proceed with adding a room in the reservation.
+          <div className="footer-label__div rdStep"></div>
+          <span className="footer-label__span rdRstep">
+            Proceed to create a reservation.
           </span>
-          <div>
+          <div className="rdBtnGroup__container">
             <ButtonGroup
-              className={classes.button}
+              className={classes.btnGrp}
               variant="text"
               color="primary"
               aria-label="text primary button group"
@@ -217,7 +220,7 @@ const ReservationDetailsRoomSteps = () => {
                 size="small"
                 disabled={storeState.isLoading}
                 text="Proceed"
-                // onClick={handleDialogProceed}
+                onClick={onDialogShow}
               />
             </ButtonGroup>
           </div>

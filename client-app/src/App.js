@@ -19,6 +19,7 @@ import SpeedDials from "./components/speeddial/SpeedDials";
 import RoomPricing from "./pages/room/pricing/RoomPricing";
 import RoomVariants from "./pages/room/variants/RoomVariants";
 import Payments from "./pages/functionality/payments/Payments";
+import GlobalLoading from "./components/loading/GlobalLoading";
 import Discounts from "./pages/functionality/discounts/Discounts";
 import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
@@ -59,6 +60,7 @@ function App() {
       <Router>
         <div className={classes.container}>
           <div className={userIsLoggedIn ? classes.container_child : ""}>
+            <GlobalLoading />
             <NavBar />
             <SpeedDials />
             <ReservationModal />

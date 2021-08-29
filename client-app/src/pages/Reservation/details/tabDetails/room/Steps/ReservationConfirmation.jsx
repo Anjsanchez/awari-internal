@@ -4,8 +4,8 @@ import "./css/ReservationConfirmation.css";
 import { useMountedState } from "react-use";
 import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import KingBedTwoToneIcon from "@material-ui/icons/KingBedTwoTone";
 import AListItem from "./../../../../../../common/antd/AListItem";
+import KingBedTwoToneIcon from "@material-ui/icons/KingBedTwoTone";
 import { store } from "../../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import ActiveButton from "./../../../../../../common/form/ActiveButton";
@@ -13,8 +13,10 @@ import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
 import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
+import { roomLinesSelectedAmountAdded } from "../../../../../../utils/store/pages/createReservation";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
+//
 const ReservationConfirmation = () => {
   const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
@@ -61,6 +63,21 @@ const ReservationConfirmation = () => {
     return `${name} - ${value}%`;
   };
 
+  const generateRoomPrice = () => {
+    const { adult, senior } = storeData.heads;
+    const totalPax = adult + senior;
+
+    let price = roomPrice.find((n) => totalPax >= n.capacity);
+
+    if (price === undefined) {
+      price = roomPrice
+        .sort((a, b) => a.capacity - b.capacity)
+        .find((n) => totalPax <= n.capacity);
+    }
+
+    return price;
+  };
+
   let grossAmount = 0,
     netDiscount = 0,
     netAmount = 0,
@@ -74,23 +91,16 @@ const ReservationConfirmation = () => {
   };
 
   const getGrossAmount = () => {
-    const { adult, senior } = storeData.heads;
-    const totalPax = adult + senior;
-
-    let price = roomPrice.find((n) => totalPax >= n.capacity);
-
-    if (price === undefined) {
-      price = roomPrice
-        .sort((a, b) => a.capacity - b.capacity)
-        .find((n) => totalPax <= n.capacity);
-    }
+    const price = generateRoomPrice();
 
     if (price === undefined) return "0.00";
     const daysNum = getNumberOfDays();
 
     grossAmount = price.sellingPrice * daysNum;
 
-    return Intl.NumberFormat().format(Number(grossAmount).toFixed(2));
+    return Intl.NumberFormat().format(
+      Number(grossAmount + mattressAmount).toFixed(2)
+    );
   };
 
   const getMattressAmount = () => {
@@ -102,7 +112,6 @@ const ReservationConfirmation = () => {
     }
 
     mattressAmount = mattress * 2420;
-    console.log("P", mattressAmount);
     return (
       mattress +
       " - " +
@@ -131,7 +140,8 @@ const ReservationConfirmation = () => {
     }
 
     if (_id !== 0) {
-      const amtMulAdult = amtHalf * adult;
+      let amtMulAdult = amtHalf * adult;
+      amtMulAdult += mattressAmount;
       accumulatedDisc += Math.round(amtMulAdult * (value / 100));
     }
 
@@ -140,8 +150,36 @@ const ReservationConfirmation = () => {
   };
 
   const getNetAmount = () => {
-    netAmount = grossAmount - netDiscount;
+    netAmount = grossAmount + mattressAmount - netDiscount;
+
+    const amt = {
+      grossAmount,
+      netAmount,
+      netDiscount,
+    };
+
+    if (isMounted()) {
+      store.dispatch(roomLinesSelectedAmountAdded(amt));
+    }
+
     return Intl.NumberFormat().format(Number(netAmount).toFixed(2));
+  };
+
+  const getRoomName = () => {
+    const price = generateRoomPrice();
+
+    if (price === undefined)
+      return storeData.selectedStartDate.room.roomLongName;
+
+    const priceFormat = Intl.NumberFormat().format(
+      Number(price.sellingPrice).toFixed(2)
+    );
+    return (
+      storeData.selectedStartDate.room.roomLongName +
+      " - " +
+      priceFormat +
+      " PHP"
+    );
   };
 
   return (
@@ -172,11 +210,6 @@ const ReservationConfirmation = () => {
             <AListItem txtLbl="Adult" txtValue={storeData.heads.adult} />
             <AListItem txtLbl="Senior" txtValue={storeData.heads.senior} />
             <AListItem txtLbl="Children" txtValue={storeData.heads.children} />
-            <AListItem
-              txtLbl="Mattress"
-              txtValue={getMattressAmount()}
-              hasDivider={false}
-            />
           </List>
         </div>
         <div className="reservationtype-container">
@@ -188,8 +221,14 @@ const ReservationConfirmation = () => {
             />
             <AListItem
               txtLbl="Room"
-              txtValue={storeData.selectedStartDate.room.roomLongName}
+              txtValue={getRoomName()}
               Icon={KingBedTwoToneIcon}
+            />
+            <AListItem
+              txtLbl="Mattress"
+              txtValue={getMattressAmount()}
+              hasDivider={false}
+              Icon={AirlineSeatIndividualSuiteTwoToneIcon}
             />
           </List>
         </div>

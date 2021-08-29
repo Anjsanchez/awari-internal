@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using API.Models.functionality;
 using API.Models.rooms;
 
 namespace API.Models.reservation
@@ -16,10 +17,10 @@ namespace API.Models.reservation
         public Guid reservationHeaderId { get; set; }
         public ReservationHeader reservationHeader { get; set; }
 
+        public Guid? discountId { get; set; }
+        public Discount discount { get; set; }
 
         public DateTime startDate { get; set; }
-
-
         public DateTime endDate { get; set; }
 
 
@@ -36,6 +37,11 @@ namespace API.Models.reservation
         public Int32 adultPax { get; set; }
         public Int32 seniorPax { get; set; }
         public Int32 childrenPax { get; set; }
+
+
+        public Int32 mattress { get; set; }
+        [StringLength(1000)]
+        public string remark { get; set; }
 
 
         [Required]

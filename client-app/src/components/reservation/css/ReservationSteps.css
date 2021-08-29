@@ -9,3 +9,11 @@
   color: #484848;
   padding-left: 5px;
 }
+
+.footer-label__span.rdRstep {
+  margin-left: 15px;
+}
+
+.footer-label__div.rdStep {
+  min-width: 400px;
+}

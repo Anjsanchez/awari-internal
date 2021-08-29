@@ -17,7 +17,7 @@ export function GetRoomLinesByHeaderId(headerId) {
   return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);
 }
 
-export function saveHeader(h) {
+export function saveHeaderLines(h) {
   http.SetJwt();
   if (h.id) {
     const body = { ...h };

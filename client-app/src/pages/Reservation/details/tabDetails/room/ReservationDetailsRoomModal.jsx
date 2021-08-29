@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
 import "../css/ReservationDetailsPaymentModal.css";
 import MDialog from "../../../../../common/MDialog";
@@ -28,6 +28,22 @@ const useStyles = makeStyles((theme) => ({
 
 const ReservationDetailsRoomModal = (props) => {
   const classes = useStyles();
+  const [askConfirmation, setAskConfirmation] = useState(false);
+
+  const handleDialogCancel = () => {
+    setAskConfirmation(false);
+  };
+
+  const handleDialogShow = () => {
+    setAskConfirmation(true);
+  };
+
+  const onDecideOfAction = async () => {
+    setAskConfirmation(false);
+    onVisible({ value: false, action: "cancel" });
+    onProceedWithModal();
+  };
+
   const {
     onVisible,
     visible,
@@ -35,17 +51,9 @@ const ReservationDetailsRoomModal = (props) => {
     onSuccessEdit,
     onSuccessAdd,
     onSuccessDelete,
+    onProceedWithModal,
   } = props;
 
-  const { askConfirmation, onDecideOfAction, handleDialogCancel } =
-    UseDetailsRoomForm(
-      RDetailsRoomFormValidate,
-      headerId,
-      onVisible,
-      onSuccessEdit,
-      onSuccessAdd,
-      onSuccessDelete
-    );
   return (
     <div className="roomModal__container">
       {askConfirmation && (
@@ -62,13 +70,14 @@ const ReservationDetailsRoomModal = (props) => {
         visible={visible.value}
         style={{
           top: "2%",
+          minWidth: "340px",
         }}
         width="auto"
         onOk={onVisible}
         onCancel={() => onVisible({ value: false, action: "cancel" })}
         footer={null}
       >
-        <ReservationDetailsRoomSteps />
+        <ReservationDetailsRoomSteps onDialogShow={handleDialogShow} />
       </Modal>
     </div>
   );

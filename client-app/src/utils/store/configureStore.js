@@ -3,6 +3,7 @@ import tokenLogger from "./middleware/tokenLogger";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import GlobalSettings from "./middleware/globalSetting";
 
 const persistConfig = {
   key: "root",
@@ -19,6 +20,7 @@ const store = configureStore({
       serializableCheck: false,
     }),
     tokenLogger(),
+    GlobalSettings(),
   ],
 });
 

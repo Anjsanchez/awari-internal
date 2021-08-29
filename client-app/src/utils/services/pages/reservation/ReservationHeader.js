@@ -25,7 +25,6 @@ export function GetHeadersWithFullDetails(headerId) {
 export function GetRoomVariantHeader(fromDate, toDate, pax) {
   const date = FormatDate(fromDate, toDate);
 
-  console.log("p", pax);
   http.SetJwt();
   return http.get(
     apiEndpoint +
