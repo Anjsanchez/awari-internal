@@ -24,9 +24,10 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
-        public Task<bool> Delete(ReservationRoomLine entity)
+        public async Task<bool> Delete(ReservationRoomLine entity)
         {
-            throw new NotImplementedException();
+            _db.ReservationRoomLines.Remove(entity);
+            return await Save();
         }
 
         public async Task<ICollection<ReservationRoomLine>> FindAll(bool isActiveOnly = false)
@@ -35,15 +36,18 @@ namespace API.Repository.pages.reservation
                         .Include(n => n.user)
                         .Include(n => n.room)
                         .Include(n => n.discount)
+                        .Include(n => n.reservationHeader)
                         .ToListAsync();
         }
 
         public async Task<ReservationRoomLine> FindById(Guid id)
         {
             return await _db.ReservationRoomLines
+                        .Include(n => n.user)
                         .Include(n => n.room)
-                            .Include(n => n.user)
-                            .FirstOrDefaultAsync(n => n._id == id);
+                        .Include(n => n.discount)
+                        .Include(n => n.reservationHeader)
+                        .FirstOrDefaultAsync(n => n._id == id);
         }
 
         public async Task<ICollection<ReservationRoomLine>> getLineByDates(DateTime fromDate, DateTime toDate)

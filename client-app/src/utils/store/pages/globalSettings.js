@@ -11,13 +11,16 @@ const slice = createSlice({
     toggleLoadingGlobal: (resx, action) => {
       resx.isLoading = action.payload;
     },
+    toggleLoadingForceStop: (resx, action) => {
+      resx.isLoading = false;
+    },
   },
 });
 
 export const getVisibleState = createSelector(
   (state) => state.entities.globalSettings,
-  (isVisible) => isVisible
+  (isLoading) => isLoading
 );
 
-export const { toggleLoadingGlobal } = slice.actions;
+export const { toggleLoadingGlobal, toggleLoadingForceStop } = slice.actions;
 export default slice.reducer;

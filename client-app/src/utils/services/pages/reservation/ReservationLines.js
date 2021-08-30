@@ -25,3 +25,7 @@ export function saveHeaderLines(h) {
   }
   return http.post(apiEndpoint, h);
 }
+
+export function deleteReservationLine(lineId) {
+  return http.delete(header(lineId));
+}

@@ -232,7 +232,7 @@ const ReservationDetailsPaymentModal = (props) => {
 
   const Footer = () => {
     const isAdd = visible.action === "add" ? true : false;
-    const btnTextValue = isAdd ? "Create" : "Modify";
+    const btnTextValue = isAdd ? "CREATE" : "MODIFY";
 
     if (visible.action !== "add") if (selectedPayment.length === 0) return null;
 

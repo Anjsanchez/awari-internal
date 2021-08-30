@@ -1,6 +1,6 @@
 import React from "react";
-import { Grid, List, ListItem } from "@material-ui/core";
 import { Divider } from "antd";
+import { ListItem } from "@material-ui/core";
 
 const AListItem = ({ txtLbl, txtValue, Icon, hasDivider = true }) => {
   return (

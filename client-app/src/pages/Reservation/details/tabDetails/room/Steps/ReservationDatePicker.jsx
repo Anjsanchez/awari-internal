@@ -1,23 +1,24 @@
+import "moment-timezone";
+import moment from "moment";
 import { DatePicker } from "antd";
 import "./css/ReservationDatePicker.css";
 import { BsArrowRight } from "react-icons/bs";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
+
 import {
   roomLinesDateAdded,
   roomLinesSelectedReset,
 } from "../../../../../../utils/store/pages/createReservation";
-import moment from "moment";
-import "moment-timezone";
-const { RangePicker } = DatePicker;
 
-const ReservationDatePicker = () => {
+const ReservationDatePicker = ({ visible }) => {
   //
   const [date, setDate] = useState({
     fromDate: moment(),
     toDate: moment(),
   });
 
+  const { RangePicker } = DatePicker;
   const storeData = store.getState().entities;
 
   useEffect(() => {
@@ -37,13 +38,9 @@ const ReservationDatePicker = () => {
       });
     }
     initialLoadValues();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    // let localTime1 = date.fromDate
-    //   .tz("2000", "HHmm", "Asia/Singapore")
-    //   .format("dddd, MMMM Do YYYY HH:mm");
-    // console.log(localTime1.toString());
     store.dispatch(roomLinesDateAdded(date));
   }, [date]);
 
@@ -77,6 +74,14 @@ const ReservationDatePicker = () => {
             );
           }}
         />
+        {storeData.createReservation.rooms.id !== "" && (
+          <div className="header-label__wrapper warning">
+            <label>
+              Modifying the dates above will reset the selected start, and end
+              date.
+            </label>
+          </div>
+        )}
       </div>
     );
   };

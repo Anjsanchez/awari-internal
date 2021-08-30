@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React from "react";
+import { useSelector } from "react-redux";
+import Fade from "@material-ui/core/Fade";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import { useSelector } from "react-redux";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2, 4, 3),
   },
 }));
+
 const GlobalLoading = () => {
   const isLoading = useSelector(
     (state) => state.entities.globalSettings.isLoading

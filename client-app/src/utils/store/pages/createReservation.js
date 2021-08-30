@@ -15,6 +15,9 @@ const slice = createSlice({
       customer: {},
     },
     rooms: {
+      id: "",
+      createdDate: "",
+      createdBy: {},
       date: {
         fromDate: moment(),
         toDate: moment(),
@@ -47,6 +50,58 @@ const slice = createSlice({
     isVisible: false,
   },
   reducers: {
+    headerRoomAllAdded: (resx, action) => {
+      const {
+        _id,
+        startDate,
+        adultPax,
+        childrenPax,
+        discount,
+        endDate,
+        grossAmount,
+        mattress,
+        remark,
+        room,
+        seniorPax,
+        totalAmount,
+        totalDiscount,
+      } = action.payload;
+
+      const xDiscount =
+        discount === null ? { _id: 0, name: "Not Applicable" } : discount;
+
+      resx.rooms.id = _id;
+      resx.rooms.date = {
+        fromDate: moment(startDate),
+        toDate: moment(endDate),
+      };
+      resx.rooms.heads = {
+        adult: adultPax,
+        children: childrenPax,
+        senior: seniorPax,
+      };
+      resx.rooms.selectedStartDate = {
+        room: room,
+        date: startDate,
+      };
+      resx.rooms.selectedEndDate = {
+        room: room,
+        date: endDate,
+      };
+      resx.rooms.discount = xDiscount;
+      resx.rooms.addOns = {
+        mattress: mattress,
+        remarks: remark,
+      };
+      resx.rooms.amountPrice = {
+        netDiscount: totalDiscount,
+        netAmount: totalAmount,
+        grossAmount: grossAmount,
+      };
+    },
+    headerIdRemoved: (resx, action) => {
+      resx.rooms.id = "";
+    },
     toggleVisible: (resx, action) => {
       resx.isVisible = action.payload;
     },
@@ -112,6 +167,7 @@ const slice = createSlice({
       resx.rooms.amountPrice.netDiscount = netDiscount;
     },
     roomLinesResetValue: (re, action) => {
+      re.rooms.id = "";
       re.rooms.date = { fromDate: moment(), toDate: moment() };
       re.rooms.heads = { adult: 0, children: 0, senior: 0 };
       re.rooms.selectedStartDate = { room: {}, date: "" };
@@ -144,5 +200,7 @@ export const {
   roomLinesSelectedAddOnsRemark,
   roomLinesSelectedAmountAdded,
   roomLinesResetValue,
+  headerRoomAllAdded,
+  headerIdRemoved,
 } = slice.actions;
 export default slice.reducer;

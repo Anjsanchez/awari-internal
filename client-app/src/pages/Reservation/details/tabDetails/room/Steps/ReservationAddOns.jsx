@@ -10,8 +10,8 @@ import {
 //
 const ReservationAddOns = () => {
   //
-  const [mattress, setMattress] = useState(0);
   const [remark, setRemark] = useState("");
+  const [mattress, setMattress] = useState(0);
 
   const storeData = store.getState().entities.createReservation.rooms;
 
@@ -23,7 +23,7 @@ const ReservationAddOns = () => {
       setMattress(mattress);
     }
     initialLoadValues();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleIncrement = () => {
     setMattress((n) => {

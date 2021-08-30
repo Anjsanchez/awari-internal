@@ -71,6 +71,11 @@ const ReservationDetailsRoomTableRow = (props) => {
     return <span style={{ padding: "5px 10px" }}>{dateInMoment} </span>;
   };
 
+  const renderPax = (obj) => {
+    const { childrenPax, adultPax, seniorPax } = obj;
+    return childrenPax + adultPax + seniorPax;
+  };
+
   return (
     <TableBody style={{ width: "100%" }}>
       {stableSort(rows, getComparator(order, orderBy))
@@ -99,7 +104,7 @@ const ReservationDetailsRoomTableRow = (props) => {
                 {row.room.roomLongName}
               </TableCell>
               <TableCell align="right">
-                <span className={classes.rowSpan}>{row.pax}</span>
+                <span className={classes.rowSpan}>{renderPax(row)}</span>
               </TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>

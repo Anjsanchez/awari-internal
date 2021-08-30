@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
 import { store } from "../../../../../utils/store/configureStore";
-import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
-import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsRoomTable";
+import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 
 const ReservationDetailsRightTabRoom = () => {
@@ -33,18 +32,6 @@ const ReservationDetailsRightTabRoom = () => {
           <div>
             {!isRestaurant && (
               <>
-                <Tooltip placement="topLeft" title="View" arrowPointAtCenter>
-                  <IconButton
-                    aria-label="Modify"
-                    size="small"
-                    onClick={() =>
-                      handleVisibleModal({ value: true, action: "update" })
-                    }
-                  >
-                    <VisibilityTwoToneIcon />
-                  </IconButton>
-                </Tooltip>
-
                 <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
                   <IconButton
                     aria-label="Modify"

@@ -22,11 +22,17 @@ const slice = createSlice({
     },
 
     addRHeaders: (resx, action) => {
-      console.log(action.payload);
       resx.payments = [...action.payload];
+    },
+    addRRooms: (resx, action) => {
+      resx.rooms = [...resx.rooms, action.payload];
+    },
+    editRRooms: (resx, action) => {
+      resx.rooms = action.payload;
     },
   },
 });
 
-export const { addRPayments, addRHeaders, addRDetails } = slice.actions;
+export const { addRPayments, addRHeaders, addRDetails, addRRooms, editRRooms } =
+  slice.actions;
 export default slice.reducer;

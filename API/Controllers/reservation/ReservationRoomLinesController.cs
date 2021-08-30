@@ -127,5 +127,27 @@ namespace API.Controllers.reservation
                 singleRecord = mappedData
             });
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteReservationLine(Guid id)
+        {
+            var reservationLine = await _repo.FindById(id);
+            if (reservationLine == null)
+                return NotFound("Reservation line not found in the database");
+
+            await _repo.Delete(reservationLine);
+            await _repo.Save();
+
+            var mappedCategory = _map.Map<ReservationRoomLine, reservationRoomLineReadDto>(reservationLine);
+
+            return Ok(new GenericResponse<reservationRoomLineReadDto>()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
+                singleRecord = mappedCategory
+            });
+        }
+
+
     }
 }

@@ -1,22 +1,21 @@
 import { Spin } from "antd";
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
-import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
+import "../css/ReservationDetailsPaymentTable.css";
 import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
 import ReservationDetailsRoomModal from "./ReservationDetailsRoomModal";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
-import { GetPaymentByHeaderId } from "../../../../../utils/services/pages/reservation/ReservationPayment";
-import { GetRoomLinesByHeaderId } from "../../../../../utils/services/pages/reservation/ReservationLines";
-import {
-  roomLinesResetValue,
-  toggleLoading,
-} from "../../../../../utils/store/pages/createReservation";
 import { toggleLoadingGlobal } from "../../../../../utils/store/pages/globalSettings";
-import moment from "moment";
 import { saveHeaderLines } from "./../../../../../utils/services/pages/reservation/ReservationLines";
+import { deleteReservationLine } from "../../../../../utils/services/pages/reservation/ReservationLines";
+import { useSelector } from "react-redux";
+import {
+  addRRooms,
+  editRRooms,
+} from "../../../../../utils/store/pages/reservationDetails";
 
 const headCells = [
   {
@@ -83,6 +82,7 @@ const ReservationDetailsRoomTable = (props) => {
   const handleResetPage = () => setPage(0);
 
   const headerInStore = store.getState().entities;
+  const storeS = useSelector((state) => state.entities.createReservation.rooms);
 
   useEffect(() => {
     //..
@@ -108,30 +108,65 @@ const ReservationDetailsRoomTable = (props) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSuccessEdit = (obj) => {
-    console.log("edit", obj);
-    // const paymentsx = [...payments];
-    // const index = paymentsx.findIndex((x) => x._id === obj._id);
+    const roomsx = [...rooms];
+    const index = roomsx.findIndex((x) => x._id === obj._id);
 
-    // paymentsx[index] = { ...paymentsx[index] };
-    // paymentsx[index].amount = obj.amount;
-    // paymentsx[index].type = obj.type;
-    // paymentsx[index].payment = obj.payment;
+    roomsx[index] = { ...roomsx[index] };
+    roomsx[index].adultPax = obj.adultPax;
+    roomsx[index].childrenPax = obj.childrenPax;
+    roomsx[index].discount = obj.discount;
+    roomsx[index].startDate = obj.startDate;
+    roomsx[index].endDate = obj.endDate;
 
-    // setPayments(paymentsx);
+    roomsx[index].grossAmount = obj.grossAmount;
+    roomsx[index].mattress = obj.mattress;
+
+    roomsx[index].remark = obj.remark;
+    roomsx[index].reservationHeader = obj.reservationHeader;
+    roomsx[index].room = obj.room;
+
+    roomsx[index].seniorPax = obj.seniorPax;
+    roomsx[index].startDate = obj.startDate;
+    roomsx[index].totalAmount = obj.totalAmount;
+
+    roomsx[index].totalDiscount = obj.totalDiscount;
+    store.dispatch(editRRooms(roomsx));
+    setRooms(roomsx);
   };
-  const onSuccessAdd = (obj) => {
-    console.log("add", obj);
 
-    // setPayments((prevState) => {
-    //   return [...prevState, obj];
-    // });
+  const onSuccessAdd = (obj) => {
+    store.dispatch(addRRooms(obj));
+    setRooms((prevState) => {
+      return [...prevState, obj];
+    });
   };
   const onSuccessDelete = (obj) => {
-    console.log("Delete", obj);
-    // const paymentsx = [...payments];
+    const roomsx = [...rooms];
+    const p = roomsx.filter((m) => m._id !== obj.id);
+    setRooms(p);
+    store.dispatch(editRRooms(p));
+  };
+  const onProceedModalDeleteAction = async () => {
+    store.dispatch(toggleLoadingGlobal(true));
+    try {
+      const obj = setObjDbModel();
+      await deleteReservationLine(obj.id).finally(() =>
+        store.dispatch(toggleLoadingGlobal(false))
+      );
 
-    // const p = paymentsx.filter((m) => m._id !== obj._id);
-    // setPayments(p);
+      store.dispatch(toggleLoadingGlobal(false));
+      enqueueSnackbar("Successfully deleted the record!", {
+        variant: "success",
+      });
+
+      onSuccessDelete(obj);
+    } catch (ex) {
+      if (ex && ex.status === 400) {
+        enqueueSnackbar(ex.data, { payment: "error" });
+      }
+      if (ex && ex.status === 500)
+        enqueueSnackbar(ex.data, { payment: "error" });
+    }
   };
 
   const setObjDbModel = () => {
@@ -142,9 +177,11 @@ const ReservationDetailsRoomTable = (props) => {
       discount,
       addOns,
       amountPrice,
-    } = headerInStore.createReservation.rooms;
+      id,
+    } = storeS;
 
-    const discountId = discount._id === 0 ? null : discount._id;
+    const discountId =
+      discount._id === 0 ? { _id: 0, name: "Not Applicable" } : discount._id;
 
     const objMdl = {
       reservationHeaderId: headerInStore.reservationDetails.header._id,
@@ -161,37 +198,43 @@ const ReservationDetailsRoomTable = (props) => {
       childrenPax: heads.children,
       userId: headerInStore.user.user.id,
       discountId,
+      id: id,
     };
 
-    console.log(objMdl);
     return objMdl;
   };
 
-  const onProceedWithModal = async () => {
-    // store.dispatch(toggleLoadingGlobal(true));
-    // try {
-    //   const obj = setObjDbModel();
-    //   // const { data } = await saveHeaderLines(obj);
-    //   // const { token, singleRecord } = data;
-    //   // store.dispatch(writeToken({ token }));
-    //   setTimeout(() => {
-    //     store.dispatch(toggleLoadingGlobal(false));
-    //     enqueueSnackbar("Successfully updated records!", {
-    //       variant: "success",
-    //     });
-    //     store.dispatch(roomLinesResetValue());
-    //     // console.log("s", singleRecord);
-    //     // if (obj.id) return onSuccessEdit(singleRecord);
-    //     // return onSuccessAdd(singleRecord);
-    //   }, 1000);
-    // } catch (ex) {
-    //   if (ex && ex.status === 400) {
-    //     enqueueSnackbar(ex.data, { payment: "error" });
-    //   }
-    //   if (ex && ex.status === 500)
-    //     enqueueSnackbar(ex.data, { payment: "error" });
-    // } finally {
-    // }
+  const onProceedModalAddUpdateAction = async () => {
+    store.dispatch(toggleLoadingGlobal(true));
+    try {
+      const obj = setObjDbModel();
+      const { data } = await saveHeaderLines(obj).finally(() =>
+        store.dispatch(toggleLoadingGlobal(false))
+      );
+      const { token, singleRecord } = data;
+      store.dispatch(writeToken({ token }));
+
+      store.dispatch(toggleLoadingGlobal(false));
+      enqueueSnackbar("Successfully updated records!", {
+        variant: "success",
+      });
+
+      if (!obj.id) return onSuccessAdd(singleRecord);
+      return onSuccessEdit(singleRecord);
+    } catch (ex) {
+      if (ex && ex.status === 400) {
+        enqueueSnackbar(ex.data, { payment: "error" });
+      }
+      if (ex && ex.status === 500)
+        enqueueSnackbar(ex.data, { payment: "error" });
+    }
+  };
+
+  const onProceedWithModal = (action) => {
+    if (action === "add" || action === "update")
+      return onProceedModalAddUpdateAction();
+
+    return onProceedModalDeleteAction();
   };
 
   const selectedRow = (obj) => setSelectedRoom(obj);
@@ -201,13 +244,9 @@ const ReservationDetailsRoomTable = (props) => {
   return (
     <>
       <ReservationDetailsRoomModal
-        headerId={headerInStore.reservationDetails.header._id}
-        selectedPayment={selectedRoom}
+        selectedRoom={selectedRoom}
         onVisible={props.onVisible}
         visible={props.visible}
-        onSuccessEdit={onSuccessEdit}
-        onSuccessAdd={onSuccessAdd}
-        onSuccessDelete={onSuccessDelete}
         onProceedWithModal={onProceedWithModal}
       />
       <MTable

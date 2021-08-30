@@ -2,10 +2,9 @@ import { Card, Tooltip } from "antd";
 import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
-import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
-import ReservationDetailsPaymentTable from "./ReservationDetailsPaymentTable";
 import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
+import ReservationDetailsPaymentTable from "./ReservationDetailsPaymentTable";
 
 const ReservationDetailsRightTabPayment = () => {
   const [visible, setVisible] = useState({ value: false, action: "add" });

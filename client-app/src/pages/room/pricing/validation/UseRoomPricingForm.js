@@ -57,6 +57,7 @@ const UseRoomPricingForm = (validate, onSuccessEdit, onSuccessAdd) => {
       return onSuccessAdd(singleRecord);
     } catch (ex) {
       if (ex && ex.status === 400) {
+        enqueueSnackbar(ex.data, { variant: "error" });
       }
       if (ex && ex.status === 500)
         enqueueSnackbar(ex.data, { variant: "success" });

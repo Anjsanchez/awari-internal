@@ -30,7 +30,7 @@ const ReservationGuestCount = () => {
       });
     }
     initialLoadValues();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     store.dispatch(roomLinesHeadsAdded(counter));
@@ -39,7 +39,6 @@ const ReservationGuestCount = () => {
   const handleIncrement = (obj) => {
     store.dispatch(roomLinesSelectedReset());
     setCounter((p) => {
-      // if (obj === "senior") if (p.senior >= p.adult) return p;
       return { ...p, [obj]: p[obj] + 1 };
     });
   };
@@ -48,10 +47,6 @@ const ReservationGuestCount = () => {
     store.dispatch(roomLinesSelectedReset());
     setCounter((p) => {
       if (p[obj] <= 0) return p;
-
-      // if (obj === "adult")
-      //   if (p.adult <= p.senior)
-      //     return { ...p, adult: p.adult - 1, senior: p.senior - 1 };
       return { ...p, [obj]: p[obj] - 1 };
     });
   };

@@ -1,7 +1,6 @@
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import "./css/ReservationConfirmation.css";
-import { useMountedState } from "react-use";
 import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AListItem from "./../../../../../../common/antd/AListItem";
@@ -13,19 +12,27 @@ import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
 import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
-import { roomLinesSelectedAmountAdded } from "../../../../../../utils/store/pages/createReservation";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
+import {
+  roomLinesSelectedAmountAdded,
+  toggleLoading,
+} from "../../../../../../utils/store/pages/createReservation";
 //
 const ReservationConfirmation = () => {
-  const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
-  const [roomPrice, setRoomPrice] = useState([]);
+  const [cGrossAmt, setCGrossAmt] = useState(0);
+  const [cNetAmount, setCNetAmount] = useState(0);
+  const [cRoomPrice, setCRoomPrice] = useState({});
+  const [cMattressAmt, setCMattressAmt] = useState(0);
+  const [cNetDiscount, setCNetDiscount] = useState(0);
 
   const storeData = store.getState().entities.createReservation.rooms;
 
   useEffect(() => {
     async function populatePricing() {
+      store.dispatch(toggleLoading(true));
+
       try {
         const { data } = await getRoomPricingsByRoomId(
           storeData.selectedStartDate.room._id
@@ -37,12 +44,19 @@ const ReservationConfirmation = () => {
           (a, b) => b.capacity - a.capacity
         );
 
-        if (isMounted()) {
-          store.dispatch(writeToken({ token }));
-          setRoomPrice(sortedPayment);
+        const { adult, senior } = storeData.heads;
+        const totalPax = adult + senior;
+
+        let price = sortedPayment.find((n) => totalPax >= n.capacity);
+
+        if (price === undefined) {
+          price = sortedPayment
+            .sort((a, b) => a.capacity - b.capacity)
+            .find((n) => totalPax <= n.capacity);
         }
+        store.dispatch(writeToken({ token }));
+        setCRoomPrice(price);
       } catch (error) {
-        console.log(error);
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",
           {
@@ -55,83 +69,35 @@ const ReservationConfirmation = () => {
     populatePricing();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const renderDiscountValue = () => {
-    const { _id, name, value } = storeData.discount;
-
-    if (_id === 0) return "Not Available - 0%";
-
-    return `${name} - ${value}%`;
-  };
-
-  const generateRoomPrice = () => {
-    const { adult, senior } = storeData.heads;
-    const totalPax = adult + senior;
-
-    let price = roomPrice.find((n) => totalPax >= n.capacity);
-
-    if (price === undefined) {
-      price = roomPrice
-        .sort((a, b) => a.capacity - b.capacity)
-        .find((n) => totalPax <= n.capacity);
-    }
-
-    return price;
-  };
-
-  let grossAmount = 0,
-    netDiscount = 0,
-    netAmount = 0,
-    mattressAmount = 0;
-
-  const getNumberOfDays = () => {
-    const sDate = moment(storeData.selectedStartDate.date);
-    const eDate = moment(storeData.selectedEndDate.date);
-
-    return eDate.diff(sDate, "days");
-  };
-
-  const getGrossAmount = () => {
-    const price = generateRoomPrice();
-
-    if (price === undefined) return "0.00";
-    const daysNum = getNumberOfDays();
-
-    grossAmount = price.sellingPrice * daysNum;
-
-    return Intl.NumberFormat().format(
-      Number(grossAmount + mattressAmount).toFixed(2)
-    );
-  };
-
-  const getMattressAmount = () => {
+  //..NET MATTRESS
+  useEffect(() => {
     const { mattress } = storeData.addOns;
 
-    if (mattress === 0) {
-      mattressAmount = 0;
-      return "0 - 0.00 PHP";
-    }
+    if (mattress === 0) return setCMattressAmt(0);
 
-    mattressAmount = mattress * 2420;
-    return (
-      mattress +
-      " - " +
-      Intl.NumberFormat().format(Number(mattressAmount).toFixed(2)) +
-      " PHP"
-    );
-  };
+    const total = mattress * 2420;
+    setCMattressAmt(total);
+  }, [cRoomPrice]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getDiscount = () => {
+  //..GROSS AMOUNT
+  useEffect(() => {
+    const daysNum = getNumberOfDays();
+
+    const total = cRoomPrice.sellingPrice * daysNum;
+
+    setCGrossAmt(total);
+  }, [cRoomPrice]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  //..NET DISCOUNT
+  useEffect(() => {
     const { adult, senior } = storeData.heads;
     const { _id, value } = storeData.discount;
     const totalHeadsForDiscount = adult + senior;
-    const amtHalf = grossAmount / totalHeadsForDiscount;
+    const amtHalf = cGrossAmt / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
 
-    if (senior === 0 && _id === 0) {
-      netDiscount = 0;
-      return "0.00";
-    }
+    if (senior === 0 && _id === 0) return setCNetDiscount(0);
 
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
@@ -141,39 +107,58 @@ const ReservationConfirmation = () => {
 
     if (_id !== 0) {
       let amtMulAdult = amtHalf * adult;
-      amtMulAdult += mattressAmount;
+      amtMulAdult += cMattressAmt;
       accumulatedDisc += Math.round(amtMulAdult * (value / 100));
     }
 
-    netDiscount = accumulatedDisc;
-    return Intl.NumberFormat().format(Number(netDiscount).toFixed(2));
+    setCNetDiscount(accumulatedDisc);
+  }, [cGrossAmt, cMattressAmt]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const total = cGrossAmt + cMattressAmt - cNetDiscount;
+
+    setCNetAmount(total);
+
+    const obj = {
+      grossAmount: cGrossAmt,
+      netAmount: total,
+      netDiscount: cNetDiscount,
+    };
+    store.dispatch(roomLinesSelectedAmountAdded(obj));
+    store.dispatch(toggleLoading(false));
+  }, [cNetDiscount, cGrossAmt, cMattressAmt]); //..NET AMOUNT
+
+  const renderDiscountValue = () => {
+    const { _id, name, value } = storeData.discount;
+
+    if (_id === 0) return "Not Available - 0%";
+
+    return `${name} - ${value}%`;
   };
 
-  const getNetAmount = () => {
-    netAmount = grossAmount + mattressAmount - netDiscount;
+  const getNumberOfDays = () => {
+    const sDate = moment(storeData.selectedStartDate.date);
+    const eDate = moment(storeData.selectedEndDate.date);
 
-    const amt = {
-      grossAmount,
-      netAmount,
-      netDiscount,
-    };
+    return eDate.diff(sDate, "days");
+  };
 
-    if (isMounted()) {
-      store.dispatch(roomLinesSelectedAmountAdded(amt));
-    }
+  const setMattressFormat = () => {
+    const { mattress } = storeData.addOns;
 
-    return Intl.NumberFormat().format(Number(netAmount).toFixed(2));
+    return (
+      mattress +
+      " - " +
+      Intl.NumberFormat().format(Number(cMattressAmt).toFixed(2)) +
+      " PHP"
+    );
   };
 
   const getRoomName = () => {
-    const price = generateRoomPrice();
-
-    if (price === undefined)
-      return storeData.selectedStartDate.room.roomLongName;
-
     const priceFormat = Intl.NumberFormat().format(
-      Number(price.sellingPrice).toFixed(2)
+      Number(cRoomPrice.sellingPrice).toFixed(2)
     );
+
     return (
       storeData.selectedStartDate.room.roomLongName +
       " - " +
@@ -181,6 +166,9 @@ const ReservationConfirmation = () => {
       " PHP"
     );
   };
+
+  const formatNumber = (num) =>
+    Intl.NumberFormat().format(Number(num).toFixed(2));
 
   return (
     <Grid container>
@@ -226,7 +214,7 @@ const ReservationConfirmation = () => {
             />
             <AListItem
               txtLbl="Mattress"
-              txtValue={getMattressAmount()}
+              txtValue={setMattressFormat()}
               hasDivider={false}
               Icon={AirlineSeatIndividualSuiteTwoToneIcon}
             />
@@ -240,24 +228,25 @@ const ReservationConfirmation = () => {
               txtValue={
                 <ActiveButton
                   value={true}
-                  textTrue={getGrossAmount() + " PHP"}
+                  textTrue={formatNumber(cGrossAmt + cMattressAmt) + " PHP"}
                 />
               }
             />
-
             <AListItem
               txtLbl="Net Discount"
               txtValue={
                 <ActiveButton
                   isWarning={true}
-                  textTrue={getDiscount() + " PHP"}
+                  textTrue={formatNumber(cNetDiscount) + " PHP"}
                 />
               }
             />
             <AListItem
               Icon={MonetizationOnTwoToneIcon}
               txtLbl="Net Amount"
-              txtValue={<ActiveButton textFalse={getNetAmount() + " PHP"} />}
+              txtValue={
+                <ActiveButton textFalse={formatNumber(cNetAmount) + " PHP"} />
+              }
             />
           </List>
         </div>

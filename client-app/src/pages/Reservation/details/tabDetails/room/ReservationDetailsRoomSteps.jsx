@@ -1,24 +1,28 @@
-import React, { useState } from "react";
-import { useSnackbar } from "notistack";
 import Step from "@material-ui/core/Step";
 import { useSelector } from "react-redux";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import { useHistory } from "react-router-dom";
-import { ButtonGroup } from "@material-ui/core";
 import Stepper from "@material-ui/core/Stepper";
+import { ButtonGroup } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
 import StepLabel from "@material-ui/core/StepLabel";
+import MDialog from "./../../../../../common/MDialog";
 import { makeStyles } from "@material-ui/core/styles";
 import StepContent from "@material-ui/core/StepContent";
-import ReservationGuestCount from "./Steps/ReservationGuestCount";
-import ReservationDatePicker from "./Steps/ReservationDatePicker";
-import { store } from "../../../../../utils/store/configureStore";
-import MaterialButton from "./../../../../../common/MaterialButton";
-import { toggleLoading } from "../../../../../utils/store/pages/createReservation";
-import ReservationRoomPicker from "./Steps/ReservationRoomPicker";
-import ReservationDiscount from "./Steps/ReservationDiscount";
-import ReservationConfirmation from "./Steps/ReservationConfirmation";
 import ReservationAddOns from "./Steps/ReservationAddOns";
+import ReservationDiscount from "./Steps/ReservationDiscount";
+import { store } from "../../../../../utils/store/configureStore";
+import ReservationRoomPicker from "./Steps/ReservationRoomPicker";
+import ReservationDatePicker from "./Steps/ReservationDatePicker";
+import ReservationGuestCount from "./Steps/ReservationGuestCount";
+import MaterialButton from "./../../../../../common/MaterialButton";
+import ActiveButton from "./../../../../../common/form/ActiveButton";
+import ReservationConfirmation from "./Steps/ReservationConfirmation";
+import {
+  headerRoomAllAdded,
+  roomLinesResetValue,
+  toggleLoading,
+} from "../../../../../utils/store/pages/createReservation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,14 +78,45 @@ function getStepContent(step) {
   }
 }
 
-const ReservationDetailsRoomSteps = ({ onDialogShow }) => {
+const ReservationDetailsRoomSteps = ({
+  onProceedModal,
+  visible,
+  selectedRoom,
+}) => {
   const steps = getSteps();
   const classes = useStyles();
-  const hist = useHistory();
-  const { enqueueSnackbar } = useSnackbar();
   const [activeStep, setActiveStep] = useState(0);
+  const [askConfirmation, setAskConfirmation] = useState(false);
+  const [curAction, setCurAction] = useState("update");
 
   const storeState = useSelector((state) => state.entities.createReservation);
+
+  const handleDialogCancel = () => setAskConfirmation(false);
+  const handleDialogShow = () => {
+    setCurAction("update");
+    setAskConfirmation(true);
+  };
+
+  const handleDialogShowDelete = () => {
+    setCurAction("delete");
+    setAskConfirmation(true);
+  };
+
+  const onDecideOfAction = () => {
+    setAskConfirmation(false);
+    setActiveStep(0);
+    onProceedModal(curAction);
+  };
+
+  useEffect(() => {
+    setActiveStep(0);
+
+    if (visible.action === "add") store.dispatch(roomLinesResetValue());
+    if (visible.action !== "update") return;
+    if (selectedRoom.length === 0) return;
+
+    store.dispatch(headerRoomAllAdded(selectedRoom));
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleNext = () =>
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -93,39 +128,10 @@ const ReservationDetailsRoomSteps = ({ onDialogShow }) => {
     setActiveStep(0);
   };
 
-  // const customerViewModel = (mdl) => ({
-  //   customerId: mdl.customer._id,
-  //   reservationTypeId: mdl.type.key,
-  //   voucher: mdl.voucher,
-  //   userId: user.user.id,
-  // });
-
-  const handleDialogProceed = async () => {
-    //
-    try {
-      // const { data } = await saveHeader(mdl);
-      // const { token } = data;
-      // store.dispatch(writeToken({ token }));
-      // setTimeout(() => {
-      //   enqueueSnackbar("Successfully updated records!", {
-      //     variant: "success",
-      //   });
-      //   store.dispatch(refreshValues());
-      //   setActiveStep(0);
-      //   hist.push("/");
-      // }, 1000);
-    } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { variant: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
-      store.dispatch(toggleLoading(false));
-    }
-  };
-
   const getDisabled = () => {
     //
+    if (storeState.isLoading) return true;
+
     if (activeStep === 1)
       return storeState.rooms.heads.adult === 0 &&
         storeState.rooms.heads.senior === 0
@@ -150,8 +156,63 @@ const ReservationDetailsRoomSteps = ({ onDialogShow }) => {
     return false;
   };
 
+  const footer = () => {
+    const isAdd = visible.action === "add" ? true : false;
+    const btnTextValue = isAdd ? "CREATE" : "MODIFY";
+
+    return (
+      <ButtonGroup
+        className={classes.btnGrp}
+        variant="text"
+        color="primary"
+        aria-label="text primary button group"
+      >
+        <MaterialButton
+          onClick={handleReset}
+          className={classes.button}
+          size="small"
+          color="secondary"
+          text="BACK"
+        />
+        {!isAdd && (
+          <MaterialButton
+            className={classes.button}
+            size="small"
+            color="secondary"
+            text="DELETE"
+            onClick={handleDialogShowDelete}
+          />
+        )}
+        <MaterialButton
+          className={classes.button}
+          size="small"
+          text={btnTextValue}
+          onClick={handleDialogShow}
+        />
+      </ButtonGroup>
+    );
+  };
+
+  if (visible.action === "update" && selectedRoom.length === 0)
+    return (
+      <div className="errorSpan rdRSteps">
+        <ActiveButton
+          value={false}
+          textFalse="Please select a row to modify."
+        />
+      </div>
+    );
+
   return (
     <div className={classes.root}>
+      {askConfirmation && (
+        <MDialog
+          openDialog={askConfirmation}
+          handleClose={handleDialogCancel}
+          handleOk={onDecideOfAction}
+        />
+      )}
+
       <Stepper activeStep={activeStep} orientation="vertical">
         {steps.map((label, index) => (
           <Step key={label}>
@@ -199,31 +260,7 @@ const ReservationDetailsRoomSteps = ({ onDialogShow }) => {
           <span className="footer-label__span rdRstep">
             Proceed to create a reservation.
           </span>
-          <div className="rdBtnGroup__container">
-            <ButtonGroup
-              className={classes.btnGrp}
-              variant="text"
-              color="primary"
-              aria-label="text primary button group"
-            >
-              {!storeState.isLoading && (
-                <MaterialButton
-                  onClick={handleReset}
-                  className={classes.button}
-                  size="small"
-                  color="secondary"
-                  text="back"
-                />
-              )}
-              <MaterialButton
-                className={classes.button}
-                size="small"
-                disabled={storeState.isLoading}
-                text="Proceed"
-                onClick={onDialogShow}
-              />
-            </ButtonGroup>
-          </div>
+          <div className="rdBtnGroup__container">{footer()}</div>
         </Paper>
       )}
     </div>

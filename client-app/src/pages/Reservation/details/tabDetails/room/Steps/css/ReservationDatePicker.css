@@ -48,6 +48,11 @@
   font-weight: 400;
   font-size: 13px;
 }
+.header__wrapper .header-label__wrapper.warning label {
+  padding-right: 0px;
+  font-style: italic;
+}
+
 @media screen and (min-width: 600px) {
   .header-label__wrapper label:first-child {
     padding-right: 165px;

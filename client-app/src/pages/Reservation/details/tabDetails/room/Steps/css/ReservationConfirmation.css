@@ -1,1 +1,15 @@
- 
+.reservationtype-container.spin {
+  min-width: 404px;
+}
+
+@media screen and (max-width: 420px) {
+  .reservationtype-container.spin {
+    min-width: 275px;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  .reservationtype-container.spin {
+    min-width: 275px;
+  }
+}

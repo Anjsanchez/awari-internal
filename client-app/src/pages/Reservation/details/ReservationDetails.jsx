@@ -1,21 +1,19 @@
-import { Spin } from "antd";
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import { useParams } from "react-router-dom";
+import Loader from "./../../../common/Loader";
 import { BsAspectRatioFill } from "react-icons/bs";
 import React, { useEffect, useState } from "react";
 import FormHeader from "./../../../common/form/FormHeader";
 import { store } from "../../../utils/store/configureStore";
 import ReservationDetailsTabs from "./ReservationDetailsTabs";
-import { writeToken } from "../../../utils/store/pages/users";
-import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
-import Loader from "./../../../common/Loader";
 import { addRDetails } from "../../../utils/store/pages/reservationDetails";
+import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
 
 const ReservationDetails = () => {
-  const { id: reservationId } = useParams();
   const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
+  const { id: reservationId } = useParams();
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   useEffect(() => {

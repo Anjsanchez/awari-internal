@@ -1,18 +1,18 @@
+import moment from "moment";
+import { Tooltip } from "antd";
 import { Collapse, Spin } from "antd";
 import { useSnackbar } from "notistack";
+import { Grid } from "@material-ui/core";
 import "./css/ReservationRoomPicker.css";
 import { useMountedState } from "react-use";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import { GetRoomVariantHeader } from "../../../../../../utils/services/pages/reservation/ReservationHeader";
-import moment from "moment";
-import { Tooltip, Button } from "antd";
 import {
   roomLinesSelectedEndDateAdded,
   roomLinesSelectedStartDateAdded,
 } from "../../../../../../utils/store/pages/createReservation";
-import { Grid } from "@material-ui/core";
 
 const { Panel } = Collapse;
 const ReservationRoomPicker = () => {
@@ -82,15 +82,14 @@ const ReservationRoomPicker = () => {
       const todateClone = toDate.clone();
 
       const dates = [];
-      const start = fromDateClone.subtract(1, "days");
-      const end = todateClone.add(1, "day");
+      const start = fromDateClone.subtract(2, "days");
+      const end = todateClone.add(2, "day");
 
       while (start.isSameOrBefore(end)) {
         dates.push(start.format("MM-DD-YYYY"));
         start.add(1, "days");
       }
       setDateRange(dates);
-      // dates.push(Number(start.format("YYYY-MM-DD")));
     }
 
     function loadDefaultValue() {
@@ -112,7 +111,7 @@ const ReservationRoomPicker = () => {
     setDateRangeOnLoad();
     fetchData();
     loadDefaultValue();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     store.dispatch(roomLinesSelectedStartDateAdded(selectedStartDate));
@@ -133,7 +132,27 @@ const ReservationRoomPicker = () => {
     return false;
   };
 
-  const getTag = (isCheckInOnly, isCheckOutOnly, isContResult) => {
+  const checkIfLastCheckOutIsSameCheckIn = (
+    lastEndDate,
+    currentDate,
+    isCheckInOnly
+  ) => {
+    const zEndDate = moment(lastEndDate);
+    const zCurrent = moment(currentDate);
+
+    if (isCheckInOnly) if (zEndDate.isSame(zCurrent)) return true;
+
+    return false;
+  };
+
+  const getTag = (
+    isCheckInOnly,
+    isCheckOutOnly,
+    isContResult,
+    isLastCheckOutSameAsCheckIn
+  ) => {
+    if (isLastCheckOutSameAsCheckIn) return "SAME";
+
     if (isCheckInOnly) return "OUT";
 
     if (isCheckOutOnly) return "IN";
@@ -161,8 +180,10 @@ const ReservationRoomPicker = () => {
     isContResult,
     isCheckInOnly,
     isCheckOutOnly,
-    date
+    date,
+    isLastCheckOutSameAsCheckIn
   ) => {
+    if (isLastCheckOutSameAsCheckIn) return " disabled";
     if (isCheckInOnly || isCheckOutOnly) return " checkInOnly";
     if (isContResult) return " disabled";
 
@@ -182,8 +203,8 @@ const ReservationRoomPicker = () => {
     const { room: sRoom, date: sDate } = selectedEndDate;
 
     if (
-      Object.keys(selectedStartDate.room).length != 0 &&
-      Object.keys(selectedEndDate.room).length != 0
+      Object.keys(selectedStartDate.room).length !== 0 &&
+      Object.keys(selectedEndDate.room).length !== 0
     ) {
       if (dateInMoment.isBetween(dateSelected, dateSelectedEndDate)) {
         if (selectedStartDate.room._id === room._id)
@@ -193,18 +214,18 @@ const ReservationRoomPicker = () => {
 
     const closest = getClosest(room);
 
-    if (Object.keys(selectedStartDate.room).length != 0) {
+    if (Object.keys(selectedStartDate.room).length !== 0) {
       if (dateInMoment.isAfter(closest))
         if (selectedStartDate.room._id === room._id) return " beforeStartDate";
     }
 
-    if (Object.keys(selectedStartDate.room).length != 0)
+    if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isBefore(dateSelected))
         if (selectedStartDate.room._id === room._id) return " beforeStartDate";
 
     if (isContResult || isCheckInOnly || isCheckOutOnly) return "";
 
-    if (Object.keys(sRoom).length != 0)
+    if (Object.keys(sRoom).length !== 0)
       if (sRoom._id === room._id && sDate === date) return " active";
 
     if (
@@ -217,6 +238,8 @@ const ReservationRoomPicker = () => {
   const renderDates = (date, n) => {
     let isCheckInOnly = false;
     let isCheckOutOnly = false;
+    let isLastCheckOutSameAsCheckIn = false;
+    let lastCheckOutDate = "";
     const dateInSubtring = date.substring(3, 5);
 
     const curRsrv = currentReservations.filter((z) => z.room._id === n._id);
@@ -233,17 +256,28 @@ const ReservationRoomPicker = () => {
             return;
           }
         }
-        if (dRange === zEnd) if (zEnd === date) return (isCheckOutOnly = true);
+        if (dRange === zEnd)
+          if (zEnd === date) {
+            lastCheckOutDate = dRange;
+            return (isCheckOutOnly = true);
+          }
       });
     });
 
     const isContResult = checkIfStartGreaterThanEndDate(xEndDate, date);
 
+    isLastCheckOutSameAsCheckIn = checkIfLastCheckOutIsSameCheckIn(
+      lastCheckOutDate,
+      date,
+      isCheckInOnly
+    );
+
     const className = GetClassString(
       isContResult,
       isCheckInOnly,
       isCheckOutOnly,
-      date
+      date,
+      isLastCheckOutSameAsCheckIn
     );
 
     const classActive = GetClassActive(
@@ -266,7 +300,8 @@ const ReservationRoomPicker = () => {
               n,
               isCheckInOnly,
               isCheckOutOnly,
-              isContResult
+              isContResult,
+              isLastCheckOutSameAsCheckIn
             )
           }
           className={`picker-body-rooms__dateBox ${className} ${classActive}`}
@@ -279,20 +314,22 @@ const ReservationRoomPicker = () => {
     };
 
     const renderToolTip = () => {
-      if (isCheckInOnly || isCheckOutOnly) {
-        let toolTipMsg = "Check-OUT only";
-        if (isCheckOutOnly) toolTipMsg = "Check-IN only";
-        return (
-          <Tooltip
-            key={date}
-            placement="topLeft"
-            title={toolTipMsg}
-            arrowPointAtCenter
-          >
-            {renderItems()}
-          </Tooltip>
-        );
-      }
+      if (!isLastCheckOutSameAsCheckIn)
+        if (isCheckInOnly || isCheckOutOnly) {
+          let toolTipMsg = "Check-OUT only";
+
+          if (isCheckOutOnly) toolTipMsg = "Check-IN only";
+          return (
+            <Tooltip
+              key={date}
+              placement="topLeft"
+              title={toolTipMsg}
+              arrowPointAtCenter
+            >
+              {renderItems()}
+            </Tooltip>
+          );
+        }
 
       return renderItems();
     };
@@ -305,16 +342,22 @@ const ReservationRoomPicker = () => {
     room,
     isCheckInOnly,
     isCheckOutOnly,
-    isContResult
+    isContResult,
+    isLastCheckOutSameAsCheckIn
   ) => {
     const dateInMoment = moment(date);
     const dateSelected = moment(selectedStartDate.date);
 
-    if (Object.keys(selectedStartDate.room).length != 0)
+    if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isBefore(dateSelected))
         if (selectedStartDate.room._id === room._id) return;
 
-    const tag = getTag(isCheckInOnly, isCheckOutOnly, isContResult);
+    const tag = getTag(
+      isCheckInOnly,
+      isCheckOutOnly,
+      isContResult,
+      isLastCheckOutSameAsCheckIn
+    );
 
     const closest = getClosest(room);
 
@@ -328,7 +371,8 @@ const ReservationRoomPicker = () => {
       if (Object.keys(selectedStartDate.room).length === 0)
         return setSelectedStartDate({ room, date });
 
-    if (tag === "IN" || tag === "OUT" || tag === "CONT") return;
+    if (tag === "IN" || tag === "OUT" || tag === "CONT" || tag === "SAME")
+      return;
 
     if (date === selectedStartDate.date && room === selectedStartDate.room) {
       setSelectedEndDate({ room: {}, date: "" });
@@ -336,7 +380,7 @@ const ReservationRoomPicker = () => {
     }
 
     //SELECTED-END-DATE
-    if (Object.keys(selectedEndDate.room).length == 0)
+    if (Object.keys(selectedEndDate.room).length === 0)
       if (selectedStartDate.room._id === room._id)
         return setSelectedEndDate({ room, date });
 
