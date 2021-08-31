@@ -36,8 +36,8 @@ function FormatDate(fromDate, toDate) {
   const fromDateClone = fromDate.clone();
   const todateClone = toDate.clone();
 
-  const start = fromDateClone.subtract(3, "days").format("YYYY-MM-DD");
-  const end = todateClone.add(3, "day").format("YYYY-MM-DD");
+  const start = fromDateClone.subtract(7, "days").format("YYYY-MM-DD");
+  const end = todateClone.add(7, "day").format("YYYY-MM-DD");
 
   return { start, end };
 }

@@ -7,6 +7,7 @@ import "./css/ReservationRoomPicker.css";
 import { useMountedState } from "react-use";
 import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
+import MaterialButton from "./../../../../../../common/MaterialButton";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import { GetRoomVariantHeader } from "../../../../../../utils/services/pages/reservation/ReservationHeader";
 import {
@@ -82,8 +83,8 @@ const ReservationRoomPicker = () => {
       const todateClone = toDate.clone();
 
       const dates = [];
-      const start = fromDateClone.subtract(2, "days");
-      const end = todateClone.add(2, "day");
+      const start = fromDateClone.subtract(7, "days");
+      const end = todateClone.add(7, "day");
 
       while (start.isSameOrBefore(end)) {
         dates.push(start.format("MM-DD-YYYY"));
@@ -124,8 +125,8 @@ const ReservationRoomPicker = () => {
   let xEndDate = "";
 
   const checkIfStartGreaterThanEndDate = (endDate, currentDate) => {
-    const zStart = moment(endDate);
-    const zEnd = moment(currentDate);
+    const zStart = moment(endDate, "MM-DD-YYYY");
+    const zEnd = moment(currentDate, "MM-DD-YYYY");
 
     if (zStart.isSameOrAfter(zEnd)) return true;
 
@@ -137,8 +138,8 @@ const ReservationRoomPicker = () => {
     currentDate,
     isCheckInOnly
   ) => {
-    const zEndDate = moment(lastEndDate);
-    const zCurrent = moment(currentDate);
+    const zEndDate = moment(lastEndDate, "MM-DD-YYYY");
+    const zCurrent = moment(currentDate, "MM-DD-YYYY");
 
     if (isCheckInOnly) if (zEndDate.isSame(zCurrent)) return true;
 
@@ -165,11 +166,16 @@ const ReservationRoomPicker = () => {
   const getClosest = (room) => {
     const nn = new Date(selectedStartDate.date);
     let closest = Infinity;
+
+    if (storeData.id !== "") return closest;
+
     currentReservations.forEach((d) => {
       const date = new Date(d.startDate);
 
       if (date >= nn && (date < new Date(closest) || date < closest)) {
-        if (d.room._id === room._id) closest = moment(d.startDate);
+        if (d.room._id === room._id) {
+          if (store) closest = moment(d.startDate);
+        }
       }
     });
 
@@ -197,9 +203,9 @@ const ReservationRoomPicker = () => {
     room,
     date
   ) => {
-    const dateInMoment = moment(date);
-    const dateSelected = moment(selectedStartDate.date);
-    const dateSelectedEndDate = moment(selectedEndDate.date);
+    const dateInMoment = moment(date, "MM-DD-YYYY");
+    const dateSelected = moment(selectedStartDate.date, "MM-DD-YYYY");
+    const dateSelectedEndDate = moment(selectedEndDate.date, "MM-DD-YYYY");
     const { room: sRoom, date: sDate } = selectedEndDate;
 
     if (
@@ -214,14 +220,17 @@ const ReservationRoomPicker = () => {
 
     const closest = getClosest(room);
 
-    if (Object.keys(selectedStartDate.room).length !== 0) {
+    if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isAfter(closest))
-        if (selectedStartDate.room._id === room._id) return " beforeStartDate";
-    }
+        if (storeData.id === "")
+          if (selectedStartDate.room._id === room._id)
+            return " beforeStartDate";
 
     if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isBefore(dateSelected))
-        if (selectedStartDate.room._id === room._id) return " beforeStartDate";
+        if (storeData.id === "")
+          if (selectedStartDate.room._id === room._id)
+            return " beforeStartDate";
 
     if (isContResult || isCheckInOnly || isCheckOutOnly) return "";
 
@@ -345,8 +354,8 @@ const ReservationRoomPicker = () => {
     isContResult,
     isLastCheckOutSameAsCheckIn
   ) => {
-    const dateInMoment = moment(date);
-    const dateSelected = moment(selectedStartDate.date);
+    const dateInMoment = moment(date, "MM-DD-YYYY");
+    const dateSelected = moment(selectedStartDate.date, "MM-DD-YYYY");
 
     if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isBefore(dateSelected))
@@ -364,7 +373,10 @@ const ReservationRoomPicker = () => {
     if (closest !== Infinity) if (dateInMoment.isAfter(closest)) return;
 
     if (tag === "OUT")
-      if (Object.keys(selectedEndDate.room).length === 0)
+      if (
+        Object.keys(selectedEndDate.room).length === 0 &&
+        room === selectedStartDate.room
+      )
         return setSelectedEndDate({ room, date });
 
     if (tag === "IN")
@@ -388,6 +400,10 @@ const ReservationRoomPicker = () => {
     setSelectedStartDate({ room, date });
   };
 
+  const resetValues = () => {
+    setSelectedEndDate({ room: {}, date: "" });
+    setSelectedStartDate({ room: {}, date: "" });
+  };
   const renderVariantPanels = (data) => {
     const { _id, name } = data;
 
@@ -435,14 +451,18 @@ const ReservationRoomPicker = () => {
                 <div>
                   <span className="counter-spanHeader rrInLabel">IN : </span>
                   <span className="counter-spanHeader ">
-                    {moment(selectedStartDate.date).format("MMM DD")}
+                    {moment(selectedStartDate.date, "MM-DD-YYYY").format(
+                      "MMM DD"
+                    )}
                   </span>
                 </div>
                 {Object.keys(selectedEndDate.room).length !== 0 && (
                   <div>
                     <span className="counter-spanHeader rrInLabel">OUT : </span>
                     <span className="counter-spanHeader">
-                      {moment(selectedEndDate.date).format("MMM DD")}
+                      {moment(selectedEndDate.date, "MM-DD-YYYY").format(
+                        "MMM DD"
+                      )}
                     </span>
                   </div>
                 )}
@@ -454,6 +474,12 @@ const ReservationRoomPicker = () => {
             <Collapse accordion>
               {roomVariants.map((n) => renderVariantPanels(n))}
             </Collapse>
+            <MaterialButton
+              text="reset"
+              size={"small"}
+              style={{ marginTop: "5px" }}
+              onClick={resetValues}
+            />
           </div>
         </Grid>
       </Grid>

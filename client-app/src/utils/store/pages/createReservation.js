@@ -82,11 +82,11 @@ const slice = createSlice({
       };
       resx.rooms.selectedStartDate = {
         room: room,
-        date: startDate,
+        date: moment(startDate).format("MM-DD-YYYY"),
       };
       resx.rooms.selectedEndDate = {
         room: room,
-        date: endDate,
+        date: moment(endDate).format("MM-DD-YYYY"),
       };
       resx.rooms.discount = xDiscount;
       resx.rooms.addOns = {

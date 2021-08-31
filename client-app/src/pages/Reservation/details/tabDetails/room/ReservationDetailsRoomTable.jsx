@@ -159,6 +159,7 @@ const ReservationDetailsRoomTable = (props) => {
         variant: "success",
       });
 
+      setSelectedRoom([]);
       onSuccessDelete(obj);
     } catch (ex) {
       if (ex && ex.status === 400) {
@@ -180,8 +181,7 @@ const ReservationDetailsRoomTable = (props) => {
       id,
     } = storeS;
 
-    const discountId =
-      discount._id === 0 ? { _id: 0, name: "Not Applicable" } : discount._id;
+    const discountId = discount._id === 0 ? null : discount._id;
 
     const objMdl = {
       reservationHeaderId: headerInStore.reservationDetails.header._id,
@@ -219,6 +219,7 @@ const ReservationDetailsRoomTable = (props) => {
         variant: "success",
       });
 
+      setSelectedRoom([]);
       if (!obj.id) return onSuccessAdd(singleRecord);
       return onSuccessEdit(singleRecord);
     } catch (ex) {

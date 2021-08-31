@@ -115,6 +115,7 @@ const ReservationDetailsRoomSteps = ({
     if (visible.action !== "update") return;
     if (selectedRoom.length === 0) return;
 
+    console.log("select", selectedRoom);
     store.dispatch(headerRoomAllAdded(selectedRoom));
   }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
