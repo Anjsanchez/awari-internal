@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.reservation;
 using API.Data;
+using API.Dto.customers;
 using API.Dto.reservations.header;
 using API.Models.reservation;
 using Microsoft.EntityFrameworkCore;
@@ -49,6 +50,7 @@ namespace API.Repository.pages.reservation
                             .Include(n => n.user)
                             .FirstOrDefaultAsync(n => n._id == id);
         }
+
 
         public async Task<List<ReservationHeader>> GetHeaderByCustomerID(Guid customerId)
         {

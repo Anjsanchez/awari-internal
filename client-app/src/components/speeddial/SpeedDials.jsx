@@ -5,11 +5,12 @@ import SpeedDial from "@material-ui/lab/SpeedDial";
 import auth from "../../utils/services/authServices";
 import { makeStyles } from "@material-ui/core/styles";
 import { store } from "../../utils/store/configureStore";
-import QueueSharpIcon from "@material-ui/icons/QueueSharp";
 import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
-import ViewListSharpIcon from "@material-ui/icons/ViewListSharp";
 import MoreHorizSharpIcon from "@material-ui/icons/MoreHorizSharp";
 import { toggleVisible } from "../../utils/store/pages/createReservation";
+import AddLocationTwoToneIcon from "@material-ui/icons/AddLocationTwoTone";
+import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
+import { toggleOpenDrawer } from "../../utils/store/pages/createTransaction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,14 +50,14 @@ export default function SpeedDials() {
   const [open, setOpen] = React.useState(false);
   const actions = [
     {
-      icon: <QueueSharpIcon className={classes.x} />,
+      icon: <AddLocationTwoToneIcon className={classes.x} />,
       name: "Make a Reservation",
       to: "/",
       action: () => handleB(),
     },
     {
-      icon: <ViewListSharpIcon className={classes.x} />,
-      name: "View active Reservations",
+      icon: <ShoppingBasketTwoToneIcon className={classes.x} />,
+      name: "Create a Transaction",
       to: "/",
       action: () => handleA(),
     },
@@ -65,10 +66,12 @@ export default function SpeedDials() {
   const handleA = () => {
     setOpen(false);
     store.dispatch(toggleVisible(false));
+    store.dispatch(toggleOpenDrawer(true));
   };
 
   const handleB = () => {
     setOpen(false);
+    store.dispatch(toggleOpenDrawer(false));
     store.dispatch(toggleVisible(true));
   };
 

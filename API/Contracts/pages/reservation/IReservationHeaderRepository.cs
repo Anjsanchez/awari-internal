@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using API.Dto.customers;
 using API.Dto.reservations.header;
 using API.Models.reservation;
 

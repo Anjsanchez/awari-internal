@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsEyeFill } from "react-icons/bs";
 import { RiDeleteBin7Fill } from "react-icons/ri";
 import { IconButton, Tooltip } from "@material-ui/core";
-
+import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
+import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 const EditDeleteIconButton = (props) => {
   const { rowId, handleDelete, linkPath, showDelete = true } = props;
   return (
@@ -16,7 +16,7 @@ const EditDeleteIconButton = (props) => {
             aria-label="menu"
             className="navbar_iconBtn"
           >
-            <BsEyeFill color="rgb(86, 100, 210)" />
+            <VisibilityTwoToneIcon />
           </IconButton>
         </Tooltip>
       </Link>
@@ -30,7 +30,7 @@ const EditDeleteIconButton = (props) => {
             className="navbar_iconBtn"
             onClick={() => handleDelete(rowId)}
           >
-            <RiDeleteBin7Fill color="#ff6e40" />
+            <DeleteTwoToneIcon style={{ color: "ff6e40" }} />
           </IconButton>
         </Tooltip>
       )}

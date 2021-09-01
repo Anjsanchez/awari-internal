@@ -1,10 +1,10 @@
 import { Modal } from "antd";
+import "./css/ReservationSteps.css";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import ReservationSteps from "./ReservationSteps";
 import { store } from "../../utils/store/configureStore";
 import { toggleVisible } from "../../utils/store/pages/createReservation";
-
 const ReservationModal = () => {
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -22,6 +22,7 @@ const ReservationModal = () => {
         style={{ zIndex: 1201 }}
         title="Reservation"
         centered
+        className="reservationModal__container"
         visible={isVisible}
         onOk={HandleModalVisible}
         onCancel={HandleModalVisibleCancel}

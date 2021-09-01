@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages;
 using API.Data;
+using API.Dto.customers;
 using API.Models;
+using API.Models.reservation;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository.pages
@@ -48,10 +50,25 @@ namespace API.Repository.pages
             return await _db.Customers.Include(n => n.user).FirstOrDefaultAsync(n => n.customerid == id);
         }
 
-        public Task<bool> isExists(int id)
+        private async Task<ICollection<ReservationHeader>> getAllReservationHeader()
         {
-            throw new NotImplementedException();
+            return await _db.ReservationHeaders.ToListAsync();
         }
+
+
+        public async Task<IEnumerable<Customer>> GetCustomersWithActiveBooking()
+        {
+            var custs = await FindAll(true);
+            var reservationHdr = await getAllReservationHeader();
+
+
+            var mapped = (from m in custs
+                          join r in reservationHdr on m._id equals r.customerId
+                          select m).Distinct();
+
+            return mapped;
+        }
+
 
         public async Task<bool> Save()
         {

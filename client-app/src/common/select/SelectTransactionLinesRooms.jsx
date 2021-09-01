@@ -5,14 +5,9 @@ import { TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { store } from "../../../utils/store/configureStore";
-import { writeToken } from "../../../utils/store/pages/users";
-import { toggleCustomeAdded } from "../../../utils/store/pages/createTransaction";
-import { headerCustomerAdded } from "../../../utils/store/pages/createReservation";
-import {
-  getCustomers,
-  GetCustomersWithActiveBooking,
-} from "./../../../utils/services/pages/CustomerService";
+import { store } from "../../utils/store/configureStore";
+import { writeToken } from "../../utils/store/pages/users";
+import { getCustomers } from "./../../utils/services/pages/CustomerService";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -50,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ReservationCustomer = ({ action = "createReservation" }) => {
+const SelectTransactionLinesRooms = () => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [customers, setCustomers] = useState([]);
@@ -59,13 +54,9 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   useEffect(() => {
     async function populateReservationTypes() {
       try {
-        let data;
+        const { data } = await getCustomers();
 
-        if (action === "createReservation") data = await getCustomers();
-        else if (action === "inventoryTransaction")
-          data = await GetCustomersWithActiveBooking();
-
-        const { token, listRecords } = data.data;
+        const { token, listRecords } = data;
 
         const sortedData = listRecords.sort((a, b) =>
           a.firstName.localeCompare(b.firstName)
@@ -75,6 +66,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
         setCustomers(sortedData);
       } catch (error) {
+        console.log(error);
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",
           {
@@ -102,35 +94,17 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   useEffect(() => {
     const { customer } = custInStore.createReservation.header;
 
-    if (action === "createReservation")
-      return Object.keys(customer).length === 0
-        ? setSearchCustomer({})
-        : setSearchCustomer(customer);
+    return Object.keys(customer).length === 0
+      ? setSearchCustomer({})
+      : setSearchCustomer(customer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    if (action === "createReservation")
-      store.dispatch(headerCustomerAdded(searchCustomer));
-    else if (action === "inventoryTransaction")
-      store.dispatch(toggleCustomeAdded(searchCustomer));
-  }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const renderBirthday = () => {
-    const { firstName, birthday } = searchCustomer;
-
-    if (firstName === undefined || firstName === "") return null;
-
-    return (
-      <div className="header-label__wrapper remark__wrapper">
-        <div>
-          <span>BIRTHDAY : </span>
-          <span className="header-label__description">
-            {moment(birthday).format("MMMM Do, YYYY")}
-          </span>
-        </div>
-      </div>
-    );
-  };
+  // useEffect(() => {
+  //   // if (action === "createReservation")
+  //   //   store.dispatch(headerCustomerAdded(searchCustomer));
+  //   // else if (action === "inventoryTransaction")
+  //   //   store.dispatch(toggleCustomeAdded(searchCustomer));
+  // }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderSpace = (text) =>
     text.firstName === "" || text.firstName === null ? "" : " ";
@@ -141,7 +115,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   return (
     <div>
       <div className="header-label__wrapper">
-        <label htmlFor="grouped-demo">CURRENT GUEST</label>
+        <label htmlFor="grouped-demo">ROOM</label>
       </div>
       <Autocomplete
         value={renderValue()}
@@ -164,9 +138,8 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         )}
         onChange={handleSearch}
       />
-      {renderBirthday()}
     </div>
   );
 };
 
-export default ReservationCustomer;
+export default SelectTransactionLinesRooms;

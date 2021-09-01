@@ -19,7 +19,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerRepository _repo;
@@ -36,6 +36,19 @@ namespace API.Controllers
         public async Task<ActionResult> GetCustomers()
         {
             var customers = await _repo.FindAll();
+            var mappedCustomers = _map.Map<List<Customer>, List<customerReadDto>>(customers.ToList());
+
+            return Ok(new GenericResponse<customerReadDto>()
+            {
+                listRecords = mappedCustomers,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("GetCustomersWithActiveBooking")]
+        public async Task<ActionResult> GetCustomersWithActiveBooking()
+        {
+            var customers = await _repo.GetCustomersWithActiveBooking();
             var mappedCustomers = _map.Map<List<Customer>, List<customerReadDto>>(customers.ToList());
 
             return Ok(new GenericResponse<customerReadDto>()

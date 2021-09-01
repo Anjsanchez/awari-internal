@@ -74,7 +74,7 @@ function getStepContent(step) {
     case 5:
       return <ReservationConfirmation />;
     default:
-      return "Unknown step";
+      return "";
   }
 }
 
@@ -86,8 +86,8 @@ const ReservationDetailsRoomSteps = ({
   const steps = getSteps();
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const [askConfirmation, setAskConfirmation] = useState(false);
   const [curAction, setCurAction] = useState("update");
+  const [askConfirmation, setAskConfirmation] = useState(false);
 
   const storeState = useSelector((state) => state.entities.createReservation);
 
@@ -110,12 +110,10 @@ const ReservationDetailsRoomSteps = ({
 
   useEffect(() => {
     setActiveStep(0);
-
     if (visible.action === "add") store.dispatch(roomLinesResetValue());
     if (visible.action !== "update") return;
     if (selectedRoom.length === 0) return;
 
-    console.log("select", selectedRoom);
     store.dispatch(headerRoomAllAdded(selectedRoom));
   }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 

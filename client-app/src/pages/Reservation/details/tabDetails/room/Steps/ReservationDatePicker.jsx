@@ -1,9 +1,10 @@
 import "moment-timezone";
+import React from "react";
 import moment from "moment";
 import { DatePicker } from "antd";
 import "./css/ReservationDatePicker.css";
+import { useSelector } from "react-redux";
 import { BsArrowRight } from "react-icons/bs";
-import React, { useState, useEffect } from "react";
 import { store } from "../../../../../../utils/store/configureStore";
 
 import {
@@ -12,43 +13,15 @@ import {
 } from "../../../../../../utils/store/pages/createReservation";
 
 const ReservationDatePicker = ({ visible }) => {
-  //
-  const [date, setDate] = useState({
-    fromDate: moment(),
-    toDate: moment(),
-  });
-
   const { RangePicker } = DatePicker;
-  const storeData = store.getState().entities;
 
-  useEffect(() => {
-    function initialLoadValues() {
-      const { fromDate, toDate } = storeData.createReservation.rooms.date;
-
-      const frDate = moment(fromDate);
-      const tDate = moment(toDate);
-      var isSameDayFrom = moment(fromDate).isSame(moment(), "day");
-      var isSameDayTo = moment(toDate).isSame(moment(), "day");
-
-      if (isSameDayFrom && isSameDayTo) return;
-
-      setDate({
-        fromDate: frDate,
-        toDate: tDate,
-      });
-    }
-    initialLoadValues();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    store.dispatch(roomLinesDateAdded(date));
-  }, [date]);
-
-  const onChangeDatePicker = (d) => setDate({ fromDate: d, toDate: d });
+  const storeData = useSelector(
+    (state) => state.entities.createReservation.rooms
+  );
 
   const onChangeRangePicker = (d) => {
     store.dispatch(roomLinesSelectedReset());
-    return d === null ? null : setDate({ fromDate: d[0], toDate: d[1] });
+    store.dispatch(roomLinesDateAdded({ fromDate: d[0], toDate: d[1] }));
   };
 
   const disabledDate = (d) => d && d < moment().startOf("day");
@@ -61,7 +34,10 @@ const ReservationDatePicker = ({ visible }) => {
           <label htmlFor="rangePicker">CHECKOUT</label>
         </div>
         <RangePicker
-          value={[date.fromDate, date.toDate]}
+          value={[
+            moment(storeData.date.fromDate),
+            moment(storeData.date.toDate),
+          ]}
           onChange={onChangeRangePicker}
           id="rangePicker"
           suffixIcon={null}
@@ -74,7 +50,7 @@ const ReservationDatePicker = ({ visible }) => {
             );
           }}
         />
-        {storeData.createReservation.rooms.id !== "" && (
+        {storeData.id !== "" && (
           <div className="header-label__wrapper warning">
             <label>
               Modifying the dates above will reset the selected start, and end
@@ -86,34 +62,7 @@ const ReservationDatePicker = ({ visible }) => {
     );
   };
 
-  const RenderDatePicker = () => {
-    return (
-      <div className="header__wrapper">
-        <div className="header-label__wrapper">
-          <label htmlFor="datePicker">CHECK-IN</label>
-        </div>
-        <DatePicker
-          value={date.fromDate}
-          format="yyyy-MM-DD"
-          onChange={onChangeDatePicker}
-          id="datePicker"
-          suffixIcon={null}
-          separator={<BsArrowRight />}
-          disabledDate={disabledDate}
-        />
-      </div>
-    );
-  };
-
-  const typeCondition = () => {
-    const { name } = storeData.reservationDetails.header.reservationType;
-
-    if (name === "Day Tour" || name === "Restaurant") return RenderDatePicker();
-
-    return RenderRangePicker();
-  };
-
-  return <>{typeCondition()}</>;
+  return <>{RenderRangePicker()}</>;
 };
 
 export default ReservationDatePicker;

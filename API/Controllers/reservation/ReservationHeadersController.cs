@@ -92,6 +92,7 @@ namespace API.Controllers.reservation
             });
         }
 
+
         [HttpGet]
         [Route("includesRoom")]
         public async Task<ActionResult> getRoomVariantHeader(DateTime fromDate, DateTime toDate, Int32 pax)

@@ -12,6 +12,11 @@ export function getCustomers() {
   return http.get(apiEndpoint);
 }
 
+export function GetCustomersWithActiveBooking() {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetCustomersWithActiveBooking");
+}
+
 export function getCustomerById(id) {
   http.SetJwt();
   return http.get(customerUrl(id));

@@ -12,9 +12,9 @@ import Employees from "./pages/employees/Employees";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./common/protectedRoute";
 import { makeStyles } from "@material-ui/core/styles";
-import Products from "./pages/products/products/Products";
 import CustomerForm from "./pages/customers/CustomerForm";
 import EmployeeForm from "./pages/employees/EmployeeForm";
+import Products from "./pages/products/products/Products";
 import SpeedDials from "./components/speeddial/SpeedDials";
 import RoomPricing from "./pages/room/pricing/RoomPricing";
 import RoomVariants from "./pages/room/variants/RoomVariants";
@@ -25,6 +25,7 @@ import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
+import InventoryDrawer from "./components/drawer/create-transaction/InventoryDrawer";
 import {
   BrowserRouter as Router,
   Switch,
@@ -63,6 +64,7 @@ function App() {
             <GlobalLoading />
             <NavBar />
             <SpeedDials />
+            <InventoryDrawer />
             <ReservationModal />
             <Switch>
               <Route path="/a/login" component={Login} />

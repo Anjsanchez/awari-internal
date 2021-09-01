@@ -72,7 +72,6 @@ namespace API.Controllers.reservation
         public async Task<ActionResult> GetHeaderByCustomerId(Guid headerId)
         {
             var reservationRoomLines = await _repo.GetLineByHeaderId(headerId);
-
             var mappedReservationRoomLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(reservationRoomLines.ToList());
 
             return Ok(new GenericResponse<reservationRoomLineReadDto>()

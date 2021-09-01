@@ -17,3 +17,7 @@
 .footer-label__div.rdStep {
   min-width: 400px;
 }
+
+.reservationModal__container .MuiStepper-root {
+  padding: 0px;
+}

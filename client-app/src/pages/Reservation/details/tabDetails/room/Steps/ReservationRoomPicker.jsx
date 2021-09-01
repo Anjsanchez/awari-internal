@@ -83,8 +83,8 @@ const ReservationRoomPicker = () => {
       const todateClone = toDate.clone();
 
       const dates = [];
-      const start = fromDateClone.subtract(7, "days");
-      const end = todateClone.add(7, "day");
+      const start = fromDateClone.subtract(4, "days");
+      const end = todateClone.add(4, "day");
 
       while (start.isSameOrBefore(end)) {
         dates.push(start.format("MM-DD-YYYY"));
@@ -356,6 +356,12 @@ const ReservationRoomPicker = () => {
   ) => {
     const dateInMoment = moment(date, "MM-DD-YYYY");
     const dateSelected = moment(selectedStartDate.date, "MM-DD-YYYY");
+
+    if (
+      Object.keys(selectedStartDate.room).length !== 0 &&
+      Object.keys(selectedEndDate.room).length !== 0
+    )
+      return;
 
     if (Object.keys(selectedStartDate.room).length !== 0)
       if (dateInMoment.isBefore(dateSelected))

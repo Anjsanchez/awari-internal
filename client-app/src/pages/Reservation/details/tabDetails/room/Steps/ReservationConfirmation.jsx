@@ -137,8 +137,8 @@ const ReservationConfirmation = () => {
   };
 
   const getNumberOfDays = () => {
-    const sDate = moment(storeData.selectedStartDate.date);
-    const eDate = moment(storeData.selectedEndDate.date);
+    const sDate = moment(storeData.selectedStartDate.date, "MM-DD-YYYY");
+    const eDate = moment(storeData.selectedEndDate.date, "MM-DD-YYYY");
 
     return eDate.diff(sDate, "days");
   };
@@ -178,18 +178,20 @@ const ReservationConfirmation = () => {
             <div style={{ width: "400px" }}></div>
             <AListItem
               txtLbl="In"
-              txtValue={moment(storeData.selectedStartDate.date).format(
-                "MMM Do, YY"
-              )}
+              txtValue={moment(
+                storeData.selectedStartDate.date,
+                "MM-DD-YYYY"
+              ).format("MMM Do, YY")}
               Icon={QueryBuilderTwoToneIcon}
             />
             <AListItem
               txtLbl="Out"
               Icon={AccessAlarmTwoToneIcon}
               hasDivider={false}
-              txtValue={moment(storeData.selectedEndDate.date).format(
-                "MMM Do, YY"
-              )}
+              txtValue={moment(
+                storeData.selectedEndDate.date,
+                "MM-DD-YYYY"
+              ).format("MMM Do, YY")}
             />
           </List>
         </div>
