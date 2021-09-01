@@ -56,19 +56,41 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   const [customers, setCustomers] = useState([]);
   const [searchCustomer, setSearchCustomer] = useState({});
 
-  const createTransaction = useSelector(
-    (state) => state.entities.createTransaction.isOpenDrawer
-  );
+  const custInStore = useSelector((state) => state.entities);
 
   useEffect(() => {
-    if (createTransaction) populateCustomerWithActiveBooking();
-  }, [createTransaction]);
+    const { isOpenDrawer } = custInStore.createTransaction;
+
+    if (isOpenDrawer) populateCustomerWithActiveBooking();
+  }, [custInStore.createTransaction.isOpenDrawer]);
+
+  useEffect(() => {
+    if (action === "createReservation") return populateCustomer();
+    else if (action === "inventoryTransaction")
+      return populateCustomerWithActiveBooking();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (action === "createReservation") {
+      const { customer } = custInStore.createReservation.header;
+
+      return Object.keys(customer).length === 0
+        ? setSearchCustomer({})
+        : setSearchCustomer(customer);
+    }
+    if (action === "inventoryTransaction") {
+      const { customer } = custInStore.createTransaction;
+
+      return Object.keys(customer).length === 0
+        ? setSearchCustomer({})
+        : setSearchCustomer(customer);
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomerWithActiveBooking = async () => {
+    console.log("load");
     try {
       const { data } = await GetCustomersWithActiveBooking();
-
-      console.log(data);
 
       let custObj = [];
 
@@ -110,12 +132,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
     }
   };
 
-  useEffect(() => {
-    if (action === "createReservation") return populateCustomer();
-    else if (action === "inventoryTransaction")
-      return populateCustomerWithActiveBooking();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   const options = customers.map((option) => {
     const firstLetter = option["firstName"][0].toUpperCase();
     return {
@@ -126,17 +142,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
   const handleSearch = (e, val) =>
     val === null ? setSearchCustomer({}) : setSearchCustomer(val);
-
-  const custInStore = useSelector((state) => state.entities);
-
-  useEffect(() => {
-    const { customer } = custInStore.createReservation.header;
-
-    if (action === "createReservation")
-      return Object.keys(customer).length === 0
-        ? setSearchCustomer({})
-        : setSearchCustomer(customer);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (action === "createReservation")

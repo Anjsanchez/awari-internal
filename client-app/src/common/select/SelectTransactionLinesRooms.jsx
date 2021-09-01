@@ -9,6 +9,7 @@ import { store } from "../../utils/store/configureStore";
 import { writeToken } from "../../utils/store/pages/users";
 import { getCustomers } from "./../../utils/services/pages/CustomerService";
 import { GetRoomLines } from "./../../utils/services/pages/reservation/ReservationLines";
+import { useMountedState } from "react-use";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -51,6 +52,7 @@ const SelectTransactionLinesRooms = () => {
   const [rooms, setRooms] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [searchRoom, setSearchRoom] = useState({});
+  const isMounted = useMountedState();
 
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction
@@ -62,18 +64,15 @@ const SelectTransactionLinesRooms = () => {
 
   useEffect(() => {
     async function populateReservationTypes() {
+      console.log("heyhey");
       try {
         const { data } = await GetRoomLines();
-
         const { token, listRecords } = data;
-
         const sortedData = listRecords.sort((a, b) =>
           a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
-
         store.dispatch(writeToken({ token }));
-
-        setRooms(sortedData);
+        if (isMounted()) setRooms(sortedData);
       } catch (error) {
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",
