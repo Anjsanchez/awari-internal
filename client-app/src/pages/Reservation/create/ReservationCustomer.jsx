@@ -56,30 +56,64 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   const [customers, setCustomers] = useState([]);
   const [searchCustomer, setSearchCustomer] = useState({});
 
+  const createTransaction = useSelector(
+    (state) => state.entities.createTransaction.isOpenDrawer
+  );
+
   useEffect(() => {
-    async function populateReservationTypes() {
-      try {
-        let data;
+    if (createTransaction) populateCustomerWithActiveBooking();
+  }, [createTransaction]);
 
-        if (action === "createReservation") data = await getCustomers();
-        else if (action === "inventoryTransaction")
-          data = await GetCustomersWithActiveBooking();
+  const populateCustomerWithActiveBooking = async () => {
+    try {
+      const { data } = await GetCustomersWithActiveBooking();
 
-        const sortedData = data.data.sort((a, b) =>
-          a.customer.firstName.localeCompare(b.customer.firstName)
-        );
+      console.log(data);
 
-        setCustomers(sortedData);
-      } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
-      }
+      let custObj = [];
+
+      data.forEach((n) => {
+        custObj.push({ ...n.customer, headerId: n.headerId });
+      });
+
+      setCustomers(custObj);
+    } catch (error) {
+      enqueueSnackbar(
+        "An error occured while fetching the reservation type in the server.",
+        {
+          variant: "error",
+        }
+      );
     }
-    populateReservationTypes();
+  };
+
+  const populateCustomer = async () => {
+    try {
+      const { data } = await getCustomers();
+
+      const { token, listRecords } = data;
+
+      const sortedData = listRecords.sort((a, b) =>
+        a.firstName.localeCompare(b.firstName)
+      );
+
+      store.dispatch(writeToken({ token }));
+
+      setCustomers(sortedData);
+    } catch (error) {
+      enqueueSnackbar(
+        "An error occured while fetching the reservation type in the server.",
+        {
+          variant: "error",
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (action === "createReservation") return populateCustomer();
+    else if (action === "inventoryTransaction")
+      return populateCustomerWithActiveBooking();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const options = customers.map((option) => {

@@ -9,11 +9,11 @@ namespace API.Migrations
         {
             migrationBuilder.InsertData(
                              table: "Users",
-                             columns: new[] { "Id", "Username", "EmailAddress", "FirstName", "LastName", "Password", "isExportFlag", "RoleId", "isActive" },
+                             columns: new[] { "Id", "Username", "EmailAddress", "FirstName", "LastName", "Password", "isExportFlag", "RoleId" },
                              values: new object[,]
                              {
-                                { Guid.NewGuid(), "anj","anj@gmail.com", "Angelo", "Sanchez",  BC.HashPassword("123"), "0", "6f3cc6d8-5575-42ed-ac18-264e3f5e26e1", "1"},
-                                { Guid.NewGuid(), "pat","pat@gmail.com", "Patricia", "Sanchez",  BC.HashPassword("123"), "0", "6f3cc6d8-5575-42ed-ac18-264e3f5e26e1", "1"}
+                                { Guid.NewGuid(), "anj","anj@gmail.com", "Angelo", "Sanchez",  BC.HashPassword("123"), "0", "6f3cc6d8-5575-42ed-ac18-264e3f5e26e1"},
+                                { Guid.NewGuid(), "pat","pat@gmail.com", "Patricia", "Sanchez",  BC.HashPassword("123"), "0", "6f3cc6d8-5575-42ed-ac18-264e3f5e26e1"}
                              });
         }
 
