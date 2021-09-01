@@ -65,13 +65,9 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         else if (action === "inventoryTransaction")
           data = await GetCustomersWithActiveBooking();
 
-        const { token, listRecords } = data.data;
-
-        const sortedData = listRecords.sort((a, b) =>
-          a.firstName.localeCompare(b.firstName)
+        const sortedData = data.data.sort((a, b) =>
+          a.customer.firstName.localeCompare(b.customer.firstName)
         );
-
-        store.dispatch(writeToken({ token }));
 
         setCustomers(sortedData);
       } catch (error) {

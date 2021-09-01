@@ -11,5 +11,6 @@ namespace API.Dto.reservations.header
         public Guid customerId { get; set; }
         public string voucher { get; set; }
         public Guid reservationTypeId { get; set; }
+        public bool isActive { get; set; }
     }
 }

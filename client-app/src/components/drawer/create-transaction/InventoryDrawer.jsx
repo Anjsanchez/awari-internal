@@ -12,6 +12,7 @@ const InventoryDrawer = () => {
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction
   );
+
   const [c, cc] = useState(0);
   const onClose = () => store.dispatch(toggleOpenDrawer(false));
 
@@ -30,9 +31,11 @@ const InventoryDrawer = () => {
           <ReservationCustomer action="inventoryTransaction" />
         </div>
 
-        <div className="id-reservationCustomer__container">
-          <SelectTransactionLinesRooms />
-        </div>
+        {Object.keys(createTransaction.customer).length !== 0 && (
+          <div className="id-reservationCustomer__container">
+            <SelectTransactionLinesRooms />
+          </div>
+        )}
 
         <p>Some contents...</p>
         <p>Some contents...</p>

@@ -6,6 +6,7 @@ using API.Contracts.pages;
 using API.Data;
 using API.Dto.customers;
 using API.Models;
+using API.Models.customer;
 using API.Models.reservation;
 using Microsoft.EntityFrameworkCore;
 
@@ -56,18 +57,20 @@ namespace API.Repository.pages
         }
 
 
-        public async Task<IEnumerable<Customer>> GetCustomersWithActiveBooking()
+        public async Task<IEnumerable<CustomerWithActiveBookingReadDto>> GetCustomersWithActiveBooking()
         {
             var custs = await FindAll(true);
             var reservationHdr = await getAllReservationHeader();
 
+            var customersWithHeader = (from p in custs
+                                       join c in reservationHdr on p._id equals c.customerId
+                                       where (c.isActive == true)
+                                       select new CustomerWithActiveBookingReadDto { Customer = p, headerId = c._id });
 
-            var mapped = (from m in custs
-                          join r in reservationHdr on m._id equals r.customerId
-                          select m).Distinct();
-
-            return mapped;
+            return customersWithHeader;
         }
+
+
 
 
         public async Task<bool> Save()
@@ -82,4 +85,6 @@ namespace API.Repository.pages
             return await Save();
         }
     }
+
+
 }

@@ -9,6 +9,7 @@ using API.Dto.customers;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models;
+using API.Models.customer;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -49,13 +50,8 @@ namespace API.Controllers
         public async Task<ActionResult> GetCustomersWithActiveBooking()
         {
             var customers = await _repo.GetCustomersWithActiveBooking();
-            var mappedCustomers = _map.Map<List<Customer>, List<customerReadDto>>(customers.ToList());
 
-            return Ok(new GenericResponse<customerReadDto>()
-            {
-                listRecords = mappedCustomers,
-                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
-            });
+            return Ok(customers);
         }
 
         [HttpGet("{id}")]

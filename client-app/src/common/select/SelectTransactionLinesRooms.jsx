@@ -8,6 +8,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../utils/store/configureStore";
 import { writeToken } from "../../utils/store/pages/users";
 import { getCustomers } from "./../../utils/services/pages/CustomerService";
+import { GetRoomLines } from "./../../utils/services/pages/reservation/ReservationLines";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -47,26 +48,33 @@ const useStyles = makeStyles((theme) => ({
 
 const SelectTransactionLinesRooms = () => {
   const classes = useStyles();
+  const [rooms, setRooms] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [customers, setCustomers] = useState([]);
-  const [searchCustomer, setSearchCustomer] = useState({});
+  const [searchRoom, setSearchRoom] = useState({});
+
+  const createTransaction = useSelector(
+    (state) => state.entities.createTransaction
+  );
+
+  useEffect(() => {
+    console.log(rooms);
+  }, [createTransaction.customer]);
 
   useEffect(() => {
     async function populateReservationTypes() {
       try {
-        const { data } = await getCustomers();
+        const { data } = await GetRoomLines();
 
         const { token, listRecords } = data;
 
         const sortedData = listRecords.sort((a, b) =>
-          a.firstName.localeCompare(b.firstName)
+          a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
 
         store.dispatch(writeToken({ token }));
 
-        setCustomers(sortedData);
+        setRooms(sortedData);
       } catch (error) {
-        console.log(error);
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",
           {
@@ -78,8 +86,8 @@ const SelectTransactionLinesRooms = () => {
     populateReservationTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const options = customers.map((option) => {
-    const firstLetter = option["firstName"][0].toUpperCase();
+  const options = rooms.map((option) => {
+    const firstLetter = option["room"]["roomLongName"][0].toUpperCase();
     return {
       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
       ...option,
@@ -87,7 +95,7 @@ const SelectTransactionLinesRooms = () => {
   });
 
   const handleSearch = (e, val) =>
-    val === null ? setSearchCustomer({}) : setSearchCustomer(val);
+    val === null ? setSearchRoom({}) : setSearchRoom(val);
 
   const custInStore = useSelector((state) => state.entities);
 
@@ -95,8 +103,8 @@ const SelectTransactionLinesRooms = () => {
     const { customer } = custInStore.createReservation.header;
 
     return Object.keys(customer).length === 0
-      ? setSearchCustomer({})
-      : setSearchCustomer(customer);
+      ? setSearchRoom({})
+      : setSearchRoom(customer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // useEffect(() => {
@@ -106,11 +114,8 @@ const SelectTransactionLinesRooms = () => {
   //   //   store.dispatch(toggleCustomeAdded(searchCustomer));
   // }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const renderSpace = (text) =>
-    text.firstName === "" || text.firstName === null ? "" : " ";
-
   const renderValue = () =>
-    Object.keys(searchCustomer).length === 0 ? null : searchCustomer;
+    Object.keys(searchRoom).length === 0 ? null : searchRoom;
 
   return (
     <div>
@@ -118,7 +123,7 @@ const SelectTransactionLinesRooms = () => {
         <label htmlFor="grouped-demo">ROOM</label>
       </div>
       <Autocomplete
-        value={renderValue()}
+        // value={renderValue()}
         classes={{
           option: classes.option,
           groupLabel: classes.groupLabel,
@@ -127,11 +132,12 @@ const SelectTransactionLinesRooms = () => {
         getOptionSelected={(option, value) => option._id === value._id}
         id="grouped-demo"
         options={options.sort(
-          (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
+          (a, b) => -b.room.roomLongName.localeCompare(a.room.roomLongName)
         )}
-        groupBy={(option) => option.firstLetter}
-        getOptionLabel={(option) =>
-          option["firstName"] + renderSpace(option) + option["lastName"]
+        groupBy={(option) => option.room.roomLongName}
+        getOptionLabel={
+          (option) => option.room.roomLongName
+          // option.room.roomLongName + renderSpace(option) + option["lastName"]
         }
         renderInput={(params) => (
           <TextField {...params} variant="outlined" className={classes.root} />
