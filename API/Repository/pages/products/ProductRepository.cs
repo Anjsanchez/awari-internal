@@ -6,7 +6,7 @@ using API.Contracts.pages.products;
 using API.Data;
 using API.Models.products;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Http;
 namespace API.Repository.pages.products
 {
     public class ProductRepository : IProductRepository
@@ -43,6 +43,8 @@ namespace API.Repository.pages.products
             return products;
         }
 
+
+
         public async Task<Product> FindById(Guid id)
         {
             return await _db.Products
@@ -57,6 +59,33 @@ namespace API.Repository.pages.products
                                 .Include(n => n.user)
                                 .Include(n => n.productCategory)
                                 .FirstOrDefaultAsync(n => n.longName.ToLower() == productName.ToLower());
+        }
+
+        public async Task<IEnumerable<Product>> GetProductsWithImage(HttpRequest request)
+        {
+            var products = await FindAll();
+
+            var z = products.Select(n => new Product()
+            {
+                _id = n._id,
+                costPrice = n.costPrice,
+                createdDate = n.createdDate,
+                ImageFile = n.ImageFile,
+                ImageName = n.ImageName,
+                ImageSrc = String.Format("{0}://{1}{2}/Images/products/{3}", request.Scheme, request.Host, request.PathBase, n.ImageName),
+                isActive = n.isActive,
+                isActivityType = n.isActivityType,
+                longName = n.longName,
+                numberOfServing = n.numberOfServing,
+                productCategory = n.productCategory,
+                sellingPrice = n.sellingPrice,
+                shortName = n.shortName,
+                productCategoryId = n.productCategoryId,
+                user = n.user,
+                userId = n.userId
+            });
+
+            return z;
         }
 
         public async Task<bool> Save()

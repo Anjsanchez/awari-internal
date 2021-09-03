@@ -4,12 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using API.Contracts.pages;
+using API.Contracts.pages.products;
 using API.Data.ApiResponse;
 using API.Dto.customers;
+using API.Dto.products;
+using API.Dto.products.product;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models;
 using API.Models.customer;
+using API.Models.products;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -24,11 +28,15 @@ namespace API.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerRepository _repo;
+        public readonly IProductCategoryRepository _prodCatRepo;
+        public readonly IProductRepository _prodRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public CustomersController(ICustomerRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public CustomersController(ICustomerRepository repo, IProductRepository prodRepo, IProductCategoryRepository prodCatRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _prodRepo = prodRepo;
+            _prodCatRepo = prodCatRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -50,8 +58,19 @@ namespace API.Controllers
         public async Task<ActionResult> GetCustomersWithActiveBooking()
         {
             var customers = await _repo.GetCustomersWithActiveBooking();
+            var prodCategory = await _prodCatRepo.FindAll(true);
+            var products = await _prodRepo.FindAll(true);
 
-            return Ok(customers);
+
+            var mappedCategory = _map.Map<List<ProductCategory>, List<productCategoryReadDto>>(prodCategory.ToList());
+            var mappedProducts = _map.Map<List<Product>, List<productReadDto>>(products.ToList());
+
+            return Ok(new CustomerWithActiveBookingReadDtoResponse()
+            {
+                customers = customers,
+                ProductCategories = mappedCategory,
+                Products = mappedProducts
+            });
         }
 
         [HttpGet("{id}")]

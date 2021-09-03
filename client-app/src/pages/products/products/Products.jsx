@@ -1,9 +1,10 @@
+import "./css/ProductForm.css";
 import { useSnackbar } from "notistack";
 import ProductList from "./ProductList";
 import ProductForm from "./ProductForm";
-import { Card, Grid } from "@material-ui/core";
 import { useMountedState } from "react-use";
 import ProductDisplay from "./ProductDisplay";
+import { Card, Grid } from "@material-ui/core";
 import SpinLoader from "./../../../common/Spin";
 import React, { useState, useEffect } from "react";
 import { RiShoppingBag2Fill } from "react-icons/ri";
@@ -51,6 +52,7 @@ const Products = () => {
     setSelectedProduct({});
     setShowForm(true);
   };
+
   const handleView = (room) => {
     setShowForm(false);
     setSelectedProduct(room);
@@ -86,6 +88,9 @@ const Products = () => {
     roomsx[index].productCategory = obj.productCategory;
     roomsx[index].isActivityType = obj.isActivityType;
     roomsx[index].isActive = obj.isActive;
+    roomsx[index].imageFile = obj.imageFile;
+    roomsx[index].imageSrc = obj.imageSrc;
+    roomsx[index].imageName = obj.imageName;
 
     setFilteredProducts(roomsx);
     setProducts(roomsx);

@@ -50,28 +50,41 @@ const useStyles = makeStyles((theme) => ({
 const SelectTransactionLinesRooms = () => {
   const classes = useStyles();
   const [rooms, setRooms] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
-  const [searchRoom, setSearchRoom] = useState({});
   const isMounted = useMountedState();
+  const { enqueueSnackbar } = useSnackbar();
+  const [filteredRooms, setFilteredRooms] = useState([]);
+  const [searchedRoom, setSearchedRoom] = useState({});
 
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction
   );
 
   useEffect(() => {
-    console.log(rooms);
+    if (rooms.length === 0) return;
+
+    const zz = rooms.filter(
+      (n) => n.reservationHeader._id === createTransaction.customer.headerId
+    );
+    setSearchedRoom({});
+    setFilteredRooms(zz);
   }, [createTransaction.customer]);
 
   useEffect(() => {
     async function populateReservationTypes() {
-      console.log("heyhey");
       try {
         const { data } = await GetRoomLines();
         const { token, listRecords } = data;
         const sortedData = listRecords.sort((a, b) =>
           a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
+
         store.dispatch(writeToken({ token }));
+
+        const zz = sortedData.filter(
+          (n) => n.reservationHeader._id === createTransaction.customer.headerId
+        );
+
+        setFilteredRooms(zz);
         if (isMounted()) setRooms(sortedData);
       } catch (error) {
         enqueueSnackbar(
@@ -85,7 +98,7 @@ const SelectTransactionLinesRooms = () => {
     populateReservationTypes();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const options = rooms.map((option) => {
+  const options = filteredRooms.map((option) => {
     const firstLetter = option["room"]["roomLongName"][0].toUpperCase();
     return {
       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
@@ -94,50 +107,32 @@ const SelectTransactionLinesRooms = () => {
   });
 
   const handleSearch = (e, val) =>
-    val === null ? setSearchRoom({}) : setSearchRoom(val);
-
-  const custInStore = useSelector((state) => state.entities);
-
-  useEffect(() => {
-    const { customer } = custInStore.createReservation.header;
-
-    return Object.keys(customer).length === 0
-      ? setSearchRoom({})
-      : setSearchRoom(customer);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // useEffect(() => {
-  //   // if (action === "createReservation")
-  //   //   store.dispatch(headerCustomerAdded(searchCustomer));
-  //   // else if (action === "inventoryTransaction")
-  //   //   store.dispatch(toggleCustomeAdded(searchCustomer));
-  // }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
+    val === null ? setSearchedRoom({}) : setSearchedRoom(val);
 
   const renderValue = () =>
-    Object.keys(searchRoom).length === 0 ? null : searchRoom;
+    Object.keys(searchedRoom).length === 0 ? null : searchedRoom;
 
   return (
     <div>
       <div className="header-label__wrapper">
-        <label htmlFor="grouped-demo">ROOM</label>
+        <label htmlFor="grouped-demo1">ROOM</label>
       </div>
       <Autocomplete
-        // value={renderValue()}
+        value={renderValue()}
         classes={{
           option: classes.option,
           groupLabel: classes.groupLabel,
           inputRoot: classes.inputRoot,
         }}
-        getOptionSelected={(option, value) => option._id === value._id}
-        id="grouped-demo"
+        getOptionSelected={(option, value) =>
+          option.room._id === value.room._id
+        }
+        id="grouped-demo1"
         options={options.sort(
           (a, b) => -b.room.roomLongName.localeCompare(a.room.roomLongName)
         )}
         groupBy={(option) => option.room.roomLongName}
-        getOptionLabel={
-          (option) => option.room.roomLongName
-          // option.room.roomLongName + renderSpace(option) + option["lastName"]
-        }
+        getOptionLabel={(option) => option.room.roomLongName}
         renderInput={(params) => (
           <TextField {...params} variant="outlined" className={classes.root} />
         )}

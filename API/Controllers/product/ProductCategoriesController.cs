@@ -1,3 +1,4 @@
+using System.IO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ using API.Models.rooms;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -34,12 +37,16 @@ namespace API.Controllers
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ProductCategoriesController(IProductCategoryRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public IWebHostEnvironment _webHostEnv { get; set; }
+
+        public ProductCategoriesController(IWebHostEnvironment webHostEnv, IProductCategoryRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _webHostEnv = webHostEnv;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
         }
+
 
         [HttpGet]
         public async Task<ActionResult> GetCategories()
@@ -70,6 +77,7 @@ namespace API.Controllers
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateCategory(Guid id, productCategoryUpdateDto categoryUpdateDto)

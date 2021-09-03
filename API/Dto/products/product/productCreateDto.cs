@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Dto.products.product
 {
@@ -38,5 +39,10 @@ namespace API.Dto.products.product
         public Guid userId { get; set; }
 
 
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageName { get; set; }
+
+        public string ImageSrc { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using API.Models;
 using API.Models.products;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Dto.products.product
 {
@@ -47,5 +48,10 @@ namespace API.Dto.products.product
 
         public DateTime createdDate { get; set; }
 
+        public string ImageName { get; set; }
+
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageSrc { get; set; }
     }
 }

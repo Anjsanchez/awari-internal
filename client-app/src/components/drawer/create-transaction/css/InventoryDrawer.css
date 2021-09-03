@@ -20,3 +20,25 @@
 .id-reservationCustomer__container {
   margin: 15px 0;
 }
+
+.id-drawer__container {
+  width: 500px;
+}
+
+@media (min-width: 600px) {
+  .id-tabs__container .MuiTab-root {
+    min-width: 0px;
+  }
+}
+
+@media screen and (max-width: 530px) {
+  .id-drawer__container {
+    width: 400px;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .id-drawer__container {
+    width: 300px;
+  }
+}

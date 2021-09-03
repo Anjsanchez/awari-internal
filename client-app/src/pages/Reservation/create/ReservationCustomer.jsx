@@ -7,7 +7,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../../utils/store/configureStore";
 import { writeToken } from "../../../utils/store/pages/users";
-import { toggleCustomeAdded } from "../../../utils/store/pages/createTransaction";
+import {
+  toggleCustomeAdded,
+  toggleProductsAdded,
+} from "../../../utils/store/pages/createTransaction";
 import { headerCustomerAdded } from "../../../utils/store/pages/createReservation";
 import {
   getCustomers,
@@ -73,14 +76,12 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   useEffect(() => {
     if (action === "createReservation") {
       const { customer } = custInStore.createReservation.header;
-
       return Object.keys(customer).length === 0
         ? setSearchCustomer({})
         : setSearchCustomer(customer);
     }
     if (action === "inventoryTransaction") {
       const { customer } = custInStore.createTransaction;
-
       return Object.keys(customer).length === 0
         ? setSearchCustomer({})
         : setSearchCustomer(customer);
@@ -88,16 +89,18 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomerWithActiveBooking = async () => {
-    console.log("load");
+    if (Object.keys(custInStore.createTransaction.customer).length === 0)
+      setSearchCustomer({});
+
     try {
       const { data } = await GetCustomersWithActiveBooking();
-
       let custObj = [];
 
-      data.forEach((n) => {
+      data.customers.forEach((n) => {
         custObj.push({ ...n.customer, headerId: n.headerId });
       });
 
+      store.dispatch(toggleProductsAdded(data));
       setCustomers(custObj);
     } catch (error) {
       enqueueSnackbar(

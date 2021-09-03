@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Models
@@ -65,5 +66,6 @@ namespace API.Models
 
 
         public User user { get; set; }
+
     }
 }

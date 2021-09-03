@@ -1,0 +1,11 @@
+.prf-container__wrapper {
+  text-align: center;
+}
+
+.prf-btnUpload__wrapper input {
+  display: none;
+}
+
+.formList-container .ant-image-img {
+  object-fit: cover;
+}

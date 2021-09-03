@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
-import resort from "../../../assets/room/resto.jpg";
+import MaterialButton from "../../../common/MaterialButton";
 import {
   ButtonGroup,
   CardMedia,
@@ -13,7 +13,6 @@ import {
   Chip,
   Avatar,
 } from "@material-ui/core";
-import MaterialButton from "../../../common/MaterialButton";
 
 const useStyles = makeStyles({
   root: {},
@@ -83,6 +82,7 @@ const ProductDisplay = (props) => {
     createdDate,
     productCategory,
     isActivityType,
+    imageSrc,
   } = props.data;
 
   const classes = useStyles();
@@ -106,16 +106,15 @@ const ProductDisplay = (props) => {
       </Grid>
     );
   };
-
   return (
-    <Card className={classes.root}>
+    <Card className={`${classes.root} pdf-card__wrapper`}>
       <CardActionArea>
         <CardMedia
           component="img"
-          alt="Resort Video"
-          height="240"
-          image={resort}
-          title="Resort Video"
+          alt="Product Image"
+          height="350"
+          image={imageSrc}
+          title="Product Image"
         />
         <CardContent>
           <div>

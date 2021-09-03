@@ -13,11 +13,11 @@ export function getProducts() {
 }
 
 export function saveProduct(product) {
+  const id = product.get("_id");
   http.SetJwt();
-  if (product.id) {
-    const body = { ...product };
+  if (id) {
     // delete body._id;
-    return http.put(productUrl(product.id), body);
+    return http.put(productUrl(id), product);
   }
   return http.post(apiEndpoint, product);
 }

@@ -15,5 +15,8 @@ export default function ProductFormValidate(v) {
   if (!v.productCategoryId.trim())
     errors.productCategoryId = "Product Category is required";
 
+  if (v.imageFile === "" || v.imageFile === null)
+    errors.imageFile = "Image is required";
+
   return errors;
 }

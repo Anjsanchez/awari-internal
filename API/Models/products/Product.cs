@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Models.products
 {
@@ -48,5 +49,14 @@ namespace API.Models.products
 
 
         public DateTime createdDate { get; set; }
+
+        public string? ImageName { get; set; }
+
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+
+        [NotMapped]
+        public string ImageSrc { get; set; }
+
     }
 }
