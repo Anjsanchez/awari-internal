@@ -1,0 +1,25 @@
+.container__wrapper.commerce * {
+  font-family: "Poppins", sans-serif;
+}
+
+.container__wrapper.commerce {
+  background-color: #eee7f6;
+  border: 1px #f3f3f3 solid;
+  padding: 0;
+}
+
+.com-title__leftSpan {
+  margin: 0px;
+  font-size: 1rem;
+  color: rgb(33, 33, 33);
+  font-weight: 600;
+  line-height: 1.235;
+}
+
+.com-title__wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.com-title__wrapper .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"] {
+}

@@ -25,6 +25,5 @@ export default function ProductFormValidate(v) {
   if (v.description === "" || v.description === null)
     errors.description = "Description is required";
 
-  console.log("V", v);
   return errors;
 }

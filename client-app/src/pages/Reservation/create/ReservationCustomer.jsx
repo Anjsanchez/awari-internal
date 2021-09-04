@@ -91,11 +91,13 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   const populateCustomerWithActiveBooking = async () => {
     if (Object.keys(custInStore.createTransaction.customer).length === 0)
       setSearchCustomer({});
+    console.log("hey");
 
     try {
       const { data } = await GetCustomersWithActiveBooking();
       let custObj = [];
 
+      console.log(data.customers);
       data.customers.forEach((n) => {
         custObj.push({ ...n.customer, headerId: n.headerId });
       });

@@ -36,9 +36,9 @@ export const sideBarData = [
     id: 18,
     subNav: [
       {
-        subTitle: "Make a Transaction",
+        subTitle: "Shop",
         icon: <EmojiFoodBeverageTwoToneIcon />,
-        path: "/a/commerce-management/commerce",
+        path: "/a/commerce-management/shop",
         id: 19,
       },
     ],

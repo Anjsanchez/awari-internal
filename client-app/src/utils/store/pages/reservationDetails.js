@@ -17,9 +17,7 @@ const slice = createSlice({
       resx.rooms = [...rooms];
       resx.header = header;
     },
-    addRPayments: (resx, action) => {
-      console.log(action.payload);
-    },
+    addRPayments: (resx, action) => {},
 
     addRHeaders: (resx, action) => {
       resx.payments = [...action.payload];

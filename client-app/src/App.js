@@ -7,6 +7,7 @@ import Rooms from "./pages/room/rooms/Rooms";
 import Logout from "./components/login/Logout";
 import NavBar from "./components/navbar/NavBar";
 import NotFound from "./pages/notfound/NotFound";
+import Commerce from "./pages/commerce/Commerce";
 import Customers from "./pages/customers/Customers";
 import Employees from "./pages/employees/Employees";
 import Dashboard from "./pages/dashboard/Dashboard";
@@ -116,6 +117,10 @@ function App() {
                 component={ActiveBooking}
               />
 
+              <ProtectedRoute
+                path="/a/commerce-management/shop"
+                component={Commerce}
+              />
               <ProtectedRoute
                 path="/a/system-functionality/payments"
                 component={Payments}

@@ -79,7 +79,6 @@ const ReservationDetailsTransactionTable = () => {
         const { data } = await GetRoomLines();
         const { token, listRecords } = data;
 
-        console.log(data);
         store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {

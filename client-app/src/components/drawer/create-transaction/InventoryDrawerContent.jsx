@@ -6,13 +6,9 @@ import ReservationCustomer from "./../../../pages/Reservation/create/Reservation
 import SelectTransactionLinesRooms from "./../../../common/select/SelectTransactionLinesRooms";
 
 const InventoryDrawerContent = () => {
-  const [tabValue, setTabValue] = useState(0);
-
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction
   );
-
-  const handleSelectTabs = (event, newValue) => setTabValue(newValue);
 
   return (
     <div className="id-drawer__container">
@@ -27,17 +23,6 @@ const InventoryDrawerContent = () => {
           <SelectTransactionLinesRooms />
         </div>
       )}
-
-      <div style={{ marginTop: "50px" }}></div>
-
-      <InventoryDrawerTabs
-        value={tabValue}
-        onChange={handleSelectTabs}
-        items={createTransaction.productCategory}
-      />
-
-      <p>Some contents...</p>
-      <p>Some contents...</p>
     </div>
   );
 };
