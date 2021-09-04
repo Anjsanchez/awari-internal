@@ -25,6 +25,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
     description: "",
     sellingPrice: "",
     productCategoryId: "",
+    productTypeId: "",
     isActive: false,
     isActivityType: false,
     createdBy: "",
@@ -36,7 +37,6 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
   });
 
   const handleValueOnLoad = (product) => {
-    console.log(product);
     setValues({
       id: product._id || "",
       shortName: product.shortName || "",
@@ -49,7 +49,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
       createdBy: product.user.firstName + " " + product.user.lastName || "",
       createdDate: product.createdDate || "",
       description: product.description || "",
-
+      productTypeId: product.productType._id || "",
       imageFile: product.imageFile || null,
       imageSrc: product.imageSrc || defaultImgSrc,
       imageName: product.imageName || "",
@@ -93,6 +93,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
     formData.append("description", values.description);
     formData.append("isActive", values.isActive);
     formData.append("isActivityType", values.isActivityType);
+    formData.append("productTypeId", values.productTypeId);
     formData.append("userId", currentUser);
     formData.append("imageFile", values.imageFile);
     formData.append("imageName", values.imageName);

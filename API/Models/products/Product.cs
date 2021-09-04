@@ -27,6 +27,11 @@ namespace API.Models.products
         public ProductCategory productCategory { get; set; }
 
 
+        [Required]
+        public Guid productTypeId { get; set; }
+        public ProductType productType { get; set; }
+
+
         public Int32 numberOfServing { get; set; }
 
 
@@ -53,8 +58,9 @@ namespace API.Models.products
 
         public DateTime createdDate { get; set; }
 
+#nullable enable
         public string? ImageName { get; set; }
-
+#nullable disable
         [NotMapped]
         public IFormFile ImageFile { get; set; }
 

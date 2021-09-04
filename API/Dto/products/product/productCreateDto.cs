@@ -19,6 +19,8 @@ namespace API.Dto.products.product
         [Required]
         public Guid productCategoryId { get; set; }
 
+        public Guid productTypeId { get; set; }
+
 
         public Int32 numberOfServing { get; set; }
 

@@ -9,3 +9,6 @@
 .formList-container .ant-image-img {
   object-fit: cover;
 }
+.prf-container__span-error {
+  color: red;
+}

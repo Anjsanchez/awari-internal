@@ -3,7 +3,6 @@ import "./css/FormHeader.css";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
 import { IconContext } from "react-icons";
-import { MdDashboard } from "react-icons/md";
 import { BiChevronRight } from "react-icons/bi";
 import { makeStyles } from "@material-ui/core/styles";
 import { Breadcrumbs, Typography, Button, Grid } from "@material-ui/core";
@@ -40,14 +39,7 @@ const useStyles = makeStyles((theme) => ({
 const FormHeader = (props) => {
   const classes = useStyles();
 
-  const {
-    header,
-    second,
-    SecondIcon,
-    third,
-    navigate,
-    isVisibleBtn = true,
-  } = props;
+  const { header, second, third, navigate, isVisibleBtn = true } = props;
   return (
     <>
       <IconContext.Provider value={{ size: "0.875rem" }}>
@@ -63,24 +55,10 @@ const FormHeader = (props) => {
                   className={classes.breadCrumb}
                 >
                   <Link color="inherit" to="/" className="link-icon">
-                    <MdDashboard
-                      size={"20px"}
-                      color={"#B39DDB"}
-                      className={classes.btnLink}
-                    />
-                    <strong className={classes.formHeader_header_emp}>
-                      Dashboard
-                    </strong>
+                    <span className="formHeader_header_emp">Dashboard</span>
                   </Link>
                   <Typography color="inherit" className="link-icon">
-                    <SecondIcon
-                      size={"20px"}
-                      color={"#B39DDB"}
-                      className={classes.btnLink}
-                    />
-                    <strong className={classes.formHeader_header_emp}>
-                      {second}
-                    </strong>
+                    <span className="formHeader_header_emp">{second}</span>
                   </Typography>
                   <span className={classes.formHeader_header_emp}>{third}</span>
                 </Breadcrumbs>

@@ -35,6 +35,7 @@ namespace API.Repository.pages.products
             var products = await _db.Products
                 .Include(n => n.productCategory)
                 .Include(n => n.user)
+                .Include(n => n.productType)
                 .ToListAsync();
 
             if (isActiveOnly)
@@ -80,6 +81,8 @@ namespace API.Repository.pages.products
                 numberOfServing = n.numberOfServing,
                 productCategory = n.productCategory,
                 sellingPrice = n.sellingPrice,
+                productType = n.productType,
+                productTypeId = n.productTypeId,
                 shortName = n.shortName,
                 productCategoryId = n.productCategoryId,
                 user = n.user,

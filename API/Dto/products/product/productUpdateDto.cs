@@ -7,17 +7,12 @@ namespace API.Dto.products.product
     public class productUpdateDto
     {
 
-        [Required]
-        [StringLength(150)]
         public string shortName { get; set; }
 
 
-        [Required]
-        [StringLength(150)]
         public string longName { get; set; }
 
 
-        [Required]
         public Guid productCategoryId { get; set; }
 
 
@@ -39,8 +34,8 @@ namespace API.Dto.products.product
         public bool isActivityType { get; set; }
 
 
-        [Required]
-        public Guid userId { get; set; }
+        public Guid productTypeId { get; set; }
+
 
         public string ImageName { get; set; }
 

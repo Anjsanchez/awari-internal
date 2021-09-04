@@ -9,22 +9,19 @@ namespace API.Dto.products.product
     public class productReadDto
     {
 
-        [Required]
         public Guid _id { get; set; }
 
 
-        [Required]
-        [StringLength(150)]
         public string shortName { get; set; }
 
 
-        [Required]
-        [StringLength(150)]
         public string longName { get; set; }
 
 
-        [Required]
         public ProductCategory productCategory { get; set; }
+
+
+        public ProductType productType { get; set; }
 
 
         public Int32 numberOfServing { get; set; }
@@ -45,7 +42,6 @@ namespace API.Dto.products.product
         public bool isActivityType { get; set; }
 
 
-        [Required]
         public User user { get; set; }
 
 

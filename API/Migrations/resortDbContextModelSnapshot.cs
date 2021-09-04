@@ -278,6 +278,9 @@ namespace API.Migrations
                     b.Property<Guid>("productCategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("productTypeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<float>("sellingPrice")
                         .HasColumnType("real");
 
@@ -293,6 +296,8 @@ namespace API.Migrations
                     b.HasKey("_id");
 
                     b.HasIndex("productCategoryId");
+
+                    b.HasIndex("productTypeId");
 
                     b.HasIndex("userId");
 
@@ -324,6 +329,20 @@ namespace API.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("ProductCategories");
+                });
+
+            modelBuilder.Entity("API.Models.products.ProductType", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("_id");
+
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("API.Models.reservation.ReservationHeader", b =>
@@ -642,6 +661,12 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("API.Models.products.ProductType", "productType")
+                        .WithMany()
+                        .HasForeignKey("productTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("API.Models.User", "user")
                         .WithMany()
                         .HasForeignKey("userId")
@@ -649,6 +674,8 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("productCategory");
+
+                    b.Navigation("productType");
 
                     b.Navigation("user");
                 });

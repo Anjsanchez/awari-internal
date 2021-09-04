@@ -15,5 +15,18 @@
 }
 
 .link-icon:hover {
-  text-decoration: underline;
+  font-size: 0.956rem;
+}
+
+.formHeader-header .formHeader_header_emp {
+  color: rgb(23, 43, 77) !important  ;
+  font-size: 0.875rem;
+  -webkit-transition: font-size 0.2s ease;
+  -moz-transition: font-size 0.2s ease;
+  -o-transition: font-size 0.2s ease;
+  transition: font-size 0.2s ease;
+}
+
+.formHeader-header .formHeader_header_emp:hover {
+  font-size: 1rem;
 }

@@ -15,11 +15,16 @@ export default function ProductFormValidate(v) {
   if (!v.productCategoryId.trim())
     errors.productCategoryId = "Product Category is required";
 
-  if (v.imageFile === "" || v.imageFile === null)
-    errors.imageFile = "Image is required";
+  if (!v.productTypeId.trim())
+    errors.productTypeId = "Product Type is required";
+
+  if (v.imageFile === "" || v.imageFile === null) {
+    if (v.imageName === "") errors.imageFile = "Image is required";
+  }
 
   if (v.description === "" || v.description === null)
     errors.description = "Description is required";
 
+  console.log("V", v);
   return errors;
 }

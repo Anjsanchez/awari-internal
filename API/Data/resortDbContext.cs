@@ -28,5 +28,6 @@ namespace API.Data
         public DbSet<ReservationHeader> ReservationHeaders { get; set; }
         public DbSet<ReservationPayment> ReservationPayments { get; set; }
         public DbSet<ReservationRoomLine> ReservationRoomLines { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
     }
 }

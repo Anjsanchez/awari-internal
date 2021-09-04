@@ -16,6 +16,7 @@ import MaterialSelect from "../../../common/form/MaterialSelect";
 import ProductFormValidate from "./validation/ProductFormValidate";
 import MaterialTextField from "./../../../common/MaterialTextField";
 import { Grid, Paper, ButtonGroup, IconButton } from "@material-ui/core";
+import { getProdTypes } from "./../../../utils/services/pages/products/ProductTypeServices";
 import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
 
 const useStyles = makeStyles((theme) => ({
@@ -34,9 +35,10 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
   const hist = useHistory();
-  const [category, setCategory] = useState([]);
-  const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+  const [types, setTypes] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
+  const [category, setCategory] = useState([]);
   const isLoading = useSelector(
     (state) => state.entities.roomVariant.isLoading
   );
@@ -57,7 +59,30 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
       try {
         const { data } = await getProdCategory();
 
-        setCategory(data.listRecords);
+        const sortedProducts = data.listRecords.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        setCategory(sortedProducts);
+      } catch (error) {
+        enqueueSnackbar(
+          "An error occured while fetching the roles in the server.",
+          {
+            variant: "error",
+          }
+        );
+      }
+    }
+
+    async function populateProductType() {
+      try {
+        const { data } = await getProdTypes();
+
+        const sortedProducts = data.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        setTypes(sortedProducts);
       } catch (error) {
         enqueueSnackbar(
           "An error occured while fetching the roles in the server.",
@@ -77,6 +102,7 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
         if (ex && ex.status === 400) hist.replace("/not-found");
       }
     }
+    populateProductType();
     populateCategories();
     populateRoom();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -121,7 +147,11 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                     >
                       <BackupTwoToneIcon />
                     </IconButton>
-                    {errors.imageFile && <span>Image is Required</span>}
+                    {errors.imageFile && (
+                      <span className="prf-container__span-error">
+                        Image is Required
+                      </span>
+                    )}
                   </label>
                 </div>
               </div>
@@ -184,6 +214,19 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 handleChangeInput={handleChange}
                 errors={errors.productCategoryId}
                 datas={category}
+                displayText="name"
+                menuItemValue="_id"
+                maxWidth="100%"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <MaterialSelect
+                name="productTypeId"
+                label="Type"
+                value={values.productTypeId}
+                handleChangeInput={handleChange}
+                errors={errors.productTypeId}
+                datas={types}
                 displayText="name"
                 menuItemValue="_id"
                 maxWidth="100%"

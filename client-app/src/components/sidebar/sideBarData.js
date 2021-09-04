@@ -1,13 +1,11 @@
-import {
-  RiUserSmileFill,
-  RiShoppingBag2Fill,
-  RiBankCardFill,
-  RiBillFill,
-} from "react-icons/ri";
-import { MdDashboard } from "react-icons/md";
-import { BsFillHouseDoorFill } from "react-icons/bs";
-import ViewListSharpIcon from "@material-ui/icons/ViewListSharp";
-
+import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
+import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
+import BallotTwoToneIcon from "@material-ui/icons/BallotTwoTone";
+import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
+import HomeTwoToneIcon from "@material-ui/icons/HomeTwoTone";
+import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
+import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
+import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 export const sideBarData = [
   {
     title: "General",
@@ -15,7 +13,7 @@ export const sideBarData = [
     subNav: [
       {
         subTitle: "Dashboard",
-        icon: <MdDashboard />,
+        icon: <DashboardTwoToneIcon />,
         path: "/",
         id: 1,
       },
@@ -27,9 +25,21 @@ export const sideBarData = [
     subNav: [
       {
         subTitle: "Active Bookings",
-        icon: <ViewListSharpIcon />,
+        icon: <BallotTwoToneIcon />,
         path: "/a/reservation-management/reservations",
         id: 17,
+      },
+    ],
+  },
+  {
+    title: "Commerce",
+    id: 18,
+    subNav: [
+      {
+        subTitle: "Make a Transaction",
+        icon: <EmojiFoodBeverageTwoToneIcon />,
+        path: "/a/commerce-management/commerce",
+        id: 19,
       },
     ],
   },
@@ -39,7 +49,7 @@ export const sideBarData = [
     subNav: [
       {
         subTitle: "Users",
-        icon: <RiUserSmileFill />,
+        icon: <AccountCircleTwoToneIcon />,
         id: 3,
         subNav: [
           { title: "Employees", path: "/a/user-management/employees", id: 4 },
@@ -52,7 +62,7 @@ export const sideBarData = [
       },
       {
         subTitle: "Rooms",
-        icon: <BsFillHouseDoorFill />,
+        icon: <HomeTwoToneIcon />,
         id: 6,
         subNav: [
           {
@@ -74,7 +84,7 @@ export const sideBarData = [
       },
       {
         subTitle: "Products",
-        icon: <RiShoppingBag2Fill />,
+        icon: <LocalMallTwoToneIcon />,
         id: 10,
         subNav: [
           {
@@ -97,13 +107,13 @@ export const sideBarData = [
     subNav: [
       {
         subTitle: "Payments",
-        icon: <RiBankCardFill />,
+        icon: <AccountBalanceWalletTwoToneIcon />,
         id: 14,
         path: "/a/system-functionality/payments",
       },
       {
         subTitle: "Discounts",
-        icon: <RiBillFill />,
+        icon: <LocalOfferTwoToneIcon />,
         id: 15,
         path: "/a/system-functionality/discounts",
       },

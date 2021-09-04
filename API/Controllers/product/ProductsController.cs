@@ -77,9 +77,10 @@ namespace API.Controllers
                 return NotFound("Product not found in the database");
 
             if (ProductUpdateDto.ImageFile != null)
+            {
                 ProductUpdateDto.ImageName = await globalFunctionalityHelper.SaveImage(ProductUpdateDto.ImageFile, "Products", _hostEnvironment);
-
-            globalFunctionalityHelper.DeleteImage(product.ImageName, "Products", _hostEnvironment);
+                globalFunctionalityHelper.DeleteImage(product.ImageName, "Products", _hostEnvironment);
+            }
 
             _map.Map(ProductUpdateDto, product);
 

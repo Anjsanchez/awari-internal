@@ -9,6 +9,7 @@ import Modal from "@material-ui/core/Modal";
 import { RiNotification3Line } from "react-icons/ri";
 import { makeStyles } from "@material-ui/core/styles";
 import * as auth from "../../utils/services/authServices";
+
 import {
   Avatar,
   Badge,

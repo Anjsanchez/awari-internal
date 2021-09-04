@@ -103,6 +103,7 @@ namespace API
             services.AddScoped<ICustomerRepository, CustomerRepository>();
             services.AddScoped<IRoomVariantRepository, RoomVariantRepository>();
             services.AddScoped<IRoomPricingRepository, RoomPricingRepository>();
+            services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IReservationTypeRepository, ReservationTypeRepository>();
             services.AddScoped<IReservationHeaderRepository, ReservationHeaderRepository>();

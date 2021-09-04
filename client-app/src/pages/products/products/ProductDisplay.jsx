@@ -81,6 +81,7 @@ const ProductDisplay = (props) => {
     user,
     createdDate,
     productCategory,
+    productType,
     isActivityType,
     imageSrc,
     description,
@@ -89,14 +90,22 @@ const ProductDisplay = (props) => {
   const classes = useStyles();
 
   const RenderChips = () => {
-    if (!isActivityType) return null;
-
     return (
       <Grid container spacing={2} style={{ marginTop: "10px" }}>
+        <Grid item xs={6}>
+          <Chip
+            avatar={<Avatar>{productType.name.charAt(0)}</Avatar>}
+            label={productType.name}
+            clickable
+            color="primary"
+            variant="outlined"
+          />
+        </Grid>
+
         {isActivityType && (
           <Grid item xs={6}>
             <Chip
-              avatar={<Avatar>A</Avatar>}
+              avatar={<Avatar>B</Avatar>}
               label="Activity"
               clickable
               color="primary"

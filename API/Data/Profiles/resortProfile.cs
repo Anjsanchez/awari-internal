@@ -3,6 +3,7 @@ using API.Dto.functionality.discounts;
 using API.Dto.functionality.payments;
 using API.Dto.products;
 using API.Dto.products.product;
+using API.Dto.products.type;
 using API.Dto.reservations.header;
 using API.Dto.reservations.line;
 using API.Dto.reservations.payment;
@@ -50,6 +51,8 @@ namespace API.Data.Profiles
             CreateMap<ProductCategory, productCategoryReadDto>().ReverseMap();
             CreateMap<productCategoryUpdateDto, ProductCategory>().ReverseMap();
             CreateMap<productCategoryCreateDto, ProductCategory>().ReverseMap();
+
+            CreateMap<ProductType, productTypeReadDto>().ReverseMap();
 
             CreateMap<Product, productReadDto>().ReverseMap();
             CreateMap<productUpdateDto, Product>().ReverseMap();
