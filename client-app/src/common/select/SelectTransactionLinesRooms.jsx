@@ -1,15 +1,13 @@
-import moment from "moment";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
+import { useMountedState } from "react-use";
 import { TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../utils/store/configureStore";
 import { writeToken } from "../../utils/store/pages/users";
-import { getCustomers } from "./../../utils/services/pages/CustomerService";
 import { GetRoomLines } from "./../../utils/services/pages/reservation/ReservationLines";
-import { useMountedState } from "react-use";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {

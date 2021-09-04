@@ -42,7 +42,7 @@ const GlobalLoading = () => {
       >
         <div>
           <Fade in={isLoading}>
-            <ScaleLoader color="#EDE7F6" loading={true} size={20} />
+            <ScaleLoader color="#E3F2FD" loading={true} size={20} />
           </Fade>
         </div>
       </Modal>

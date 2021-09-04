@@ -14,8 +14,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 500,
   },
   addContainer_btn: {
+    backgroundColor: "#2196F3",
     borderRadius: "16px",
     minWidth: "156px",
+    "&:hover": {
+      backgroundColor: "#1976D2 !important",
+    },
   },
   addContainer: {
     display: "flex",
@@ -69,12 +73,12 @@ const FormHeader = (props) => {
                 {isVisibleBtn && (
                   <Link to={navigate} className="link">
                     <Button
-                      className={classes.addContainer_btn}
-                      startIcon={<FaPlus />}
+                      className="mBtn__container"
                       variant="contained"
-                      color="primary"
+                      color="inherit"
+                      startIcon={<FaPlus style={{ fill: "white" }} />}
                     >
-                      Add {third}
+                      <span style={{ color: "white" }}>Add {third} </span>
                     </Button>
                   </Link>
                 )}

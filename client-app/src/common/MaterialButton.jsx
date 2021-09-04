@@ -30,7 +30,7 @@ const MaterialButton = (props) => {
       variant="contained"
       color={color}
       size={size}
-      className={classes}
+      className={`${classes} mBtn__container`}
       {...rest}
     >
       {text}

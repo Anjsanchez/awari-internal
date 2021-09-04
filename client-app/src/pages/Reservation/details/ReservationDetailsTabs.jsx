@@ -32,7 +32,7 @@ const ReservationDetailsTabs = (props) => {
       <div className="details-tab__wrapper">
         <div>
           <Tabs
-            TabIndicatorProps={{ style: { background: "#b39ddb" } }}
+            TabIndicatorProps={{ style: { background: "#42A5F5" } }}
             value={value}
             onChange={handleChange}
             variant="fullWidth"
