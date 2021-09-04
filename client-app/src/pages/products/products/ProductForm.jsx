@@ -17,6 +17,7 @@ import ProductFormValidate from "./validation/ProductFormValidate";
 import MaterialTextField from "./../../../common/MaterialTextField";
 import { Grid, Paper, ButtonGroup, IconButton } from "@material-ui/core";
 import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
+
 const useStyles = makeStyles((theme) => ({
   root: { padding: "15px", paddingTop: "30px" },
   textField: {
@@ -141,6 +142,16 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 handleChange={handleChange}
                 errors={errors.shortName}
                 values={values.shortName}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <MaterialTextField
+                multiline={true}
+                id="description"
+                label="Description"
+                handleChange={handleChange}
+                errors={errors.description}
+                values={values.description}
               />
             </Grid>
 

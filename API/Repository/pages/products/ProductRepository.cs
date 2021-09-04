@@ -75,6 +75,7 @@ namespace API.Repository.pages.products
                 ImageSrc = String.Format("{0}://{1}{2}/Images/products/{3}", request.Scheme, request.Host, request.PathBase, n.ImageName),
                 isActive = n.isActive,
                 isActivityType = n.isActivityType,
+                description = n.description,
                 longName = n.longName,
                 numberOfServing = n.numberOfServing,
                 productCategory = n.productCategory,

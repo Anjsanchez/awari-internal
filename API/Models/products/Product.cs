@@ -42,6 +42,9 @@ namespace API.Models.products
         public bool isActivityType { get; set; }
 
 
+        public string description { get; set; }
+
+
         [Required]
         [Column("createdBy")]
         public Guid userId { get; set; }

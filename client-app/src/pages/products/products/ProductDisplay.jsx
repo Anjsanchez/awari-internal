@@ -83,6 +83,7 @@ const ProductDisplay = (props) => {
     productCategory,
     isActivityType,
     imageSrc,
+    description,
   } = props.data;
 
   const classes = useStyles();
@@ -132,6 +133,19 @@ const ProductDisplay = (props) => {
                 This product was created by {user.firstName} {user.lastName} on{" "}
                 {moment(createdDate).format("MMMM Do, YYYY")}.
               </span>
+            </Grid>
+          </Grid>
+
+          <Grid container spacing={2} style={{ marginTop: "15px" }}>
+            <Grid item xs={12}>
+              <div>
+                <span className={classes.displayCard_span_subTitle}>
+                  Description
+                </span>
+                <span className={classes.display_span_child}>
+                  {description}
+                </span>
+              </div>
             </Grid>
           </Grid>
 

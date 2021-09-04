@@ -30,6 +30,9 @@ namespace API.Dto.products.product
         public float sellingPrice { get; set; }
 
 
+        public string description { get; set; }
+
+
         public bool isActive { get; set; }
 
 

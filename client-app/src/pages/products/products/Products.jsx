@@ -85,6 +85,7 @@ const Products = () => {
     roomsx[index].longName = obj.longName;
     roomsx[index].numberOfServing = obj.numberOfServing;
     roomsx[index].sellingPrice = obj.sellingPrice;
+    roomsx[index].description = obj.description;
     roomsx[index].productCategory = obj.productCategory;
     roomsx[index].isActivityType = obj.isActivityType;
     roomsx[index].isActive = obj.isActive;

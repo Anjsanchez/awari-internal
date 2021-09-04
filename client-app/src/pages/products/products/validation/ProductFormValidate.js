@@ -18,5 +18,8 @@ export default function ProductFormValidate(v) {
   if (v.imageFile === "" || v.imageFile === null)
     errors.imageFile = "Image is required";
 
+  if (v.description === "" || v.description === null)
+    errors.description = "Description is required";
+
   return errors;
 }

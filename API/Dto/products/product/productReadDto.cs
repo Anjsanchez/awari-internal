@@ -39,6 +39,9 @@ namespace API.Dto.products.product
         public bool isActive { get; set; }
 
 
+        public string description { get; set; }
+
+
         public bool isActivityType { get; set; }
 
 

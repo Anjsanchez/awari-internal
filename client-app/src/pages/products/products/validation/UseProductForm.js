@@ -22,6 +22,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
     longName: "",
     numberOfServing: "",
     costPrice: "0",
+    description: "",
     sellingPrice: "",
     productCategoryId: "",
     isActive: false,
@@ -35,6 +36,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
   });
 
   const handleValueOnLoad = (product) => {
+    console.log(product);
     setValues({
       id: product._id || "",
       shortName: product.shortName || "",
@@ -46,6 +48,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
       isActivityType: product.isActivityType || false,
       createdBy: product.user.firstName + " " + product.user.lastName || "",
       createdDate: product.createdDate || "",
+      description: product.description || "",
 
       imageFile: product.imageFile || null,
       imageSrc: product.imageSrc || defaultImgSrc,
@@ -87,6 +90,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
     formData.append("numberOfServing", values.numberOfServing);
     formData.append("costPrice", 0);
     formData.append("sellingPrice", values.sellingPrice);
+    formData.append("description", values.description);
     formData.append("isActive", values.isActive);
     formData.append("isActivityType", values.isActivityType);
     formData.append("userId", currentUser);

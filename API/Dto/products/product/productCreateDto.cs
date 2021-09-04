@@ -35,6 +35,9 @@ namespace API.Dto.products.product
         public bool isActivityType { get; set; }
 
 
+        public string description { get; set; }
+
+
         [Required]
         public Guid userId { get; set; }
 
