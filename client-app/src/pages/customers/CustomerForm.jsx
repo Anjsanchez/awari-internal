@@ -1,4 +1,3 @@
-import "./css/Employee.css";
 import moment from "moment";
 import "./css/EmployeeForm.css";
 import { HiUsers } from "react-icons/hi";

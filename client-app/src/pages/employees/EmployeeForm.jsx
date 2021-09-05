@@ -1,4 +1,3 @@
-import "./css/Employee.css";
 import "./css/EmployeeForm.css";
 import { useSnackbar } from "notistack";
 import { HiUsers } from "react-icons/hi";

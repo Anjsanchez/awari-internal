@@ -60,9 +60,8 @@
 }
 
 .com-body__card {
-  height: 100%;
   width: 100%;
-  height: 422px;
+  height: 280px;
   background-color: rgb(255, 255, 255);
   color: rgb(97, 97, 97);
   transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
@@ -79,7 +78,7 @@
   background-repeat: no-repeat;
   display: block;
   background-position: center center;
-  height: 220px;
+  height: 150px;
 }
 .com-body__card .ant-card-body {
   padding: 0;
@@ -116,7 +115,7 @@
   align-items: center;
 
   bottom: 20px;
-  width: 92%;
+  width: 85%;
   position: absolute;
 }
 .com-content__wrapper {
@@ -126,13 +125,62 @@
 
 .com-body__pricing-label {
   margin: 0px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgb(33, 33, 33);
-  font-weight: 600;
-  font-family: Roboto, sans-serif;
+  font-weight: 400;
   line-height: 1.235;
 }
 
 .com-body__pricing .ant-btn-icon-only {
   width: 45px;
+}
+
+/* drawer */
+
+.cd__container {
+  width: 300px;
+}
+
+.cd__drawer-container .ant-drawer-body {
+  padding: 10px;
+}
+
+.cd__container .MuiTypography-body1 {
+  font-size: 15px;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+}
+.cd-prices__container .ant-radio-wrapper {
+  padding-left: 20px;
+}
+
+.cd-prices__span {
+  font-size: 12px;
+  font-weight: 400;
+  font-family: "Poppins", sans-serif;
+}
+
+.cd-category__container .MuiCheckbox-colorPrimary.Mui-checked {
+  color: #0099f3;
+}
+
+.cd-category__container .MuiFormControlLabel-root {
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 600px) {
+  .com-title__autocomplete {
+    width: 130px;
+  }
+  .com-body__title span {
+    font-size: 0.725rem;
+    font-weight: 400;
+  }
+
+  .com-body__pricing-label {
+    font-size: 0.78rem;
+  }
+  .com-content__wrapper {
+    padding: 10px;
+  }
 }

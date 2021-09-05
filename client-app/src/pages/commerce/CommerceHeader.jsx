@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 const data = [{ name: "angelo" }];
 
-const CommerceHeader = () => {
+const CommerceHeader = ({ onFilterShow }) => {
   const classes = useStyles();
   const options = data.map((option) => {
     const firstLetter = option["name"][0].toUpperCase();
@@ -70,6 +70,7 @@ const CommerceHeader = () => {
         <Divider type="vertical" />
         <div className="div">
           <Button
+            onClick={onFilterShow}
             variant="text"
             color="default"
             startIcon={<LocalBarSharpIcon style={{ fill: "#B39DDB" }} />}

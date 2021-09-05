@@ -1,5 +1,4 @@
 import React from "react";
-import "./css/Employee.css";
 import { RiUserSmileFill } from "react-icons/ri";
 import EmployeeTable from "./EmployeeTable";
 import FormHeader from "./../../common/form/FormHeader";
