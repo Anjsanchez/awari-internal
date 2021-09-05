@@ -13,7 +13,6 @@
   font-size: 1rem;
   color: rgb(33, 33, 33);
   font-weight: 600;
-  line-height: 1.235;
 }
 
 .com-title__wrapper,
@@ -85,16 +84,11 @@
   height: 100%;
 }
 
-.com-body__description,
-.com-body__pricing {
-  padding-top: 16px;
-}
 .com-body__title span {
   margin: 0px;
   font-size: 0.875rem;
   font-weight: 500;
   color: rgb(33, 33, 33);
-  line-height: 1.75;
   text-decoration: none;
 }
 
@@ -102,9 +96,8 @@
   margin: 0px;
   letter-spacing: 0em;
   font-weight: 400;
-  line-height: 1.5em;
   color: rgb(97, 97, 97);
-  font-size: 0.875rem;
+  font-size: 0.7rem;
   overflow: hidden;
   height: 45px;
 }
@@ -114,8 +107,8 @@
   justify-content: space-between;
   align-items: center;
 
-  bottom: 20px;
-  width: 85%;
+  bottom: 12px;
+  width: 89%;
   position: absolute;
 }
 .com-content__wrapper {
@@ -128,7 +121,6 @@
   font-size: 0.9rem;
   color: rgb(33, 33, 33);
   font-weight: 400;
-  line-height: 1.235;
 }
 
 .com-body__pricing .ant-btn-icon-only {
@@ -204,7 +196,6 @@
   font-family: Roboto, sans-serif;
   font-weight: 500;
   font-size: 0.875rem;
-  line-height: 1.75;
   text-transform: uppercase;
   min-height: 36px;
   transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -226,6 +217,22 @@
 
 .com-body__wrapper #commerceAddToCard .MuiSvgIcon-root {
   fill: black;
+}
+
+@media screen and (max-width: 768px) {
+  .com-body__description {
+    line-height: 15px;
+  }
+  .com-body__description span {
+    font-size: 0.6rem;
+  }
+  .com-content__wrapper {
+    padding: 10px;
+    padding-bottom: 18px;
+  }
+  .com-body__pricing {
+    width: 92%;
+  }
 }
 @media screen and (max-width: 600px) {
   .com-title__autocomplete {

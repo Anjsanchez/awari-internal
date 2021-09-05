@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.products;
 using API.Data.ApiResponse;
+using API.Dto.products;
 using API.Dto.products.product;
+using API.Dto.products.type;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models.products;
@@ -24,13 +26,17 @@ namespace API.Controllers
     {
 
         private readonly IProductRepository _repo;
+        private readonly IProductTypeRepository _typeRepo;
+        private readonly IProductCategoryRepository _catRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
         public readonly IWebHostEnvironment _hostEnvironment;
 
 
-        public ProductsController(IProductRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor, IWebHostEnvironment hostEnvironment)
+        public ProductsController(IProductRepository repo, IProductCategoryRepository catRepo, IProductTypeRepository typeRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor, IWebHostEnvironment hostEnvironment)
         {
+            _typeRepo = typeRepo;
+            _catRepo = catRepo;
             _hostEnvironment = hostEnvironment;
             _repo = repo;
             _map = mapp;
@@ -38,9 +44,12 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetProducts()
+        public async Task<ActionResult> GetProducts(bool isActiveOnly = false)
         {
             var products = await _repo.GetProductsWithImage(Request);
+            if (isActiveOnly)
+                products = products.Where(n => n.isActive == true).ToList();
+
             var mappedProducts = _map.Map<List<Product>, List<productReadDto>>(products.ToList());
 
             return Ok(new GenericResponse<productReadDto>()
@@ -49,6 +58,29 @@ namespace API.Controllers
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }
+
+        [HttpGet("includesCategory")]
+        public async Task<ActionResult> GetProductsWithCategory()
+        {
+            var products = await _repo.GetProductsWithImage(Request);
+            products = products.Where(n => n.isActive == true).ToList();
+            var mappedProducts = _map.Map<List<Product>, List<productReadDto>>(products.ToList());
+
+            var roomProductCategory = await _catRepo.FindAll(true);
+            var mappedCategory = _map.Map<List<ProductCategory>, List<productCategoryReadDto>>(roomProductCategory.ToList());
+
+            var types = await _typeRepo.FindAll();
+            var mappedType = _map.Map<List<ProductType>, List<productTypeReadDto>>(types.ToList());
+
+            return Ok(new ProductWithCategoryResponse()
+            {
+                products = mappedProducts,
+                types = mappedType,
+                categories = mappedCategory,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetProductById(Guid id)
