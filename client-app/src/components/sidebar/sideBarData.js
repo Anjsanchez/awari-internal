@@ -6,6 +6,7 @@ import HomeTwoToneIcon from "@material-ui/icons/HomeTwoTone";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
+import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 export const sideBarData = [
   {
     title: "General",
@@ -40,6 +41,12 @@ export const sideBarData = [
         icon: <EmojiFoodBeverageTwoToneIcon />,
         path: "/a/commerce-management/shop",
         id: 19,
+      },
+      {
+        subTitle: "Cart Item",
+        icon: <ShoppingBasketTwoToneIcon />,
+        path: "/a/commerce-management/cart",
+        id: 20,
       },
     ],
   },

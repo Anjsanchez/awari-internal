@@ -1,6 +1,7 @@
 import "./app.css";
 import React from "react";
 import "antd/dist/antd.css";
+import Cart from "./pages/cart/Cart";
 import { useSelector } from "react-redux";
 import Login from "./components/login/Login";
 import Rooms from "./pages/room/rooms/Rooms";
@@ -120,6 +121,10 @@ function App() {
               <ProtectedRoute
                 path="/a/commerce-management/shop"
                 component={Commerce}
+              />
+              <ProtectedRoute
+                path="/a/commerce-management/cart"
+                component={Cart}
               />
               <ProtectedRoute
                 path="/a/system-functionality/payments"
