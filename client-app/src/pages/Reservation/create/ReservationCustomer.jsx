@@ -7,10 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../../utils/store/configureStore";
 import { writeToken } from "../../../utils/store/pages/users";
-import {
-  toggleCustomeAdded,
-  toggleProductsAdded,
-} from "../../../utils/store/pages/createTransaction";
+
 import { headerCustomerAdded } from "../../../utils/store/pages/createReservation";
 import {
   getCustomers,
@@ -61,16 +58,16 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
   const custInStore = useSelector((state) => state.entities);
 
-  useEffect(() => {
-    const { isOpenDrawer } = custInStore.createTransaction;
+  // useEffect(() => {
+  //   const { isOpenDrawer } = custInStore.createTransaction;
 
-    if (isOpenDrawer) populateCustomerWithActiveBooking();
-  }, [custInStore.createTransaction.isOpenDrawer]);
+  //   if (isOpenDrawer) populateCustomerWithActiveBooking();
+  // }, [custInStore.createTransaction.isOpenDrawer]);
 
   useEffect(() => {
     if (action === "createReservation") return populateCustomer();
-    else if (action === "inventoryTransaction")
-      return populateCustomerWithActiveBooking();
+    // else if (action === "inventoryTransaction")
+    //   return populateCustomerWithActiveBooking();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -80,12 +77,12 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         ? setSearchCustomer({})
         : setSearchCustomer(customer);
     }
-    if (action === "inventoryTransaction") {
-      const { customer } = custInStore.createTransaction;
-      return Object.keys(customer).length === 0
-        ? setSearchCustomer({})
-        : setSearchCustomer(customer);
-    }
+    // if (action === "inventoryTransaction") {
+    //   const { customer } = custInStore.createTransaction;
+    //   return Object.keys(customer).length === 0
+    //     ? setSearchCustomer({})
+    //     : setSearchCustomer(customer);
+    // }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomerWithActiveBooking = async () => {
@@ -102,7 +99,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         custObj.push({ ...n.customer, headerId: n.headerId });
       });
 
-      store.dispatch(toggleProductsAdded(data));
+      // store.dispatch(toggleProductsAdded(data));
       setCustomers(custObj);
     } catch (error) {
       enqueueSnackbar(
@@ -151,8 +148,8 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   useEffect(() => {
     if (action === "createReservation")
       store.dispatch(headerCustomerAdded(searchCustomer));
-    else if (action === "inventoryTransaction")
-      store.dispatch(toggleCustomeAdded(searchCustomer));
+    // else if (action === "inventoryTransaction")
+    //   store.dispatch(toggleCustomeAdded(searchCustomer));
   }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderBirthday = () => {

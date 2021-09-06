@@ -3,15 +3,15 @@ import { Drawer } from "antd";
 import "./css/InventoryDrawer.css";
 import { useSelector } from "react-redux";
 import { store } from "../../../utils/store/configureStore";
-import { toggleOpenDrawer } from "../../../utils/store/pages/createTransaction";
+// import { toggleOpenDrawer } from "../../../utils/store/pages/createTransaction";
 import InventoryDrawerContent from "./InventoryDrawerContent";
 
 const InventoryDrawer = () => {
-  const createTransaction = useSelector(
-    (state) => state.entities.createTransaction
-  );
+  // const createTransaction = useSelector(
+  //   (state) => state.entities.createTransaction
+  // );
 
-  const onClose = () => store.dispatch(toggleOpenDrawer(false));
+  // const onClose = () => store.dispatch(toggleOpenDrawer(false));
 
   return (
     <>
@@ -19,8 +19,8 @@ const InventoryDrawer = () => {
         placement="right"
         closable={false}
         width={"auto"}
-        onClose={onClose}
-        visible={createTransaction.isOpenDrawer}
+        // onClose={onClose}
+        visible={false}
       >
         <InventoryDrawerContent />
       </Drawer>

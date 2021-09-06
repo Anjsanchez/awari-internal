@@ -42,6 +42,6 @@ export const getVisibleState = createSelector(
   (isLoading) => isLoading
 );
 
-export const { toggleOpenDrawer, toggleCustomeAdded, toggleProductsAdded } =
-  slice.actions;
+// export const { toggleOpenDrawer, toggleCustomeAdded, toggleProductsAdded } =
+//   slice.actions;
 export default slice.reducer;
