@@ -5,34 +5,57 @@ import { createSelector } from "@reduxjs/toolkit";
 const slice = createSlice({
   name: "createTransaction",
   initialState: {
-    isOpenDrawer: false,
-    customer: {},
     products: [],
-    productCategory: [],
   },
   reducers: {
-    toggleOpenDrawer: (resx, action) => {
-      resx.isOpenDrawer = action.payload;
-
-      if (action.payload === true) return;
-      resx.customer = {};
-      resx.products = [];
-      resx.productCategory = [];
-    },
-    toggleCustomeAdded: (resx, action) => {
-      resx.customer = action.payload;
-    },
     toggleProductsAdded: (resx, action) => {
-      const cat = action.payload.productCategories;
-      const prod = action.payload.products;
+      const prodFromPayload = { ...action.payload };
 
-      const sortedCat = cat.sort((a, b) => a.name.localeCompare(b.name));
-      const sortedProd = prod.sort((a, b) =>
-        a.longName.localeCompare(b.longName)
+      const prodx = [...resx.products];
+      const i = prodx.findIndex((x) => x._id === prodFromPayload._id);
+
+      if (i === -1) {
+        resx.products = [
+          ...prodx,
+          {
+            ...prodFromPayload,
+            quantity: 1,
+            totalDiscount: 0,
+            seniorPax: 0,
+            discountId: "",
+          },
+        ];
+        return;
+      }
+
+      prodx[i].quantity += 1;
+      resx.products = prodx;
+    },
+    toggleAdjustQuantity: (resx, action) => {
+      const { act, prod } = action.payload;
+
+      const prodx = [...resx.products];
+      const i = prodx.findIndex((x) => x._id === prod._id);
+
+      if (i === -1) return;
+
+      const currentQty = prodx[i].quantity;
+
+      if (act === "dec") {
+        if (currentQty <= 1) return;
+        prodx[i].quantity -= 1;
+        return;
+      }
+      prodx[i].quantity += 1;
+    },
+
+    toggleRemoveItemInCart: (resx, action) => {
+      const prodFromPayload = { ...action.payload };
+
+      const newProd = resx.products.filter(
+        (n) => n._id !== prodFromPayload._id
       );
-
-      resx.productCategory = [{ _id: 0, name: "All" }, ...sortedCat];
-      resx.products = sortedProd;
+      resx.products = newProd;
     },
   },
 });
@@ -42,6 +65,9 @@ export const getVisibleState = createSelector(
   (isLoading) => isLoading
 );
 
-// export const { toggleOpenDrawer, toggleCustomeAdded, toggleProductsAdded } =
-//   slice.actions;
+export const {
+  toggleProductsAdded,
+  toggleAdjustQuantity,
+  toggleRemoveItemInCart,
+} = slice.actions;
 export default slice.reducer;

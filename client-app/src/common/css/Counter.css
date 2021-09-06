@@ -40,6 +40,14 @@
   justify-content: center;
 }
 
+.counter__wrapper .counter-btn {
+  background-color: #e57373;
+}
+
+.counter__wrapper .counter-btn.pos {
+  background-color: #29b6f6;
+}
+
 @media screen and (min-width: 600px) {
   .counter__wrapper {
     max-width: 397px;

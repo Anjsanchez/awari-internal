@@ -16,3 +16,17 @@
   font-family: "Poppins", sans-serif;
   font-size: 0.875rem;
 }
+
+.ec-img__wrapper {
+  padding-top: 20px;
+}
+
+.ant-empty.ec-img__wrapper .ant-empty-image {
+  height: 300px;
+}
+
+@media screen and (max-width: 600px) {
+  .ant-empty.ec-img__wrapper .ant-empty-image {
+    height: 140px;
+  }
+}

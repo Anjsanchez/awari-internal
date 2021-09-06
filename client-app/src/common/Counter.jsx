@@ -26,7 +26,7 @@ const Counter = ({ name, counterV, onIncrement, onDecrement }) => {
           size="small"
           variant="contained"
           color="primary"
-          className="counter-btn"
+          className="counter-btn pos"
           onClick={() => onIncrement(name)}
         >
           +

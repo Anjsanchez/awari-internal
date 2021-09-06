@@ -8,9 +8,10 @@ const EmptyContent = ({ text, subText, link }) => {
     <div>
       <Empty
         image={defaultImgSrc}
-        imageStyle={{
-          height: 300,
-        }}
+        className="ec-img__wrapper"
+        // imageStyle={{
+        //   height: 300,
+        // }}
         description={
           <div>
             <span className="ec-span__content">{text}</span>

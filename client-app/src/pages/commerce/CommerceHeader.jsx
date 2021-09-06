@@ -1,9 +1,14 @@
-import React from "react";
+import { Badge } from "antd";
 import { Divider } from "antd";
+import { Link } from "react-router-dom";
+import { Button as AntBtn } from "antd";
+import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Button, TextField } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import LocalBarSharpIcon from "@material-ui/icons/LocalBarSharp";
+import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -30,7 +35,18 @@ const useStyles = makeStyles((theme) => ({
 
 const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
   //
+
   const classes = useStyles();
+  const [cartLength, setCartLength] = useState(0);
+
+  const createTransaction = useSelector(
+    (state) => state.entities.createTransaction.products
+  );
+
+  useEffect(() => {
+    const count = createTransaction.reduce((a, b) => a + b.quantity, 0);
+    setCartLength(count);
+  }, [createTransaction]);
 
   const options = products.map((option) => {
     const firstLetter = option["longName"][0].toUpperCase();
@@ -79,6 +95,17 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
           </Button>
         </div>
       </div>
+      <AntBtn
+        type="primary"
+        id="commerceAddToCard"
+        icon={
+          <Link to="/a/commerce-management/cart" className="ch-link__wrapper">
+            <Badge count={cartLength}>
+              <ShoppingBasketTwoToneIcon />
+            </Badge>
+          </Link>
+        }
+      />
     </div>
   );
 };

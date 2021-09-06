@@ -1,7 +1,9 @@
 import React from "react";
-import { Badge, Card, Button } from "antd";
+import { Card, Button } from "antd";
 import { Grid } from "@material-ui/core";
 import EmptyContent from "./../../common/EmptyContent";
+import { store } from "../../utils/store/configureStore";
+import { toggleProductsAdded } from "../../utils/store/pages/createTransaction";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 
 const CommerceBody = ({ products }) => {
@@ -17,15 +19,6 @@ const CommerceBody = ({ products }) => {
 
   return (
     <div className="com-body__wrapper">
-      <Button
-        type="primary"
-        id="commerceAddToCard"
-        icon={
-          <Badge count={3}>
-            <ShoppingBasketTwoToneIcon />
-          </Badge>
-        }
-      />
       <Grid container spacing={2}>
         {products.map((n) => (
           <Grid item xs={6} sm={4} md={3} lg={2} key={n._id}>
@@ -42,7 +35,7 @@ const CommerceBody = ({ products }) => {
                   <span>{n.longName}</span>
                 </div>
                 <div className="com-body__description">
-                  <span>{n.description}</span>
+                  <span>{n.productType.name}</span>
                 </div>
                 <div className="com-body__pricing">
                   <span className="com-body__pricing-label">
@@ -54,7 +47,7 @@ const CommerceBody = ({ products }) => {
                   <Button
                     type="primary"
                     icon={<ShoppingBasketTwoToneIcon />}
-                    onClick={() => console.log(n)}
+                    onClick={() => store.dispatch(toggleProductsAdded(n))}
                   />
                 </div>
               </div>
