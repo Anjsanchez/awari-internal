@@ -28,12 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data = [{ name: "angelo" }];
-
-const CommerceHeader = ({ onFilterShow }) => {
+const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
+  //
   const classes = useStyles();
-  const options = data.map((option) => {
-    const firstLetter = option["name"][0].toUpperCase();
+
+  const options = products.map((option) => {
+    const firstLetter = option["longName"][0].toUpperCase();
     return {
       firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
       ...option,
@@ -60,11 +60,11 @@ const CommerceHeader = ({ onFilterShow }) => {
               (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
             )}
             groupBy={(option) => option.firstLetter}
-            getOptionLabel={(option) => option["name"]}
+            getOptionLabel={(option) => option["longName"]}
             renderInput={(params) => (
               <TextField {...params} label="Search" variant="outlined" />
             )}
-            //   onChange={onSearch}
+            onChange={onSearch}
           />
         </div>
         <Divider type="vertical" />

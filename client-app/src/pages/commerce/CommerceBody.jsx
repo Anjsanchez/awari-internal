@@ -5,6 +5,8 @@ import EmptyContent from "./../../common/EmptyContent";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 
 const CommerceBody = ({ products }) => {
+  //
+
   if (products.length === 0)
     return (
       <EmptyContent

@@ -1,35 +1,36 @@
-import React, { useState, useEffect } from "react";
 import "./css/Commerce.css";
 import { Divider } from "antd";
-import CommerceHeader from "./CommerceHeader";
 import CommerceBody from "./CommerceBody";
-import CommerceDrawer from "./CommerceDrawer";
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
-import {
-  getProducts,
-  GetProductsWithCategory,
-} from "./../../utils/services/pages/products/ProductService";
+import SpinLoader from "./../../common/Spin";
+import CommerceDrawer from "./CommerceDrawer";
+import CommerceHeader from "./CommerceHeader";
+import React, { useState, useEffect } from "react";
 import { store } from "../../utils/store/configureStore";
 import { writeToken } from "../../utils/store/pages/users";
-import SpinLoader from "./../../common/Spin";
+import { GetProductsWithCategory } from "./../../utils/services/pages/products/ProductService";
 
 const Commerce = () => {
   const isMounted = useMountedState();
+  const [types, setTypes] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [products, setProducts] = useState([]);
-  const [types, setTypes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [searchProduct, setSearchProduct] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [isFilterDrawerShow, setIsFilterDrawerShow] = useState(false);
 
   //Filters
-  const [selectedTypes, setSelectedTypes] = React.useState([]);
-  const [selectedPrice, setSelectedPrice] = React.useState(0);
-  const [selectedCategory, setSelectedCategory] = React.useState([]);
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
-  const executeFilter = () => {
+  const handleSearch = (e, value) =>
+    value === null ? setSearchProduct("") : setSearchProduct(value.longName);
+
+  useEffect(() => {
     const prodx = [...products];
 
     const filteredCat = prodx.filter((item) => {
@@ -48,12 +49,20 @@ const Commerce = () => {
       (n) => price.from <= n.sellingPrice && price.to >= n.sellingPrice
     );
 
-    setFilteredProducts(filteredPrice);
-  };
+    if (searchProduct === "") return setFilteredProducts(filteredPrice);
 
-  useEffect(() => {
-    executeFilter();
-  }, [selectedCategory, selectedTypes, selectedPrice]);
+    filteredPrice
+      .filter((val) => {
+        if (searchProduct === "") return val;
+        if (val.longName.toLowerCase().includes(searchProduct.toLowerCase()))
+          return val;
+        return "";
+      })
+      .map((val, key) => {
+        if (searchProduct === "") return setFilteredProducts(filteredPrice);
+        return setFilteredProducts([val]);
+      });
+  }, [selectedCategory, selectedTypes, selectedPrice, searchProduct]);
 
   useEffect(() => {
     //..
@@ -105,7 +114,11 @@ const Commerce = () => {
 
   return (
     <div className="container__wrapper commerce">
-      <CommerceHeader onFilterShow={onFilterShow} />
+      <CommerceHeader
+        onSearch={handleSearch}
+        onFilterShow={onFilterShow}
+        products={filteredProducts}
+      />
       <CommerceDrawer
         types={types}
         categories={categories}
