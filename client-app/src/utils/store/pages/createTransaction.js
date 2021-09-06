@@ -20,9 +20,10 @@ const slice = createSlice({
           {
             ...prodFromPayload,
             quantity: 1,
-            totalDiscount: 0,
+            netDiscount: 0,
             seniorPax: 0,
-            discountId: "",
+            discount: {},
+            netAmount: 0,
           },
         ];
         return;
@@ -48,7 +49,20 @@ const slice = createSlice({
       }
       prodx[i].quantity += 1;
     },
+    toggleAddCartDiscount: (resx, action) => {
+      const { discount, seniorPax, netDiscount, product } = action.payload;
 
+      const prodx = [...resx.products];
+      const i = prodx.findIndex((x) => x._id === product._id);
+
+      if (i === -1) return;
+
+      prodx[i].discount = discount;
+      prodx[i].seniorPax = seniorPax;
+      prodx[i].netDiscount = netDiscount;
+
+      resx.products = prodx;
+    },
     toggleRemoveItemInCart: (resx, action) => {
       const prodFromPayload = { ...action.payload };
 
@@ -69,5 +83,6 @@ export const {
   toggleProductsAdded,
   toggleAdjustQuantity,
   toggleRemoveItemInCart,
+  toggleAddCartDiscount,
 } = slice.actions;
 export default slice.reducer;

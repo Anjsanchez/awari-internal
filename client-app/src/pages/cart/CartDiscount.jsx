@@ -12,19 +12,21 @@ import AAutoComplete from "./../../common/select/AAutoComplete";
 import FastfoodTwoToneIcon from "@material-ui/icons/FastfoodTwoTone";
 import PieChartTwoToneIcon from "@material-ui/icons/PieChartTwoTone";
 import { getDiscounts } from "./../../utils/services/pages/functionality/DiscountService";
+import { toggleAddCartDiscount } from "../../utils/store/pages/createTransaction";
 
 const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
   const isMounted = useMountedState();
   const [senior, setSenior] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [discounts, setDiscounts] = useState(0);
+  const [netDiscount, setNetDiscount] = useState(0);
   const [selectedDiscount, setSelectedDiscount] = useState({});
-
-  const { longName, numberOfServing, quantity } = selectedProduct;
+  const { longName, numberOfServing, quantity, sellingPrice } = selectedProduct;
 
   useEffect(() => {
     setSenior(0);
-    setSelectedDiscount({});
+    setNetDiscount(0);
+    setSelectedDiscount({ _id: 0, name: "Not Applicable" });
   }, [showModal]);
 
   const onSelectChange = (value, e) => setSelectedDiscount(e.obj);
@@ -36,7 +38,6 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
 
         const { token, listRecords } = data;
 
-        console.log(listRecords);
         const sortedPayment = listRecords.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
@@ -57,6 +58,48 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
 
     populateDiscounts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSaveDiscount = () => {
+    store.dispatch(
+      toggleAddCartDiscount({
+        discount: selectedDiscount,
+        seniorPax: senior,
+        netDiscount: netDiscount,
+        product: selectedProduct,
+      })
+    );
+
+    enqueueSnackbar("Successfully added a discount!", {
+      variant: "success",
+    });
+    handleCancelModal();
+  };
+
+  useEffect(() => {
+    //..GROSS AMOUNT
+    const totalHeadsForDiscount = numberOfServing * quantity;
+    const grossAmount = quantity * sellingPrice;
+    //..NET DISCOUNT
+    const { _id, value } = selectedDiscount;
+    const amtHalf = grossAmount / totalHeadsForDiscount;
+
+    let accumulatedDisc = 0;
+
+    if (senior === 0 && _id === 0) return setNetDiscount(0);
+
+    if (senior !== 0) {
+      const amtMulSenior = amtHalf * senior;
+
+      accumulatedDisc += Math.round(amtMulSenior * 0.2);
+    }
+
+    if (_id !== 0) {
+      const totalHeadsNoSenr = (numberOfServing - senior) * amtHalf;
+      accumulatedDisc += Math.round(totalHeadsNoSenr * (value / 100));
+    }
+
+    setNetDiscount(accumulatedDisc);
+  }, [selectedDiscount, senior]);
 
   const handleIncrement = (action) => {
     const totalHeads = numberOfServing * quantity;
@@ -116,7 +159,11 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
 
           <div className="cd-mattress__button">
             <div className="cf-button__container">
-              <Button variant="contained" color="primary">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveDiscount}
+              >
                 Save Discount
               </Button>
             </div>
