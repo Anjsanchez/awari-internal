@@ -1,7 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "antd";
 import { Divider, Grid, List, ListItem } from "@material-ui/core";
+import { useSelector } from "react-redux";
 const CartBilling = () => {
+  const [grossAmount, setGrossAmount] = useState(0);
+  const [netDiscount, setNetDiscount] = useState(0);
+  const [netTotal, setNetTotal] = useState(0);
+
+  const products = useSelector(
+    (state) => state.entities.createTransaction.products
+  );
+
+  useEffect(() => {
+    const gross = products.reduce((a, b) => a + b.sellingPrice * b.quantity, 0);
+    const netDiscount = products.reduce((a, b) => a + b.netDiscount, 0);
+
+    setGrossAmount(gross);
+    setNetDiscount(netDiscount);
+    setNetTotal(gross - netDiscount);
+  }, [products]);
+
   return (
     <div className="cb-container__wrapper">
       <Grid container spacing={2}>
@@ -28,7 +46,10 @@ const CartBilling = () => {
                       Gross Amount
                     </span>
                     <span className="reservationDetails-body__span__detail">
-                      202,150 PHP
+                      ₱
+                      {Intl.NumberFormat().format(
+                        Number(grossAmount).toFixed(2)
+                      )}
                     </span>
                   </ListItem>
                   <Divider />
@@ -40,7 +61,10 @@ const CartBilling = () => {
                       Net Discount
                     </span>
                     <span className="reservationDetails-body__span__detail">
-                      50,401 PHP
+                      ₱
+                      {Intl.NumberFormat().format(
+                        Number(netDiscount).toFixed(2)
+                      )}
                     </span>
                   </ListItem>
                   <Divider />
@@ -52,7 +76,7 @@ const CartBilling = () => {
                       Net Total
                     </span>
                     <span className="reservationDetails-body__span__detail">
-                      821,321 PHP
+                      ₱{Intl.NumberFormat().format(Number(netTotal).toFixed(2))}
                     </span>
                   </ListItem>
                 </List>

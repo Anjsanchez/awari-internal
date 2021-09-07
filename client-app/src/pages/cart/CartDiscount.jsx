@@ -9,14 +9,16 @@ import { store } from "../../utils/store/configureStore";
 import { writeToken } from "../../utils/store/pages/users";
 import EcoTwoToneIcon from "@material-ui/icons/EcoTwoTone";
 import AAutoComplete from "./../../common/select/AAutoComplete";
+import MaterialTextField from "./../../common/MaterialTextField";
 import FastfoodTwoToneIcon from "@material-ui/icons/FastfoodTwoTone";
 import PieChartTwoToneIcon from "@material-ui/icons/PieChartTwoTone";
-import { getDiscounts } from "./../../utils/services/pages/functionality/DiscountService";
 import { toggleAddCartDiscount } from "../../utils/store/pages/createTransaction";
+import { getDiscounts } from "./../../utils/services/pages/functionality/DiscountService";
 
 const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
   const isMounted = useMountedState();
   const [senior, setSenior] = useState(0);
+  const [remark, setRemark] = useState(0);
   const { enqueueSnackbar } = useSnackbar();
   const [discounts, setDiscounts] = useState(0);
   const [netDiscount, setNetDiscount] = useState(0);
@@ -28,7 +30,8 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
 
     setSelectedDiscount(selectedProduct.discount);
     setNetDiscount(selectedProduct.netDiscount);
-    setSenior(senior);
+    setSenior(selectedProduct.seniorPax);
+    setRemark(selectedProduct.remark);
   }, [showModal]);
 
   const onSelectChange = (value, e) => setSelectedDiscount(e.obj);
@@ -68,6 +71,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
         seniorPax: senior,
         netDiscount: netDiscount,
         product: selectedProduct,
+        remark: remark,
       })
     );
 
@@ -77,6 +81,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     handleCancelModal();
   };
 
+  const handleRemarkChange = (n) => setRemark(n.target.value);
   useEffect(() => {
     //..GROSS AMOUNT
     const totalHeadsForDiscount = numberOfServing * quantity;
@@ -130,11 +135,13 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
             txtValue={longName}
             Icon={FastfoodTwoToneIcon}
           />
+
           <AListItem
             txtLbl="Number of Serving"
             txtValue={numberOfServing}
             Icon={PieChartTwoToneIcon}
           />
+
           <AListItem
             txtLbl="Quantity"
             txtValue={quantity}
@@ -150,12 +157,25 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
               onDecrement={handleIncrement}
             />
           </div>
+
           <div className="cd-mattress__autoComplete">
             <AAutoComplete
               label="DISCOUNTS"
               onSelectChange={onSelectChange}
               selectedData={selectedDiscount}
               data={discounts}
+            />
+          </div>
+
+          <div className="cd-mattress__autoComplete">
+            <MaterialTextField
+              label="REMARK"
+              id="remark"
+              values={remark}
+              handleChange={handleRemarkChange}
+              type="text"
+              multiline={true}
+              size="small"
             />
           </div>
 

@@ -1,9 +1,9 @@
 import React from "react";
 import "./css/CommerceCart.css";
-import { Divider } from "@material-ui/core";
 import CartTable from "./CartTable";
-import CartBilling from "./CartBilling";
 import CartFooter from "./CartFooter";
+import CartBilling from "./CartBilling";
+import { Divider } from "@material-ui/core";
 const Cart = () => {
   return (
     <div className="container__wrapper cc">

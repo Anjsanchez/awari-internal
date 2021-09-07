@@ -1,12 +1,11 @@
 import { useSnackbar } from "notistack";
-import { useSelector } from "react-redux";
 import { useMountedState } from "react-use";
 import { TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../utils/store/configureStore";
-import { writeToken } from "../../utils/store/pages/users";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import { toggleRoomAdded } from "../../utils/store/pages/createTransaction";
 import { GetRoomLines } from "./../../utils/services/pages/reservation/ReservationLines";
 
 const useStyles = makeStyles((theme) => ({
@@ -45,45 +44,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SelectTransactionLinesRooms = () => {
+const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
   const classes = useStyles();
-  const [rooms, setRooms] = useState([]);
   const isMounted = useMountedState();
+  const [rooms, setRooms] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [filteredRooms, setFilteredRooms] = useState([]);
   const [searchedRoom, setSearchedRoom] = useState({});
-
-  const createTransaction = useSelector(
-    (state) => state.entities.createTransaction
-  );
+  const [filteredRooms, setFilteredRooms] = useState([]);
 
   useEffect(() => {
     if (rooms.length === 0) return;
 
     const zz = rooms.filter(
-      (n) => n.reservationHeader._id === createTransaction.customer.headerId
+      (n) => n.reservationHeader._id === customer.headerId
     );
+
     setSearchedRoom({});
     setFilteredRooms(zz);
-  }, [createTransaction.customer]);
+  }, [customer]);
+
+  useEffect(() => {
+    store.dispatch(toggleRoomAdded(searchedRoom));
+  }, [searchedRoom]);
 
   useEffect(() => {
     async function populateReservationTypes() {
       try {
         const { data } = await GetRoomLines();
-        const { token, listRecords } = data;
+        const { listRecords } = data;
         const sortedData = listRecords.sort((a, b) =>
           a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
-
-        store.dispatch(writeToken({ token }));
-
         const zz = sortedData.filter(
-          (n) => n.reservationHeader._id === createTransaction.customer.headerId
+          (n) => n.reservationHeader._id === customer.headerId
         );
-
-        setFilteredRooms(zz);
-        if (isMounted()) setRooms(sortedData);
+        if (isMounted()) {
+          setRooms(sortedData);
+          setFilteredRooms(zz);
+        }
       } catch (error) {
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",

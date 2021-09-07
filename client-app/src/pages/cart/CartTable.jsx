@@ -1,22 +1,21 @@
 import React, { useState } from "react";
+import CartDiscount from "./CartDiscount";
+import { useSelector } from "react-redux";
 import Table from "@material-ui/core/Table";
+import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import { Button, ButtonGroup, Tooltip, IconButton } from "@material-ui/core";
-import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
-import ConfirmationNumberTwoToneIcon from "@material-ui/icons/ConfirmationNumberTwoTone";
-import { store } from "../../utils/store/configureStore";
 import EmptyContent from "./../../common/EmptyContent";
-import { useSelector } from "react-redux";
+import { store } from "../../utils/store/configureStore";
+import TableContainer from "@material-ui/core/TableContainer";
+import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
+import { Button, ButtonGroup, Tooltip, IconButton } from "@material-ui/core";
+import ConfirmationNumberTwoToneIcon from "@material-ui/icons/ConfirmationNumberTwoTone";
 import {
   toggleAdjustQuantity,
   toggleRemoveItemInCart,
 } from "../../utils/store/pages/createTransaction";
-import { Modal } from "antd";
-import CartDiscount from "./CartDiscount";
 
 const CartTable = () => {
   //..
@@ -24,18 +23,18 @@ const CartTable = () => {
   const [selectedProduct, setSelectedProduct] = useState({});
 
   const handleCancelModal = () => setShowModal(false);
+
   const handleShowDiscount = (prod) => {
     setShowModal(true);
     setSelectedProduct(prod);
   };
+
   const products = useSelector(
     (state) => state.entities.createTransaction.products
   );
 
-  const handleQuantityAdjust = (act, prod) => {
-    const obj = { act, prod };
-    store.dispatch(toggleAdjustQuantity(obj));
-  };
+  const handleQuantityAdjust = (act, prod) =>
+    store.dispatch(toggleAdjustQuantity({ act, prod }));
 
   const renderTableBody = () => {
     return products.map((n) => (
@@ -74,10 +73,17 @@ const CartTable = () => {
           </ButtonGroup>
         </TableCell>
         <TableCell className="ct-tableCell__wrapper" align="right">
-          <span className="ct-rowProduct-titleSpan">₱19.20</span>
+          <span className="ct-rowProduct-titleSpan">
+            ₱{Intl.NumberFormat().format(Number(n.netDiscount).toFixed(2))}
+          </span>
         </TableCell>
         <TableCell className="ct-tableCell__wrapper" align="left">
-          <span className="ct-rowProduct-titleSpan">₱19.20</span>
+          <span className="ct-rowProduct-titleSpan">
+            ₱
+            {Intl.NumberFormat().format(
+              Number(n.sellingPrice * n.quantity - n.netDiscount).toFixed(2)
+            )}
+          </span>
         </TableCell>
         <TableCell className="ct-tableCell__wrapper" align="right">
           <Tooltip title="Discount" placement="top">

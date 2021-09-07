@@ -129,10 +129,22 @@
 .cd-modal__wrapper .ant-modal-body {
   padding: 16px;
 }
-
+.cd-mattress__switch.btn {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  text-align: right;
+}
+.cd-mattress__switch.btn .MuiButton-containedSizeSmall {
+  padding: 4px 18px;
+  background-color: #2196f3;
+}
 .cd-mattress__war,
-.cd-mattress__autoComplete {
+.cd-mattress__autoComplete,
+.cd-mattress__switch {
   margin: 5px 15% 0 15%;
+}
+.cd-mattress__switch {
+  margin-top: 15px;
 }
 .cd-mattress__autoComplete {
   padding-top: 10px;
@@ -146,9 +158,17 @@
   width: 100px;
   height: 35px;
 }
-.cd-mattress__buttonWrapper.MuiButton-containedPrimary {
-}
 
+.cd-mattress__switch.btn .cf-btn__getOrders {
+  color: white;
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  padding: 0 20px;
+}
+.cd-mattress__switch.btn .cf-btn__getOrders,
+#cc-switch__sendKitchen.ant-switch-checked {
+  background-color: #9575cd;
+}
 @media screen and (max-width: 600px) {
   .ct-rowProduct-titleSpan {
     font-size: 0.625rem;

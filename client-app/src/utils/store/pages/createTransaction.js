@@ -6,6 +6,9 @@ const slice = createSlice({
   name: "createTransaction",
   initialState: {
     products: [],
+    customer: {},
+    room: {},
+    sendToKitchen: true,
   },
   reducers: {
     toggleProductsAdded: (resx, action) => {
@@ -24,6 +27,7 @@ const slice = createSlice({
             seniorPax: 0,
             discount: { _id: 0, name: "Not Applicable" },
             netAmount: 0,
+            remark: "",
           },
         ];
         return;
@@ -50,7 +54,8 @@ const slice = createSlice({
       prodx[i].quantity += 1;
     },
     toggleAddCartDiscount: (resx, action) => {
-      const { discount, seniorPax, netDiscount, product } = action.payload;
+      const { discount, seniorPax, remark, netDiscount, product } =
+        action.payload;
 
       const prodx = [...resx.products];
       const i = prodx.findIndex((x) => x._id === product._id);
@@ -60,6 +65,7 @@ const slice = createSlice({
       prodx[i].discount = discount;
       prodx[i].seniorPax = seniorPax;
       prodx[i].netDiscount = netDiscount;
+      prodx[i].remark = remark;
 
       resx.products = prodx;
     },
@@ -70,6 +76,15 @@ const slice = createSlice({
         (n) => n._id !== prodFromPayload._id
       );
       resx.products = newProd;
+    },
+    toggleCustomerAdded: (r, a) => {
+      r.customer = a.payload;
+    },
+    toggleRoomAdded: (r, a) => {
+      r.room = a.payload;
+    },
+    toggleSendKitchen: (r, a) => {
+      r.sendToKitchen = a.payload;
     },
   },
 });
@@ -84,5 +99,8 @@ export const {
   toggleAdjustQuantity,
   toggleRemoveItemInCart,
   toggleAddCartDiscount,
+  toggleCustomerAdded,
+  toggleRoomAdded,
+  toggleSendKitchen,
 } = slice.actions;
 export default slice.reducer;

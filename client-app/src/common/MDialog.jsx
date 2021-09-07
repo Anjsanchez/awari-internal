@@ -1,4 +1,5 @@
 import React from "react";
+import "./css/MDialog.css";
 import {
   Button,
   Dialog,
@@ -31,20 +32,22 @@ const MDialog = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{dialogText.title}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {dialogText.subTitle}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleOk} color="primary" autoFocus>
-            Proceed
-          </Button>
-        </DialogActions>
+        <div className="md-dialog__container">
+          <DialogTitle id="alert-dialog-title">{dialogText.title}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {dialogText.subTitle}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={handleOk} color="primary" autoFocus>
+              Proceed
+            </Button>
+          </DialogActions>
+        </div>
       </Dialog>
     </>
   );

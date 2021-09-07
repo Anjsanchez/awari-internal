@@ -13,6 +13,7 @@ import {
   getCustomers,
   GetCustomersWithActiveBooking,
 } from "./../../../utils/services/pages/CustomerService";
+import { toggleCustomerAdded } from "../../../utils/store/pages/createTransaction";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -58,16 +59,10 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
   const custInStore = useSelector((state) => state.entities);
 
-  // useEffect(() => {
-  //   const { isOpenDrawer } = custInStore.createTransaction;
-
-  //   if (isOpenDrawer) populateCustomerWithActiveBooking();
-  // }, [custInStore.createTransaction.isOpenDrawer]);
-
   useEffect(() => {
     if (action === "createReservation") return populateCustomer();
-    // else if (action === "inventoryTransaction")
-    //   return populateCustomerWithActiveBooking();
+    else if (action === "inventoryTransaction")
+      return populateCustomerWithActiveBooking();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -77,18 +72,17 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         ? setSearchCustomer({})
         : setSearchCustomer(customer);
     }
-    // if (action === "inventoryTransaction") {
-    //   const { customer } = custInStore.createTransaction;
-    //   return Object.keys(customer).length === 0
-    //     ? setSearchCustomer({})
-    //     : setSearchCustomer(customer);
-    // }
+    if (action === "inventoryTransaction") {
+      const { customer } = custInStore.createTransaction;
+      return Object.keys(customer).length === 0
+        ? setSearchCustomer({})
+        : setSearchCustomer(customer);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomerWithActiveBooking = async () => {
     if (Object.keys(custInStore.createTransaction.customer).length === 0)
       setSearchCustomer({});
-    console.log("hey");
 
     try {
       const { data } = await GetCustomersWithActiveBooking();
@@ -148,8 +142,8 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   useEffect(() => {
     if (action === "createReservation")
       store.dispatch(headerCustomerAdded(searchCustomer));
-    // else if (action === "inventoryTransaction")
-    //   store.dispatch(toggleCustomeAdded(searchCustomer));
+    else if (action === "inventoryTransaction")
+      store.dispatch(toggleCustomerAdded(searchCustomer));
   }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderBirthday = () => {
