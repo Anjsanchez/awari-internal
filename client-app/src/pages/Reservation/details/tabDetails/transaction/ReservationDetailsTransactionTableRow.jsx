@@ -49,7 +49,6 @@ const ReservationDetailsTransactionTableRow = (props) => {
           //..
           const isItemSelected = isSelected(row._id);
           const labelId = `enhanced-table-checkbox-${index}`;
-
           return (
             <TableRow
               hover
@@ -66,19 +65,29 @@ const ReservationDetailsTransactionTableRow = (props) => {
             >
               <TableCell component="th" scope="row" padding="none"></TableCell>
               <TableCell component="th" id={labelId} scope="row" padding="none">
-                Jetski
+                {row.product.longName}
               </TableCell>
               <TableCell align="right">
-                <span className={classes.rowSpan}>{row.pax}</span>
+                <span className={classes.rowSpan}>
+                  ₱
+                  {Intl.NumberFormat().format(
+                    Number(
+                      row.product.sellingPrice * row.quantity - row.netDiscount
+                    ).toFixed(2)
+                  )}
+                </span>
               </TableCell>
               <TableCell align="right">
-                <span className={classes.rowSpan}>{row.totalAmount}</span>
+                <span className={classes.rowSpan}>
+                  <ActiveButton
+                    textFalse="No"
+                    textTrue="Yes"
+                    value={row.netDiscount !== 0}
+                  />
+                </span>
               </TableCell>
               <TableCell align="right">
-                <ActiveButton textFalse="No" value={false} />
-              </TableCell>
-              <TableCell align="right">
-                {moment(row.startDate).format("YYYY-MM-DD hh:mm A")}
+                {moment(row.createdDate).format("YYYY-MM-DD hh:mm A")}
               </TableCell>
 
               <TableCell align="right"></TableCell>

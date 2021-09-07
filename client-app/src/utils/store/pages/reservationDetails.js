@@ -8,14 +8,16 @@ const slice = createSlice({
     payments: [],
     transactions: [],
     header: {},
+    trans: [],
   },
 
   reducers: {
     addRDetails: (resx, action) => {
-      const { payments, header, rooms } = action.payload;
+      const { payments, header, rooms, trans } = action.payload;
       resx.payments = [...payments];
       resx.rooms = [...rooms];
       resx.header = header;
+      resx.trans = trans;
     },
     addRPayments: (resx, action) => {},
 

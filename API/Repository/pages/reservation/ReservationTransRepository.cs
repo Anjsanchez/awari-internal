@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.reservation;
 using API.Data;
@@ -55,6 +56,13 @@ namespace API.Repository.pages.reservation
              .Include(n => n.reservationRoomLine)
              .Include(n => n.user)
                   .FirstOrDefaultAsync(n => n._id == id);
+        }
+
+        public async Task<List<ReservationTransLine>> GetPaymentByHeaderId(Guid headerId)
+        {
+            var datas = await FindAll();
+
+            return datas.Where(n => n.reservationHeaderId == headerId).ToList();
         }
 
         public async Task<bool> Save()

@@ -7,7 +7,7 @@ import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../utils/store/pages/users";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsTransactionTableRow";
-import { GetRoomLines } from "../../../../../utils/services/pages/reservation/ReservationLines";
+import { GetTransLine } from "./../../../../../utils/services/pages/reservation/ReservationTrans";
 
 const headCells = [
   {
@@ -15,41 +15,34 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "",
-    enableSort: true,
-  },
-  {
-    id: "type",
-    numeric: false,
-    disablePadding: true,
-    label: "Remark",
-    enableSort: true,
-  },
-  {
-    id: "paymentType",
-    numeric: true,
-    disablePadding: false,
-    label: "Type",
     enableSort: false,
   },
   {
-    id: "Amount",
+    id: "product",
+    numeric: false,
+    disablePadding: true,
+    label: "Product",
+    enableSort: false,
+  },
+  {
+    id: "netAmount",
     numeric: true,
-    disablePadding: false,
-    label: "Amount",
-    enableSort: true,
+    disablePadding: true,
+    label: "Net Amount",
+    enableSort: false,
   },
   {
     id: "isDiscounted",
     numeric: true,
-    disablePadding: false,
+    disablePadding: true,
     label: "Is Discounted",
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: "createdDate",
     numeric: true,
     disablePadding: false,
-    label: "Payment Date",
+    label: "Transaction Date",
     enableSort: true,
   },
   {
@@ -65,27 +58,25 @@ const ReservationDetailsTransactionTable = () => {
   //..
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
-  const { enqueueSnackbar } = useSnackbar();
   const [rooms, setRooms] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
 
+  const headerInStore = store.getState().entities.reservationDetails;
+
   useEffect(() => {
     //..
     async function fetchData() {
       try {
-        const { data } = await GetRoomLines();
-        const { token, listRecords } = data;
-
-        store.dispatch(writeToken({ token }));
         setTimeout(() => {
           if (isMounted()) {
-            setRooms(listRecords);
+            setRooms(headerInStore.trans);
             setInitialLoadForm(true);
           }
-        }, 500);
+        }, 300);
         //
       } catch (error) {
         enqueueSnackbar("An error occured while calling the server.", {

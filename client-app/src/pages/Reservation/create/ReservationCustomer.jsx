@@ -88,7 +88,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
       const { data } = await GetCustomersWithActiveBooking();
       let custObj = [];
 
-      console.log(data.customers);
       data.customers.forEach((n) => {
         custObj.push({ ...n.customer, headerId: n.headerId });
       });

@@ -1,3 +1,4 @@
+using System.Threading.Tasks.Dataflow;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using API.Data.ApiResponse;
 using API.Dto.reservations.header;
 using API.Dto.reservations.line;
 using API.Dto.reservations.payment;
+using API.Dto.reservations.trans;
 using API.Dto.rooms.room;
 using API.Dto.rooms.variant;
 using API.helpers.api;
@@ -31,22 +33,24 @@ namespace API.Controllers.reservation
     public class ReservationHeadersController : ControllerBase
     {
 
-        private readonly IRoomVariantRepository _variantRepo;
-        private readonly IRoomRepository _roomsRepo;
-        private readonly IReservationHeaderRepository _repo;
-        private readonly IReservationRoomLineRepository _lineRepo;
-        private readonly IReservationPaymentRepository _paymentRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
+        private readonly IRoomRepository _roomsRepo;
+        private readonly IReservationHeaderRepository _repo;
+        private readonly IRoomVariantRepository _variantRepo;
+        private readonly IReservationTransRepository _transRepo;
+        private readonly IReservationRoomLineRepository _lineRepo;
+        private readonly IReservationPaymentRepository _paymentRepo;
 
-        public ReservationHeadersController(IRoomRepository roomsRepo, IReservationHeaderRepository repo, IRoomVariantRepository variantRepo, IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationHeadersController(IRoomRepository roomsRepo, IReservationTransRepository transRepo, IReservationHeaderRepository repo, IRoomVariantRepository variantRepo, IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _map = mapp;
+            _repo = repo;
+            _lineRepo = lineRepo;
+            _transRepo = transRepo;
             _roomsRepo = roomsRepo;
             _variantRepo = variantRepo;
             _paymentRepo = paymentRepo;
-            _lineRepo = lineRepo;
-            _repo = repo;
-            _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
         }
 
@@ -123,15 +127,19 @@ namespace API.Controllers.reservation
             var reservationHeader = await _repo.FindById(headerId);
             var reservationLines = await _lineRepo.GetLineByHeaderId(headerId);
             var reservationPayment = await _paymentRepo.GetPaymentByHeaderId(headerId);
+            var reservationTrans = await _transRepo.GetPaymentByHeaderId(headerId);
 
             var mappedDto = _map.Map<ReservationHeader, reservationHeaderReadDto>(reservationHeader);
             var mappedLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(reservationLines.ToList());
             var mappedPayments = _map.Map<List<ReservationPayment>, List<reservationPaymentReadDto>>(reservationPayment.ToList());
+            var mappedTrans = _map.Map<List<ReservationTransLine>, List<reservationTransReadDto>>(reservationTrans.ToList());
+
             return Ok(new ReserverationHeaderResponse()
             {
                 header = mappedDto,
                 rooms = mappedLines,
                 payments = mappedPayments,
+                trans = mappedTrans,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }

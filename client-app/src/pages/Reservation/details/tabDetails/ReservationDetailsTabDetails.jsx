@@ -6,6 +6,7 @@ import ReservationDetailsLeftTab from "./ReservationDetailsLeftTab";
 import ReservationDetailsLeftTabBilling from "./ReservationDetailsLeftTabBilling";
 import ReservationDetailsRightTabRoom from "./room/ReservationDetailsRightTabRoom";
 import ReservationDetailsRightTabPayment from "./payment/ReservationDetailsRightTabPayment";
+import ReservationDetailsRightTabTransaction from "./transaction/ReservationDetailsRightTabTransaction";
 
 const ReservationDetailsTabDetails = () => {
   let isWalkIn = false;
@@ -26,6 +27,7 @@ const ReservationDetailsTabDetails = () => {
         <Grid item xs={12} md={8}>
           <ReservationDetailsRightTabPayment />
           {!isWalkIn && <ReservationDetailsRightTabRoom />}
+          <ReservationDetailsRightTabTransaction />
         </Grid>
       </Grid>
     </div>

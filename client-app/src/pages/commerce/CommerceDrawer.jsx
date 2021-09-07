@@ -76,7 +76,6 @@ const CommerceDrawer = ({
     setVisible(visi);
   };
 
-  console.log();
   return (
     <div>
       <Drawer
