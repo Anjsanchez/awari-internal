@@ -9,6 +9,7 @@ const slice = createSlice({
     customer: {},
     room: {},
     sendToKitchen: true,
+    isFromReception: false,
   },
   reducers: {
     toggleProductsAdded: (resx, action) => {
@@ -26,7 +27,6 @@ const slice = createSlice({
             netDiscount: 0,
             seniorPax: 0,
             discount: { _id: 0, name: "Not Applicable" },
-            netAmount: 0,
             remark: "",
           },
         ];
@@ -86,6 +86,12 @@ const slice = createSlice({
     toggleSendKitchen: (r, a) => {
       r.sendToKitchen = a.payload;
     },
+    toggleResetValues: (r, a) => {
+      r.products = [];
+      r.customer = {};
+      r.room = {};
+      r.isFromReception = false;
+    },
   },
 });
 
@@ -102,5 +108,6 @@ export const {
   toggleCustomerAdded,
   toggleRoomAdded,
   toggleSendKitchen,
+  toggleResetValues,
 } = slice.actions;
 export default slice.reducer;

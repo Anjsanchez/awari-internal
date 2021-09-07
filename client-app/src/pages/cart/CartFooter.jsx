@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import CartCustomer from "./CartCustomer";
 import { useHistory } from "react-router-dom";
 import { Grid, Button } from "@material-ui/core";
+import { store } from "../../utils/store/configureStore";
 import ArrowBackSharpIcon from "@material-ui/icons/ArrowBackSharp";
+import { toggleResetValues } from "../../utils/store/pages/createTransaction";
 const CartFooter = () => {
   //..
   const [showModal, setShowModal] = useState(false);
@@ -11,7 +13,10 @@ const CartFooter = () => {
 
   const handleConfirmOrder = () => {
     setShowModal(false);
-    hist.replace("/a/commerce-management/shop");
+    setTimeout(() => {
+      hist.replace("/a/commerce-management/shop");
+      store.dispatch(toggleResetValues());
+    }, 200);
   };
   const handleShowModal = () => setShowModal(true);
 

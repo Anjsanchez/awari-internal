@@ -10,7 +10,6 @@ import MoreHorizSharpIcon from "@material-ui/icons/MoreHorizSharp";
 import { toggleVisible } from "../../utils/store/pages/createReservation";
 import AddLocationTwoToneIcon from "@material-ui/icons/AddLocationTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
-// import { toggleOpenDrawer } from "../../utils/store/pages/createTransaction";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,23 +54,15 @@ export default function SpeedDials() {
       to: "/",
       action: () => handleB(),
     },
-    {
-      icon: <ShoppingBasketTwoToneIcon className={classes.x} />,
-      name: "Create a Transaction",
-      to: "/",
-      action: () => handleA(),
-    },
   ];
 
   const handleA = () => {
     setOpen(false);
     store.dispatch(toggleVisible(false));
-    // store.dispatch(toggleOpenDrawer(true));
   };
 
   const handleB = () => {
     setOpen(false);
-    // store.dispatch(toggleOpenDrawer(false));
     store.dispatch(toggleVisible(true));
   };
 

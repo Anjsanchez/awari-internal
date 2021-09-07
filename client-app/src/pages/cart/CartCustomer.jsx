@@ -1,10 +1,12 @@
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Modal, Switch, Button } from "antd";
 import MDialog from "./../../common/MDialog";
 import { store } from "../../utils/store/configureStore";
-import ReservationCustomer from "./../Reservation/create/ReservationCustomer";
 import { toggleSendKitchen } from "../../utils/store/pages/createTransaction";
+import ReservationCustomer from "./../Reservation/create/ReservationCustomer";
+import { saveTransLine } from "./../../utils/services/pages/reservation/ReservationTrans";
 import SelectTransactionLinesRooms from "./../../common/select/SelectTransactionLinesRooms";
 
 const dialog = {
@@ -14,6 +16,7 @@ const dialog = {
 
 const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
   //..
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, isLoading] = useState(false);
   const [askConfirm, setAskConfirm] = useState(false);
 
@@ -26,9 +29,47 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
 
   const onSwitchChange = (n) => store.dispatch(toggleSendKitchen(n));
 
-  const handleOkDialog = () => {
+  const handleOkDialog = async () => {
     setAskConfirm(false);
-    // handleConfirmOrder();
+    isLoading(true);
+
+    try {
+      await saveTransLine(objViewModel());
+      enqueueSnackbar("Successfully updated records!", { variant: "success" });
+      handleConfirmOrder();
+    } catch (ex) {
+      if ((ex && ex.status === 400) || (ex && ex.status === 400))
+        enqueueSnackbar(ex.data, { payment: "error" });
+    } finally {
+      isLoading(false);
+    }
+  };
+
+  const objViewModel = () => {
+    const objArray = [];
+
+    const user = store.getState().entities.user.user;
+    const { products, customer, room } = createTransaction;
+
+    products.forEach((n) => {
+      const discountId = n.discount._id === 0 ? null : n.discount._id;
+
+      const obj = {
+        reservationHeaderId: customer.headerId,
+        reservationRoomLineId: room._id,
+        productId: n._id,
+        discountId: discountId,
+        quantity: n.quantity,
+        seniorPax: n.seniorPax,
+        netDiscount: n.netDiscount,
+        remark: n.remark,
+        userId: user.id,
+      };
+
+      objArray.push(obj);
+    });
+
+    return objArray;
   };
 
   return (

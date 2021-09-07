@@ -7,6 +7,7 @@ using API.Dto.products.type;
 using API.Dto.reservations.header;
 using API.Dto.reservations.line;
 using API.Dto.reservations.payment;
+using API.Dto.reservations.trans;
 using API.Dto.reservations.type;
 using API.Dto.roles;
 using API.Dto.rooms.pricing;
@@ -79,6 +80,10 @@ namespace API.Data.Profiles
             CreateMap<ReservationRoomLine, reservationRoomLineReadDto>().ReverseMap();
             CreateMap<reservationRoomLineUpdateDto, ReservationRoomLine>().ReverseMap();
             CreateMap<reservationRoomLineCreateDto, ReservationRoomLine>().ReverseMap();
+
+            CreateMap<ReservationTransLine, reservationTransReadDto>().ReverseMap();
+            CreateMap<reservationTransUpdateDto, ReservationTransLine>().ReverseMap();
+            CreateMap<reservationTransCreateDto, ReservationTransLine>().ReverseMap();
 
         }
     }

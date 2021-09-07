@@ -106,6 +106,7 @@ namespace API
             services.AddScoped<IProductTypeRepository, ProductTypeRepository>();
             services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
             services.AddScoped<IReservationTypeRepository, ReservationTypeRepository>();
+            services.AddScoped<IReservationTransRepository, ReservationTransRepository>();
             services.AddScoped<IReservationHeaderRepository, ReservationHeaderRepository>();
             services.AddScoped<IReservationPaymentRepository, ReservationPaymentRepository>();
             services.AddScoped<IReservationRoomLineRepository, ReservationRoomLineRepository>();
