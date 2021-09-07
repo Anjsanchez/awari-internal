@@ -24,9 +24,11 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
   const { longName, numberOfServing, quantity, sellingPrice } = selectedProduct;
 
   useEffect(() => {
-    setSenior(0);
-    setNetDiscount(0);
-    setSelectedDiscount({ _id: 0, name: "Not Applicable" });
+    if (showModal === false) return;
+
+    setSelectedDiscount(selectedProduct.discount);
+    setNetDiscount(selectedProduct.netDiscount);
+    setSenior(senior);
   }, [showModal]);
 
   const onSelectChange = (value, e) => setSelectedDiscount(e.obj);

@@ -22,7 +22,7 @@ const slice = createSlice({
             quantity: 1,
             netDiscount: 0,
             seniorPax: 0,
-            discount: {},
+            discount: { _id: 0, name: "Not Applicable" },
             netAmount: 0,
           },
         ];
