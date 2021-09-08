@@ -1,19 +1,19 @@
 import moment from "moment";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { TextField } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import { store } from "../../../utils/store/configureStore";
 import { writeToken } from "../../../utils/store/pages/users";
-
 import { headerCustomerAdded } from "../../../utils/store/pages/createReservation";
+import { toggleCustomerAdded } from "../../../utils/store/pages/createTransaction";
 import {
   getCustomers,
   GetCustomersWithActiveBooking,
 } from "./../../../utils/services/pages/CustomerService";
-import { toggleCustomerAdded } from "../../../utils/store/pages/createTransaction";
 
 const useStyles = makeStyles((theme) => ({
   autoComplete: {
@@ -54,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 const ReservationCustomer = ({ action = "createReservation" }) => {
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
+  const { id: employeeIdFromUrl } = useParams();
   const [customers, setCustomers] = useState([]);
   const [searchCustomer, setSearchCustomer] = useState({});
 
@@ -74,11 +75,19 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
     }
     if (action === "inventoryTransaction") {
       const { customer } = custInStore.createTransaction;
-      return Object.keys(customer).length === 0
-        ? setSearchCustomer({})
-        : setSearchCustomer(customer);
+      if (Object.keys(customer).length === 0) setSearchCustomer({});
+      else setSearchCustomer(customer);
+
+      console.log("second!");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (action === "createReservation")
+      store.dispatch(headerCustomerAdded(searchCustomer));
+    else if (action === "inventoryTransaction")
+      store.dispatch(toggleCustomerAdded(searchCustomer));
+  }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomerWithActiveBooking = async () => {
     if (Object.keys(custInStore.createTransaction.customer).length === 0)
@@ -92,7 +101,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
         custObj.push({ ...n.customer, headerId: n.headerId });
       });
 
-      // store.dispatch(toggleProductsAdded(data));
       setCustomers(custObj);
     } catch (error) {
       enqueueSnackbar(
@@ -103,6 +111,15 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
       );
     }
   };
+
+  useEffect(() => {
+    if (action !== "inventoryTransaction" || customers.length === 0) return;
+
+    if (employeeIdFromUrl === undefined) return;
+
+    const z = customers.find((n) => n.headerId === employeeIdFromUrl);
+    setSearchCustomer(z);
+  }, [customers]);
 
   const populateCustomer = async () => {
     try {
@@ -137,13 +154,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
   const handleSearch = (e, val) =>
     val === null ? setSearchCustomer({}) : setSearchCustomer(val);
-
-  useEffect(() => {
-    if (action === "createReservation")
-      store.dispatch(headerCustomerAdded(searchCustomer));
-    else if (action === "inventoryTransaction")
-      store.dispatch(toggleCustomerAdded(searchCustomer));
-  }, [searchCustomer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderBirthday = () => {
     const { firstName, birthday } = searchCustomer;

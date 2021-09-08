@@ -1,9 +1,9 @@
 import { Badge } from "antd";
 import { Divider } from "antd";
-import { Link } from "react-router-dom";
 import { Button as AntBtn } from "antd";
 import { useSelector } from "react-redux";
 import React, { useState, useEffect } from "react";
+import { Link, useParams } from "react-router-dom";
 import { TextField, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -35,10 +35,15 @@ const useStyles = makeStyles((theme) => ({
 
 const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
   //
-
   const classes = useStyles();
+  const { id: employeeIdFromUrl } = useParams();
   const [cartLength, setCartLength] = useState(0);
+  const [navLink, setNavLink] = useState("/a/commerce-management/cart");
 
+  useEffect(() => {
+    if (employeeIdFromUrl !== undefined)
+      setNavLink(navLink + "/" + employeeIdFromUrl);
+  }, []);
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction.products
   );
@@ -99,7 +104,7 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
         type="primary"
         id="commerceAddToCard"
         icon={
-          <Link to="/a/commerce-management/cart" className="ch-link__wrapper">
+          <Link to={navLink} className="ch-link__wrapper">
             <Badge count={cartLength}>
               <ShoppingBasketTwoToneIcon />
             </Badge>

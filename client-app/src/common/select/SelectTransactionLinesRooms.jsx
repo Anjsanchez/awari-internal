@@ -78,10 +78,10 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
         const zz = sortedData.filter(
           (n) => n.reservationHeader._id === customer.headerId
         );
-        if (isMounted()) {
-          setRooms(sortedData);
-          setFilteredRooms(zz);
-        }
+        if (!isMounted()) return;
+
+        setRooms(sortedData);
+        setFilteredRooms(zz);
       } catch (error) {
         enqueueSnackbar(
           "An error occured while fetching the reservation type in the server.",

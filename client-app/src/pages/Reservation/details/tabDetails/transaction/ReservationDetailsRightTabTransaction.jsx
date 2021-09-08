@@ -6,11 +6,14 @@ import { Divider, IconButton } from "@material-ui/core";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsTransactionTable";
+import { store } from "../../../../../utils/store/configureStore";
+import { toggleResetValues } from "../../../../../utils/store/pages/createTransaction";
 
-const ReservationDetailsRightTabTransaction = () => {
+const ReservationDetailsRightTabTransaction = ({ header }) => {
   const hist = useHistory();
   const onClickCreate = () => {
-    hist.push("/a/commerce-management/shop");
+    store.dispatch(toggleResetValues());
+    hist.push(`/a/commerce-management/shop/${header}`);
   };
 
   return (

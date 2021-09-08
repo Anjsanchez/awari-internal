@@ -9,7 +9,6 @@ const slice = createSlice({
     customer: {},
     room: {},
     sendToKitchen: true,
-    isFromReception: false,
   },
   reducers: {
     toggleProductsAdded: (resx, action) => {
@@ -90,7 +89,7 @@ const slice = createSlice({
       r.products = [];
       r.customer = {};
       r.room = {};
-      r.isFromReception = false;
+      r.sendToKitchen = true;
     },
   },
 });

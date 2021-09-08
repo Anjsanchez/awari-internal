@@ -11,11 +11,11 @@ import ReservationDetailsRightTabTransaction from "./transaction/ReservationDeta
 const ReservationDetailsTabDetails = () => {
   let isWalkIn = false;
 
-  const typeInStore = store
-    .getState()
-    .entities.reservationDetails.header.reservationType.name.toLowerCase();
+  const typeInStore = store.getState().entities.reservationDetails.header;
 
-  if (typeInStore === "day tour") isWalkIn = true;
+  const type = typeInStore.reservationType.name.toLowerCase();
+
+  if (type === "day tour") isWalkIn = true;
 
   return (
     <div className="reservationdetails__container">
@@ -27,7 +27,7 @@ const ReservationDetailsTabDetails = () => {
         <Grid item xs={12} md={8}>
           <ReservationDetailsRightTabPayment />
           {!isWalkIn && <ReservationDetailsRightTabRoom />}
-          <ReservationDetailsRightTabTransaction />
+          <ReservationDetailsRightTabTransaction header={typeInStore._id} />
         </Grid>
       </Grid>
     </div>

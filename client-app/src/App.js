@@ -117,10 +117,17 @@ function App() {
                 path="/a/reservation-management/reservations"
                 component={ActiveBooking}
               />
-
+              <ProtectedRoute
+                path="/a/commerce-management/shop/:id"
+                component={Commerce}
+              />
               <ProtectedRoute
                 path="/a/commerce-management/shop"
                 component={Commerce}
+              />
+              <ProtectedRoute
+                path="/a/commerce-management/cart/:id"
+                component={Cart}
               />
               <ProtectedRoute
                 path="/a/commerce-management/cart"
