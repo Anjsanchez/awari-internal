@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "antd";
 import "./css/ReservationDetailsLeftTab.css";
 import tempAvatar from "../../../../assets/tempAvatar.png";
@@ -8,8 +8,33 @@ import BookmarkTwoToneIcon from "@material-ui/icons/BookmarkTwoTone";
 import { Grid, Divider, Avatar, List, ListItem } from "@material-ui/core";
 import PhoneAndroidTwoToneIcon from "@material-ui/icons/PhoneAndroidTwoTone";
 import ConfirmationNumberTwoToneIcon from "@material-ui/icons/ConfirmationNumberTwoTone";
+import { store } from "../../../../utils/store/configureStore";
+import { useSelector } from "react-redux";
 
 const ReservationDetailsLeftTab = () => {
+  const [totalHeads, setTotalHeads] = useState(0);
+  const [totalRooms, setTotalRooms] = useState(0);
+  const [totalTrans, setTotalTrans] = useState(0);
+
+  const detailsInStore = useSelector(
+    (state) => state.entities.reservationDetails
+  );
+
+  const { rooms, payments, transactions, header, trans } = detailsInStore;
+
+  const { firstName, lastName, mobile, emailAddress } = header.customer;
+
+  useEffect(() => {
+    const heads = rooms.reduce(
+      (a, b) => a + (b.adultPax + b.seniorPax + b.childrenPax),
+      0
+    );
+
+    setTotalTrans(trans.length);
+    setTotalRooms(rooms.length);
+    setTotalHeads(heads);
+  }, [rooms]);
+
   return (
     <div className="reservationdetails-grid__wrapper first">
       <Card className="reservationDetails-card__wrapper" hoverable>
@@ -18,10 +43,10 @@ const ReservationDetailsLeftTab = () => {
             <Avatar alt="Remy Sharp" src={tempAvatar} />
             <div className="reservationDetails-title-span__wrapper">
               <span className="reservationDetails-title__spanHeader">
-                Angelo Sanchez
+                {firstName + " " + lastName}
               </span>
               <span className="reservationDetails-title__spanSubHeader">
-                0978905482
+                {mobile}
               </span>
             </div>
           </div>
@@ -39,7 +64,7 @@ const ReservationDetailsLeftTab = () => {
                 Reservation Type
               </span>
               <span className="reservationDetails-body__span__detail">
-                Walk-In
+                {header.reservationType.name}
               </span>
             </ListItem>
             <Divider />
@@ -49,7 +74,7 @@ const ReservationDetailsLeftTab = () => {
                 Voucher
               </span>
               <span className="reservationDetails-body__span__detail">
-                VH22113
+                {header.reservationType.voucher}
               </span>
             </ListItem>
             <Divider />
@@ -59,7 +84,7 @@ const ReservationDetailsLeftTab = () => {
                 Email
               </span>
               <span className="reservationDetails-body__span__detail">
-                anjlosanchez@gmail.com
+                {emailAddress}
               </span>
             </ListItem>
             <Divider />
@@ -69,7 +94,7 @@ const ReservationDetailsLeftTab = () => {
                 Phone
               </span>
               <span className="reservationDetails-body__span__detail">
-                09054292526
+                {mobile}
               </span>
             </ListItem>
           </List>
@@ -80,7 +105,9 @@ const ReservationDetailsLeftTab = () => {
                 xs={4}
                 className="reservationDetails-footer-span__wrapper"
               >
-                <span className="reservationDetails-footer__spanHeader">2</span>
+                <span className="reservationDetails-footer__spanHeader">
+                  {totalHeads}
+                </span>
                 <br />
                 <span className="reservationDetails-footer__span__detail">
                   Heads
@@ -91,7 +118,9 @@ const ReservationDetailsLeftTab = () => {
                 xs={4}
                 className="reservationDetails-footer-span__wrapper"
               >
-                <span className="reservationDetails-footer__spanHeader">5</span>
+                <span className="reservationDetails-footer__spanHeader">
+                  {totalRooms}
+                </span>
                 <br />
                 <span className="reservationDetails-footer__span__detail">
                   Rooms
@@ -103,7 +132,7 @@ const ReservationDetailsLeftTab = () => {
                 className="reservationDetails-footer-span__wrapper"
               >
                 <span className="reservationDetails-footer__spanHeader">
-                  55
+                  {totalTrans}
                 </span>
                 <br />
                 <span className="reservationDetails-footer__span__detail">

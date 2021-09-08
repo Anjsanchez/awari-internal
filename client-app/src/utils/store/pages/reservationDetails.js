@@ -6,7 +6,6 @@ const slice = createSlice({
   initialState: {
     rooms: [],
     payments: [],
-    transactions: [],
     header: {},
     trans: [],
   },
