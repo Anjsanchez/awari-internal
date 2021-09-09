@@ -12,10 +12,10 @@ import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
 import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
+import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
-import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import {
   roomLinesSelectedAmountAdded,
   toggleLoading,

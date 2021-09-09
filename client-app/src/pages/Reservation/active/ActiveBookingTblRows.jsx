@@ -82,6 +82,13 @@ const ActiveBookingTblRows = (props) => {
       <span className={classes.numberOfRooms__nonZero}>{item.roomCount}</span>
     );
   };
+
+  const renderActiveReservationStatus = (row) => {
+    console.log(row);
+    if (row.isActive) return <ActiveButton value={true} />;
+
+    return <ActiveButton isWarning={true} textTrue="Pending" />;
+  };
   return (
     <TableBody>
       {stableSort(rows, getComparator(order, orderBy))
@@ -132,7 +139,7 @@ const ActiveBookingTblRows = (props) => {
                 </span>
               </TableCell>
               <TableCell align="right">
-                <ActiveButton value={true} />
+                {renderActiveReservationStatus(row)}
               </TableCell>
               <TableCell align="right">
                 <EditDeleteIconButton

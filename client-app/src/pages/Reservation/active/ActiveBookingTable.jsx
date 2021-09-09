@@ -1,13 +1,13 @@
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
+import SpinLoader from "../../../common/Spin";
 import React, { useEffect, useState } from "react";
-import { store } from "../../../utils/store/configureStore";
-import { writeToken } from "../../../utils/store/pages/users";
-import { GetHeaderWithRoomCount } from "../../../utils/services/pages/reservation/ReservationHeader";
 import MTable from "./../../../components/table/MTable";
 import ActiveBookingTblRows from "./ActiveBookingTblRows";
-import SpinLoader from "../../../common/Spin";
+import { store } from "../../../utils/store/configureStore";
+import { writeToken } from "../../../utils/store/pages/users";
 import ActiveBookingHeaderTabs from "./ActiveBookingHeaderTabs";
+import { GetHeaderWithRoomCount } from "../../../utils/services/pages/reservation/ReservationHeader";
 
 const headCells = [
   {
@@ -93,7 +93,6 @@ const ActiveBookingTable = () => {
       try {
         const { data } = await GetHeaderWithRoomCount();
         const { token, listRecords } = data;
-
         store.dispatch(writeToken({ token }));
 
         setTimeout(() => {

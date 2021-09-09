@@ -41,11 +41,12 @@ function FormatDate(fromDate, toDate) {
 
   return { start, end };
 }
+
 export function saveHeader(h) {
   http.SetJwt();
-  if (h.id) {
+  if (h._id) {
     const body = { ...h };
-    return http.put(header(h.id), body);
+    return http.put(header(h._id), body);
   }
   return http.post(apiEndpoint, h);
 }

@@ -14,5 +14,6 @@ namespace API.Dto.reservations.header
         public User user { get; set; }
         public DateTime createdDate { get; set; }
         public int roomCount { get; set; }
+        public bool isActive { get; set; }
     }
 }

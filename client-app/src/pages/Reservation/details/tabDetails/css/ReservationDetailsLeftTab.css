@@ -116,6 +116,17 @@
   position: static;
 }
 
+.rdlt-btn__wrapper.rdlt {
+  display: flex;
+  justify-content: center;
+}
+.cd-button__container.rdlt {
+  padding: 0 10px;
+}
+.cd-button__container.rdlt button {
+  font-size: 12px;
+}
+
 @media screen and (max-width: 960px) {
   .reservationdetails__container .reservationdetails-grid__wrapper {
     padding-left: 0px;

@@ -86,6 +86,7 @@ namespace API.Repository.pages.reservation
                 voucher = a.voucher,
                 createdDate = a.createdDate,
                 roomCount = a.ReservationRoomLine.Count(),
+                isActive = a.isActive
             })
             .ToListAsync();
 

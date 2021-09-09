@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import MTable from "./../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import ReservationDetailsPaymentModal from "./ReservationDetailsPaymentModal";
+import { addRPayments } from "../../../../../utils/store/pages/reservationDetails";
 import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
 
 const headCells = [
@@ -74,18 +75,23 @@ const ReservationDetailsPaymentTable = (props) => {
     paymentsx[index].type = obj.type;
     paymentsx[index].payment = obj.payment;
 
+    store.dispatch(addRPayments(paymentsx));
     setPayments(paymentsx);
   };
 
-  const onSuccessAdd = (obj) =>
+  const onSuccessAdd = (obj) => {
     setPayments((prevState) => {
-      return [...prevState, obj];
+      const o = [...prevState, obj];
+      store.dispatch(addRPayments(o));
+      return o;
     });
+  };
 
   const onSuccessDelete = (obj) => {
     const paymentsx = [...payments];
 
     const p = paymentsx.filter((m) => m._id !== obj._id);
+    store.dispatch(addRPayments(p));
     setPayments(p);
   };
 

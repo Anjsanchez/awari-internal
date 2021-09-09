@@ -21,7 +21,6 @@ const ReservationDetails = () => {
     async function fetchData() {
       try {
         const { data } = await GetHeadersWithFullDetails(reservationId);
-
         store.dispatch(addRDetails(data));
 
         setTimeout(() => {

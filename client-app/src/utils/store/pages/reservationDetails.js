@@ -13,15 +13,12 @@ const slice = createSlice({
   reducers: {
     addRDetails: (resx, action) => {
       const { payments, header, rooms, trans } = action.payload;
-
       resx.payments = [...payments];
       resx.rooms = [...rooms];
       resx.header = header;
       resx.trans = trans;
     },
-    addRPayments: (resx, action) => {},
-
-    addRHeaders: (resx, action) => {
+    addRPayments: (resx, action) => {
       resx.payments = [...action.payload];
     },
     addRRooms: (resx, action) => {
@@ -33,6 +30,9 @@ const slice = createSlice({
     toggleRemoveProduct: (r, a) => {
       r.trans = a.payload;
     },
+    toggleHeaderActiveStatus: (r, a) => {
+      r.header.isActive = true;
+    },
   },
 });
 
@@ -43,5 +43,6 @@ export const {
   toggleRemoveProduct,
   addRRooms,
   editRRooms,
+  toggleHeaderActiveStatus,
 } = slice.actions;
 export default slice.reducer;

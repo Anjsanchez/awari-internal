@@ -13,8 +13,8 @@ import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
-import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
 import { deleteTransLine } from "../../../../../utils/services/pages/reservation/ReservationTrans";
+import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,6 +78,9 @@ const ReservationDetailsTransactionModal = (props) => {
 
     if (requestOnGoing) execute();
   }, [requestOnGoing]);
+
+  const formatNumber = (num) =>
+    Intl.NumberFormat().format(Number(num).toFixed(2));
 
   const Footer = () => {
     const classes = useStyles();
@@ -156,16 +159,48 @@ const ReservationDetailsTransactionModal = (props) => {
           <div className="reservationtype-container">
             <List component="nav" aria-label="mailbox folders">
               <AListItem txtLbl="Senior Pax" txtValue={seniorPax} />
-              <AListItem txtLbl="Discount" txtValue={discountText} />
-              <AListItem txtLbl="Net Discount" txtValue={netDiscount} />
+              <AListItem
+                txtLbl="Discount"
+                txtValue={discountText}
+                hasDivider={false}
+              />
+            </List>
+          </div>
+
+          <div className="reservationtype-container">
+            <List component="nav" aria-label="mailbox folders">
+              <AListItem
+                txtLbl="Gross Amount"
+                txtValue={
+                  <ActiveButton
+                    value={true}
+                    textTrue={
+                      formatNumber(product.sellingPrice * quantity) + " PHP"
+                    }
+                  />
+                }
+              />
+              <AListItem
+                txtLbl="Net Discount"
+                txtValue={
+                  <ActiveButton
+                    isWarning={true}
+                    textTrue={formatNumber(netDiscount) + " PHP"}
+                  />
+                }
+              />
               <AListItem
                 txtLbl="Net Amount"
                 hasDivider={false}
-                txtValue={Intl.NumberFormat().format(
-                  Number(product.sellingPrice * quantity - netDiscount).toFixed(
-                    2
-                  )
-                )}
+                txtValue={
+                  <ActiveButton
+                    textFalse={
+                      formatNumber(
+                        product.sellingPrice * quantity - netDiscount
+                      ) + " PHP"
+                    }
+                  />
+                }
               />
             </List>
           </div>

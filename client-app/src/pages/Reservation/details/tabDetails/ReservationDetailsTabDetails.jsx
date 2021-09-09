@@ -20,11 +20,11 @@ const ReservationDetailsTabDetails = () => {
   return (
     <div className="reservationdetails__container">
       <Grid container>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} md={12} lg={4}>
           <ReservationDetailsLeftTab />
           <ReservationDetailsLeftTabBilling />
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12} lg={8}>
           <ReservationDetailsRightTabPayment />
           {!isWalkIn && <ReservationDetailsRightTabRoom />}
           <ReservationDetailsRightTabTransaction header={typeInStore._id} />
