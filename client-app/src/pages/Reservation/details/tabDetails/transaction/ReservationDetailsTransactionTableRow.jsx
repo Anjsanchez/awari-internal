@@ -52,7 +52,7 @@ const ReservationDetailsTransactionTableRow = (props) => {
           return (
             <TableRow
               hover
-              onClick={(event) => handleClick(event, row._id)}
+              onClick={(event) => handleClick(event, row._id, row)}
               role="checkbox"
               aria-checked={isItemSelected}
               tabIndex={-1}

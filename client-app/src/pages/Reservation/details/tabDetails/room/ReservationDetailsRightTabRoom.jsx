@@ -4,6 +4,7 @@ import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
 import { store } from "../../../../../utils/store/configureStore";
 import ReservationDetailsRoomTable from "./ReservationDetailsRoomTable";
+import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 
@@ -32,6 +33,17 @@ const ReservationDetailsRightTabRoom = () => {
           <div>
             {!isRestaurant && (
               <>
+                <Tooltip placement="topLeft" title="View" arrowPointAtCenter>
+                  <IconButton
+                    aria-label="View"
+                    size="small"
+                    onClick={() =>
+                      handleVisibleModal({ value: true, action: "view" })
+                    }
+                  >
+                    <VisibilityTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
                 <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
                   <IconButton
                     aria-label="Modify"

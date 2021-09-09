@@ -23,3 +23,7 @@
 .roomServationMdl__container .ant-modal-body {
   padding: 0px;
 }
+
+.rdp-textField__wrapper {
+  max-width: 120px;
+}

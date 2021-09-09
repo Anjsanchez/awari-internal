@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Tooltip } from "antd";
 import { useHistory } from "react-router-dom";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
-import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsTransactionTable";
 import { store } from "../../../../../utils/store/configureStore";
 import { toggleResetValues } from "../../../../../utils/store/pages/createTransaction";
+import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 
 const ReservationDetailsRightTabTransaction = ({ header }) => {
+  const [visible, setVisible] = useState({ value: false, action: "add" });
+
+  const handleVisibleModal = ({ value, action }) =>
+    setVisible({ value, action });
+
   const hist = useHistory();
   const onClickCreate = () => {
     store.dispatch(toggleResetValues());
@@ -28,15 +33,15 @@ const ReservationDetailsRightTabTransaction = ({ header }) => {
             </div>
           </div>
           <div>
-            <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
+            <Tooltip placement="topLeft" title="View" arrowPointAtCenter>
               <IconButton
-                aria-label="Modify"
+                aria-label="View"
                 size="small"
-                // onClick={() =>
-                //   handleVisibleModal({ value: true, action: "update" })
-                // }
+                onClick={() =>
+                  handleVisibleModal({ value: true, action: "update" })
+                }
               >
-                <EditLocationTwoToneIcon />
+                <VisibilityTwoToneIcon />
               </IconButton>
             </Tooltip>
 
@@ -54,7 +59,10 @@ const ReservationDetailsRightTabTransaction = ({ header }) => {
 
         <Divider light />
         <div className="reservationDetails-body__wrapper">
-          <ReservationDetailsRoomTable />
+          <ReservationDetailsRoomTable
+            onVisible={handleVisibleModal}
+            visible={visible}
+          />
         </div>
       </Card>
     </div>

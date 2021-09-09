@@ -8,12 +8,14 @@ import KingBedTwoToneIcon from "@material-ui/icons/KingBedTwoTone";
 import { store } from "../../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import ActiveButton from "./../../../../../../common/form/ActiveButton";
+import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
 import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
+import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import {
   roomLinesSelectedAmountAdded,
   toggleLoading,
@@ -249,6 +251,26 @@ const ReservationConfirmation = () => {
               txtValue={
                 <ActiveButton textFalse={formatNumber(cNetAmount) + " PHP"} />
               }
+            />
+          </List>
+        </div>
+
+        <div className="reservationtype-container">
+          <List component="nav" aria-label="mailbox folders">
+            <AListItem
+              txtLbl="Created By"
+              txtValue={
+                storeData.user.firstName + " " + storeData.user.lastName
+              }
+              Icon={AssignmentIndTwoToneIcon}
+            />
+            <AListItem
+              txtLbl="Created Date"
+              txtValue={moment(storeData.createdDate).format(
+                "YYYY-MM-DD hh:mm A"
+              )}
+              Icon={ScheduleTwoToneIcon}
+              hasDivider={false}
             />
           </List>
         </div>

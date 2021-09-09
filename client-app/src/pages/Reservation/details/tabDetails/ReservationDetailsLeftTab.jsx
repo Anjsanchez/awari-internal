@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
 import { Card } from "antd";
+import { useSelector } from "react-redux";
 import "./css/ReservationDetailsLeftTab.css";
+import React, { useState, useEffect } from "react";
 import tempAvatar from "../../../../assets/tempAvatar.png";
 import MailTwoToneIcon from "@material-ui/icons/MailTwoTone";
 import ActiveButton from "./../../../../common/form/ActiveButton";
@@ -8,8 +9,6 @@ import BookmarkTwoToneIcon from "@material-ui/icons/BookmarkTwoTone";
 import { Grid, Divider, Avatar, List, ListItem } from "@material-ui/core";
 import PhoneAndroidTwoToneIcon from "@material-ui/icons/PhoneAndroidTwoTone";
 import ConfirmationNumberTwoToneIcon from "@material-ui/icons/ConfirmationNumberTwoTone";
-import { store } from "../../../../utils/store/configureStore";
-import { useSelector } from "react-redux";
 
 const ReservationDetailsLeftTab = () => {
   const [totalHeads, setTotalHeads] = useState(0);
@@ -33,7 +32,7 @@ const ReservationDetailsLeftTab = () => {
     setTotalTrans(trans.length);
     setTotalRooms(rooms.length);
     setTotalHeads(heads);
-  }, [rooms]);
+  }, [rooms, trans]);
 
   return (
     <div className="reservationdetails-grid__wrapper first">

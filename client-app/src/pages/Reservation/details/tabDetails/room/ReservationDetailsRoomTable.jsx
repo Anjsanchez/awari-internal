@@ -232,7 +232,7 @@ const ReservationDetailsRoomTable = (props) => {
   };
 
   const onProceedWithModal = (action) => {
-    if (action === "add" || action === "update")
+    if (action === "add" || action === "update" || action === "view")
       return onProceedModalAddUpdateAction();
 
     return onProceedModalDeleteAction();

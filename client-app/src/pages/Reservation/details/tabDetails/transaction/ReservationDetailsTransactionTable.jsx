@@ -5,9 +5,9 @@ import "../css/ReservationDetailsPaymentTable.css";
 import React, { useEffect, useState } from "react";
 import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
-import { writeToken } from "../../../../../utils/store/pages/users";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsTransactionTableRow";
-import { GetTransLine } from "./../../../../../utils/services/pages/reservation/ReservationTrans";
+import ReservationDetailsTransactionModal from "./ReservationDetailsTransactionModal";
+import { toggleRemoveProduct } from "../../../../../utils/store/pages/reservationDetails";
 
 const headCells = [
   {
@@ -54,19 +54,22 @@ const headCells = [
   },
 ];
 
-const ReservationDetailsTransactionTable = () => {
+const ReservationDetailsTransactionTable = (props) => {
   //..
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
   const [rooms, setRooms] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [selectedRoom, setSelectedRoom] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
 
   const headerInStore = store.getState().entities.reservationDetails;
-
+  const selectedRow = (obj) => {
+    setSelectedRoom(obj);
+  };
   useEffect(() => {
     //..
     async function fetchData() {
@@ -92,8 +95,20 @@ const ReservationDetailsTransactionTable = () => {
 
   if (!initialLoadForm) return <Spin className="spin-loader__center " />;
 
+  const onSuccessDelete = () => {
+    const removeLine = rooms.filter((n) => n._id !== selectedRoom._id);
+    store.dispatch(toggleRemoveProduct(removeLine));
+    setRooms(removeLine);
+  };
+
   return (
     <>
+      <ReservationDetailsTransactionModal
+        onVisible={props.onVisible}
+        visible={props.visible}
+        selectedRoom={selectedRoom}
+        onSuccessDelete={onSuccessDelete}
+      />
       <MTable
         rows={rooms}
         xCells={headCells}
@@ -102,6 +117,7 @@ const ReservationDetailsTransactionTable = () => {
         onChangePage={handleChangePage}
         onResetPage={handleResetPage}
         isSubTable={true}
+        selectedRow={selectedRow}
       />
     </>
   );

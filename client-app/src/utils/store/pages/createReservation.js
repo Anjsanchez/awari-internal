@@ -17,7 +17,7 @@ const slice = createSlice({
     rooms: {
       id: "",
       createdDate: "",
-      createdBy: {},
+      user: {},
       date: {
         fromDate: moment(),
         toDate: moment(),
@@ -65,11 +65,14 @@ const slice = createSlice({
         seniorPax,
         totalAmount,
         totalDiscount,
+        user,
+        createdDate,
       } = action.payload;
 
       const xDiscount =
         discount === null ? { _id: 0, name: "Not Applicable" } : discount;
-
+      resx.rooms.user = user;
+      resx.rooms.createdDate = createdDate;
       resx.rooms.id = _id;
       resx.rooms.date = {
         fromDate: moment(startDate),

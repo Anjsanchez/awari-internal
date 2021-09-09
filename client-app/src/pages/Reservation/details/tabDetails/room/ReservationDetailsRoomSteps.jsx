@@ -111,9 +111,10 @@ const ReservationDetailsRoomSteps = ({
   useEffect(() => {
     setActiveStep(0);
     if (visible.action === "add") store.dispatch(roomLinesResetValue());
-    if (visible.action !== "update") return;
+    if (visible.action !== "update" && visible.action !== "view") return;
     if (selectedRoom.length === 0) return;
 
+    if (visible.action === "view") setActiveStep(5);
     store.dispatch(headerRoomAllAdded(selectedRoom));
   }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -192,7 +193,11 @@ const ReservationDetailsRoomSteps = ({
     );
   };
 
-  if (visible.action === "update" && selectedRoom.length === 0)
+  if (
+    visible.action === "update" &&
+    visible.action === "view" &&
+    selectedRoom.length === 0
+  )
     return (
       <div className="errorSpan rdRSteps">
         <ActiveButton

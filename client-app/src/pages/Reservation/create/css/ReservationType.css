@@ -15,6 +15,7 @@
 }
 .remark__wrapper {
   margin-top: 5px;
+  max-width: 232px;
 }
 
 .remark__container {

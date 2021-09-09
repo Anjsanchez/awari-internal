@@ -206,22 +206,24 @@ const ReservationDetailsPaymentModal = (props) => {
               </Select.Option>
             ))}
           </Select>
-          {conditionA()}
-          <AInput
-            label="REMARK"
-            id="remark"
-            errors={errors.remark}
-            values={values.remark}
-            handleChange={handleChange}
-          />
-          <AInput
-            label="AMOUNT"
-            id="amount"
-            type="number"
-            errors={errors.amount}
-            values={values.amount}
-            handleChange={handleChange}
-          />
+          <div className="rdp-textField__wrapper">
+            {conditionA()}
+            <AInput
+              label="REMARK"
+              id="remark"
+              errors={errors.remark}
+              values={values.remark}
+              handleChange={handleChange}
+            />
+            <AInput
+              label="AMOUNT"
+              id="amount"
+              type="number"
+              errors={errors.amount}
+              values={values.amount}
+              handleChange={handleChange}
+            />
+          </div>
           {renderUserInfo()}
 
           {renderErrorSpan()}
