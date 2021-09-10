@@ -254,26 +254,27 @@ const ReservationConfirmation = () => {
             />
           </List>
         </div>
-
-        <div className="reservationtype-container">
-          <List component="nav" aria-label="mailbox folders">
-            <AListItem
-              txtLbl="Created By"
-              txtValue={
-                storeData.user.firstName + " " + storeData.user.lastName
-              }
-              Icon={AssignmentIndTwoToneIcon}
-            />
-            <AListItem
-              txtLbl="Created Date"
-              txtValue={moment(storeData.createdDate).format(
-                "YYYY-MM-DD hh:mm A"
-              )}
-              Icon={ScheduleTwoToneIcon}
-              hasDivider={false}
-            />
-          </List>
-        </div>
+        {storeData.user.firstName !== undefined && (
+          <div className="reservationtype-container">
+            <List component="nav" aria-label="mailbox folders">
+              <AListItem
+                txtLbl="Created By"
+                txtValue={
+                  storeData.user.firstName + " " + storeData.user.lastName
+                }
+                Icon={AssignmentIndTwoToneIcon}
+              />
+              <AListItem
+                txtLbl="Created Date"
+                txtValue={moment(storeData.createdDate).format(
+                  "YYYY-MM-DD hh:mm A"
+                )}
+                Icon={ScheduleTwoToneIcon}
+                hasDivider={false}
+              />
+            </List>
+          </div>
+        )}
       </Grid>
     </Grid>
   );

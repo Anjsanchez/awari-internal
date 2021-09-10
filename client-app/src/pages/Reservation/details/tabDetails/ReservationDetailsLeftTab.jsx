@@ -2,6 +2,7 @@ import { Card } from "antd";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import "./css/ReservationDetailsLeftTab.css";
+import { useHistory } from "react-router-dom";
 import MDialog from "./../../../../common/MDialog";
 import React, { useState, useEffect } from "react";
 import tempAvatar from "../../../../assets/tempAvatar.png";
@@ -23,6 +24,7 @@ import {
 } from "@material-ui/core";
 
 const ReservationDetailsLeftTab = () => {
+  const hist = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [totalHeads, setTotalHeads] = useState(0);
   const [totalRooms, setTotalRooms] = useState(0);
@@ -33,7 +35,7 @@ const ReservationDetailsLeftTab = () => {
     (state) => state.entities.reservationDetails
   );
 
-  const { rooms, header, trans } = detailsInStore;
+  const { rooms, header, trans, totals } = detailsInStore;
 
   const { firstName, lastName, mobile, emailAddress } = header.customer;
 
@@ -48,21 +50,28 @@ const ReservationDetailsLeftTab = () => {
     setTotalHeads(heads);
   }, [rooms, trans]);
 
-  const handleOk = async () => {
-    setAskConfirmation(false);
+  const soa = () => {
+    hist.push("/a/reports/SOA/:1212");
+  };
+  const handleCheckInCheckOut = () => {
+    if (!header.isActive) return setAskConfirmation(true);
 
-    if (header.isActive) {
-      enqueueSnackbar("This booking is already Checked In", {
+    const { netAmount, netPayment } = totals;
+    if (netAmount !== netPayment) {
+      return enqueueSnackbar("Please settle the exact amount", {
         variant: "error",
       });
-      return;
     }
+  };
+
+  const handleOk = async () => {
+    setAskConfirmation(false);
 
     const obj = { _id: header._id, isActive: true };
     try {
       await saveHeader(obj);
       store.dispatch(toggleHeaderActiveStatus());
-      enqueueSnackbar("Successfully Checked IN!", { variant: "success" });
+      enqueueSnackbar("Successfully Checked In", { variant: "success" });
     } catch (ex) {
       if (ex) enqueueSnackbar(ex.data, { variant: "error" });
     }
@@ -202,7 +211,7 @@ const ReservationDetailsLeftTab = () => {
             <div className="rdlt-btn__wrapper rdlt">
               {header.isActive && (
                 <div className="cd-button__container rdlt">
-                  <Button variant="contained" color="primary">
+                  <Button onClick={soa} variant="contained" color="primary">
                     PRINT SOA
                   </Button>
                 </div>
@@ -211,7 +220,8 @@ const ReservationDetailsLeftTab = () => {
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={() => setAskConfirmation(true)}
+                  onClick={handleCheckInCheckOut}
+                  onClick={handleCheckInCheckOut}
                 >
                   {header.isActive ? "CHECK-OUT" : "CHECK-IN"}
                 </Button>

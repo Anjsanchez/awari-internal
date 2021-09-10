@@ -5,6 +5,7 @@ import Cart from "./pages/cart/Cart";
 import { useSelector } from "react-redux";
 import Login from "./components/login/Login";
 import Rooms from "./pages/room/rooms/Rooms";
+import SOA from "./components/Prints/SOA/SOA";
 import Logout from "./components/login/Logout";
 import NavBar from "./components/navbar/NavBar";
 import NotFound from "./pages/notfound/NotFound";
@@ -139,6 +140,7 @@ function App() {
                 path="/a/system-functionality/discounts"
                 component={Discounts}
               />
+              <ProtectedRoute path="/a/reports/SOA/:id" component={SOA} />
               <Route path="/not-found" component={NotFound} />
               <Redirect from="/" exact to="/a/dashboard" />
               <Redirect to="/not-found" />
