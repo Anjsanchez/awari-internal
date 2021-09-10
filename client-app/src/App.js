@@ -27,7 +27,6 @@ import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
-import InventoryDrawer from "./components/drawer/create-transaction/InventoryDrawer";
 import {
   BrowserRouter as Router,
   Switch,
@@ -66,7 +65,6 @@ function App() {
             <GlobalLoading />
             <NavBar />
             <SpeedDials />
-            <InventoryDrawer />
             <ReservationModal />
             <Switch>
               <Route path="/a/login" component={Login} />

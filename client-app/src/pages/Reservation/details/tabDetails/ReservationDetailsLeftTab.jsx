@@ -52,7 +52,7 @@ const ReservationDetailsLeftTab = () => {
     setAskConfirmation(false);
 
     if (header.isActive) {
-      enqueueSnackbar("This booking is already checked-IN", {
+      enqueueSnackbar("This booking is already Checked In", {
         variant: "error",
       });
       return;

@@ -9,7 +9,6 @@ import SpeedDialAction from "@material-ui/lab/SpeedDialAction";
 import MoreHorizSharpIcon from "@material-ui/icons/MoreHorizSharp";
 import { toggleVisible } from "../../utils/store/pages/createReservation";
 import AddLocationTwoToneIcon from "@material-ui/icons/AddLocationTwoTone";
-import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,11 +55,6 @@ export default function SpeedDials() {
     },
   ];
 
-  const handleA = () => {
-    setOpen(false);
-    store.dispatch(toggleVisible(false));
-  };
-
   const handleB = () => {
     setOpen(false);
     store.dispatch(toggleVisible(true));
@@ -88,8 +82,6 @@ export default function SpeedDials() {
       >
         {actions.map((action) => (
           <SpeedDialAction
-            // component={Link}
-            // to={action.to}
             className={classes.z}
             style={{ zIndex: 1201 }}
             key={action.name}

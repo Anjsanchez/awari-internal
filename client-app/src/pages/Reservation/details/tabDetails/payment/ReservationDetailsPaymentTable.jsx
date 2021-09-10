@@ -96,7 +96,10 @@ const ReservationDetailsPaymentTable = (props) => {
   };
 
   const headerInStore = store.getState().entities.reservationDetails;
-  const selectedRow = (obj) => setSelectedPayment(obj);
+  const selectedRow = (obj) => {
+    props.onVisible({ value: false, action: "cancel" });
+    setSelectedPayment(obj);
+  };
 
   useEffect(() => {
     //..
@@ -110,7 +113,7 @@ const ReservationDetailsPaymentTable = (props) => {
         }, 300);
         //
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        enqueueSnackbar("0002: An error occured while calling the server.", {
           variant: "error",
         });
         return () => {
@@ -121,10 +124,39 @@ const ReservationDetailsPaymentTable = (props) => {
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    if (props.visible.action === "cancel") return;
+
+    if (!headerInStore.header.isActive) {
+      enqueueSnackbar("This reservation is not yet active.", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    if (props.visible.action !== "add" && selectedPayment.length === 0) {
+      enqueueSnackbar("Please select a payment to update.", {
+        variant: "info",
+      });
+      return;
+    }
+  }, [props.visible]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (!initialLoadForm) return <Spin className="spin-loader__center " />;
 
-  return (
-    <>
+  const renderModal = () => {
+    const { action } = props.visible;
+
+    if (!headerInStore.header.isActive) return null;
+
+    if (
+      (action === "update" && selectedPayment.length === 0) ||
+      (action === "view" && selectedPayment.length === 0)
+    ) {
+      return null;
+    }
+
+    return (
       <ReservationDetailsPaymentModal
         headerId={headerInStore.header._id}
         selectedPayment={selectedPayment}
@@ -134,6 +166,12 @@ const ReservationDetailsPaymentTable = (props) => {
         onSuccessAdd={onSuccessAdd}
         onSuccessDelete={onSuccessDelete}
       />
+    );
+  };
+
+  return (
+    <>
+      {renderModal()}
       <MTable
         rows={payments}
         xCells={headCells}

@@ -238,18 +238,42 @@ const ReservationDetailsRoomTable = (props) => {
     return onProceedModalDeleteAction();
   };
 
-  const selectedRow = (obj) => setSelectedRoom(obj);
+  const selectedRow = (obj) => {
+    props.onVisible({ value: false, action: "cancel" });
+    setSelectedRoom(obj);
+  };
+
+  useEffect(() => {
+    if (props.visible.action === "cancel" || props.visible.action === "add")
+      return;
+
+    if (selectedRoom.length === 0) {
+      enqueueSnackbar("Select a room to modify.", {
+        variant: "info",
+      });
+    }
+  }, [props.visible]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!initialLoadForm) return <Spin className="spin-loader__center " />;
 
-  return (
-    <>
+  const renderModal = () => {
+    const { action } = props.visible;
+
+    if (action !== "add" && selectedRoom.length === 0) return null;
+
+    return (
       <ReservationDetailsRoomModal
         selectedRoom={selectedRoom}
         onVisible={props.onVisible}
         visible={props.visible}
         onProceedWithModal={onProceedWithModal}
       />
+    );
+  };
+
+  return (
+    <>
+      {renderModal()}
       <MTable
         rows={rooms}
         xCells={headCells}

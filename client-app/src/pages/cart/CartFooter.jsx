@@ -31,7 +31,7 @@ const CartFooter = () => {
     if (employeeIdFromUrl === undefined) return;
 
     setNavLink(navLink + "/" + employeeIdFromUrl);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleShowModal = () => setShowModal(true);
 

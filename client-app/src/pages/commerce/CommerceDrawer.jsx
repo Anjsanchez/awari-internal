@@ -71,7 +71,7 @@ const CommerceDrawer = ({
 
   const handleListCLick = (id) => {
     var visi = [...visible];
-    var foundIndex = visible.findIndex((x) => x.id == id);
+    var foundIndex = visible.findIndex((x) => x.id === id);
     visi[foundIndex].open = !visi[foundIndex].open;
     setVisible(visi);
   };

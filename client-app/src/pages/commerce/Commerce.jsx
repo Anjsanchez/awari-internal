@@ -62,7 +62,7 @@ const Commerce = () => {
         if (searchProduct === "") return setFilteredProducts(filteredPrice);
         return setFilteredProducts([val]);
       });
-  }, [selectedCategory, selectedTypes, selectedPrice, searchProduct]);
+  }, [selectedCategory, selectedTypes, selectedPrice, searchProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     //..

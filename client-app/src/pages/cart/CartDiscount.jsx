@@ -32,7 +32,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     setNetDiscount(selectedProduct.netDiscount);
     setSenior(selectedProduct.seniorPax);
     setRemark(selectedProduct.remark);
-  }, [showModal]);
+  }, [showModal]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSelectChange = (value, e) => setSelectedDiscount(e.obj);
 
@@ -106,7 +106,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     }
 
     setNetDiscount(accumulatedDisc);
-  }, [selectedDiscount, senior]);
+  }, [selectedDiscount, senior]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleIncrement = (action) => {
     const totalHeads = numberOfServing * quantity;

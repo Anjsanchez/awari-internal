@@ -61,7 +61,7 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
 
     setSearchedRoom({});
     setFilteredRooms(zz);
-  }, [customer]);
+  }, [customer]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     store.dispatch(toggleRoomAdded(searchedRoom));

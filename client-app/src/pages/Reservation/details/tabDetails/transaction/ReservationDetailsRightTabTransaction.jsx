@@ -1,25 +1,16 @@
-import React, { useState } from "react";
 import { Card, Tooltip } from "antd";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
 import "../css/ReservationDetailsRightTabPayment.css";
 import { Divider, IconButton } from "@material-ui/core";
+import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsTransactionTable";
-import { store } from "../../../../../utils/store/configureStore";
-import { toggleResetValues } from "../../../../../utils/store/pages/createTransaction";
-import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 
 const ReservationDetailsRightTabTransaction = ({ header }) => {
-  const [visible, setVisible] = useState({ value: false, action: "add" });
+  const [visible, setVisible] = useState({ value: false, action: "cancel" });
 
   const handleVisibleModal = ({ value, action }) =>
     setVisible({ value, action });
-
-  const hist = useHistory();
-  const onClickCreate = () => {
-    store.dispatch(toggleResetValues());
-    hist.push(`/a/commerce-management/shop/${header}`);
-  };
 
   return (
     <div className="reservationdetails-grid__wrapper">
@@ -49,7 +40,9 @@ const ReservationDetailsRightTabTransaction = ({ header }) => {
               <IconButton
                 size="small"
                 aria-label="create"
-                onClick={onClickCreate}
+                onClick={() =>
+                  handleVisibleModal({ value: true, action: "add" })
+                }
               >
                 <BorderColorTwoToneIcon />
               </IconButton>
@@ -60,6 +53,7 @@ const ReservationDetailsRightTabTransaction = ({ header }) => {
         <Divider light />
         <div className="reservationDetails-body__wrapper">
           <ReservationDetailsRoomTable
+            header={header}
             onVisible={handleVisibleModal}
             visible={visible}
           />

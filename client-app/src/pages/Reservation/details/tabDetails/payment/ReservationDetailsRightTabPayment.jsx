@@ -7,7 +7,7 @@ import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 import ReservationDetailsPaymentTable from "./ReservationDetailsPaymentTable";
 
 const ReservationDetailsRightTabPayment = () => {
-  const [visible, setVisible] = useState({ value: false, action: "add" });
+  const [visible, setVisible] = useState({ value: false, action: "cancel" });
 
   const handleVisibleModal = ({ value, action }) =>
     setVisible({ value, action });

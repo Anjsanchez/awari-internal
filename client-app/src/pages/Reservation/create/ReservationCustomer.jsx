@@ -119,7 +119,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
     const z = customers.find((n) => n.headerId === employeeIdFromUrl);
     setSearchCustomer(z);
-  }, [customers]);
+  }, [customers]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const populateCustomer = async () => {
     try {

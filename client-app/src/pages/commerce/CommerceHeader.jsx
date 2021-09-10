@@ -43,7 +43,7 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
   useEffect(() => {
     if (employeeIdFromUrl !== undefined)
       setNavLink(navLink + "/" + employeeIdFromUrl);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction.products
   );

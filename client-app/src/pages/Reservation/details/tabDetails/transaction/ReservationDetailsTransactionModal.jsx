@@ -77,7 +77,7 @@ const ReservationDetailsTransactionModal = (props) => {
     }
 
     if (requestOnGoing) execute();
-  }, [requestOnGoing]);
+  }, [requestOnGoing]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const formatNumber = (num) =>
     Intl.NumberFormat().format(Number(num).toFixed(2));
