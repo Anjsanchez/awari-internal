@@ -51,7 +51,7 @@ const ReservationDetailsLeftTab = () => {
   }, [rooms, trans]);
 
   const soa = () => {
-    hist.push("/a/reports/SOA/:1212");
+    hist.push(`/a/reports/SOA/${header._id}`);
   };
   const handleCheckInCheckOut = () => {
     if (!header.isActive) return setAskConfirmation(true);

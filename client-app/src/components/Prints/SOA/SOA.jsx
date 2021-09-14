@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Page,
   Text,
@@ -8,8 +8,15 @@ import {
   Image,
   View,
 } from "@react-pdf/renderer";
-import ReactPDF from "@react-pdf/renderer";
+import { useHistory, useParams } from "react-router-dom";
 import { PDFViewer } from "@react-pdf/renderer";
+import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
+import { store } from "../../../utils/store/configureStore";
+import { writeToken } from "../../../utils/store/pages/users";
+import { useMountedState } from "react-use";
+import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
+import moment from "moment";
+import { toggleLoading } from "../../../utils/store/pages/createReservation";
 
 Font.register({
   family: "Oswald",
@@ -121,152 +128,664 @@ const styles = StyleSheet.create({
   },
   tableRowText: {
     fontSize: 10,
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 2,
+    marginBottom: 2,
   },
   groupByText: {
     fontWeight: "1200",
   },
+  borderTotal: {
+    border: 1,
+    marginTop: 15,
+  },
+  productMargin: {
+    marginTop: 6,
+  },
   //END
 });
 
-const SOAe = () => {
+const formatNumber = (num) =>
+  Intl.NumberFormat().format(Number(num).toFixed(2));
+
+let lastId = "0";
+const renderCategory = (pc) => {
+  if (lastId === pc._id) return null;
+
+  lastId = pc._id;
+
+  return (
+    <View style={[styles.tableRow, styles.productMargin]}>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>{pc.name}</Text>
+      </View>
+      <View style={[styles.tableCol, styles.tableColDescription]}>
+        <Text style={[styles.tableRowText]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+    </View>
+  );
+};
+const renderMattress = (roomsx) => {
+  if (roomsx.mattress === 0) return null;
+  return (
+    <View style={[styles.tableRow]}>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol, styles.tableColDescription]}>
+        <Text style={[styles.tableRowText]}>Extra Mattress</Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>
+          {roomsx.mattress}
+        </Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>
+          {formatNumber(roomsx.mattress * 2420)}
+        </Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+    </View>
+  );
+};
+const renderPaymentName = (p) => {
+  return (
+    <View style={[styles.tableRow]} key={1 + p._id}>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>
+          {moment(p.createdDate).format("MM-DD-YY")}
+        </Text>
+      </View>
+      <View style={[styles.tableCol, styles.tableColDescription]}>
+        <Text style={[styles.tableRowText]}>
+          {p.payment.name} {p.paymentRefNum.trim() && " —  " + p.paymentRefNum}
+        </Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+      </View>
+      <View style={[styles.tableCol]}>
+        <Text style={[styles.tableRowText, styles.tableColSub]}>
+          {formatNumber(p.amount)}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
+  const renderTotalCharges = (d, isFormatted = true) => {
+    const roomCharges = d.grossAmount + d.mattress * 2420;
+    const transOfThisRoom = trans.filter(
+      (n) => n.reservationRoomLine._id === d._id
+    );
+    const transCharges = transOfThisRoom.reduce(
+      (a, b) => a + b.quantity * b.product.sellingPrice,
+      0
+    );
+
+    const total = roomCharges + transCharges;
+
+    if (!isFormatted) return total;
+    return formatNumber(total);
+  };
+
+  const renderTotalDiscount = (d, isFormatted = true) => {
+    const roomDiscount = d.totalDiscount;
+    const transOfThisRoom = trans.filter(
+      (n) => n.reservationRoomLine._id === d._id
+    );
+    const transDiscount = transOfThisRoom.reduce(
+      (a, b) => a + b.netDiscount,
+      0
+    );
+
+    const total = roomDiscount + transDiscount;
+
+    if (!isFormatted) return total;
+    return formatNumber(total);
+  };
+
+  const renderTotalSubTotal = (d) => {
+    const totalCharges = renderTotalCharges(d, false);
+    const totalDiscount = renderTotalDiscount(d, false);
+
+    console.log(totalDiscount - totalCharges);
+    return formatNumber(totalCharges - totalDiscount);
+  };
+
   return (
     <Document title="Guest Folio">
-      <Page size="A4" style={styles.body}>
-        <View>
-          <View style={styles.rowResort}>
-            <View style={[styles.resortWrapper]}>
-              <View style={styles.rowRight}>
-                <Text>Awari Anilao Bay Resort</Text>
-              </View>
-              <View style={styles.rowRight}>
-                <Text>Brgy Solo, Mabini, Batangas Philippines</Text>
-              </View>
-              <View style={styles.rowRight}>
-                <Text>+63 9177203915/ +63 9989940866</Text>
-              </View>
-              <View style={styles.rowRight}>
-                <Text>www.anilaoawaribay.com</Text>
-              </View>
-              <View style={styles.rowRight}>
-                <Text>TIN: 008-712-086-000</Text>
-              </View>
-            </View>
+      {rooms.map((roomsx) => {
+        lastId = "";
+        return (
+          <Page size="A4" style={styles.body} key={roomsx._id}>
+            <View>
+              <View style={styles.rowResort}>
+                <View style={[styles.resortWrapper]}>
+                  <View style={styles.rowRight}>
+                    <Text>Awari Anilao Bay Resort</Text>
+                  </View>
+                  <View style={styles.rowRight}>
+                    <Text>Brgy Solo, Mabini, Batangas Philippines</Text>
+                  </View>
+                  <View style={styles.rowRight}>
+                    <Text>+63 9177203915/ +63 9989940866</Text>
+                  </View>
+                  <View style={styles.rowRight}>
+                    <Text>www.anilaoawaribay.com</Text>
+                  </View>
+                  <View style={styles.rowRight}>
+                    <Text>TIN: 008-712-086-000</Text>
+                  </View>
+                </View>
 
-            <View style={styles.centerImage}>
-              <Image style={styles.image} src="/img/awari.jpg" />
-            </View>
-          </View>
-        </View>
-
-        <View>
-          <Text style={styles.titleText}>Guest Folio</Text>
-        </View>
-
-        <View style={styles.rowCustomer}>
-          <View>
-            <View style={styles.customerText}>
-              <Text>Angelo Sanchez</Text>
+                <View style={styles.centerImage}>
+                  <Image style={styles.image} src="/img/awari.jpg" />
+                </View>
+              </View>
             </View>
             <View>
-              <Text style={styles.rowRight}>KM51 Gatbuca Calumpit Bulacan</Text>
+              <Text style={styles.titleText}>Guest Folio</Text>
             </View>
-          </View>
-          <View style={styles.rightBookingDetails}>
-            <View>
-              <Text>
-                Date{"     "} :{"  "}Aug 01, 2021
-              </Text>
+            <View style={styles.rowCustomer}>
+              <View>
+                <View style={styles.customerText}>
+                  <Text>
+                    {header.customer.firstName} {header.customer.lastName}
+                  </Text>
+                </View>
+                <View>
+                  <Text style={styles.rowRight}>{header.customer.address}</Text>
+                </View>
+              </View>
+              <View style={styles.rightBookingDetails}>
+                <View>
+                  <Text>
+                    Date{"     "} :{"  "}
+                    {moment().format("MMM Do, YY")}
+                  </Text>
+                </View>
+                <View>
+                  <Text>
+                    Clerk {"    "}:{"  "}
+                    {user.firstName + " " + user.lastName}
+                  </Text>
+                </View>
+              </View>
             </View>
-            <View>
-              <Text>
-                Clerk {"    "}:{"  "}Patricia Rose Pangan
-              </Text>
-            </View>
-            <View>
-              <Text>
-                IN{"          "}:{"  "}Aug 01, 2021 — OUT{"  "}:{"  "}Aug 03,
-                2021
-              </Text>
-            </View>
-          </View>
-        </View>
+            <View style={styles.table}>
+              {/* TableHeader */}
+              <View style={styles.tableRow}>
+                <View style={[styles.tableCol, styles.tableColHeader]}>
+                  <Text style={[styles.tableHeader, styles.tableColSub]}>
+                    DATE
+                  </Text>
+                </View>
+                <View
+                  style={[
+                    styles.tableCol,
+                    styles.tableColHeader,
+                    styles.tableColDescription,
+                  ]}
+                >
+                  <Text style={[styles.tableHeader]}>DESCRIPTION</Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColHeader]}>
+                  <Text style={[styles.tableHeader, styles.tableColSub]}>
+                    QTY
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColHeader]}>
+                  <Text style={[styles.tableHeader, styles.tableColSub]}>
+                    CHARGES
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColHeader]}>
+                  <Text style={[styles.tableHeader, styles.tableColSub]}>
+                    DISCOUNT
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColHeader]}>
+                  <Text style={[styles.tableHeader, styles.tableColSub]}>
+                    CREDIT
+                  </Text>
+                </View>
+              </View>
+              {/* GROUP BY PAYMENT*/}
+              <View style={[styles.tableRow, styles.productMargin]}>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    Room
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+              </View>
+              {/* CONTENT PAYMENT */}
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    {moment(roomsx.createdDate).format("MM-DD-YY")}
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}>
+                    {roomsx.room.roomLongName} (
+                    {moment(roomsx.startDate).format("MMM DD, YY")} —{" "}
+                    {moment(roomsx.endDate).format("MMM DD, YY")})
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    {formatNumber(roomsx.grossAmount)}
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    {formatNumber(roomsx.totalDiscount)}
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+              </View>
+              {renderMattress(roomsx)}
+              {/* GROUP BY */}
+              {productCategories.map((pc) => {
+                return trans.map((t) => {
+                  if (t.product.productCategoryId !== pc._id) return;
+                  if (t.reservationRoomLine.room._id !== roomsx.room._id)
+                    return;
 
-        <View style={styles.table}>
-          {/* TableHeader */}
-          <View style={styles.tableRow}>
-            <View style={[styles.tableCol, styles.tableColHeader]}>
-              <Text style={[styles.tableHeader, styles.tableColSub]}>DATE</Text>
-            </View>
-            <View
-              style={[
-                styles.tableCol,
-                styles.tableColHeader,
-                styles.tableColDescription,
-              ]}
-            >
-              <Text style={[styles.tableHeader]}>DESCRIPTION</Text>
-            </View>
-            <View style={[styles.tableCol, styles.tableColHeader]}>
-              <Text style={[styles.tableHeader, styles.tableColSub]}>QTY</Text>
-            </View>
-            <View style={[styles.tableCol, styles.tableColHeader]}>
-              <Text style={[styles.tableHeader, styles.tableColSub]}>
-                DISCOUNT
-              </Text>
-            </View>
-            <View style={[styles.tableCol, styles.tableColHeader]}>
-              <Text style={[styles.tableHeader, styles.tableColSub]}>
-                CHARGES
-              </Text>
-            </View>
-            <View style={[styles.tableCol, styles.tableColHeader]}>
-              <Text style={[styles.tableHeader, styles.tableColSub]}>
-                CREDIT
-              </Text>
-            </View>
-          </View>
+                  if (roomsx._id !== t.reservationRoomLine._id) return;
 
-          {/* CONTENT */}
-          <View style={[styles.tableRow]}>
-            <View style={[styles.tableCol]}>
-              <Text style={[styles.tableRowText, styles.tableColSub]}>
-                09-09-2021
-              </Text>
+                  return (
+                    <div key={t._id}>
+                      {t.reservationRoomLine.room._id && renderCategory(pc)}
+
+                      <View style={[styles.tableRow]}>
+                        <View style={[styles.tableCol]}>
+                          <Text
+                            style={[styles.tableRowText, styles.tableColSub]}
+                          >
+                            {moment(t.createdDate).format("MM-DD-YY")}
+                          </Text>
+                        </View>
+                        <View
+                          style={[styles.tableCol, styles.tableColDescription]}
+                        >
+                          <Text style={[styles.tableRowText]}>
+                            {t.product.longName}
+                          </Text>
+                        </View>
+                        <View style={[styles.tableCol]}>
+                          <Text
+                            style={[styles.tableRowText, styles.tableColSub]}
+                          >
+                            {t.quantity}
+                          </Text>
+                        </View>
+                        <View style={[styles.tableCol]}>
+                          <Text
+                            style={[styles.tableRowText, styles.tableColSub]}
+                          >
+                            {formatNumber(t.product.sellingPrice * t.quantity)}
+                          </Text>
+                        </View>
+                        <View style={[styles.tableCol]}>
+                          <Text
+                            style={[styles.tableRowText, styles.tableColSub]}
+                          >
+                            {formatNumber(t.netDiscount)}
+                          </Text>
+                        </View>
+                        <View style={[styles.tableCol]}>
+                          <Text
+                            style={[styles.tableRowText, styles.tableColSub]}
+                          ></Text>
+                        </View>
+                      </View>
+                    </div>
+                  );
+                });
+              })}
+
+              {/* GROUP BY */}
+              <View style={[styles.tableRow, styles.productMargin]}>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    Payment
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+              </View>
+              {payments.map((p) => renderPaymentName(p))}
+
+              <View style={styles.borderTotal}></View>
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    Charges
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    {renderTotalCharges(roomsx)}
+                  </Text>
+                </View>
+              </View>
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    Discount
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    {renderTotalDiscount(roomsx)}
+                  </Text>
+                </View>
+              </View>
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[
+                      styles.tableRowText,
+                      styles.tableColSub,
+                      { textAlign: "right", paddingRight: 10 },
+                    ]}
+                  >
+                    SUBTOTAL
+                  </Text>
+                </View>
+                <View style={[styles.tableCol, { paddingBottom: 7 }]}>
+                  <Text
+                    style={[
+                      styles.tableRowText,
+                      styles.tableColSub,
+                      { fontSize: 15 },
+                    ]}
+                  >
+                    {renderTotalSubTotal(roomsx)}
+                  </Text>
+                </View>
+              </View>
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    Credit
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    15,200
+                  </Text>
+                </View>
+              </View>
+
+              <View style={[styles.tableRow]}>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol, styles.tableColDescription]}>
+                  <Text style={[styles.tableRowText]}></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[styles.tableRowText, styles.tableColSub]}
+                  ></Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[
+                      styles.tableRowText,
+                      styles.tableColSub,
+                      { textAlign: "right", paddingRight: 10 },
+                    ]}
+                  >
+                    BALANCE
+                  </Text>
+                </View>
+                <View style={[styles.tableCol]}>
+                  <Text
+                    style={[
+                      styles.tableRowText,
+                      styles.tableColSub,
+                      { fontSize: 14 },
+                    ]}
+                  >
+                    1,200
+                  </Text>
+                </View>
+              </View>
             </View>
-            <View style={[styles.tableCol, styles.tableColDescription]}>
-              <Text style={[styles.tableRowText]}>Cluster Room 1</Text>
-            </View>
-            <View style={[styles.tableCol]}>
-              <Text style={[styles.tableRowText, styles.tableColSub]}>1</Text>
-            </View>
-            <View style={[styles.tableCol]}>
-              <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
-            </View>
-            <View style={[styles.tableCol]}>
-              <Text style={[styles.tableRowText, styles.tableColSub]}>
-                15,030
-              </Text>
-            </View>
-          </View>
-        </View>
-        <Text
-          style={styles.pageNumber}
-          render={({ pageNumber, totalPages }) =>
-            `${pageNumber} / ${totalPages}`
-          }
-          fixed
-        />
-      </Page>
+            <Text
+              style={styles.pageNumber}
+              render={({ pageNumber, totalPages }) =>
+                `${pageNumber} / ${totalPages}`
+              }
+              fixed
+            />
+          </Page>
+        );
+      })}
     </Document>
   );
 };
 
 const SOA = () => {
+  const isMounted = useMountedState();
+  const { id: headerId } = useParams();
+  const [rooms, setRooms] = useState([]);
+  const [trans, setTrans] = useState([]);
+  const [header, setHeader] = useState({});
+  const [payments, setPayments] = useState([]);
+  const [currentUser, setCurrentUser] = useState([]);
+  const [initialLoading, setInitialLoading] = useState(false);
+  const [productCategories, setProductCategories] = useState([]);
+
+  useEffect(() => {
+    //..
+    async function fetchProductDetails() {
+      try {
+        const { data } = await getProdCategory();
+        const { token, listRecords } = data;
+        store.dispatch(writeToken({ token }));
+
+        if (isMounted()) {
+          setProductCategories(listRecords);
+        }
+        //
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    async function fetchData() {
+      try {
+        const { data } = await GetHeadersWithFullDetails(headerId);
+        const { token, header, payments, rooms, trans } = data;
+
+        store.dispatch(writeToken({ token }));
+
+        if (isMounted()) {
+          const sortedTrans = trans.sort((a, b) =>
+            a.product.productCategoryId.localeCompare(
+              b.product.productCategoryId
+            )
+          );
+
+          setPayments(payments);
+          setTrans(sortedTrans);
+          setRooms(rooms);
+          setHeader(header);
+          setInitialLoading(true);
+        }
+        //
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    setCurrentUser(store.getState().entities.user.user);
+    fetchProductDetails();
+    fetchData();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!initialLoading) return null;
+
   return (
     <PDFViewer style={{ width: "100%", height: "100vh" }}>
-      <SOAe />
+      <SOAe
+        rooms={rooms}
+        header={header}
+        trans={trans}
+        payments={payments}
+        user={currentUser}
+        productCategories={productCategories}
+      />
     </PDFViewer>
   );
 };
