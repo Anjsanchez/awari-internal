@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using API.Dto.reservations.line;
+using API.Dto.reservations.room;
 using API.Dto.rooms.room;
 using API.Dto.rooms.variant;
 

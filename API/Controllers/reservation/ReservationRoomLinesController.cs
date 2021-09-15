@@ -6,7 +6,7 @@ using API.Contracts.pages.functionality;
 using API.Contracts.pages.reservation;
 using API.Data.ApiResponse;
 using API.Dto.reservations.header;
-using API.Dto.reservations.line;
+using API.Dto.reservations.room;
 using API.Dto.reservations.payment;
 using API.helpers.api;
 using API.Migrations.Configurations;

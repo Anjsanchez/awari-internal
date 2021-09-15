@@ -1,12 +1,10 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using API.Models;
-using API.Models.reservation;
-namespace API.Dto.reservations.header
+
+namespace API.Dto.trans.header
 {
-    public class reservationHeaderCreateDto
+    public class transHeaderCreateDto
     {
+        public Guid _id { get; set; }
         public Guid customerId { get; set; }
 
         public Guid reservationTypeId { get; set; }
@@ -14,6 +12,8 @@ namespace API.Dto.reservations.header
         public string voucher { get; set; }
 
         public Guid userId { get; set; }
+
+        public Guid userCheckOutId { get; set; }
 
         public DateTime createdDate { get; set; }
     }

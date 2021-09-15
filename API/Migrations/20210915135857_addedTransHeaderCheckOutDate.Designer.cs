@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210915135857_addedTransHeaderCheckOutDate")]
+    partial class addedTransHeaderCheckOutDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -432,6 +434,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("TransHeader_id")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("adultPax")
                         .HasColumnType("int");
 
@@ -480,6 +485,8 @@ namespace API.Migrations
                         .HasColumnName("createdBy");
 
                     b.HasKey("_id");
+
+                    b.HasIndex("TransHeader_id");
 
                     b.HasIndex("discountId");
 
@@ -692,169 +699,7 @@ namespace API.Migrations
 
                     b.HasIndex("userId");
 
-                    b.ToTable("TransHeaders");
-                });
-
-            modelBuilder.Entity("API.Models.trans.TransLine", b =>
-                {
-                    b.Property<Guid>("_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("discountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("netDiscount")
-                        .HasColumnType("real");
-
-                    b.Property<Guid>("productId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("remark")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int>("seniorPax")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("transHeaderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("transRoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("createdBy");
-
-                    b.HasKey("_id");
-
-                    b.HasIndex("discountId");
-
-                    b.HasIndex("productId");
-
-                    b.HasIndex("transHeaderId");
-
-                    b.HasIndex("transRoomId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("TransLines");
-                });
-
-            modelBuilder.Entity("API.Models.trans.TransPayment", b =>
-                {
-                    b.Property<Guid>("_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("amount")
-                        .HasColumnType("real");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("paymentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("paymentRefNum")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("transHeaderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("type")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("createdBy");
-
-                    b.HasKey("_id");
-
-                    b.HasIndex("paymentId");
-
-                    b.HasIndex("transHeaderId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("TransPayments");
-                });
-
-            modelBuilder.Entity("API.Models.trans.TransRoom", b =>
-                {
-                    b.Property<Guid>("_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("adultPax")
-                        .HasColumnType("int");
-
-                    b.Property<int>("childrenPax")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("discountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("endDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("grossAmount")
-                        .HasColumnType("real");
-
-                    b.Property<int>("mattress")
-                        .HasColumnType("int");
-
-                    b.Property<string>("remark")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<Guid>("roomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("seniorPax")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("startDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<float>("totalAmount")
-                        .HasColumnType("real");
-
-                    b.Property<float>("totalDiscount")
-                        .HasColumnType("real");
-
-                    b.Property<Guid>("transHeaderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("createdBy");
-
-                    b.HasKey("_id");
-
-                    b.HasIndex("discountId");
-
-                    b.HasIndex("roomId");
-
-                    b.HasIndex("transHeaderId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("TransRooms");
+                    b.ToTable("TransHeader");
                 });
 
             modelBuilder.Entity("API.Models.Customer", b =>
@@ -1006,6 +851,10 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.reservation.ReservationRoomLine", b =>
                 {
+                    b.HasOne("API.Models.trans.TransHeader", null)
+                        .WithMany("ReservationRoomLine")
+                        .HasForeignKey("TransHeader_id");
+
                     b.HasOne("API.Models.functionality.Discount", "discount")
                         .WithMany()
                         .HasForeignKey("discountId");
@@ -1151,107 +1000,6 @@ namespace API.Migrations
                     b.Navigation("userCheckOut");
                 });
 
-            modelBuilder.Entity("API.Models.trans.TransLine", b =>
-                {
-                    b.HasOne("API.Models.functionality.Discount", "discount")
-                        .WithMany()
-                        .HasForeignKey("discountId");
-
-                    b.HasOne("API.Models.products.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.trans.TransHeader", "transHeader")
-                        .WithMany()
-                        .HasForeignKey("transHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.trans.TransRoom", "transRoom")
-                        .WithMany()
-                        .HasForeignKey("transRoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("discount");
-
-                    b.Navigation("product");
-
-                    b.Navigation("transHeader");
-
-                    b.Navigation("transRoom");
-
-                    b.Navigation("user");
-                });
-
-            modelBuilder.Entity("API.Models.trans.TransPayment", b =>
-                {
-                    b.HasOne("API.Models.functionality.Payment", "payment")
-                        .WithMany()
-                        .HasForeignKey("paymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.trans.TransHeader", "transHeader")
-                        .WithMany()
-                        .HasForeignKey("transHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("payment");
-
-                    b.Navigation("transHeader");
-
-                    b.Navigation("user");
-                });
-
-            modelBuilder.Entity("API.Models.trans.TransRoom", b =>
-                {
-                    b.HasOne("API.Models.functionality.Discount", "discount")
-                        .WithMany()
-                        .HasForeignKey("discountId");
-
-                    b.HasOne("API.Models.rooms.Room", "room")
-                        .WithMany()
-                        .HasForeignKey("roomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.trans.TransHeader", "transHeader")
-                        .WithMany("TransRoom")
-                        .HasForeignKey("transHeaderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("discount");
-
-                    b.Navigation("room");
-
-                    b.Navigation("transHeader");
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("API.Models.reservation.ReservationHeader", b =>
                 {
                     b.Navigation("ReservationRoomLine");
@@ -1259,7 +1007,7 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Models.trans.TransHeader", b =>
                 {
-                    b.Navigation("TransRoom");
+                    b.Navigation("ReservationRoomLine");
                 });
 #pragma warning restore 612, 618
         }

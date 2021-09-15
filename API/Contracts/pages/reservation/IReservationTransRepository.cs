@@ -7,7 +7,8 @@ namespace API.Contracts.pages.reservation
 {
     public interface IReservationTransRepository : IRepositoryBase<ReservationTransLine>
     {
+        Task<bool> deleteRange(List<ReservationTransLine> lines);
         Task<bool> createRange(List<ReservationTransLine> lines);
-        Task<List<ReservationTransLine>> GetPaymentByHeaderId(Guid headerId);
+        Task<List<ReservationTransLine>> GetTransLineByHeaderId(Guid headerId);
     }
 }

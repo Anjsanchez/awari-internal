@@ -5,7 +5,7 @@ using API.Dto.products;
 using API.Dto.products.product;
 using API.Dto.products.type;
 using API.Dto.reservations.header;
-using API.Dto.reservations.line;
+using API.Dto.reservations.room;
 using API.Dto.reservations.payment;
 using API.Dto.reservations.trans;
 using API.Dto.reservations.type;
@@ -13,13 +13,18 @@ using API.Dto.roles;
 using API.Dto.rooms.pricing;
 using API.Dto.rooms.room;
 using API.Dto.rooms.variant;
+using API.Dto.trans.header;
 using API.Dto.Users;
 using API.Models;
 using API.Models.functionality;
 using API.Models.products;
 using API.Models.reservation;
 using API.Models.rooms;
+using API.Models.trans;
 using AutoMapper;
+using API.Dto.trans.payment;
+using API.Dto.trans.room;
+using API.Dto.trans.line;
 
 namespace API.Data.Profiles
 {
@@ -84,6 +89,21 @@ namespace API.Data.Profiles
             CreateMap<ReservationTransLine, reservationTransReadDto>().ReverseMap();
             CreateMap<reservationTransUpdateDto, ReservationTransLine>().ReverseMap();
             CreateMap<reservationTransCreateDto, ReservationTransLine>().ReverseMap();
+
+
+            CreateMap<TransHeader, transHeaderReadDto>().ReverseMap();
+            CreateMap<transHeaderCreateDto, TransHeader>().ReverseMap();
+
+            CreateMap<TransPayment, transPaymentReadDto>().ReverseMap();
+            CreateMap<transPaymentCreateDto, TransPayment>().ReverseMap();
+
+            CreateMap<TransRoom, transRoomReadDto>().ReverseMap();
+            CreateMap<transRoomCreateDto, TransRoom>().ReverseMap();
+
+            CreateMap<TransLine, transReadDto>().ReverseMap();
+            CreateMap<transCreateDto, TransLine>().ReverseMap();
+
+            CreateMap<ReservationHeader, transHeaderCreateDto>().ReverseMap();
 
         }
     }

@@ -5,9 +5,9 @@ using API.Models;
 using API.Models.reservation;
 using API.Models.rooms;
 
-namespace API.Dto.reservations.line
+namespace API.Dto.reservations.room
 {
-    public class reservationRoomLineCreateDto
+    public class reservationRoomLineUpdateDto
     {
         public Guid reservationHeaderId { get; set; }
 
@@ -29,7 +29,5 @@ namespace API.Dto.reservations.line
         public Int32 adultPax { get; set; }
         public Int32 seniorPax { get; set; }
         public Int32 childrenPax { get; set; }
-
-        public Guid userId { get; set; }
     }
 }

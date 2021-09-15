@@ -84,7 +84,6 @@ const ActiveBookingTblRows = (props) => {
   };
 
   const renderActiveReservationStatus = (row) => {
-    console.log(row);
     if (row.isActive) return <ActiveButton value={true} />;
 
     return <ActiveButton isWarning={true} textTrue="Pending" />;

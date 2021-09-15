@@ -30,6 +30,7 @@ const ReservationDetailsLeftTab = () => {
   const [totalRooms, setTotalRooms] = useState(0);
   const [totalTrans, setTotalTrans] = useState(0);
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const [askCheckOutConfirmation, setAskCheckOutConfirmation] = useState(false);
 
   const detailsInStore = useSelector(
     (state) => state.entities.reservationDetails
@@ -50,8 +51,11 @@ const ReservationDetailsLeftTab = () => {
     setTotalHeads(heads);
   }, [rooms, trans]);
 
-  const soa = () => {
-    hist.push(`/a/reports/SOA/${header._id}`);
+  const soa = () => hist.push(`/a/reports/SOA/${header._id}`);
+
+  const handleClose = () => {
+    setAskConfirmation(false);
+    setAskCheckOutConfirmation(false);
   };
   const handleCheckInCheckOut = () => {
     if (!header.isActive) return setAskConfirmation(true);
@@ -62,9 +66,17 @@ const ReservationDetailsLeftTab = () => {
         variant: "error",
       });
     }
+
+    setAskCheckOutConfirmation(true);
+  };
+
+  const handleCheckOut = () => {
+    setAskCheckOutConfirmation(false);
   };
 
   const handleOk = async () => {
+    if (askCheckOutConfirmation) return handleCheckOut();
+
     setAskConfirmation(false);
 
     const obj = { _id: header._id, isActive: true };
@@ -84,15 +96,20 @@ const ReservationDetailsLeftTab = () => {
     return <ActiveButton isWarning={true} textTrue="Pending" />;
   };
 
-  return (
-    <>
-      {askConfirmation && (
+  const renderConfirmation = () => {
+    if (askConfirmation || askCheckOutConfirmation)
+      return (
         <MDialog
-          openDialog={askConfirmation}
-          handleClose={() => setAskConfirmation(false)}
+          openDialog={askConfirmation || askCheckOutConfirmation}
+          handleClose={handleClose}
           handleOk={handleOk}
         />
-      )}
+      );
+  };
+  return (
+    <>
+      {renderConfirmation()}
+
       <div className="reservationdetails-grid__wrapper first">
         <Card className="reservationDetails-card__wrapper" hoverable>
           <div className="reservationDetails-title__wrapper">
@@ -220,7 +237,6 @@ const ReservationDetailsLeftTab = () => {
                 <Button
                   color="primary"
                   variant="contained"
-                  onClick={handleCheckInCheckOut}
                   onClick={handleCheckInCheckOut}
                 >
                   {header.isActive ? "CHECK-OUT" : "CHECK-IN"}

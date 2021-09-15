@@ -25,6 +25,13 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
+        public async Task<bool> deleteRange(List<ReservationPayment> lines)
+        {
+            _db.ReservationPayments.RemoveRange(lines);
+            return await Save();
+        }
+
+
         public async Task<bool> Delete(ReservationPayment entity)
         {
             _db.ReservationPayments.Remove(entity);

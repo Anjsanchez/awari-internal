@@ -6,7 +6,7 @@ using API.Models.functionality;
 using API.Models.reservation;
 using API.Models.rooms;
 
-namespace API.Dto.reservations.line
+namespace API.Dto.reservations.room
 {
     public class reservationRoomLineReadDto
     {

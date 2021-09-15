@@ -7,6 +7,7 @@ namespace API.Contracts.pages.reservation
 {
     public interface IReservationPaymentRepository : IRepositoryBase<ReservationPayment>
     {
+        Task<bool> deleteRange(List<ReservationPayment> lines);
         Task<List<ReservationPayment>> GetPaymentByHeaderId(Guid headerId);
     }
 }

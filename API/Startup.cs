@@ -10,6 +10,7 @@ using API.Contracts.pages.functionality;
 using API.Contracts.pages.products;
 using API.Contracts.pages.reservation;
 using API.Contracts.pages.rooms;
+using API.Contracts.pages.trans;
 using API.Data;
 using API.Data.Profiles;
 using API.Migrations.Configurations;
@@ -19,6 +20,7 @@ using API.Repository.pages.functionality;
 using API.Repository.pages.products;
 using API.Repository.pages.reservation;
 using API.Repository.pages.rooms;
+using API.Repository.pages.trans;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -110,6 +112,14 @@ namespace API
             services.AddScoped<IReservationHeaderRepository, ReservationHeaderRepository>();
             services.AddScoped<IReservationPaymentRepository, ReservationPaymentRepository>();
             services.AddScoped<IReservationRoomLineRepository, ReservationRoomLineRepository>();
+
+            //..TRANS
+            services.AddScoped<ITransLineRepository, TransLineRepository>();
+            services.AddScoped<ITransRoomRepository, TransRoomRepository>();
+            services.AddScoped<ITransHeaderRepository, TransHeaderRepository>();
+            services.AddScoped<ITransHeaderRepository, TransHeaderRepository>();
+            services.AddScoped<ITransPaymentRepository, TransPaymentRepository>();
+
 
             services.AddAutoMapper(typeof(resortProfile));
 

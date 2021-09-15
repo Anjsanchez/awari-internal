@@ -3,6 +3,7 @@ using API.Models.functionality;
 using API.Models.products;
 using API.Models.reservation;
 using API.Models.rooms;
+using API.Models.trans;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -30,5 +31,11 @@ namespace API.Data
         public DbSet<ReservationPayment> ReservationPayments { get; set; }
         public DbSet<ReservationRoomLine> ReservationRoomLines { get; set; }
         public DbSet<ReservationTransLine> ReservationTransLines { get; set; }
+
+        //..TRANS
+        public DbSet<TransHeader> TransHeaders { get; set; }
+        public DbSet<TransLine> TransLines { get; set; }
+        public DbSet<TransPayment> TransPayments { get; set; }
+        public DbSet<TransRoom> TransRooms { get; set; }
     }
 }

@@ -1,15 +1,11 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using API.Models;
-using API.Models.reservation;
-using API.Models.rooms;
 
-namespace API.Dto.reservations.line
+namespace API.Dto.trans.room
 {
-    public class reservationRoomLineUpdateDto
+    public class transRoomCreateDto
     {
-        public Guid reservationHeaderId { get; set; }
+        public Guid _id { get; set; }
+        public Guid transHeaderId { get; set; }
 
         public DateTime startDate { get; set; }
 
@@ -29,5 +25,8 @@ namespace API.Dto.reservations.line
         public Int32 adultPax { get; set; }
         public Int32 seniorPax { get; set; }
         public Int32 childrenPax { get; set; }
+
+        public Guid userId { get; set; }
+        public DateTime createdDate { get; set; }
     }
 }

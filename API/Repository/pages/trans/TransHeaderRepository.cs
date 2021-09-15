@@ -2,50 +2,48 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.Contracts.pages.reservation;
+using API.Contracts.pages.trans;
 using API.Data;
-using API.Dto.customers;
-using API.Dto.reservations.header;
-using API.Models.reservation;
+using API.Dto.trans.header;
+using API.Models.trans;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Repository.pages.reservation
+namespace API.Repository.pages.trans
 {
-    public class ReservationHeaderRepository : IReservationHeaderRepository
+    public class TransHeaderRepository : ITransHeaderRepository
     {
         private readonly resortDbContext _db;
 
 
-        public ReservationHeaderRepository(resortDbContext db)
+        public TransHeaderRepository(resortDbContext db)
         {
             _db = db;
         }
 
-
-        public async Task<bool> Create(ReservationHeader entity)
+        public async Task<bool> Create(TransHeader entity)
         {
-            await _db.ReservationHeaders.AddAsync(entity);
+            await _db.TransHeaders.AddAsync(entity);
             return await Save();
         }
 
-        public async Task<bool> Delete(ReservationHeader entity)
+        public async Task<bool> Delete(TransHeader entity)
         {
-            _db.ReservationHeaders.Remove(entity);
+            _db.TransHeaders.Remove(entity);
             return await Save();
         }
 
-        public async Task<ICollection<ReservationHeader>> FindAll(bool isActiveOnly = false)
+        public async Task<ICollection<TransHeader>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.ReservationHeaders
+            return await _db.TransHeaders
                         .Include(n => n.Customer)
                         .Include(n => n.reservationType)
                         .Include(n => n.user)
                         .ToListAsync();
         }
 
-        public async Task<ReservationHeader> FindById(Guid id)
+        public async Task<TransHeader> FindById(Guid id)
         {
-            return await _db.ReservationHeaders
+            return await _db.TransHeaders
                             .Include(n => n.Customer)
                             .Include(n => n.reservationType)
                             .Include(n => n.user)
@@ -53,7 +51,7 @@ namespace API.Repository.pages.reservation
         }
 
 
-        public async Task<List<ReservationHeader>> GetHeaderByCustomerID(Guid customerId)
+        public async Task<List<TransHeader>> GetHeaderByCustomerID(Guid customerId)
         {
             var xpayments = await FindAll();
 
@@ -62,9 +60,9 @@ namespace API.Repository.pages.reservation
             return z;
         }
 
-        public async Task<ReservationHeader> GetHeadersWithFullDetails(Guid HeaderId)
+        public async Task<TransHeader> GetHeadersWithFullDetails(Guid HeaderId)
         {
-            var headers = await _db.ReservationHeaders
+            var headers = await _db.TransHeaders
                 .Include(n => n.Customer)
                 .Include(n => n.reservationType)
                 .Include(n => n.user)
@@ -75,19 +73,20 @@ namespace API.Repository.pages.reservation
             return headers;
         }
 
-        public async Task<List<reservationHeaderReadDto>> GetHeaderWithRoomCount()
+        public async Task<List<transHeaderReadDto>> GetHeaderWithRoomCount()
         {
 
-            var headerWithRoomCount = await _db.ReservationHeaders.Select(a => new reservationHeaderReadDto
+            var headerWithRoomCount = await _db.TransHeaders.Select(a => new transHeaderReadDto
             {
                 _id = a._id,
                 Customer = a.Customer,
                 reservationType = a.reservationType,
                 user = a.user,
+                userCheckOut = a.userCheckOut,
                 voucher = a.voucher,
+                checkOutDate = a.checkOutDate,
                 createdDate = a.createdDate,
-                roomCount = a.ReservationRoomLine.Count(),
-                isActive = a.isActive
+                roomCount = a.TransRoom.Count(),
             })
             .ToListAsync();
 
@@ -100,9 +99,9 @@ namespace API.Repository.pages.reservation
             return changes > 0;
         }
 
-        public async Task<bool> Update(ReservationHeader entity)
+        public async Task<bool> Update(TransHeader entity)
         {
-            _db.ReservationHeaders.Update(entity);
+            _db.TransHeaders.Update(entity);
             return await Save();
         }
     }

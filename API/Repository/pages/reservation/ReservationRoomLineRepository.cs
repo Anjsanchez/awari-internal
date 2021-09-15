@@ -30,6 +30,11 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
+        public async Task<bool> deleteRange(List<ReservationRoomLine> lines)
+        {
+            _db.ReservationRoomLines.RemoveRange(lines);
+            return await Save();
+        }
         public async Task<ICollection<ReservationRoomLine>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationRoomLines

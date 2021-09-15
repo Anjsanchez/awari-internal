@@ -36,6 +36,13 @@ namespace API.Repository.pages.reservation
             return await Save();
         }
 
+
+        public async Task<bool> deleteRange(List<ReservationTransLine> lines)
+        {
+            _db.ReservationTransLines.RemoveRange(lines);
+            return await Save();
+        }
+
         public async Task<ICollection<ReservationTransLine>> FindAll(bool isActiveOnly = false)
         {
             return await _db.ReservationTransLines
@@ -59,7 +66,7 @@ namespace API.Repository.pages.reservation
                   .FirstOrDefaultAsync(n => n._id == id);
         }
 
-        public async Task<List<ReservationTransLine>> GetPaymentByHeaderId(Guid headerId)
+        public async Task<List<ReservationTransLine>> GetTransLineByHeaderId(Guid headerId)
         {
             var datas = await FindAll();
 

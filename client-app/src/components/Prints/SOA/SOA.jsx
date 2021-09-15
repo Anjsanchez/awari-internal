@@ -1,4 +1,12 @@
+import moment from "moment";
+import { useMountedState } from "react-use";
+import { useParams } from "react-router-dom";
+import { PDFViewer } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
+import { store } from "../../../utils/store/configureStore";
+import { writeToken } from "../../../utils/store/pages/users";
+import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
+import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
 import {
   Page,
   Text,
@@ -8,16 +16,6 @@ import {
   Image,
   View,
 } from "@react-pdf/renderer";
-import { useHistory, useParams } from "react-router-dom";
-import { PDFViewer } from "@react-pdf/renderer";
-import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
-import { store } from "../../../utils/store/configureStore";
-import { writeToken } from "../../../utils/store/pages/users";
-import { useMountedState } from "react-use";
-import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
-import moment from "moment";
-import { toggleLoading } from "../../../utils/store/pages/createReservation";
-
 Font.register({
   family: "Oswald",
   src: "https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf",
@@ -306,7 +304,6 @@ const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
   };
 
   const renderTotalPax = () => {
-    console.log(rooms);
     const grossAmountRooms = rooms.reduce(
       (a, b) => a + b.adultPax + b.seniorPax,
       0
@@ -483,11 +480,11 @@ const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
                 {/* GROUP BY */}
                 {productCategories.map((pc) => {
                   return trans.map((t) => {
-                    if (t.product.productCategoryId !== pc._id) return;
+                    if (t.product.productCategoryId !== pc._id) return 0;
                     if (t.reservationRoomLine.room._id !== roomsx.room._id)
-                      return;
+                      return 0;
 
-                    if (roomsx._id !== t.reservationRoomLine._id) return;
+                    if (roomsx._id !== t.reservationRoomLine._id) return 0;
 
                     return (
                       <div key={t._id}>

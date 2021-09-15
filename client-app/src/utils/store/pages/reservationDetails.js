@@ -24,7 +24,6 @@ const slice = createSlice({
       resx.header = header;
       resx.trans = trans;
 
-      console.log(resx.payments);
       resx.totals.netPayment = resx.payments.reduce((a, b) => a + b.amount, 0);
       resx.totals.netAmountRooms = resx.rooms.reduce(
         (a, b) => a + b.totalAmount,

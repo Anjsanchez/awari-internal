@@ -77,8 +77,6 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
       const { customer } = custInStore.createTransaction;
       if (Object.keys(customer).length === 0) setSearchCustomer({});
       else setSearchCustomer(customer);
-
-      console.log("second!");
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

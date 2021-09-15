@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using API.Dto.reservations.header;
-using API.Dto.reservations.line;
+using API.Dto.reservations.room;
 using API.Dto.reservations.payment;
 using API.Dto.reservations.trans;
 
