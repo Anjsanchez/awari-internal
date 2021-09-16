@@ -14,6 +14,7 @@ import PhoneAndroidTwoToneIcon from "@material-ui/icons/PhoneAndroidTwoTone";
 import ConfirmationNumberTwoToneIcon from "@material-ui/icons/ConfirmationNumberTwoTone";
 import { saveHeader } from "../../../../utils/services/pages/reservation/ReservationHeader";
 import { toggleHeaderActiveStatus } from "../../../../utils/store/pages/reservationDetails";
+import { PostCheckOutReservation } from "./../../../../utils/services/pages/reservation/ReservationHeader";
 import {
   Grid,
   Divider,
@@ -70,8 +71,26 @@ const ReservationDetailsLeftTab = () => {
     setAskCheckOutConfirmation(true);
   };
 
-  const handleCheckOut = () => {
+  const handleCheckOut = async () => {
     setAskCheckOutConfirmation(false);
+
+    try {
+      console.log(header._id);
+      await PostCheckOutReservation(header._id);
+
+      enqueueSnackbar("Check out complete", {
+        variant: "success",
+      });
+
+      hist.replace("/a/reservation-management/reservations");
+    } catch (error) {
+      enqueueSnackbar(
+        "0003: An error occured while fetching the reservation type in the server.",
+        {
+          variant: "error",
+        }
+      );
+    }
   };
 
   const handleOk = async () => {

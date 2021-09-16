@@ -16,7 +16,10 @@ export function GetHeaderWithRoomCount() {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesRoomCount");
 }
-
+export function PostCheckOutReservation(headerId) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/CheckOut?id=" + headerId);
+}
 export function GetHeadersWithFullDetails(headerId) {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);

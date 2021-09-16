@@ -101,7 +101,7 @@ const ReservationSteps = () => {
 
         store.dispatch(refreshValues());
         setActiveStep(0);
-        hist.push("/");
+        hist.replace("/a/reservation-management/reservations");
       }, 1000);
     } catch (ex) {
       if (ex && ex.status === 400) {

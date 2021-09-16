@@ -1,6 +1,7 @@
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import { useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Loader from "./../../../common/Loader";
 import { BsAspectRatioFill } from "react-icons/bs";
 import React, { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import { addRDetails } from "../../../utils/store/pages/reservationDetails";
 import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
 
 const ReservationDetails = () => {
+  const hist = useHistory();
   const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
   const { id: reservationId } = useParams();
@@ -21,6 +23,10 @@ const ReservationDetails = () => {
     async function fetchData() {
       try {
         const { data } = await GetHeadersWithFullDetails(reservationId);
+
+        if (data.header === null || data.header === undefined)
+          hist.replace("/a/reservation-management/reservations");
+
         store.dispatch(addRDetails(data));
 
         setTimeout(() => {

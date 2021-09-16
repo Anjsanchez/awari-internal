@@ -247,7 +247,7 @@ namespace API.Controllers.reservation
             try
             {
                 var data = await _paymentRepo.GetPaymentByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return false;
+                if (data == null || data.Count == 0) return true;
 
                 var transLine = new List<transPaymentCreateDto>();
 
@@ -284,7 +284,7 @@ namespace API.Controllers.reservation
             try
             {
                 var data = await _lineRepo.GetLineByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return false;
+                if (data == null || data.Count == 0) return true;
 
                 var transLine = new List<transRoomCreateDto>();
 
@@ -329,7 +329,7 @@ namespace API.Controllers.reservation
             try
             {
                 var data = await _transRepo.GetTransLineByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return false;
+                if (data == null || data.Count == 0) return true;
 
                 var transLine = new List<transCreateDto>();
 
@@ -523,7 +523,7 @@ namespace API.Controllers.reservation
 
 
 
-        [HttpPost("CheckOut")]
+        [HttpGet("CheckOut")]
         public async Task<ActionResult> PostCheckOutReservation(Guid id)
         {
             if (!ModelState.IsValid)
@@ -545,25 +545,25 @@ namespace API.Controllers.reservation
             if (!await postTransHeader(reservationHeader))
             {
                 await executeRollBack();
-                return NotFound();
+                return NotFound("PostTransHeader");
             }
 
             if (!await postTransPayment())
             {
                 await executeRollBack();
-                return NotFound();
+                return NotFound("PostTransPayment");
             }
 
             if (!await postTransRooms())
             {
                 await executeRollBack();
-                return NotFound();
+                return NotFound("postTransRooms");
             }
 
             if (!await postTransLines())
             {
                 await executeRollBack();
-                return NotFound();
+                return NotFound("postTransLines");
             }
 
             await executeDeleteReservation();
