@@ -1,6 +1,6 @@
+API/appsettings.json
 API/obj/Debug/net5.0/API.assets.cache
 API/obj/Debug/net5.0/API.csproj.AssemblyReference.cache
-API/appsettings.json
 API/bin/Debug/net5.0/API.deps.json
 API/bin/Debug/net5.0/API.dll
 API/bin/Debug/net5.0/API.exe
@@ -24,4 +24,7 @@ API/obj/Debug/net5.0/project.razor.json
 API/obj/Debug/net5.0/ref/API.dll
 API/obj/Debug/net5.0/staticwebassets/API.StaticWebAssets.Manifest.cache
 API/obj/Debug/net5.0/staticwebassets/API.StaticWebAssets.xml
+ 
+printer-worker/printer-worker/obj/debug
+printer-worker/printer-worker/bin/debug/resortMgmt.xml
  
