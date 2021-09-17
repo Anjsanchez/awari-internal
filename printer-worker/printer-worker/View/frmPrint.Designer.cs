@@ -36,14 +36,15 @@ namespace resortPrintWorker.View
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblTimer = new System.Windows.Forms.Label();
             this.txtPass = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.txtInterval = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnPause
             // 
             this.btnPause.Enabled = false;
-            this.btnPause.Location = new System.Drawing.Point(18, 12);
+            this.btnPause.Location = new System.Drawing.Point(18, 47);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(167, 26);
             this.btnPause.TabIndex = 585;
@@ -53,12 +54,13 @@ namespace resortPrintWorker.View
             // 
             // tmrPrint
             // 
-            this.tmrPrint.Interval = 2000;
+            this.tmrPrint.Enabled = true;
+            this.tmrPrint.Interval = 15000;
             this.tmrPrint.Tick += new System.EventHandler(this.tmrPrint_Tick);
             // 
             // btnLock
             // 
-            this.btnLock.Location = new System.Drawing.Point(18, 110);
+            this.btnLock.Location = new System.Drawing.Point(18, 145);
             this.btnLock.Name = "btnLock";
             this.btnLock.Size = new System.Drawing.Size(167, 26);
             this.btnLock.TabIndex = 586;
@@ -69,7 +71,7 @@ namespace resortPrintWorker.View
             // panel1
             // 
             this.panel1.Controls.Add(this.lblTimer);
-            this.panel1.Location = new System.Drawing.Point(36, 44);
+            this.panel1.Location = new System.Drawing.Point(36, 79);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(130, 60);
             this.panel1.TabIndex = 587;
@@ -89,31 +91,44 @@ namespace resortPrintWorker.View
             // 
             // txtPass
             // 
-            this.txtPass.Location = new System.Drawing.Point(18, 142);
+            this.txtPass.Location = new System.Drawing.Point(18, 177);
             this.txtPass.Name = "txtPass";
             this.txtPass.PasswordChar = '*';
             this.txtPass.Size = new System.Drawing.Size(167, 20);
             this.txtPass.TabIndex = 0;
             this.txtPass.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // button1
+            // txtInterval
             // 
-            this.button1.Location = new System.Drawing.Point(18, 180);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(167, 26);
-            this.button1.TabIndex = 588;
-            this.button1.Text = "Hit";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.txtInterval.Location = new System.Drawing.Point(18, 21);
+            this.txtInterval.Name = "txtInterval";
+            this.txtInterval.ReadOnly = true;
+            this.txtInterval.Size = new System.Drawing.Size(167, 20);
+            this.txtInterval.TabIndex = 589;
+            this.txtInterval.Text = "15000";
+            this.txtInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(110)))), ((int)(((byte)(106)))), ((int)(((byte)(122)))));
+            this.label2.Location = new System.Drawing.Point(15, 5);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(45, 13);
+            this.label2.TabIndex = 590;
+            this.label2.Text = "Interval";
             // 
             // frmPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
-            this.ClientSize = new System.Drawing.Size(203, 218);
+            this.ClientSize = new System.Drawing.Size(203, 217);
             this.ControlBox = false;
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtInterval);
             this.Controls.Add(this.txtPass);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.btnLock);
@@ -138,6 +153,7 @@ namespace resortPrintWorker.View
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lblTimer;
         private System.Windows.Forms.TextBox txtPass;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.TextBox txtInterval;
+        private System.Windows.Forms.Label label2;
     }
 }
