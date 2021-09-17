@@ -40,5 +40,7 @@ namespace API.Models.reservation
         public User user { get; set; }
 
         public DateTime createdDate { get; set; }
+
+        public bool isPrinted { get; set; }
     }
 }

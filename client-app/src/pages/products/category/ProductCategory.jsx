@@ -126,6 +126,7 @@ const ProductCategory = () => {
     categoryx[index] = { ...categoryx[index] };
     categoryx[index].name = obj.name;
     categoryx[index].isActive = obj.isActive;
+    categoryx[index].printerName = obj.printerName;
 
     setFilteredProdCategory(categoryx);
     setProdCategory(categoryx);

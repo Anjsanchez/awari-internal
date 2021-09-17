@@ -105,7 +105,8 @@ namespace API.Controllers.reservation
                     reservationHeaderId = trans.reservationHeaderId,
                     reservationRoomLineId = trans.reservationRoomLineId,
                     seniorPax = trans.seniorPax,
-                    userId = trans.userId
+                    userId = trans.userId,
+                    isPrinted = trans.isPrinted
                 };
 
                 transLine.Add(x);

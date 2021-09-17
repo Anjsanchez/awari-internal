@@ -93,6 +93,15 @@ const ProductCategoryForm = ({
                 values={values.name}
               />
             </Grid>
+            <Grid item xs={12}>
+              <MaterialTextField
+                id="printerName"
+                label="Printer name"
+                handleChange={handleChange}
+                errors={errors.printerName}
+                values={values.printerName}
+              />
+            </Grid>
           </Grid>
           <Grid
             container

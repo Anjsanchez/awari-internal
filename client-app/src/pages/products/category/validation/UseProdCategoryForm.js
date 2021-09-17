@@ -18,6 +18,7 @@ const UseProdCategoryForm = (validate, onSuccessEdit, onSuccessAdd) => {
   const [values, setValues] = useState({
     id: "",
     name: "",
+    printerName: "",
     isActive: false,
     createdBy: "",
     createdDate: "",
@@ -28,6 +29,7 @@ const UseProdCategoryForm = (validate, onSuccessEdit, onSuccessAdd) => {
       id: category._id || "",
       isActive: category.isActive || false,
       name: category.name || "",
+      printerName: category.printerName || "",
       createdDate: category.createdDate || "",
       createdBy: category.user.firstName + " " + category.user.lastName || "",
     });

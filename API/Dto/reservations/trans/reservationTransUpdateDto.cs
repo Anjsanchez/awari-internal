@@ -16,5 +16,6 @@ namespace API.Dto.reservations.trans
 
         public string remark { get; set; }
 
+        public bool isPrinted { get; set; }
     }
 }

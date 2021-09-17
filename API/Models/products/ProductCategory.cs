@@ -14,6 +14,8 @@ namespace API.Models.products
         [Required]
         public string name { get; set; }
 
+        [Required]
+        public string printerName { get; set; }
 
         public bool isActive { get; set; }
 

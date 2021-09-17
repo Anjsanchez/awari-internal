@@ -23,5 +23,8 @@ namespace API.Dto.reservations.trans
         public Guid userId { get; set; }
 
         public DateTime createdDate { get; set; }
+
+
+        public bool isPrinted { get; set; }
     }
 }

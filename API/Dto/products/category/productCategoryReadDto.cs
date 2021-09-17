@@ -13,6 +13,7 @@ namespace API.Dto.products
 
         public bool isActive { get; set; }
 
+        public string printerName { get; set; }
 
         public User user { get; set; }
 
