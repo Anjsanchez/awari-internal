@@ -36,7 +36,8 @@ const ReservationDetails = () => {
         }, 500);
         //
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        console.log(error);
+        enqueueSnackbar("0004: An error occured while calling the server.", {
           variant: "error",
         });
       }

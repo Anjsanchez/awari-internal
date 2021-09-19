@@ -9,6 +9,7 @@ namespace resortPrintWorker.Model
     class printObj
     {
         public string reservationHeaderId { get; set; }
+        public string productCategoryId { get; set; }
         public string customerName { get; set; }
         public string staffName { get; set; }
         public string roomLongName { get; set; }

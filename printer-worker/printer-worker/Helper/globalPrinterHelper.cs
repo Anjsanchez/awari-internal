@@ -13,7 +13,7 @@ namespace resortPrintWorker.Helper
     class globalPrinterHelper
     {
 
-        List<printObj>  _printObj;
+        List<printObj> _printObj;
         List<string> _printers;
 
         public globalPrinterHelper()
@@ -37,41 +37,47 @@ namespace resortPrintWorker.Helper
             return false;
         }
 
-        public void InitiatePrint(List<printObj>  printObj)
+        public bool InitiatePrint(List<printObj> printObj)
         {
-            _printObj = printObj;
-
-            if (!checkIfPrinterExist(_printObj[0].printerName)) return;
-
-            var doc = new PrintDocument();
-
-            var printController = new StandardPrintController();
-            doc.PrintPage += new PrintPageEventHandler(PrintReceiptPOSReturn);
-
-
-            doc.PrintController = printController;
-            PrinterSettings ps = new PrinterSettings();
-            ps.PrinterName = _printObj[0].printerName;
-            doc.PrinterSettings = ps;
-            doc.Print();
-            doc.Dispose();
-        }
-
-        private void PrintReceiptPOSReturn(object sender, PrintPageEventArgs e)
-        {
-
             try
             {
+                _printObj = printObj;
 
+                if (!checkIfPrinterExist(_printObj[0].printerName)) return false;
+
+                var doc = new PrintDocument();
+
+                var printController = new StandardPrintController();
+                doc.PrintPage += new PrintPageEventHandler(PrintReceipt);
+
+
+                doc.PrintController = printController;
+                PrinterSettings ps = new PrinterSettings();
+                ps.PrinterName = _printObj[0].printerName;
+                doc.PrinterSettings = ps;
+                doc.Print();
+                doc.Dispose();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private void PrintReceipt(object sender, PrintPageEventArgs e)
+        {
+            try
+            {
                 Graphics graphics = e.Graphics;
 
-                Font font10 = new Font("Courier New", 10);
-                Font font12 = new Font("Courier New", 7);
-                Font ftnBusinessName = new Font("Courier New", 13, FontStyle.Bold);
+                Font font9 = new Font("Courier New", 9);
+                Font font8 = new Font("Courier New", 8);
+                Font ftnBusinessName = new Font("Courier New", 18, FontStyle.Bold);
                 Font fntForFooter = new Font("Courier New", 2);
 
-                float leading = 4;
-                float lineheight12 = font12.GetHeight() + leading;
+                float leading = 0;
+                float lineheight12 = font8.GetHeight() + leading;
                 float lineheight14 = ftnBusinessName.GetHeight() + leading;
 
                 float startX = 0;
@@ -86,102 +92,108 @@ namespace resortPrintWorker.Helper
                 formatRight.Alignment = StringAlignment.Far;
                 formatLeft.Alignment = StringAlignment.Near;
 
-                SizeF layoutSize = new SizeF(180 - Offset * 2, lineheight14);
+                SizeF layoutSize = new SizeF(250 - Offset * 2, lineheight14);
                 RectangleF layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
 
                 Brush brush = Brushes.Black;
 
-                //graphics.DrawString(GlobalCurrentSettings.compSettingsMdl.CompanyName, ftnBusinessName, brush, layout, formatCenter);
-                //Offset = Offset + lineheight14;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //graphics.DrawString($"{GlobalCurrentSettings.compSettingsMdl.companyAddress1}\n {GlobalCurrentSettings.compSettingsMdl.companyAddress2}", font12, brush, layout, formatCenter);
-                //Offset = Offset + lineheight14;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //graphics.DrawString(GlobalCurrentSettings.compSettingsMdl.companyTin, font12, brush, layout, formatCenter);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                ////.ToString("MMM dd yyyy")  
-                //graphics.DrawString(_mdl.dateReceipt, font12, brush, layout, formatLeft);
-                //graphics.DrawString(_mdl.timeReceipt, font12, brush, layout, formatRight);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //graphics.DrawString("CASHIER : " + _mdl.cashieruser, font12, brush, layout, formatLeft);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //graphics.DrawString("OR : " + _mdl.transid, font12, brush, layout, formatLeft);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                Offset = Offset + lineheight12;
-                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                graphics.DrawString("".PadRight(20, '*'), font10, brush, layout, formatLeft);
-                Offset = Offset + lineheight12;
-                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                graphics.DrawString("RETURN", font12, brush, layout, formatCenter);
-                Offset = Offset + lineheight12;
-                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                graphics.DrawString("".PadRight(20, '*'), font10, brush, layout, formatLeft);
-                Offset = Offset + lineheight12;
+                graphics.DrawString("ORDER SLIP", ftnBusinessName, brush, layout, formatCenter);
+                Offset = Offset + lineheight14;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
                 Offset = Offset + lineheight12;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                Offset = Offset + lineheight12;
 
-                //foreach (var item in _mdl.listOfDetailsItems)
-                //{
+                //.ToString("MMM dd yyyy")  
+                graphics.DrawString(DateTime.Now.ToString("MMM dd yyyy"), font9, brush, layout, formatLeft);
+                graphics.DrawString(DateTime.Now.ToLongTimeString(), font9, brush, layout, formatRight);
 
-                //    graphics.DrawString($"{item.description} \n \t {item.Qty} @ {item.sellingPrice}", font12, brush, layout, formatLeft);
-                //    graphics.DrawString("\n-" + item.subtotal, font12, brush, layout, formatRight);
-                //    Offset = Offset + lineheight12;
-                //    layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //    Offset = Offset + lineheight12;
-                //    layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                //}
-
-                //graphics.DrawString("Items : " + _mdl.numberOfItems, font12, brush, layout, formatLeft);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //graphics.DrawString("".PadRight(20, '-'), font10, brush, layout, formatLeft);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-
-                //graphics.DrawString("Total  ", font12, brush, layout, formatLeft);
-                //graphics.DrawString("-" + _mdl.totalAmount, font12, brush, layout, formatRight);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-
-
-                //graphics.DrawString("THANK YOU AND COME AGAIN", font12, brush, layout, formatCenter);
-                //Offset = Offset + lineheight12;
-                //layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-
-                //if (isRePrint)
-                //{
-                //    graphics.DrawString("***REPRINTED***", font12, brush, layout, formatCenter);
-                //    Offset = Offset + lineheight12;
-                //    layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                //}
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                graphics.DrawString("STAFF  ", font9, brush, layout, formatLeft);
+                graphics.DrawString(_printObj[0].staffName, font9, brush, layout, formatRight);
 
                 Offset = Offset + lineheight12;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
 
                 Offset = Offset + lineheight12;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                graphics.DrawString("".PadRight(31, '*'), font9, brush, layout, formatLeft);
+
                 Offset = Offset + lineheight12;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
 
-                graphics.DrawString(".", fntForFooter, brush, layout, formatCenter);
-                Offset = Offset + lineheight12;
+                Offset = Offset + lineheight12 - 4;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
 
-                font10.Dispose(); font12.Dispose(); ftnBusinessName.Dispose(); fntForFooter.Dispose();
+                int totalOrder = 0;
+                var last = _printObj.Last();
+
+                foreach (var item in _printObj)
+                {
+                    var remarkName = item.remark.Length == 0 || string.IsNullOrEmpty(item.remark) ? "" : $"- {item.remark}";
+                    totalOrder += int.Parse(item.quantity);
+
+                    graphics.DrawString($"{item.productName} \n \t{remarkName}", font9, brush, layout, formatLeft);
+                    graphics.DrawString(item.quantity, font9, brush, layout, formatRight);
+                    layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                    if (item.Equals(last))
+                    {
+
+                        if (!string.IsNullOrEmpty(remarkName))
+                        {
+                            Offset = Offset + lineheight12;
+                            layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                        }
+
+                        Offset = Offset + lineheight12;
+                        layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                        Offset = Offset + lineheight12;
+                        layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(remarkName)) continue;
+                    Offset = Offset + lineheight12 + 5;
+                    Offset = Offset + lineheight12;
+                    layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                }
+
+                graphics.DrawString("".PadRight(31, '*'), font9, brush, layout, formatLeft);
+
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                graphics.DrawString("TOTAL ORDER : ", font9, brush, layout, formatLeft);
+                graphics.DrawString(totalOrder.ToString(), font9, brush, layout, formatRight);
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                graphics.DrawString("ROOM  ", font9, brush, layout, formatLeft);
+                graphics.DrawString(_printObj[0].roomLongName, font9, brush, layout, formatRight);
+
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                graphics.DrawString("GUEST  ", font9, brush, layout, formatLeft);
+                graphics.DrawString(_printObj[0].customerName, font9, brush, layout, formatRight);
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                graphics.DrawString(".", font9, brush, layout, formatCenter);
+
+                font9.Dispose(); font8.Dispose(); ftnBusinessName.Dispose(); fntForFooter.Dispose();
 
             }
             catch (Exception ex)
