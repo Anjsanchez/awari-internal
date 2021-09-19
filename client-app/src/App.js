@@ -15,6 +15,7 @@ import Employees from "./pages/employees/Employees";
 import Dashboard from "./pages/dashboard/Dashboard";
 import ProtectedRoute from "./common/protectedRoute";
 import { makeStyles } from "@material-ui/core/styles";
+import EmployeeRole from "./pages/employees/EmployeeRole";
 import CustomerForm from "./pages/customers/CustomerForm";
 import EmployeeForm from "./pages/employees/EmployeeForm";
 import Products from "./pages/products/products/Products";
@@ -71,6 +72,10 @@ function App() {
               <Route path="/a/login" component={Login} />
               <Route path="/a/logout" component={Logout} />
               <ProtectedRoute path="/a/dashboard" component={Dashboard} />
+              <ProtectedRoute
+                path="/a/user-management/employees/roles/:id"
+                component={EmployeeRole}
+              />
               <ProtectedRoute
                 path="/a/user-management/employees/:id"
                 component={EmployeeForm}

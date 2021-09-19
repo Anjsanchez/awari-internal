@@ -1,4 +1,5 @@
 import "./css/EmployeeForm.css";
+import { Transfer } from "antd";
 import { useSnackbar } from "notistack";
 import { HiUsers } from "react-icons/hi";
 import { Grid } from "@material-ui/core";
@@ -61,6 +62,75 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const resortMgmtPages = [
+  {
+    key: 1,
+    title: "Dashboard",
+    description: "Dashboard",
+  },
+  {
+    key: 2,
+    title: "Active Bookings",
+    description: "Active Bookings",
+  },
+  {
+    key: 3,
+    title: "Shop",
+    description: "Shop",
+  },
+  {
+    key: 4,
+    title: "Cart Item",
+    description: "Cart Item",
+  },
+  {
+    key: 5,
+    title: "Users - Employees",
+    description: "Users - Employees",
+  },
+  {
+    key: 6,
+    title: "Users - Customers",
+    description: "Users - Customers",
+  },
+  {
+    key: 7,
+    title: "Rooms - Variants",
+    description: "Rooms - Variants",
+  },
+  {
+    key: 8,
+    title: "Rooms - Rooms",
+    description: "Rooms - Rooms",
+  },
+
+  {
+    key: 9,
+    title: "Rooms - Pricings",
+    description: "Rooms - Pricings",
+  },
+  {
+    key: 10,
+    title: "Products - Category",
+    description: "Products - Category",
+  },
+  {
+    key: 11,
+    title: "Products - Products",
+    description: "Products - Products",
+  },
+  {
+    key: 12,
+    title: "Payments",
+    description: "Payments",
+  },
+  {
+    key: 13,
+    title: "Discounts",
+    description: "Discounts",
+  },
+];
+
 const EmployeeForm = () => {
   //..
   const {
@@ -79,6 +149,12 @@ const EmployeeForm = () => {
   const hist = useHistory();
   const classes = useStyles();
   const [roles, setRoles] = useState([]);
+
+  const [mockData, setMockData] = useState(
+    resortMgmtPages.sort((a, b) => a.title.localeCompare(b.title))
+  );
+  const [targetKeys, setTargetKeys] = useState([]);
+
   const { enqueueSnackbar } = useSnackbar();
   const { id: employeeIdFromUrl } = useParams();
 
@@ -116,9 +192,17 @@ const EmployeeForm = () => {
         if (ex && ex.status === 400) hist.replace("/not-found");
       }
     }
+
     populateRoles();
     populateUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const filterOption = (inputValue, option) =>
+    option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
+
+  const handleChangeTransfer = (targetKeys) => {
+    setTargetKeys(targetKeys);
+  };
 
   if (employeeIdFromUrl === "new")
     passwordField = (
@@ -156,7 +240,7 @@ const EmployeeForm = () => {
           dialogText={dialog}
         />
       )}
-      <div className="container__wrapper">
+      <div className="container__wrapper ef">
         <FormHeader
           header="New Employee"
           second="Management"
@@ -218,6 +302,18 @@ const EmployeeForm = () => {
                   datas={roles}
                   displayText="rolename"
                   menuItemValue="id"
+                  maxWidth="100%"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Transfer
+                  dataSource={mockData}
+                  showSearch
+                  filterOption={filterOption}
+                  targetKeys={targetKeys}
+                  onChange={handleChangeTransfer}
+                  render={(item) => item.title}
                 />
               </Grid>
             </Grid>

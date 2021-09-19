@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { IconButton, Tooltip } from "@material-ui/core";
 import DeleteTwoToneIcon from "@material-ui/icons/DeleteTwoTone";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
+
 const EditDeleteIconButton = (props) => {
   const { rowId, handleDelete, linkPath, showDelete = true } = props;
   return (
@@ -22,7 +23,6 @@ const EditDeleteIconButton = (props) => {
       {showDelete && (
         <Tooltip title="Delete" placement="top">
           <IconButton
-            style={{ paddingLeft: "15px" }}
             edge="start"
             color="inherit"
             aria-label="menu"
