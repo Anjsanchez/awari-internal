@@ -2,12 +2,19 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { store } from "../utils/store/configureStore";
 
-const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
+const ProtectedRoute = ({
+  path,
+  component: Component,
+  keyId,
+  render,
+  ...rest
+}) => {
+  const { isLoggedIn, user } = store.getState().entities.user;
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (!store.getState().entities.user.isLoggedIn)
+        if (!isLoggedIn)
           return (
             <Redirect
               to={{
@@ -16,6 +23,21 @@ const ProtectedRoute = ({ path, component: Component, render, ...rest }) => {
               }}
             />
           );
+
+        const hasAccess = user.userRoles.filter(
+          (e) => e.roleKey === Math.trunc(keyId)
+        );
+
+        if (hasAccess.length === 0)
+          return (
+            <Redirect
+              to={{
+                pathname: "/no-access",
+                state: { from: props.location },
+              }}
+            />
+          );
+
         return Component ? <Component {...props} /> : render(props);
       }}
     />

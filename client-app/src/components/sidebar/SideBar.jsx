@@ -58,14 +58,22 @@ const SideBar = React.forwardRef(() => {
             if (ur.roleKey !== s.id) return null;
             if (isMatchSubNav) return null;
             isMatchSubNav = true;
-            return <span className="sideMenu_container-title">{n.title}</span>;
+            return (
+              <span key={s.id} className="sideMenu_container-title">
+                {n.title}
+              </span>
+            );
           });
         } else {
           if (ur.roleKey !== m.id) return null;
         }
         if (isMatchNav) return null;
         isMatchNav = true;
-        return <span className="sideMenu_container-title">{n.title}</span>;
+        return (
+          <span key={1 + m.id} className="sideMenu_container-title">
+            {n.title}
+          </span>
+        );
       });
     });
   };

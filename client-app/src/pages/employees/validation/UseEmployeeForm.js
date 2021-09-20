@@ -65,7 +65,7 @@ const UseEmployeeForm = (validate) => {
       const uId =
         values.id === "" ? "29B57807-0BAE-4149-9A6E-C7E369FA4DFE" : values.id;
       values.targetKeys.map((n) => {
-        tmpKeys.push({ userId: uId, roleKey: n });
+        return tmpKeys.push({ userId: uId, roleKey: n });
       });
 
       objEmp.userRoles = tmpKeys;

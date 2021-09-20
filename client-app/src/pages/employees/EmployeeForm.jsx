@@ -132,8 +132,8 @@ const EmployeeForm = () => {
     const targetKeysx = [];
 
     resortMgmtPagesData.filter((n) => {
-      values.userRoles.forEach((u) => {
-        if (n.key === u.roleKey) targetKeysx.push(n.key);
+      return values.userRoles.forEach((u) => {
+        if (n.key === u.roleKey) return targetKeysx.push(n.key);
       });
     });
 
@@ -141,7 +141,7 @@ const EmployeeForm = () => {
     setMockData(
       resortMgmtPagesData.sort((a, b) => a.title.localeCompare(b.title))
     );
-  }, [values.userRoles]);
+  }, [values.userRoles]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filterOption = (inputValue, option) =>
     option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;

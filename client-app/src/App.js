@@ -2,6 +2,7 @@ import "./app.css";
 import React from "react";
 import "antd/dist/antd.css";
 import Cart from "./pages/cart/Cart";
+import E404 from "./pages/notfound/E404";
 import { useSelector } from "react-redux";
 import Login from "./components/login/Login";
 import Rooms from "./pages/room/rooms/Rooms";
@@ -71,85 +72,112 @@ function App() {
             <Switch>
               <Route path="/a/login" component={Login} />
               <Route path="/a/logout" component={Logout} />
-              <ProtectedRoute path="/a/dashboard" component={Dashboard} />
+              <ProtectedRoute
+                path="/a/dashboard"
+                component={Dashboard}
+                keyId="1"
+              />
               <ProtectedRoute
                 path="/a/user-management/employees/roles/:id"
                 component={EmployeeRole}
+                keyId="5"
               />
               <ProtectedRoute
                 path="/a/user-management/employees/:id"
                 component={EmployeeForm}
+                keyId="5"
               />
               <ProtectedRoute
                 path="/a/user-management/employees"
                 component={Employees}
+                keyId="5"
               />
               <ProtectedRoute
                 path="/a/user-management/customers/:id"
                 component={CustomerForm}
+                keyId="6"
               />
 
               <ProtectedRoute
                 path="/a/user-management/customers"
                 component={Customers}
+                keyId="6"
               />
               <ProtectedRoute
                 path="/a/room-management/rooms"
                 component={Rooms}
+                keyId="8"
               />
               <ProtectedRoute
                 path="/a/room-management/room-variants"
                 component={RoomVariants}
+                keyId="7"
               />
               <ProtectedRoute
                 path="/a/room-management/room-pricings"
                 component={RoomPricing}
+                keyId="9"
               />
               <ProtectedRoute
                 path="/a/product-management/category"
                 component={ProductCategory}
+                keyId="10"
               />
               <ProtectedRoute
                 path="/a/product-management/products"
                 component={Products}
+                keyId="11"
               />
               <ProtectedRoute
                 path="/a/reservation-management/reservations/:id"
                 component={ReservationDetails}
+                keyId="2"
               />
               <ProtectedRoute
                 path="/a/reservation-management/reservations"
                 component={ActiveBooking}
+                keyId="2"
               />
               <ProtectedRoute
                 path="/a/commerce-management/shop/:id"
                 component={Commerce}
+                keyId="3"
               />
               <ProtectedRoute
                 path="/a/commerce-management/shop"
                 component={Commerce}
+                keyId="3"
               />
               <ProtectedRoute
                 path="/a/commerce-management/cart/:id"
                 component={Cart}
+                keyId="4"
               />
               <ProtectedRoute
                 path="/a/commerce-management/cart"
                 component={Cart}
+                keyId="4"
               />
               <ProtectedRoute
                 path="/a/system-functionality/payments"
                 component={Payments}
+                keyId="12"
               />
               <ProtectedRoute
                 path="/a/system-functionality/discounts"
                 component={Discounts}
+                keyId="13"
               />
-              <ProtectedRoute path="/a/reports/SOA/:id" component={SOA} />
+              <ProtectedRoute
+                path="/a/reports/SOA/:id"
+                component={SOA}
+                keyId="2"
+              />
+              <Route path="/no-access" component={E404} />
               <Route path="/not-found" component={NotFound} />
               <Redirect from="/" exact to="/a/dashboard" />
               <Redirect to="/not-found" />
-              <ProtectedRoute path="/" component={Dashboard} />
+              <ProtectedRoute path="/" component={Dashboard} keyId="1" />
             </Switch>
           </div>
         </div>
