@@ -1,18 +1,18 @@
 import "./NavBar.css";
-import me from "../../assets/anj.jpg";
+import me from "../../assets/tempAvatar.png";
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import SideBar from "../sidebar/SideBar";
 import { IconContext } from "react-icons";
 import Modal from "@material-ui/core/Modal";
-import { RiNotification3Line } from "react-icons/ri";
+// import { RiNotification3Line } from "react-icons/ri";
 import { makeStyles } from "@material-ui/core/styles";
 import * as auth from "../../utils/services/authServices";
 
 import {
   Avatar,
-  Badge,
+  // Badge,
   IconButton,
   Hidden,
   Fade,
@@ -84,8 +84,8 @@ const NavBar = () => {
             </div>
           </div>
           <div className="navBar_iconRightContainer">
-            <div className="navbar_iconRight">
-              <IconButton
+            {/* <div className="navbar_iconRight">
+               <IconButton
                 edge="start"
                 color="inherit"
                 aria-label="menu"
@@ -95,7 +95,7 @@ const NavBar = () => {
                   <RiNotification3Line />
                 </Badge>
               </IconButton>
-            </div>
+            </div>*/}
             <div className="navbar_ImageRight">
               <IconButton
                 className="navBar-avatar"

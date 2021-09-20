@@ -1,0 +1,112 @@
+.container__wrapper.db {
+  background-color: #e3f2fd;
+  padding: 0px;
+}
+.db-card__wrapper {
+  border-radius: 10px;
+  height: 160px;
+  display: flex;
+  flex-flow: column wrap;
+  width: 100%;
+  justify-content: center;
+  padding-left: 15px;
+  padding-top: 30px;
+  background-color: #5e35b1;
+  overflow: hidden;
+}
+
+.db-card__wrapper::before {
+  top: -125px;
+  right: -15px;
+  width: 210px;
+  height: 210px;
+  content: "";
+  opacity: 0.5;
+  position: absolute;
+  background: #4527a0;
+  border-radius: 50%;
+}
+.db-card__wrapper::after {
+  top: -85px;
+  right: -95px;
+  width: 210px;
+  height: 210px;
+  content: "";
+  position: absolute;
+  background: #4527a0;
+  border-radius: 50%;
+}
+.db-card__wrapper.nog {
+  background-color: #1e88e5;
+}
+.db-card__wrapper.nog::before {
+  background: #1565c0;
+}
+.db-card__wrapper.nog::after {
+  background: #1565c0;
+}
+.db-title__subSpan.nog {
+  color: #90caf9;
+}
+
+.db-card__wrapper .ant-card-body,
+.db-card-list__wrapper .ant-card-body {
+  padding: 5px;
+}
+
+.db-title__span {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: white;
+}
+.db-title__subSpan {
+  font-family: "Poppins", sans-serif;
+  color: #b39ddb;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: block;
+}
+
+.db-card-list__wrapper {
+  border-radius: 10px;
+  padding: 15px;
+  max-height: 445px;
+}
+
+.db-cl-span__wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 15px;
+  border-bottom: 1px rgb(238, 238, 238) solid;
+}
+
+.db-cl__span {
+  margin: 0px;
+  font-size: 0.8rem;
+  color: rgb(33, 33, 33);
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.235;
+}
+.db-cl-body__container .MuiListItem-gutters {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.db-cl-body__container {
+  max-height: 385px;
+  overflow-y: auto;
+}
+.db-cl-body__table {
+  padding-top: 10px;
+}
+
+.db-card-list__wrapper.rm {
+  margin-top: 15px;
+}
+
+.db-card-list__wrapper.rac {
+  display: flex;
+  justify-content: center;
+}

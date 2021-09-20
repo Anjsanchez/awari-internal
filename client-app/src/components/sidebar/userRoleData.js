@@ -65,4 +65,9 @@ export const resortMgmtPagesData = [
     title: "Discounts",
     description: "Discounts",
   },
+  {
+    key: 14,
+    title: "Statistics",
+    description: "Statistics",
+  },
 ];

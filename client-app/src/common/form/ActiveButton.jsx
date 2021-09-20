@@ -22,16 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ActiveButton = (props) => {
+const ActiveButton = ({
+  value,
+  textTrue = "Active",
+  textFalse = "Inactive",
+  isWarning = false,
+}) => {
   //..
   const classes = useStyles();
-
-  const {
-    value,
-    textTrue = "Active",
-    textFalse = "Inactive",
-    isWarning = false,
-  } = props;
 
   if (isWarning) {
     return (

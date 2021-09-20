@@ -1,9 +1,9 @@
 import "./SideBar.css";
 import SubNav from "./SubNav";
-import me from "../../assets/anj.jpg";
 import React, { useState } from "react";
 import awari from "../../assets/awari.jpg";
 import { sideBarData } from "./sideBarData";
+import me from "../../assets/tempAvatar.png";
 import { makeStyles } from "@material-ui/core/styles";
 import { store } from "../../utils/store/configureStore";
 import { Avatar, Paper, Divider } from "@material-ui/core";
@@ -28,12 +28,13 @@ const SideBar = React.forwardRef(() => {
 
   const handleSetActiveChildList = (btn) => setActiveChildMenu(btn);
 
-  const userRole = store.getState().entities.user.user.userRoles;
+  const { userRoles, role, firstName, lastName } =
+    store.getState().entities.user.user;
 
   const renderReturn = (m) => {
     return (
       <SubNav
-        userRole={userRole}
+        userRole={userRoles}
         id={m.id}
         key={m.subTitle}
         title={m.subTitle}
@@ -51,7 +52,7 @@ const SideBar = React.forwardRef(() => {
     let isMatchNav = false;
 
     return n.subNav.map((m) => {
-      return userRole.map((ur) => {
+      return userRoles.map((ur) => {
         if (m.subNav !== undefined) {
           //..
           return m.subNav.map((s) => {
@@ -88,7 +89,7 @@ const SideBar = React.forwardRef(() => {
         <ul className="sideMenu_ul">
           <li className="sideMenu_li">
             {n.subNav.map((m) => {
-              return userRole.map((ur) => {
+              return userRoles.map((ur) => {
                 if (m.subNav !== undefined) {
                   //..
 
@@ -129,8 +130,10 @@ const SideBar = React.forwardRef(() => {
               <Avatar alt="Cindy Baker" src={me} />
             </div>
             <div className="userInfo_nameContainer">
-              <span className="userInfo_name">Angelo Sanchez</span>
-              <span className="userInfo_role">Administartor</span>
+              <span className="userInfo_name">
+                {firstName} {lastName}
+              </span>
+              <span className="userInfo_role">{role.rolename}</span>
             </div>
           </div>
         </div>

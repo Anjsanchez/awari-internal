@@ -46,6 +46,8 @@ const useStyles = makeStyles((theme) => ({
 export default function SpeedDials() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const { user } = store.getState().entities.user;
+
   const actions = [
     {
       icon: <AddLocationTwoToneIcon className={classes.x} />,
@@ -66,6 +68,11 @@ export default function SpeedDials() {
   if (!auth.IsLoggedIn()) return null;
 
   const icon = open ? <CloseIcon /> : <MoreHorizSharpIcon />;
+
+  const hasAccess = user.userRoles.filter((e) => e.roleKey === 2);
+
+  if (hasAccess.length === 0) return null;
+
   return (
     <div className={classes.exampleWrapper}>
       <Backdrop open={open} style={{ zIndex: 1200 }} />
