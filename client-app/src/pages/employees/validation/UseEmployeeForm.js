@@ -22,6 +22,8 @@ const UseEmployeeForm = (validate) => {
     roleId: "",
     password: "",
     password2: "",
+    userRoles: [],
+    targetKeys: [],
   });
 
   const handleValueOnLoad = (employee) => {
@@ -35,6 +37,8 @@ const UseEmployeeForm = (validate) => {
       password: employee.password || "updateonlynopasswordreq",
       password2: employee.password || "updateonlynopasswordreq",
       roleId: employee.role.id || "",
+      userRoles: employee.userRoles || [],
+      targetKeys: [],
     });
   };
 
@@ -53,12 +57,32 @@ const UseEmployeeForm = (validate) => {
     // eslint-disable-next-line
   }, [errors]);
 
+  const setObjViewMdl = () => {
+    try {
+      const objEmp = { ...values };
+      var tmpKeys = [];
+
+      const uId =
+        values.id === "" ? "29B57807-0BAE-4149-9A6E-C7E369FA4DFE" : values.id;
+      values.targetKeys.map((n) => {
+        tmpKeys.push({ userId: uId, roleKey: n });
+      });
+
+      objEmp.userRoles = tmpKeys;
+      return objEmp;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleDialogProceed = async () => {
     setAskConfirmation(false);
     setIsLoading(true);
     try {
-      const objEmp = { ...values };
+      const objEmp = setObjViewMdl();
+      console.log("asdad", objEmp);
       await saveEmployee(objEmp);
+
       enqueueSnackbar("Successfully updated records!", { variant: "success" });
       setIsLoading(false);
       hist.push("/a/user-management/employees");
@@ -71,6 +95,13 @@ const UseEmployeeForm = (validate) => {
 
       setIsLoading(false);
     }
+  };
+
+  const handleChangeTargetKeys = (e) => {
+    setValues({
+      ...values,
+      targetKeys: e,
+    });
   };
 
   const handleChange = (e) => {
@@ -106,6 +137,7 @@ const UseEmployeeForm = (validate) => {
     handleDialogProceed,
     handleDialogCancel,
     isLoading,
+    handleChangeTargetKeys,
   };
 };
 

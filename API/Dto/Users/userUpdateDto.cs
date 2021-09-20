@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using API.Dto.Users.roles;
+using API.Models.employee;
 
 namespace API.Dto.Users
 {
@@ -30,5 +33,7 @@ namespace API.Dto.Users
 
         [Required]
         public bool isActive { get; set; }
+
+        public List<employeeRole> userRoles { get; set; }
     }
 }

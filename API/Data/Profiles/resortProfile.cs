@@ -25,6 +25,8 @@ using AutoMapper;
 using API.Dto.trans.payment;
 using API.Dto.trans.room;
 using API.Dto.trans.line;
+using API.Models.employee;
+using API.Dto.Users.roles;
 
 namespace API.Data.Profiles
 {
@@ -32,6 +34,10 @@ namespace API.Data.Profiles
     {
         public resortProfile()
         {
+            CreateMap<employeeRole, employeeRoleReadDto>().ReverseMap();
+            CreateMap<employeeRoleCreateDto, employeeRole>().ReverseMap();
+            CreateMap<employeeRoleUpdateDto, employeeRole>().ReverseMap();
+
             CreateMap<User, userReadDto>().ReverseMap();
             CreateMap<userCreateDto, User>().ReverseMap();
             CreateMap<userUpdateDto, User>().ReverseMap();

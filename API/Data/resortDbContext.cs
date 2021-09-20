@@ -1,4 +1,5 @@
 using API.Models;
+using API.Models.employee;
 using API.Models.functionality;
 using API.Models.products;
 using API.Models.reservation;
@@ -25,6 +26,7 @@ namespace API.Data
         public DbSet<RoomVariant> RoomVariants { get; set; }
         public DbSet<RoomPricing> RoomPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<employeeRole> EmployeeRoles { get; set; }
         public DbSet<ReservationType> ReservationTypes { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ReservationHeader> ReservationHeaders { get; set; }

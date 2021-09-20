@@ -6,11 +6,14 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using API.Contracts;
+using API.Contracts.pages.Users;
 using API.Data.ApiResponse;
 using API.Dto.Users;
+using API.Dto.Users.roles;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models;
+using API.Models.employee;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -27,11 +30,13 @@ namespace API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _repo;
+        private readonly IEmployeeRoleRepository _roleRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
         public UsersController(
-            IMapper mapper, IOptionsMonitor<jwtConfig> optionsMonitor, IUserRepository repo)
+            IMapper mapper, IOptionsMonitor<jwtConfig> optionsMonitor, IEmployeeRoleRepository roleRepo, IUserRepository repo)
         {
+            _roleRepo = roleRepo;
             _repo = repo;
             _map = mapper;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -63,6 +68,11 @@ namespace API.Controllers
 
             var mappedUsers = _map.Map<User, userReadDto>(users);
 
+            var userRoles = await _roleRepo.GetRoleByUser(mappedUsers.Id);
+            var mappedRoles = _map.Map<List<employeeRole>, List<employeeRoleReadDto>>(userRoles.ToList());
+
+            mappedUsers.userRoles = mappedRoles;
+
             return Ok(new GenericResponse<userReadDto>()
             {
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
@@ -82,6 +92,9 @@ namespace API.Controllers
             _map.Map(usrUpdateDto, user);
             await _repo.Update(user);
             await _repo.Save();
+
+            await _roleRepo.deleteRange(user.Id);
+            await _roleRepo.createRange(usrUpdateDto.userRoles);
             return NoContent();
         }
 
@@ -99,6 +112,11 @@ namespace API.Controllers
                 return BadRequest("Invalid username password combination");
 
             var commandModel = _map.Map<userReadDto>(account);
+
+            var userRoles = await _roleRepo.GetRoleByUser(commandModel.Id);
+            var mappedRoles = _map.Map<List<employeeRole>, List<employeeRoleReadDto>>(userRoles.ToList());
+
+            commandModel.userRoles = mappedRoles;
 
             return Ok(new GenericResponse<userReadDto>()
             {
@@ -127,6 +145,14 @@ namespace API.Controllers
 
             await _repo.Create(cmdMdl);
             await _repo.Save();
+
+            foreach (var item in userCreateDto.userRoles)
+            {
+                item.userId = cmdMdl.Id;
+            }
+
+            await _roleRepo.deleteRange(cmdMdl.Id);
+            await _roleRepo.createRange(userCreateDto.userRoles);
 
             return Ok(cmdMdl);
         }

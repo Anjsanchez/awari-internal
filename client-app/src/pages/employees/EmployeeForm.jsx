@@ -143,6 +143,7 @@ const EmployeeForm = () => {
     handleValueOnLoad,
     handleDialogProceed,
     handleDialogCancel,
+    handleChangeTargetKeys,
   } = UseEmployeeForm(employeeFormValidate);
 
   let passwordField;
@@ -150,10 +151,8 @@ const EmployeeForm = () => {
   const classes = useStyles();
   const [roles, setRoles] = useState([]);
 
-  const [mockData, setMockData] = useState(
-    resortMgmtPages.sort((a, b) => a.title.localeCompare(b.title))
-  );
-  const [targetKeys, setTargetKeys] = useState([]);
+  const [mockData, setMockData] = useState([]);
+  // const [targetKeys, setTargetKeys] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
   const { id: employeeIdFromUrl } = useParams();
@@ -197,11 +196,24 @@ const EmployeeForm = () => {
     populateUser();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  useEffect(() => {
+    const targetKeysx = [];
+
+    resortMgmtPages.filter((n) => {
+      values.userRoles.forEach((u) => {
+        if (n.key === u.roleKey) targetKeysx.push(n.key);
+      });
+    });
+
+    handleChangeTargetKeys(targetKeysx);
+    setMockData(resortMgmtPages.sort((a, b) => a.title.localeCompare(b.title)));
+  }, [values.userRoles]);
+
   const filterOption = (inputValue, option) =>
     option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
 
-  const handleChangeTransfer = (targetKeys) => {
-    setTargetKeys(targetKeys);
+  const handleChangeTransfer = (targetKeys, z) => {
+    handleChangeTargetKeys(targetKeys);
   };
 
   if (employeeIdFromUrl === "new")
@@ -307,11 +319,16 @@ const EmployeeForm = () => {
               </Grid>
 
               <Grid item xs={12}>
+                <div className="reservationDetails-title-span__wrapper">
+                  <span className="reservationDetails-title__spanHeader">
+                    Menu Access
+                  </span>
+                </div>
                 <Transfer
                   dataSource={mockData}
                   showSearch
                   filterOption={filterOption}
-                  targetKeys={targetKeys}
+                  targetKeys={values.targetKeys}
                   onChange={handleChangeTransfer}
                   render={(item) => item.title}
                 />

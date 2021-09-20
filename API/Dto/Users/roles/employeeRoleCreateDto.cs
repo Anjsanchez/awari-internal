@@ -1,13 +1,11 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using API.Models;
 
-namespace API.Models.employee
+namespace API.Dto.Users.roles
 {
-    public class employeeRole
+    public class employeeRoleCreateDto
     {
-        [Key]
-        public Guid _id { get; set; }
-
         [Required]
         public Guid userId { get; set; }
         public User user { get; set; }
