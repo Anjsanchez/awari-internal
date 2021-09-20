@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+import ActiveButton from "../../common/form/ActiveButton";
 import EditDeleteIconButton from "./../../common/form/EditDeleteIconButton";
 import { TableBody, TableCell, TableRow, Checkbox } from "@material-ui/core";
-import ActiveButton from "../../common/form/ActiveButton";
-import LockOpenTwoToneIcon from "@material-ui/icons/LockOpenTwoTone";
-import { IconButton, Tooltip } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   selected: {
@@ -93,18 +91,6 @@ const EmployeeTblRows = (props) => {
                 <ActiveButton value={row.isActive} />
               </TableCell>
               <TableCell align="right">
-                <Link to={`/a/user-management/employees/roles/${row.id}`}>
-                  <Tooltip title="Role" placement="top">
-                    <IconButton
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      className="navbar_iconBtn"
-                    >
-                      <LockOpenTwoToneIcon style={{ color: "FFCA28" }} />
-                    </IconButton>
-                  </Tooltip>
-                </Link>
                 <EditDeleteIconButton
                   rowId={row.id}
                   handleDelete={handleDelete}

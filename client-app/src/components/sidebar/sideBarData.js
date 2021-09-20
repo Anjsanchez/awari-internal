@@ -10,7 +10,7 @@ import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone"
 export const sideBarData = [
   {
     title: "General",
-    id: 0,
+    id: 101,
     subNav: [
       {
         subTitle: "Dashboard",
@@ -22,55 +22,55 @@ export const sideBarData = [
   },
   {
     title: "Reservation",
-    id: 16,
+    id: 102,
     subNav: [
       {
         subTitle: "Active Bookings",
         icon: <BallotTwoToneIcon />,
         path: "/a/reservation-management/reservations",
-        id: 17,
+        id: 2,
       },
     ],
   },
   {
     title: "Commerce",
-    id: 18,
+    id: 103,
     subNav: [
       {
         subTitle: "Shop",
         icon: <EmojiFoodBeverageTwoToneIcon />,
         path: "/a/commerce-management/shop",
-        id: 19,
+        id: 3,
       },
       {
         subTitle: "Cart Item",
         icon: <ShoppingBasketTwoToneIcon />,
         path: "/a/commerce-management/cart",
-        id: 20,
+        id: 4,
       },
     ],
   },
   {
     title: "Resource Management",
-    id: 2,
+    id: 104,
     subNav: [
       {
         subTitle: "Users",
         icon: <AccountCircleTwoToneIcon />,
-        id: 3,
+        id: 105,
         subNav: [
-          { title: "Employees", path: "/a/user-management/employees", id: 4 },
+          { title: "Employees", path: "/a/user-management/employees", id: 5 },
           {
             title: "Customers",
             path: "/a/user-management/customers",
-            id: 5,
+            id: 6,
           },
         ],
       },
       {
         subTitle: "Rooms",
         icon: <HomeTwoToneIcon />,
-        id: 6,
+        id: 106,
         subNav: [
           {
             title: "Variants",
@@ -92,17 +92,17 @@ export const sideBarData = [
       {
         subTitle: "Products",
         icon: <LocalMallTwoToneIcon />,
-        id: 10,
+        id: 107,
         subNav: [
           {
             title: "Category",
             path: "/a/product-management/category",
-            id: 11,
+            id: 10,
           },
           {
             title: "Products",
             path: "/a/product-management/products",
-            id: 12,
+            id: 11,
           },
         ],
       },
@@ -110,18 +110,18 @@ export const sideBarData = [
   },
   {
     title: "System Functionality",
-    id: 13,
+    id: 108,
     subNav: [
       {
         subTitle: "Payments",
         icon: <AccountBalanceWalletTwoToneIcon />,
-        id: 14,
+        id: 12,
         path: "/a/system-functionality/payments",
       },
       {
         subTitle: "Discounts",
         icon: <LocalOfferTwoToneIcon />,
-        id: 15,
+        id: 13,
         path: "/a/system-functionality/discounts",
       },
     ],

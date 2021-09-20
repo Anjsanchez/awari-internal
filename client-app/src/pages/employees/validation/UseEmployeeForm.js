@@ -80,7 +80,6 @@ const UseEmployeeForm = (validate) => {
     setIsLoading(true);
     try {
       const objEmp = setObjViewMdl();
-      console.log("asdad", objEmp);
       await saveEmployee(objEmp);
 
       enqueueSnackbar("Successfully updated records!", { variant: "success" });

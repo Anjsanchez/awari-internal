@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Avatar, Paper, Divider } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import "./SideBar.css";
+import SubNav from "./SubNav";
 import me from "../../assets/anj.jpg";
+import React, { useState } from "react";
 import awari from "../../assets/awari.jpg";
 import { sideBarData } from "./sideBarData";
-import SubNav from "./SubNav";
-import "./SideBar.css";
+import { makeStyles } from "@material-ui/core/styles";
+import { store } from "../../utils/store/configureStore";
+import { Avatar, Paper, Divider } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   large: {
@@ -25,8 +26,83 @@ const SideBar = React.forwardRef(() => {
   const classes = useStyles();
   const [activeChildMenu, setActiveChildMenu] = useState(0);
 
-  const handleSetActiveChildList = (btn) => {
-    setActiveChildMenu(btn);
+  const handleSetActiveChildList = (btn) => setActiveChildMenu(btn);
+
+  const userRole = store.getState().entities.user.user.userRoles;
+
+  const renderReturn = (m) => {
+    return (
+      <SubNav
+        userRole={userRole}
+        id={m.id}
+        key={m.subTitle}
+        title={m.subTitle}
+        subNav={m.subNav}
+        icon={m.icon}
+        headerPath={m.path}
+        handleSelect={handleSetActiveChildList}
+        activeChildMenu={activeChildMenu}
+      />
+    );
+  };
+
+  const checkIfTitleExist = (n) => {
+    let isMatchSubNav = false;
+    let isMatchNav = false;
+
+    return n.subNav.map((m) => {
+      return userRole.map((ur) => {
+        if (m.subNav !== undefined) {
+          //..
+          return m.subNav.map((s) => {
+            if (ur.roleKey !== s.id) return null;
+            if (isMatchSubNav) return null;
+            isMatchSubNav = true;
+            return <span className="sideMenu_container-title">{n.title}</span>;
+          });
+        } else {
+          if (ur.roleKey !== m.id) return null;
+        }
+        if (isMatchNav) return null;
+        isMatchNav = true;
+        return <span className="sideMenu_container-title">{n.title}</span>;
+      });
+    });
+  };
+
+  const renderSideBarWithUserRoles = (n) => {
+    let isMatchSubNav = false;
+    let lastItem = "";
+    return (
+      <>
+        {checkIfTitleExist(n)}
+
+        <ul className="sideMenu_ul">
+          <li className="sideMenu_li">
+            {n.subNav.map((m) => {
+              return userRole.map((ur) => {
+                if (m.subNav !== undefined) {
+                  //..
+
+                  return m.subNav.map((s) => {
+                    if (ur.roleKey !== s.id) return null;
+
+                    if (lastItem !== m.subTitle) isMatchSubNav = false;
+                    if (isMatchSubNav) return null;
+                    isMatchSubNav = true;
+                    lastItem = m.subTitle;
+                    return renderReturn(m);
+                  });
+                } else {
+                  if (ur.roleKey !== m.id) return null;
+                }
+                return renderReturn(m);
+              });
+            })}
+          </li>
+        </ul>
+      </>
+    );
   };
 
   return (
@@ -55,23 +131,7 @@ const SideBar = React.forwardRef(() => {
         <div className="sideMenuBar_mainContainer">
           {sideBarData.map((n) => (
             <div key={n.title} className="sideMenubar_container">
-              <span className="sideMenu_container-title">{n.title}</span>
-              <ul className="sideMenu_ul">
-                <li className="sideMenu_li">
-                  {n.subNav.map((m) => (
-                    <SubNav
-                      id={m.id}
-                      key={m.subTitle}
-                      title={m.subTitle}
-                      subNav={m.subNav}
-                      icon={m.icon}
-                      headerPath={m.path}
-                      handleSelect={handleSetActiveChildList}
-                      activeChildMenu={activeChildMenu}
-                    />
-                  ))}
-                </li>
-              </ul>
+              {renderSideBarWithUserRoles(n)}
             </div>
           ))}
         </div>

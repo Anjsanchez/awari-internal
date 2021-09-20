@@ -75,7 +75,6 @@ const ReservationDetailsLeftTab = () => {
     setAskCheckOutConfirmation(false);
 
     try {
-      console.log(header._id);
       await PostCheckOutReservation(header._id);
 
       enqueueSnackbar("Check out complete", {

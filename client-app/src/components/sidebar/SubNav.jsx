@@ -41,8 +41,16 @@ const useStyles = makeStyles((theme) => ({
 const SubNav = (props) => {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const classes = useStyles();
-  const { title, id, subNav, icon, headerPath, handleSelect, activeChildMenu } =
-    props;
+  const {
+    title,
+    id,
+    subNav,
+    icon,
+    headerPath,
+    handleSelect,
+    activeChildMenu,
+    userRole,
+  } = props;
 
   const handleIconClick = () => {
     setShowSubMenu(!showSubMenu);
@@ -105,39 +113,48 @@ const SubNav = (props) => {
 
         <ul className={`sideMenu_ul_child ${!showSubMenu && "hidden"}`}>
           {subNav &&
-            subNav.map((m) => (
-              <li key={m.title} className="sideMenu_li_child">
-                <Link
-                  to={m.path}
-                  className={`link `}
-                  onClick={() => handleSelect(m.id)}
-                  id={m.id}
-                >
-                  <IconButton
-                    className={`${classes.sideMenu_button} ${
-                      classes.sideMenu_button_child
-                    } ${
-                      activeChildMenu === m.id ? classes.subChild_active : ""
-                    }`}
-                    edge="start"
-                    aria-label="menu"
-                    color="primary"
-                  >
-                    <div className="sideMenu_container_iconLeftChild">
-                      <span
-                        className={`  ${
+            subNav.map((m) => {
+              //
+              return userRole.map((ur) => {
+                if (ur.roleKey !== m.id) return null;
+
+                return (
+                  <li key={m.title} className="sideMenu_li_child">
+                    <Link
+                      to={m.path}
+                      className={`link `}
+                      onClick={() => handleSelect(m.id)}
+                      id={m.id}
+                    >
+                      <IconButton
+                        className={`${classes.sideMenu_button} ${
+                          classes.sideMenu_button_child
+                        } ${
                           activeChildMenu === m.id
                             ? classes.subChild_active
                             : ""
                         }`}
+                        edge="start"
+                        aria-label="menu"
+                        color="primary"
                       >
-                        {m.title}
-                      </span>
-                    </div>
-                  </IconButton>
-                </Link>
-              </li>
-            ))}
+                        <div className="sideMenu_container_iconLeftChild">
+                          <span
+                            className={`  ${
+                              activeChildMenu === m.id
+                                ? classes.subChild_active
+                                : ""
+                            }`}
+                          >
+                            {m.title}
+                          </span>
+                        </div>
+                      </IconButton>
+                    </Link>
+                  </li>
+                );
+              });
+            })}
         </ul>
       </IconContext.Provider>
     </React.Fragment>

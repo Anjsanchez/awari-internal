@@ -66,7 +66,6 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
         userId: user.id,
         isPrinted: createTransaction.sendToKitchen,
       };
-      console.log(obj);
       objArray.push(obj);
     });
 
