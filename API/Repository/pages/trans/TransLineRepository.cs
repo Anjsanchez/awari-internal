@@ -47,6 +47,7 @@ namespace API.Repository.pages.trans
             return await _db.TransLines
                    .Include(n => n.discount)
                    .Include(n => n.product)
+                   .Include(n => n.product.productCategory)
                    .Include(n => n.transHeader)
                    .Include(n => n.transRoom)
                    .Include(n => n.user)

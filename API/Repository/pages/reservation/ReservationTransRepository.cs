@@ -48,6 +48,7 @@ namespace API.Repository.pages.reservation
             return await _db.ReservationTransLines
                    .Include(n => n.discount)
                    .Include(n => n.product)
+                   .Include(n => n.product.productCategory)
                    .Include(n => n.reservationHeader)
                    .Include(n => n.reservationRoomLine)
                    .Include(n => n.user)

@@ -70,9 +70,6 @@ namespace API.Repository.pages
             return customersWithHeader;
         }
 
-
-
-
         public async Task<bool> Save()
         {
             var changes = await _db.SaveChangesAsync();

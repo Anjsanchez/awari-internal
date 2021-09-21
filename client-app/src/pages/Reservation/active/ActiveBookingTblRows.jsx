@@ -134,7 +134,7 @@ const ActiveBookingTblRows = (props) => {
               <TableCell align="right">{RenderRoomCount(row)}</TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>
-                  {moment(row.createdDate).format("MMMM Do, YYYY")}
+                  {moment(row.createdDate).format("YYYY-MM-DD")}
                 </span>
               </TableCell>
               <TableCell align="right">

@@ -7,19 +7,21 @@ function header(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getHeaders() {
+export function getHeaders(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + `?isActiveOnly=${isActiveOnly}`);
 }
 
 export function GetHeaderWithRoomCount() {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesRoomCount");
 }
+
 export function PostCheckOutReservation(headerId) {
   http.SetJwt();
   return http.get(apiEndpoint + "/CheckOut?id=" + headerId);
 }
+
 export function GetHeadersWithFullDetails(headerId) {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);

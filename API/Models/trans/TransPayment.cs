@@ -11,29 +11,23 @@ namespace API.Models.trans
         [Required]
         public Guid _id { get; set; }
 
-
         [Required]
         public Guid transHeaderId { get; set; }
         public TransHeader transHeader { get; set; }
-
 
         [Required]
         [StringLength(50)]
         public string type { get; set; }
 
-
         public float amount { get; set; }
-
 
         [Required]
         public Guid paymentId { get; set; }
         public Payment payment { get; set; }
 
-
         [Required]
         [StringLength(100)]
         public string paymentRefNum { get; set; }
-
 
         [Required]
         [Column("createdBy")]

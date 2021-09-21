@@ -28,6 +28,15 @@ namespace API.Models.reservation
 
         public virtual List<ReservationRoomLine> ReservationRoomLine { get; set; }
 
+        [NotMapped]
+        public virtual float netAmount { get; set; }
+        [NotMapped]
+        public virtual float grossAmount { get; set; }
+        [NotMapped]
+        public virtual float netDiscount { get; set; }
+        [NotMapped]
+        public virtual int totalNumberOfGuest { get; set; }
+
         [Required]
         [Column("createdBy")]
         public Guid userId { get; set; }

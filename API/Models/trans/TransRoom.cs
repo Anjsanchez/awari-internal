@@ -28,11 +28,9 @@ namespace API.Models.trans
         public Guid roomId { get; set; }
         public Room room { get; set; }
 
-
         public float grossAmount { get; set; }
         public float totalDiscount { get; set; }
         public float totalAmount { get; set; }
-
 
         public Int32 adultPax { get; set; }
         public Int32 seniorPax { get; set; }

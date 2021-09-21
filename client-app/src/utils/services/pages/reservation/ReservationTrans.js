@@ -12,6 +12,11 @@ export function GetTransLine() {
   return http.get(apiEndpoint);
 }
 
+export function includesTransLines() {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/includesTransLines");
+}
+
 // export function GetRoomLinesByHeaderId(headerId) {
 //   http.SetJwt();
 //   return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);

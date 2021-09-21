@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using API.Contracts.pages;
 using API.Contracts.pages.products;
@@ -12,11 +11,8 @@ using API.Dto.products.product;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models;
-using API.Models.customer;
 using API.Models.products;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 

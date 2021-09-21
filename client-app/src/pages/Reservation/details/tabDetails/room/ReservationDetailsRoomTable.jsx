@@ -188,7 +188,7 @@ const ReservationDetailsRoomTable = (props) => {
       startDate: selectedStartDate.date,
       endDate: selectedEndDate.date,
       roomId: selectedStartDate.room._id,
-      grossAmount: amountPrice.grossAmount,
+      grossAmount: amountPrice.grossAmount + addOns.mattress * 2420,
       totalDiscount: amountPrice.netDiscount,
       totalAmount: amountPrice.netAmount,
       mattress: addOns.mattress,
@@ -200,7 +200,6 @@ const ReservationDetailsRoomTable = (props) => {
       discountId,
       id: id,
     };
-
     return objMdl;
   };
 

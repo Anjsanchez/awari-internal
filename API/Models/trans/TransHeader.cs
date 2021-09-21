@@ -22,6 +22,10 @@ namespace API.Models.trans
         [StringLength(100)]
         public string voucher { get; set; }
 
+        public float netAmount { get; set; }
+        public float grossAmount { get; set; }
+        public float netDiscount { get; set; }
+        public int totalNumberOfGuest { get; set; }
 
         [Required]
         public Guid reservationTypeId { get; set; }

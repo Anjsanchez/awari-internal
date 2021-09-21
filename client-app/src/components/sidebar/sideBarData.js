@@ -3,7 +3,6 @@ import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
 import BallotTwoToneIcon from "@material-ui/icons/BallotTwoTone";
 import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
 import HomeTwoToneIcon from "@material-ui/icons/HomeTwoTone";
-import AssessmentTwoToneIcon from "@material-ui/icons/AssessmentTwoTone";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
@@ -33,18 +32,18 @@ export const sideBarData = [
       },
     ],
   },
-  {
-    title: "Report",
-    id: 109,
-    subNav: [
-      {
-        subTitle: "Bookings",
-        icon: <AssessmentTwoToneIcon />,
-        path: "/a/reservation-management/reservations",
-        id: 14,
-      },
-    ],
-  },
+  // {
+  //   title: "Report",
+  //   id: 109,
+  //   subNav: [
+  //     {
+  //       subTitle: "Bookings",
+  //       icon: <AssessmentTwoToneIcon />,
+  //       path: "/a/reservation-management/reservations",
+  //       id: 14,
+  //     },
+  //   ],
+  // },
   {
     title: "Commerce",
     id: 103,

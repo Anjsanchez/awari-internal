@@ -74,9 +74,11 @@ namespace API.Controllers.reservation
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetReservationHeaders()
+        public async Task<ActionResult> GetReservationHeaders(bool isActiveOnly = false)
         {
             var reservationHeaders = await _repo.FindAll();
+            if (isActiveOnly)
+                reservationHeaders = reservationHeaders.Where(n => n.isActive == true).ToList();
 
             var mappedReservationHeaders = _map.Map<List<ReservationHeader>, List<reservationHeaderReadDto>>(reservationHeaders.ToList());
 
@@ -242,53 +244,16 @@ namespace API.Controllers.reservation
                 return false;
             }
         }
-        private async Task<bool> postTransPayment()
+
+        private async Task<bool> postTransRooms(List<ReservationRoomLine> roomData)
         {
             try
             {
-                var data = await _paymentRepo.GetPaymentByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return true;
-
-                var transLine = new List<transPaymentCreateDto>();
-
-                foreach (var trans in data)
-                {
-                    var x = new transPaymentCreateDto()
-                    {
-                        _id = trans._id,
-                        amount = trans.amount,
-                        paymentId = trans.paymentId,
-                        paymentRefNum = trans.paymentRefNum,
-                        transHeaderId = trans.reservationHeaderId,
-                        type = trans.type,
-                        userId = trans.userId,
-                        createdDate = trans.createdDate
-                    };
-
-                    transLine.Add(x);
-                }
-
-                var createMdl = _map.Map<List<transPaymentCreateDto>, List<TransPayment>>(transLine);
-
-                await _tPayment.createRange(createMdl);
-
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        private async Task<bool> postTransRooms()
-        {
-            try
-            {
-                var data = await _lineRepo.GetLineByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return true;
+                if (roomData == null || roomData.Count == 0) return true;
 
                 var transLine = new List<transRoomCreateDto>();
 
-                foreach (var trans in data)
+                foreach (var trans in roomData)
                 {
                     var x = new transRoomCreateDto()
                     {
@@ -324,16 +289,15 @@ namespace API.Controllers.reservation
                 return false;
             }
         }
-        private async Task<bool> postTransLines()
+        private async Task<bool> postTransLines(List<ReservationTransLine> linesData)
         {
             try
             {
-                var data = await _transRepo.GetTransLineByHeaderId(_headerId);
-                if (data == null || data.Count == 0) return true;
+                if (linesData == null || linesData.Count == 0) return true;
 
                 var transLine = new List<transCreateDto>();
 
-                foreach (var trans in data)
+                foreach (var trans in linesData)
                 {
                     var x = new transCreateDto()
                     {
@@ -347,7 +311,9 @@ namespace API.Controllers.reservation
                         transRoomId = trans.reservationRoomLineId,
                         transHeaderId = trans.reservationHeaderId,
                         userId = trans.userId,
-                        createdDate = trans.createdDate
+                        createdDate = trans.createdDate,
+                        grossAmount = (trans.quantity * trans.product.sellingPrice),
+                        netAmount = (trans.quantity * trans.product.sellingPrice) - trans.netDiscount
                     };
 
                     transLine.Add(x);
@@ -359,7 +325,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -377,7 +343,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -394,7 +360,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -411,7 +377,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -428,7 +394,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -465,7 +431,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -482,7 +448,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -499,7 +465,7 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
@@ -515,12 +481,49 @@ namespace API.Controllers.reservation
 
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }
         }
 
+
+
+        private async Task<bool> postTransPayment(List<ReservationPayment> paymentData)
+        {
+            try
+            {
+                if (paymentData == null || paymentData.Count == 0) return true;
+                var transLine = new List<transPaymentCreateDto>();
+
+                foreach (var trans in paymentData)
+                {
+                    var x = new transPaymentCreateDto()
+                    {
+                        _id = trans._id,
+                        amount = trans.amount,
+                        paymentId = trans.paymentId,
+                        paymentRefNum = trans.paymentRefNum,
+                        transHeaderId = trans.reservationHeaderId,
+                        type = trans.type,
+                        userId = trans.userId,
+                        createdDate = trans.createdDate
+                    };
+
+                    transLine.Add(x);
+                }
+
+                var createMdl = _map.Map<List<transPaymentCreateDto>, List<TransPayment>>(transLine);
+
+                await _tPayment.createRange(createMdl);
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
 
 
         [HttpGet("CheckOut")]
@@ -542,25 +545,34 @@ namespace API.Controllers.reservation
 
             _headerId = reservationHeader._id;
 
+            var paymentData = await _paymentRepo.GetPaymentByHeaderId(_headerId);
+            var linesData = await _transRepo.GetTransLineByHeaderId(_headerId);
+            var roomData = await _lineRepo.GetLineByHeaderId(_headerId);
+
+            reservationHeader.totalNumberOfGuest = globalFunctionalityHelper.getTotalNumberOfGuests(roomData);
+            reservationHeader.netAmount = globalFunctionalityHelper.getNetAmount(roomData, linesData);
+            reservationHeader.grossAmount = globalFunctionalityHelper.getGrossAmount(roomData, linesData);
+            reservationHeader.netDiscount = globalFunctionalityHelper.getNetDiscount(roomData, linesData);
+
             if (!await postTransHeader(reservationHeader))
             {
                 await executeRollBack();
                 return NotFound("PostTransHeader");
             }
 
-            if (!await postTransPayment())
+            if (!await postTransPayment(paymentData))
             {
                 await executeRollBack();
                 return NotFound("PostTransPayment");
             }
 
-            if (!await postTransRooms())
+            if (!await postTransRooms(roomData))
             {
                 await executeRollBack();
                 return NotFound("postTransRooms");
             }
 
-            if (!await postTransLines())
+            if (!await postTransLines(linesData))
             {
                 await executeRollBack();
                 return NotFound("postTransLines");

@@ -23,35 +23,35 @@ namespace API.Controllers.trans
     {
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
-        private readonly IRoomRepository _roomsRepo;
         private readonly ITransHeaderRepository _repo;
-        private readonly IRoomVariantRepository _variantRepo;
-        // private readonly ITransTransRepository _transRepo;
-        // private readonly ITransRoomLineRepository _lineRepo;
-        // private readonly ITransPaymentRepository _paymentRepo;
+        private readonly ITransLineRepository _transRepo;
+        private readonly ITransRoomRepository _roomRepo;
+        private readonly ITransPaymentRepository _paymentRepo;
 
 
-        public TransHeadersController(IRoomRepository roomsRepo,
-        ITransHeaderRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor, IRoomVariantRepository variantRepo
-
-        // , IReservationPaymentRepository paymentRepo, 
-        // IReservationRoomLineRepository lineRepo
-        )
+        public TransHeadersController(
+                                        IMapper mapp,
+                                        IOptionsMonitor<jwtConfig> optionsMonitor,
+                                        ITransHeaderRepository repo,
+                                        ITransPaymentRepository paymentRepo,
+                                        ITransLineRepository transRepo,
+                                        ITransRoomRepository roomRepo)
         {
             _map = mapp;
             _repo = repo;
-            _roomsRepo = roomsRepo;
             _jwtConfig = optionsMonitor.CurrentValue;
-            _variantRepo = variantRepo;
-            // _transRepo = transRepo;
-            // _lineRepo = lineRepo;
-            // _paymentRepo = paymentRepo;
+            _transRepo = transRepo;
+            _roomRepo = roomRepo;
+            _paymentRepo = paymentRepo;
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetTransHeaders()
+        public async Task<ActionResult> GetTransHeaders(bool isGetToday = false)
         {
             var transHeaders = await _repo.FindAll();
+
+            if (isGetToday)
+                transHeaders = transHeaders.Where(n => n.checkOutDate.Date == DateTime.Now.Date).ToList();
 
             var mappedTransHeaders = _map.Map<List<TransHeader>, List<transHeaderReadDto>>(transHeaders.ToList());
 
@@ -61,6 +61,7 @@ namespace API.Controllers.trans
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult> GetTransHeaderById(Guid headerId)
@@ -89,54 +90,6 @@ namespace API.Controllers.trans
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }
-
-
-        // [HttpGet]
-        // [Route("includesRoom")]
-        // public async Task<ActionResult> getRoomVariantHeader(DateTime fromDate, DateTime toDate, Int32 pax)
-        // {
-        //     toDate = toDate.AddHours(23);
-
-        //     var variants = await _variantRepo.FindAll(true);
-        //     var rooms = await _roomsRepo.GetRoomWithMinAndMax(pax);
-        //     var lines = await _lineRepo.getLineByDates(fromDate, toDate);
-
-        //     var mVariants = _map.Map<List<RoomVariant>, List<roomVariantReadDto>>(variants.ToList());
-        //     var mRooms = _map.Map<List<Room>, List<roomReadDto>>(rooms.ToList());
-        //     var mLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(lines.ToList());
-
-        //     return Ok(new RoomReservationCreation()
-        //     {
-        //         Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
-        //         Success = true,
-        //         rooms = mRooms,
-        //         lines = mLines,
-        //         variants = mVariants
-        //     });
-        // }
-
-        // [HttpGet("includesFullDetails")]
-        // public async Task<ActionResult> GetHeadersWithFullDetails(Guid headerId)
-        // {
-        //     var transHeader = await _repo.FindById(headerId);
-        //     var reservationLines = await _lineRepo.GetLineByHeaderId(headerId);
-        //     var reservationPayment = await _paymentRepo.GetPaymentByHeaderId(headerId);
-        //     var reservationTrans = await _transRepo.GetPaymentByHeaderId(headerId);
-
-        //     var mappedDto = _map.Map<TransHeader, transHeaderReadDto>(transHeader);
-        //     var mappedLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(reservationLines.ToList());
-        //     var mappedPayments = _map.Map<List<ReservationPayment>, List<reservationPaymentReadDto>>(reservationPayment.ToList());
-        //     var mappedTrans = _map.Map<List<ReservationTransLine>, List<reservationTransReadDto>>(reservationTrans.ToList());
-
-        //     return Ok(new ReserverationHeaderResponse()
-        //     {
-        //         header = mappedDto,
-        //         rooms = mappedLines,
-        //         payments = mappedPayments,
-        //         trans = mappedTrans,
-        //         Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
-        //     });
-        // }
 
         [HttpGet("ByCustomerId")]
         public async Task<ActionResult> GetHeaderByCustomerId(Guid headerId)

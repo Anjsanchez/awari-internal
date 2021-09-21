@@ -16,5 +16,10 @@ namespace API.Dto.trans.header
         public Guid userCheckOutId { get; set; }
 
         public DateTime createdDate { get; set; }
+
+        public float netAmount { get; set; }
+        public float grossAmount { get; set; }
+        public float netDiscount { get; set; }
+        public int totalNumberOfGuest { get; set; }
     }
 }

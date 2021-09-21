@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.reservation;
+using API.Contracts.pages.trans;
 using API.Data.ApiResponse;
 using API.Dto.reservations.trans;
+using API.Dto.trans.line;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models.reservation;
+using API.Models.trans;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -20,11 +23,13 @@ namespace API.Controllers.reservation
     {
 
         private readonly IReservationTransRepository _repo;
+        private readonly ITransLineRepository _tRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationTransController(IReservationTransRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationTransController(IReservationTransRepository repo, ITransLineRepository tRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _tRepo = tRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -41,6 +46,22 @@ namespace API.Controllers.reservation
             {
                 listRecords = mappedData,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("includesTransLines")]
+        public async Task<ActionResult> IncludesTransLines()
+        {
+            var hTrans = await _repo.FindAll();
+            var hTransDto = _map.Map<List<ReservationTransLine>, List<reservationTransReadDto>>(hTrans.ToList());
+
+            var tTrans = await _tRepo.FindAll();
+            var tTransDto = _map.Map<List<TransLine>, List<transReadDto>>(tTrans.ToList());
+
+            return Ok(new HTransLineWithTrans()
+            {
+                rLines = tTransDto,
+                hLines = hTransDto
             });
         }
 

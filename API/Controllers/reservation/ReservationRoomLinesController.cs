@@ -38,9 +38,11 @@ namespace API.Controllers.reservation
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetReservationRoomLines()
+        public async Task<ActionResult> GetReservationRoomLines(bool isActiveOnly = false)
         {
             var reservationRoomLines = await _repo.FindAll();
+            if (isActiveOnly)
+                reservationRoomLines = await _repo.GetLinesActiveHeader();
 
             var mappedReservationRoomLines = _map.Map<List<ReservationRoomLine>, List<reservationRoomLineReadDto>>(reservationRoomLines.ToList());
 

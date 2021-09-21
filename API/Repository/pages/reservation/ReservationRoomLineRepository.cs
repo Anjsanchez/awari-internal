@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.reservation;
 using API.Data;
+using API.Dto.reservations.room;
 using API.Models.reservation;
 using Microsoft.EntityFrameworkCore;
 
@@ -70,6 +71,25 @@ namespace API.Repository.pages.reservation
             var z = xlines.Where(n => n.reservationHeaderId == headerId).ToList();
 
             return z;
+        }
+
+        private async Task<ICollection<ReservationHeader>> getAllReservationHeader()
+        {
+            return await _db.ReservationHeaders.ToListAsync();
+        }
+
+        public async Task<ICollection<ReservationRoomLine>> GetLinesActiveHeader()
+        {
+            var rLines = await FindAll(true);
+            var rHdr = await getAllReservationHeader();
+
+            var roomWithHeader = (from p in rLines
+                                  join c in rHdr on p.reservationHeaderId equals c._id
+                                  where (c.isActive == true)
+                                  orderby p.endDate ascending
+                                  select p).ToList();
+
+            return roomWithHeader;
         }
 
         public async Task<bool> Save()

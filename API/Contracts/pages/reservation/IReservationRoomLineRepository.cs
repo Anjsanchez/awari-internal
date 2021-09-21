@@ -10,6 +10,6 @@ namespace API.Contracts.pages.reservation
         Task<bool> deleteRange(List<ReservationRoomLine> lines);
         Task<List<ReservationRoomLine>> GetLineByHeaderId(Guid headerId);
         Task<ICollection<ReservationRoomLine>> getLineByDates(DateTime fromDate, DateTime toDate);
-
+        Task<ICollection<ReservationRoomLine>> GetLinesActiveHeader();
     }
 }

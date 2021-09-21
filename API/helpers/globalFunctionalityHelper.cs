@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using API.Migrations.Configurations;
+using API.Models.reservation;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -55,7 +57,53 @@ namespace API.helpers.api
             }
 
             return imgName;
-
         }
+
+        public static int getTotalNumberOfGuests(List<ReservationRoomLine> roomData)
+        {
+            var totalGuest = 0;
+            foreach (var item in roomData)
+            {
+                int totalHeads = item.adultPax + item.seniorPax;
+                totalGuest += totalHeads;
+            }
+
+            return totalGuest;
+        }
+        public static float getNetAmount(List<ReservationRoomLine> roomData, List<ReservationTransLine> linesData)
+        {
+            float netAmount = 0f;
+            foreach (var item in roomData)
+                netAmount += item.totalAmount;
+
+            foreach (var item in linesData)
+                netAmount += item.quantity * item.product.sellingPrice - item.netDiscount;
+
+            return netAmount;
+        }
+        public static float getGrossAmount(List<ReservationRoomLine> roomData, List<ReservationTransLine> linesData)
+        {
+            float grossAmount = 0f;
+            foreach (var item in roomData)
+                grossAmount += item.grossAmount;
+
+            foreach (var item in linesData)
+                grossAmount += item.quantity * item.product.sellingPrice;
+
+            return grossAmount;
+        }
+        public static float getNetDiscount(List<ReservationRoomLine> roomData, List<ReservationTransLine> linesData)
+        {
+            float netDiscount = 0f;
+            foreach (var item in roomData)
+                netDiscount += item.totalDiscount;
+
+            foreach (var item in linesData)
+                netDiscount += item.netDiscount;
+
+            return netDiscount;
+        }
+
+
     }
 }

@@ -7,9 +7,9 @@ function header(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function GetRoomLines() {
+export function GetRoomLines(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "/?isActiveOnly=" + isActiveOnly);
 }
 
 export function GetRoomLinesByHeaderId(headerId) {
