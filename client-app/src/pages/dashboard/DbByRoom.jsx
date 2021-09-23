@@ -22,6 +22,12 @@ const DbByRoom = ({ rLines }) => {
     return <ActiveButton value={true} textTrue={dateInMoment} />;
   };
 
+  const handleRoomName = (d) => {
+    if (d.room) {
+      return d.room.roomLongName;
+    }
+    return d.reservationHeader.reservationType.name;
+  };
   return (
     <Card className="db-card-list__wrapper rm" hoverable>
       <div className="db-cl-span__wrapper">
@@ -39,7 +45,7 @@ const DbByRoom = ({ rLines }) => {
                 <Link
                   to={`/a/reservation-management/reservations/${d.reservationHeader._id}`}
                 >
-                  {d.room.roomLongName}
+                  {handleRoomName(d)}
                 </Link>
               }
               txtValue={renderEndDate(d.endDate)}
