@@ -36,6 +36,7 @@
 }
 .counter-spanInLabel__container {
   text-align: right;
+  min-width: 95px;
 }
 
 .picker-body__container .ant-collapse-content-box {
@@ -120,6 +121,9 @@
   background-color: #e3f2fd;
   transition: background-color 0.2s ease-in;
 }
+.counter-spanHeader__headerContainer {
+  min-width: 150px;
+}
 
 @media screen and (max-width: 420px) {
   .counter-spanHeader.rrRoomLbl {
@@ -129,6 +133,7 @@
   }
   .counter-spanHeader__headerContainer {
     width: 140px;
+    min-width: 150px;
   }
 
   .picker-body__container

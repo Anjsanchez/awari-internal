@@ -148,104 +148,140 @@ const styles = StyleSheet.create({
   //END
 });
 
-const formatNumber = (num) =>
-  Intl.NumberFormat().format(Number(num).toFixed(2));
+const SOAe = ({
+  rooms,
+  trans,
+  header,
+  payments,
+  productCategories,
+  user,
+  isDayTour,
+}) => {
+  const formatNumber = (num) =>
+    Intl.NumberFormat().format(Number(num).toFixed(2));
 
-let lastId = "0";
-const renderCategory = (pc) => {
-  if (lastId === pc._id) return null;
+  let lastId = "0";
+  const renderCategory = (pc, roomId) => {
+    if (!isDayTour) {
+      if (!roomId.room._id) return null;
+    }
 
-  lastId = pc._id;
+    if (lastId === pc._id) return null;
 
-  return (
-    <View style={[styles.tableRow, styles.productMargin]}>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>{pc.name}</Text>
-      </View>
-      <View style={[styles.tableCol, styles.tableColDescription]}>
-        <Text style={[styles.tableRowText]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-    </View>
-  );
-};
-const renderMattress = (roomsx) => {
-  if (roomsx.mattress === 0) return null;
-  return (
-    <View style={[styles.tableRow]}>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol, styles.tableColDescription]}>
-        <Text style={[styles.tableRowText]}>Extra Mattress</Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>
-          {roomsx.mattress}
-        </Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>
-          {formatNumber(roomsx.mattress * 2420)}
-        </Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-    </View>
-  );
-};
-const renderPaymentName = (p) => {
-  return (
-    <View style={[styles.tableRow]} key={1 + p._id}>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>
-          {moment(p.createdDate).format("MM-DD-YY")}
-        </Text>
-      </View>
-      <View style={[styles.tableCol, styles.tableColDescription]}>
-        <Text style={[styles.tableRowText]}>
-          {p.payment.name} {p.paymentRefNum.trim() && " —  " + p.paymentRefNum}
-        </Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
-      </View>
-      <View style={[styles.tableCol]}>
-        <Text style={[styles.tableRowText, styles.tableColSub]}>
-          {formatNumber(p.amount)}
-        </Text>
-      </View>
-    </View>
-  );
-};
+    lastId = pc._id;
 
-const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
+    return (
+      <View style={[styles.tableRow, styles.productMargin]}>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {pc.name}
+          </Text>
+        </View>
+        <View style={[styles.tableCol, styles.tableColDescription]}>
+          <Text style={[styles.tableRowText]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderPaymentName = (p) => {
+    return (
+      <View style={[styles.tableRow]} key={1 + p._id}>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {moment(p.createdDate).format("MM-DD-YY")}
+          </Text>
+        </View>
+        <View style={[styles.tableCol, styles.tableColDescription]}>
+          <Text style={[styles.tableRowText]}>
+            {p.payment.name}{" "}
+            {p.paymentRefNum.trim() && " —  " + p.paymentRefNum}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {formatNumber(p.amount)}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+  const renderMattress = (roomsx) => {
+    if (isDayTour) return null;
+
+    if (roomsx.mattress === 0) return null;
+    return (
+      <View style={[styles.tableRow]}>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol, styles.tableColDescription]}>
+          <Text style={[styles.tableRowText]}>Extra Mattress</Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {roomsx.mattress}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {formatNumber(roomsx.mattress * 2420)}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+      </View>
+    );
+  };
+
   const renderTotalCharges = (d, isFormatted = true) => {
     const roomCharges = d.grossAmount + d.mattress * 2420;
+
+    if (isDayTour) {
+      const transOfThisRoomDT = trans.filter(
+        (n) => n.reservationHeader._id === d.reservationHeader._id
+      );
+
+      const transChargesDT = transOfThisRoomDT.reduce(
+        (a, b) => a + b.quantity * b.product.sellingPrice,
+        0
+      );
+
+      const totalDT = roomCharges + transChargesDT;
+
+      if (!isFormatted) return totalDT;
+      return formatNumber(totalDT);
+    }
+
     const transOfThisRoom = trans.filter(
       (n) => n.reservationRoomLine._id === d._id
     );
+
     const transCharges = transOfThisRoom.reduce(
       (a, b) => a + b.quantity * b.product.sellingPrice,
       0
@@ -259,6 +295,23 @@ const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
 
   const renderTotalDiscount = (d, isFormatted = true) => {
     const roomDiscount = d.totalDiscount;
+
+    if (isDayTour) {
+      const transOfThisRoomDT = trans.filter(
+        (n) => n.reservationHeader._id === d.reservationHeader._id
+      );
+
+      const transDiscountDT = transOfThisRoomDT.reduce(
+        (a, b) => a + b.netDiscount,
+        0
+      );
+
+      const totalDT = roomDiscount + transDiscountDT;
+
+      if (!isFormatted) return totalDT;
+      return formatNumber(totalDT);
+    }
+
     const transOfThisRoom = trans.filter(
       (n) => n.reservationRoomLine._id === d._id
     );
@@ -310,6 +363,75 @@ const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
     );
 
     return grossAmountRooms;
+  };
+
+  const renderRoom = (roomsx) => {
+    if (isDayTour)
+      return (
+        <View style={[styles.tableRow]}>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {moment(roomsx.createdDate).format("MM-DD-YY")}
+            </Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}>
+              {header.reservationType.name}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {renderTotalPax()}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.grossAmount)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.totalDiscount)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+      );
+
+    return (
+      <View style={[styles.tableRow]}>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {moment(roomsx.createdDate).format("MM-DD-YY")}
+          </Text>
+        </View>
+        <View style={[styles.tableCol, styles.tableColDescription]}>
+          <Text style={[styles.tableRowText]}>
+            {roomsx.room.roomLongName} (
+            {moment(roomsx.startDate).format("MMM DD, YY")} —{" "}
+            {moment(roomsx.endDate).format("MMM DD, YY")})
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {formatNumber(roomsx.grossAmount)}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {formatNumber(roomsx.totalDiscount)}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+      </View>
+    );
   };
   const renderBalance = () =>
     formatNumber(renderNetTotal(false) - renderTotalPayment(false));
@@ -440,55 +562,24 @@ const SOAe = ({ rooms, trans, header, payments, productCategories, user }) => {
                     ></Text>
                   </View>
                 </View>
-
-                <View style={[styles.tableRow]}>
-                  <View style={[styles.tableCol]}>
-                    <Text style={[styles.tableRowText, styles.tableColSub]}>
-                      {moment(roomsx.createdDate).format("MM-DD-YY")}
-                    </Text>
-                  </View>
-                  <View style={[styles.tableCol, styles.tableColDescription]}>
-                    <Text style={[styles.tableRowText]}>
-                      {roomsx.room.roomLongName} (
-                      {moment(roomsx.startDate).format("MMM DD, YY")} —{" "}
-                      {moment(roomsx.endDate).format("MMM DD, YY")})
-                    </Text>
-                  </View>
-                  <View style={[styles.tableCol]}>
-                    <Text
-                      style={[styles.tableRowText, styles.tableColSub]}
-                    ></Text>
-                  </View>
-                  <View style={[styles.tableCol]}>
-                    <Text style={[styles.tableRowText, styles.tableColSub]}>
-                      {formatNumber(roomsx.grossAmount)}
-                    </Text>
-                  </View>
-                  <View style={[styles.tableCol]}>
-                    <Text style={[styles.tableRowText, styles.tableColSub]}>
-                      {formatNumber(roomsx.totalDiscount)}
-                    </Text>
-                  </View>
-                  <View style={[styles.tableCol]}>
-                    <Text
-                      style={[styles.tableRowText, styles.tableColSub]}
-                    ></Text>
-                  </View>
-                </View>
+                {renderRoom(roomsx)}
 
                 {renderMattress(roomsx)}
                 {/* GROUP BY */}
                 {productCategories.map((pc) => {
                   return trans.map((t) => {
-                    if (t.product.productCategoryId !== pc._id) return 0;
-                    if (t.reservationRoomLine.room._id !== roomsx.room._id)
-                      return 0;
+                    if (t.product.productCategoryId !== pc._id) return null;
 
-                    if (roomsx._id !== t.reservationRoomLine._id) return 0;
+                    if (!isDayTour) {
+                      if (t.reservationRoomLine.room._id !== roomsx.room._id)
+                        return null;
+
+                      if (roomsx._id !== t.reservationRoomLine._id) return 0;
+                    }
 
                     return (
                       <div key={t._id}>
-                        {t.reservationRoomLine.room._id && renderCategory(pc)}
+                        {renderCategory(pc, t.reservationRoomLine)}
 
                         <View style={[styles.tableRow]}>
                           <View style={[styles.tableCol]}>
@@ -827,9 +918,16 @@ const SOA = () => {
 
   if (!initialLoading) return null;
 
+  const isDayTour =
+    header.reservationType.name === "Day Tour" ||
+    header.reservationType.name === "Restaurant"
+      ? true
+      : false;
+
   return (
     <PDFViewer style={{ width: "100%", height: "100vh" }}>
       <SOAe
+        isDayTour={isDayTour}
         rooms={rooms}
         header={header}
         trans={trans}

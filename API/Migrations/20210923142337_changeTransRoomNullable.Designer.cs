@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210923142337_changeTransRoomNullable")]
+    partial class changeTransRoomNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -547,6 +549,7 @@ namespace API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("reservationRoomLineId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("seniorPax")
@@ -771,6 +774,7 @@ namespace API.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("transRoomId")
+                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("userId")
@@ -866,7 +870,7 @@ namespace API.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<Guid?>("roomId")
+                    b.Property<Guid>("roomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("seniorPax")
@@ -1110,7 +1114,9 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.reservation.ReservationRoomLine", "reservationRoomLine")
                         .WithMany()
-                        .HasForeignKey("reservationRoomLineId");
+                        .HasForeignKey("reservationRoomLineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Models.User", "user")
                         .WithMany()
@@ -1222,7 +1228,9 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.trans.TransRoom", "transRoom")
                         .WithMany()
-                        .HasForeignKey("transRoomId");
+                        .HasForeignKey("transRoomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Models.User", "user")
                         .WithMany()
@@ -1276,7 +1284,9 @@ namespace API.Migrations
 
                     b.HasOne("API.Models.rooms.Room", "room")
                         .WithMany()
-                        .HasForeignKey("roomId");
+                        .HasForeignKey("roomId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("API.Models.trans.TransHeader", "transHeader")
                         .WithMany("TransRoom")

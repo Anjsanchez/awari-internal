@@ -23,6 +23,11 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
   const createTransaction = useSelector(
     (state) => state.entities.createTransaction
   );
+  const isDayTour =
+    createTransaction.customer.type === "Day Tour" ||
+    createTransaction.customer.type === "Restaurant"
+      ? true
+      : false;
 
   const hasCustomer = Object.keys(createTransaction.customer).length !== 0;
   const hasRooms = Object.keys(createTransaction.room).length !== 0;
@@ -39,7 +44,7 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
       handleConfirmOrder();
     } catch (ex) {
       if ((ex && ex.status === 400) || (ex && ex.status === 400))
-        enqueueSnackbar(ex.data, { payment: "error" });
+        enqueueSnackbar(ex.data, { payment: "0010: error" });
     } finally {
       isLoading(false);
     }
@@ -53,10 +58,11 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
 
     products.forEach((n) => {
       const discountId = n.discount._id === 0 ? null : n.discount._id;
+      const roomId = room._id === undefined ? null : room._id;
 
       const obj = {
         reservationHeaderId: customer.headerId,
-        reservationRoomLineId: room._id,
+        reservationRoomLineId: roomId,
         productId: n._id,
         discountId: discountId,
         quantity: n.quantity,
@@ -72,6 +78,48 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
     return objArray;
   };
 
+  const renderRoomLines = () => {
+    if (isDayTour) return null;
+
+    if (hasCustomer)
+      return (
+        <div className="cd-mattress__autoComplete">
+          <SelectTransactionLinesRooms
+            activeRoom={createTransaction.room}
+            customer={createTransaction.customer}
+          />
+        </div>
+      );
+    return null;
+  };
+
+  const renderButtonGroup = () => {
+    if (isDayTour && hasCustomer)
+      return (
+        <div className="cd-mattress__switch btn">
+          <Button
+            loading={loading}
+            className="cf-btn__getOrders"
+            onClick={() => setAskConfirm(true)}
+          >
+            SEND ORDER
+          </Button>
+        </div>
+      );
+
+    if (hasCustomer && hasRooms)
+      return (
+        <div className="cd-mattress__switch btn">
+          <Button
+            loading={loading}
+            className="cf-btn__getOrders"
+            onClick={() => setAskConfirm(true)}
+          >
+            SEND ORDER
+          </Button>
+        </div>
+      );
+  };
   return (
     <>
       <MDialog
@@ -93,14 +141,7 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
           <ReservationCustomer action="inventoryTransaction" />
         </div>
 
-        {hasCustomer && (
-          <div className="cd-mattress__autoComplete">
-            <SelectTransactionLinesRooms
-              activeRoom={createTransaction.room}
-              customer={createTransaction.customer}
-            />
-          </div>
-        )}
+        {renderRoomLines()}
 
         <div className="cd-mattress__switch">
           <div className="header-label__wrapper">
@@ -112,18 +153,7 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
             onChange={onSwitchChange}
           />
         </div>
-
-        {hasCustomer && hasRooms && (
-          <div className="cd-mattress__switch btn">
-            <Button
-              loading={loading}
-              className="cf-btn__getOrders"
-              onClick={() => setAskConfirm(true)}
-            >
-              SEND ORDER
-            </Button>
-          </div>
-        )}
+        {renderButtonGroup()}
       </Modal>
     </>
   );

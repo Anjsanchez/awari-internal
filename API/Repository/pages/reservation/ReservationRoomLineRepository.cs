@@ -53,6 +53,7 @@ namespace API.Repository.pages.reservation
                         .Include(n => n.room)
                         .Include(n => n.discount)
                         .Include(n => n.reservationHeader)
+                        .Include(n => n.reservationHeader.reservationType)
                         .FirstOrDefaultAsync(n => n._id == id);
         }
 

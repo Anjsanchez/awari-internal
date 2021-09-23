@@ -10,23 +10,14 @@ namespace API.Dto.trans.line
 {
     public class transReadDto
     {
-        [Key]
-        [Required]
         public Guid _id { get; set; }
 
-        [Required]
-        public Guid transHeaderId { get; set; }
         public TransHeader transHeader { get; set; }
 
-        [Required]
-        public Guid transRoomId { get; set; }
         public TransRoom transRoom { get; set; }
 
-        [Required]
-        public Guid productId { get; set; }
         public Product product { get; set; }
 
-        public Guid? discountId { get; set; }
         public Discount discount { get; set; }
 
         public Int32 quantity { get; set; }
@@ -36,12 +27,8 @@ namespace API.Dto.trans.line
         public float netAmount { get; set; }
         public float grossAmount { get; set; }
 
-        [StringLength(1000)]
         public string remark { get; set; }
 
-        [Required]
-        [Column("createdBy")]
-        public Guid userId { get; set; }
         public User user { get; set; }
 
         public DateTime createdDate { get; set; }

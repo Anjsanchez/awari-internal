@@ -61,7 +61,10 @@ const slice = createSlice({
     },
     toggleRemoveProduct: (r, a) => {
       r.trans = a.payload;
-      r.totals.netAmountTrans = r.totals.netAmountTrans.reduce(
+      console.log(a.payload);
+      if (r.trans.length === 0) return;
+
+      r.totals.netAmountTrans = r.trans.reduce(
         (a, b) => a + (b.product.sellingPrice * b.quantity - b.netDiscount),
         0
       );

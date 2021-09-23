@@ -99,8 +99,8 @@ const ReservationDetailsTransactionTable = (props) => {
 
   const onSuccessDelete = () => {
     const removeLine = rooms.filter((n) => n._id !== selectedRoom._id);
-    store.dispatch(toggleRemoveProduct(removeLine));
     setRooms(removeLine);
+    store.dispatch(toggleRemoveProduct(removeLine));
   };
 
   useEffect(() => {

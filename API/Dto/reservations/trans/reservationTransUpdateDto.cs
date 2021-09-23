@@ -4,7 +4,7 @@ namespace API.Dto.reservations.trans
 {
     public class reservationTransUpdateDto
     {
-        public Guid reservationRoomLineId { get; set; }
+        public Guid? reservationRoomLineId { get; set; }
 
         public Guid productId { get; set; }
 

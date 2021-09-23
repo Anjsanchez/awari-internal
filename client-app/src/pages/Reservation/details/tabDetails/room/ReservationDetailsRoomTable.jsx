@@ -1,5 +1,6 @@
 import { Spin } from "antd";
 import { useSnackbar } from "notistack";
+import { useSelector } from "react-redux";
 import { useMountedState } from "react-use";
 import React, { useEffect, useState } from "react";
 import "../css/ReservationDetailsPaymentTable.css";
@@ -11,7 +12,6 @@ import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
 import { toggleLoadingGlobal } from "../../../../../utils/store/pages/globalSettings";
 import { saveHeaderLines } from "./../../../../../utils/services/pages/reservation/ReservationLines";
 import { deleteReservationLine } from "../../../../../utils/services/pages/reservation/ReservationLines";
-import { useSelector } from "react-redux";
 import {
   addRRooms,
   editRRooms,
@@ -23,7 +23,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "",
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: "room",

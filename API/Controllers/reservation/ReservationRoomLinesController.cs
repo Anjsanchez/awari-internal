@@ -116,6 +116,28 @@ namespace API.Controllers.reservation
             reservationRoomLine.childrenPax = lineDto.childrenPax;
             reservationRoomLine.seniorPax = lineDto.seniorPax;
 
+
+            float grossAmount = 0;
+
+            float discSeniorAmt = 0f;
+            float netAmount = 0f;
+
+            grossAmount = 1720 * (lineDto.adultPax + lineDto.seniorPax);
+            discSeniorAmt = (1720 * lineDto.seniorPax) * (float)0.20;
+
+            netAmount = grossAmount - discSeniorAmt;
+
+            reservationRoomLine.grossAmount = grossAmount;
+            reservationRoomLine.totalAmount = grossAmount - discSeniorAmt;
+            reservationRoomLine.totalDiscount = discSeniorAmt;
+
+            if (reservationRoomLine.reservationHeader.reservationType.name == "Restaurant")
+            {
+                reservationRoomLine.grossAmount = 0;
+                reservationRoomLine.totalAmount = 0;
+                reservationRoomLine.totalDiscount = 0;
+            }
+
             await _repo.Update(reservationRoomLine);
             await _repo.Save();
 

@@ -72,12 +72,17 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
       try {
         const { data } = await GetRoomLines();
         const { listRecords } = data;
-        const sortedData = listRecords.sort((a, b) =>
+
+        const withOutNullValues = listRecords.filter((n) => n.room !== null);
+
+        const sortedData = withOutNullValues.sort((a, b) =>
           a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
+
         const zz = sortedData.filter(
           (n) => n.reservationHeader._id === customer.headerId
         );
+
         if (!isMounted()) return;
 
         setRooms(sortedData);

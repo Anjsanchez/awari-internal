@@ -16,8 +16,7 @@ namespace API.Models.reservation
         public Guid reservationHeaderId { get; set; }
         public ReservationHeader reservationHeader { get; set; }
 
-        [Required]
-        public Guid reservationRoomLineId { get; set; }
+        public Guid? reservationRoomLineId { get; set; }
         public ReservationRoomLine reservationRoomLine { get; set; }
 
         [Required]

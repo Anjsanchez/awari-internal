@@ -8,7 +8,7 @@ namespace API.Dto.trans.line
         public Guid transHeaderId { get; set; }
 
 
-        public Guid transRoomId { get; set; }
+        public Guid? transRoomId { get; set; }
 
         public Guid productId { get; set; }
 

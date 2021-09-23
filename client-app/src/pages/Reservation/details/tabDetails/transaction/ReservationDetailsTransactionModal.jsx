@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ReservationDetailsTransactionModal = (props) => {
   const { enqueueSnackbar } = useSnackbar();
+  const [isDayTour, setIsDayTour] = useState(false);
   const [requestOnGoing, setRequestOnGoing] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
@@ -50,9 +51,20 @@ const ReservationDetailsTransactionModal = (props) => {
     quantity,
     reservationRoomLine,
     seniorPax,
+    reservationHeader,
     user,
     _id,
   } = selectedRoom;
+
+  useEffect(() => {
+    if (reservationHeader === undefined) return;
+
+    if (
+      reservationHeader.reservationType.name === "Day Tour" ||
+      reservationHeader.reservationType.name === "Restaurant"
+    )
+      setIsDayTour(true);
+  }, [reservationHeader]);
 
   const handleOk = async () => {
     //
@@ -129,12 +141,16 @@ const ReservationDetailsTransactionModal = (props) => {
                 txtValue={product.longName}
                 Icon={ShoppingBasketTwoToneIcon}
               />
-              <AListItem
-                txtLbl="Room"
-                Icon={AirlineSeatIndividualSuiteTwoToneIcon}
-                hasDivider={false}
-                txtValue={reservationRoomLine.room.roomLongName}
-              />
+              {!isDayTour && (
+                <AListItem
+                  txtLbl="Room"
+                  Icon={AirlineSeatIndividualSuiteTwoToneIcon}
+                  hasDivider={false}
+                  txtValue={
+                    reservationRoomLine && reservationRoomLine.room.roomLongName
+                  }
+                />
+              )}
             </List>
           </div>
 

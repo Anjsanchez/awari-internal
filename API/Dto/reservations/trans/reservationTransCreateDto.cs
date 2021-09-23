@@ -8,7 +8,7 @@ namespace API.Dto.reservations.trans
 
         public Guid reservationHeaderId { get; set; }
 
-        public Guid reservationRoomLineId { get; set; }
+        public Guid? reservationRoomLineId { get; set; }
 
         public Guid productId { get; set; }
 

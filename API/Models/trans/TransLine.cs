@@ -17,8 +17,7 @@ namespace API.Models.trans
         public Guid transHeaderId { get; set; }
         public TransHeader transHeader { get; set; }
 
-        [Required]
-        public Guid transRoomId { get; set; }
+        public Guid? transRoomId { get; set; }
         public TransRoom transRoom { get; set; }
 
         [Required]

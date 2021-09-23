@@ -54,6 +54,8 @@ const ReservationRoomPicker = () => {
           a.name.localeCompare(b.name)
         );
 
+        const removeNullRooms = lines.filter((z) => z.room !== null);
+
         store.dispatch(writeToken({ token }));
 
         setTimeout(() => {
@@ -61,7 +63,7 @@ const ReservationRoomPicker = () => {
 
           setRoomVariants(sortedRooms);
           setRooms(rooms);
-          setCurrentReservations(lines);
+          setCurrentReservations(removeNullRooms);
           setInitialLoadForm(true);
         }, 500);
       } catch (error) {

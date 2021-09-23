@@ -46,7 +46,6 @@ const ReservationDetailsLeftTab = () => {
       (a, b) => a + (b.adultPax + b.seniorPax + b.childrenPax),
       0
     );
-
     setTotalTrans(trans.length);
     setTotalRooms(rooms.length);
     setTotalHeads(heads);

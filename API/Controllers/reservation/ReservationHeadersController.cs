@@ -195,7 +195,7 @@ namespace API.Controllers.reservation
 
             //TODO: mag save dito for the walk in and resto
             if (mappedData.reservationType.name.ToLower() == "day tour" ||
-                mappedData.reservationType.name.ToLower() == "Restaurant")
+                mappedData.reservationType.name.ToLower() == "restaurant")
             {
 
                 var isSuccess = await onRoomLineCreation(mappedData);
@@ -215,22 +215,30 @@ namespace API.Controllers.reservation
             });
         }
 
+        //DAY TOUR & RESTO
         private async Task<bool> onRoomLineCreation(reservationHeaderReadDto header)
         {
             try
             {
-
-
                 int seniorPax = 0;
                 int adultPax = 1;
+                int totalAmount = 1720;
+                int grossAmount = 1720;
 
                 var today = DateTime.Today;
                 var age = today.Year - header.Customer.birthday.Year;
 
                 if (age >= 60)
                 {
+                    totalAmount = 1376;
                     seniorPax = 1;
                     adultPax = 0;
+                }
+
+                if (header.reservationType.name == "Restaurant")
+                {
+                    totalAmount = 0;
+                    grossAmount = 0;
                 }
 
                 var rm = new reservationRoomLineCreateDto()
@@ -242,12 +250,12 @@ namespace API.Controllers.reservation
                     discountId = null,
                     endDate = DateTime.Now,
                     startDate = DateTime.Now,
-                    grossAmount = 0,
+                    grossAmount = grossAmount,
                     mattress = 0,
                     remark = header.reservationType.name,
                     roomId = null,
-                    totalAmount = 0,
-                    totalDiscount = 0,
+                    totalAmount = totalAmount,
+                    totalDiscount = grossAmount - totalAmount,
                     userId = header.user.Id
                 };
 
