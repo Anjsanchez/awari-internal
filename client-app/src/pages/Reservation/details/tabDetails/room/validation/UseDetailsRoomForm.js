@@ -96,7 +96,7 @@ const UseDetailsRoomForm = (
 
         if (obj.id) return onSuccessEdit(singleRecord);
         return onSuccessAdd(singleRecord);
-      }, 1000);
+      }, 500);
     } catch (ex) {
       if (ex && ex.status === 400) {
         enqueueSnackbar(ex.data, { payment: "error" });
@@ -126,7 +126,7 @@ const UseDetailsRoomForm = (
         onVisible({ value: false, action: "cancel" });
 
         onSuccessDelete(singleRecord);
-      }, 1000);
+      }, 500);
     } catch (ex) {
       if (ex && ex.status === 400) {
         enqueueSnackbar(ex.data, { payment: "error" });

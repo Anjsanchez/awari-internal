@@ -17,6 +17,10 @@ export function GetRoomLinesByHeaderId(headerId) {
   return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);
 }
 
+export function updateReservationLineWalkInHeads(lines) {
+  return http.put(apiEndpoint + "/UpdateHeadsOnWalkIn/" + lines._id, lines);
+}
+
 export function saveHeaderLines(h) {
   http.SetJwt();
   if (h.id) {

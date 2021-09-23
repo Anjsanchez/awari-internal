@@ -105,6 +105,31 @@ namespace API.Controllers.reservation
             });
         }
 
+        [HttpPut("UpdateHeadsOnWalkIn/{id}")]
+        public async Task<ActionResult> UpdateHeadsOnWalkIn(Guid id, reservationRoomLineWalkInUpdateDto lineDto)
+        {
+            var reservationRoomLine = await _repo.FindById(id);
+            if (reservationRoomLine == null)
+                return NotFound("ReservationRoomLine not found in the database");
+
+            reservationRoomLine.adultPax = lineDto.adultPax;
+            reservationRoomLine.childrenPax = lineDto.childrenPax;
+            reservationRoomLine.seniorPax = lineDto.seniorPax;
+
+            await _repo.Update(reservationRoomLine);
+            await _repo.Save();
+
+            var withUser = await _repo.FindById(reservationRoomLine._id);
+            var mappedCategory = _map.Map<ReservationRoomLine, reservationRoomLineReadDto>(withUser);
+
+            return Ok(new GenericResponse<reservationRoomLineReadDto>()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
+                singleRecord = mappedCategory
+            });
+        }
+
         [HttpPost]
         public async Task<ActionResult> CreateReservationRoomLine(reservationRoomLineCreateDto ReservationRoomLineCreateDto)
         {

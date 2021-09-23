@@ -7,15 +7,33 @@ import ReservationDetailsLeftTabBilling from "./ReservationDetailsLeftTabBilling
 import ReservationDetailsRightTabRoom from "./room/ReservationDetailsRightTabRoom";
 import ReservationDetailsRightTabPayment from "./payment/ReservationDetailsRightTabPayment";
 import ReservationDetailsRightTabTransaction from "./transaction/ReservationDetailsRightTabTransaction";
+import ReservationDetailsRightTabHeads from "./walk-in/ReservationDetailsRightTabHeads";
 
 const ReservationDetailsTabDetails = () => {
   let isWalkIn = false;
 
-  const typeInStore = store.getState().entities.reservationDetails.header;
+  const typeInStore = store.getState().entities.reservationDetails;
 
-  const type = typeInStore.reservationType.name.toLowerCase();
+  const type = typeInStore.header.reservationType.name.toLowerCase();
 
-  if (type === "day tour") isWalkIn = true;
+  if (type === "day tour" || type === "restaurant") isWalkIn = true;
+
+  const renderRoomTab = () => {
+    if (isWalkIn)
+      return (
+        <>
+          <ReservationDetailsRightTabHeads />
+          <ReservationDetailsRightTabPayment />
+        </>
+      );
+
+    return (
+      <>
+        <ReservationDetailsRightTabPayment />
+        <ReservationDetailsRightTabRoom />
+      </>
+    );
+  };
 
   return (
     <div className="reservationdetails__container">
@@ -25,9 +43,10 @@ const ReservationDetailsTabDetails = () => {
           <ReservationDetailsLeftTabBilling />
         </Grid>
         <Grid item xs={12} md={12} lg={8}>
-          <ReservationDetailsRightTabPayment />
-          {!isWalkIn && <ReservationDetailsRightTabRoom />}
-          <ReservationDetailsRightTabTransaction header={typeInStore._id} />
+          {renderRoomTab()}
+          <ReservationDetailsRightTabTransaction
+            header={typeInStore.header._id}
+          />
         </Grid>
       </Grid>
     </div>

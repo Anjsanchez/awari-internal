@@ -89,7 +89,7 @@ const CustomerTblRows = (props) => {
               </TableCell>
               <TableCell align="right">
                 <span className={classes.rowSpan}>
-                  {moment(row.createdDate).format("MMMM Do, YYYY")}
+                  {moment(row.createdDate).format("YYYY-DD-MM")}
                 </span>
               </TableCell>
               <TableCell align="right">

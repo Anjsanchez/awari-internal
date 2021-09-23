@@ -15,7 +15,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: "",
-    enableSort: true,
+    enableSort: false,
   },
   {
     id: "type",

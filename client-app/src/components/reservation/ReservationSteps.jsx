@@ -102,7 +102,7 @@ const ReservationSteps = () => {
         store.dispatch(refreshValues());
         setActiveStep(0);
         hist.replace("/a/reservation-management/reservations");
-      }, 1000);
+      }, 500);
     } catch (ex) {
       if (ex && ex.status === 400) {
         enqueueSnackbar(ex.data, { variant: "error" });

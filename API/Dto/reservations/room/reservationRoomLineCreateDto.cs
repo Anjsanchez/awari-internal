@@ -15,7 +15,7 @@ namespace API.Dto.reservations.room
 
         public DateTime endDate { get; set; }
 
-        public Guid roomId { get; set; }
+        public Guid? roomId { get; set; }
 
         public Guid? discountId { get; set; }
 

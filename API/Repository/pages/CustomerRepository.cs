@@ -61,11 +61,13 @@ namespace API.Repository.pages
         {
             var custs = await FindAll(true);
             var reservationHdr = await getAllReservationHeader();
+            var rTypes = await _db.ReservationTypes.ToListAsync();
 
             var customersWithHeader = (from p in custs
                                        join c in reservationHdr on p._id equals c.customerId
+                                       join t in rTypes on c.reservationTypeId equals t._id
                                        where (c.isActive == true)
-                                       select new CustomerWithActiveBookingReadDto { Customer = p, headerId = c._id });
+                                       select new CustomerWithActiveBookingReadDto { Customer = p, headerId = c._id, typeName = t.name });
 
             return customersWithHeader;
         }

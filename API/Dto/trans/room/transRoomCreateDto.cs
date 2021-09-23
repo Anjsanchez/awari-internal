@@ -11,7 +11,7 @@ namespace API.Dto.trans.room
 
         public DateTime endDate { get; set; }
 
-        public Guid roomId { get; set; }
+        public Guid? roomId { get; set; }
 
         public Guid? discountId { get; set; }
 

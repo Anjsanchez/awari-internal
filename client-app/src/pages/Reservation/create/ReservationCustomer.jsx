@@ -94,25 +94,20 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
     try {
       const { data } = await GetCustomersWithActiveBooking();
       let custObj = [];
-
       data.customers.forEach((n) => {
-        custObj.push({ ...n.customer, headerId: n.headerId });
+        custObj.push({ ...n.customer, headerId: n.headerId, type: n.typeName });
       });
 
       setCustomers(custObj);
     } catch (error) {
-      enqueueSnackbar(
-        "An error occured while fetching the reservation type in the server.",
-        {
-          variant: "error",
-        }
-      );
+      enqueueSnackbar("0008: An error occured.", {
+        variant: "error",
+      });
     }
   };
 
   useEffect(() => {
     if (action !== "inventoryTransaction" || customers.length === 0) return;
-
     if (employeeIdFromUrl === undefined) return;
 
     const z = customers.find((n) => n.headerId === employeeIdFromUrl);

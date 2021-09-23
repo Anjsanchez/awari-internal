@@ -93,7 +93,7 @@ const ReservationDetailsRoomTable = (props) => {
             setRooms(headerInStore.reservationDetails.rooms);
             setInitialLoadForm(true);
           }
-        }, 600);
+        }, 500);
         //
       } catch (error) {
         enqueueSnackbar("An error occured while calling the server.", {

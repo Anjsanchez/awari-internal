@@ -6,5 +6,6 @@ namespace API.Models.customer
     {
         public Customer Customer { get; set; }
         public Guid headerId { get; set; }
+        public string typeName { get; set; }
     }
 }

@@ -24,8 +24,7 @@ namespace API.Models.reservation
         public DateTime endDate { get; set; }
 
 
-        [Required]
-        public Guid roomId { get; set; }
+        public Guid? roomId { get; set; }
         public Room room { get; set; }
 
 

@@ -193,12 +193,76 @@ namespace API.Controllers.reservation
             var withUser = await _repo.FindById(cmdMdl._id);
             var mappedData = _map.Map<ReservationHeader, reservationHeaderReadDto>(withUser);
 
+            //TODO: mag save dito for the walk in and resto
+            if (mappedData.reservationType.name.ToLower() == "day tour" ||
+                mappedData.reservationType.name.ToLower() == "Restaurant")
+            {
+
+                var isSuccess = await onRoomLineCreation(mappedData);
+                if (!isSuccess)
+                {
+                    _headerId = mappedData._id;
+                    await deleteReservationHeader();
+                    return NotFound();
+                }
+            }
+
             return Ok(new GenericResponse<reservationHeaderReadDto>()
             {
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
                 Success = true,
                 singleRecord = mappedData
             });
+        }
+
+        private async Task<bool> onRoomLineCreation(reservationHeaderReadDto header)
+        {
+            try
+            {
+
+
+                int seniorPax = 0;
+                int adultPax = 1;
+
+                var today = DateTime.Today;
+                var age = today.Year - header.Customer.birthday.Year;
+
+                if (age >= 60)
+                {
+                    seniorPax = 1;
+                    adultPax = 0;
+                }
+
+                var rm = new reservationRoomLineCreateDto()
+                {
+                    reservationHeaderId = header._id,
+                    adultPax = adultPax,
+                    seniorPax = seniorPax,
+                    childrenPax = 0,
+                    discountId = null,
+                    endDate = DateTime.Now,
+                    startDate = DateTime.Now,
+                    grossAmount = 0,
+                    mattress = 0,
+                    remark = header.reservationType.name,
+                    roomId = null,
+                    totalAmount = 0,
+                    totalDiscount = 0,
+                    userId = header.user.Id
+                };
+
+                var cmdMdl = _map.Map<reservationRoomLineCreateDto, ReservationRoomLine>(rm);
+                cmdMdl.createdDate = DateTime.Now;
+
+                await _lineRepo.Create(cmdMdl);
+                await _lineRepo.Save();
+
+                return true;
+            }
+            catch (System.Exception)
+            {
+                return false;
+            }
         }
 
         [HttpGet("includesFullDetails")]

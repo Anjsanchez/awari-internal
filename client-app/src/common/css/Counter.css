@@ -17,8 +17,9 @@
 
 .counter__wrapper {
   display: flex;
-  padding-bottom: 2px;
-  max-width: 299px;
+  padding-bottom: 10px;
+  width: 90%;
+  margin: auto;
 }
 
 .counter__container .MuiButton-containedSizeSmall {
@@ -26,6 +27,7 @@
 }
 
 .counter-spanHeader {
+  padding-left: 8%;
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   font-size: 0.875rem;

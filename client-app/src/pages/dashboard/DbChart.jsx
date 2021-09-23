@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Empty } from "antd";
 import ReactApexChart from "react-apexcharts";
 
 const DbChart = ({ rTrans }) => {
@@ -28,6 +28,13 @@ const DbChart = ({ rTrans }) => {
     return options.series.push(n.amount);
   });
 
+  if (options.series.length === 0) {
+    return (
+      <Card className="db-card-list__wrapper rac" hoverable>
+        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+      </Card>
+    );
+  }
   return (
     <Card className="db-card-list__wrapper rac" hoverable>
       <ReactApexChart

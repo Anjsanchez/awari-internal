@@ -28,7 +28,17 @@ const ProtectedRoute = ({
           (e) => e.roleKey === Math.trunc(keyId)
         );
 
-        if (hasAccess.length === 0)
+        if (hasAccess.length === 0) {
+          if (keyId === "1")
+            return (
+              <Redirect
+                to={{
+                  pathname: "/a/commerce-management/shop",
+                  state: { from: props.location },
+                }}
+              />
+            );
+
           return (
             <Redirect
               to={{
@@ -37,6 +47,7 @@ const ProtectedRoute = ({
               }}
             />
           );
+        }
 
         return Component ? <Component {...props} /> : render(props);
       }}

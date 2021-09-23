@@ -127,7 +127,7 @@
   font-size: 12px;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 1280px) {
   .reservationdetails__container .reservationdetails-grid__wrapper {
     padding-left: 0px;
   }
