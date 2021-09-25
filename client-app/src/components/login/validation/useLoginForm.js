@@ -40,7 +40,6 @@ const useLoginForm = (validate) => {
         const { username, password } = values;
 
         const data = await auth.login(username, password);
-
         store.dispatch(userAdded({ data }));
 
         let pathToRelocate;

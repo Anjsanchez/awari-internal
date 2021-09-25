@@ -4,16 +4,21 @@ import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import { getCustomers } from "./../../../utils/services/pages/CustomerService";
 import BhByHeaderDrawer from "./BhByHeaderDrawer";
-import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
 import { GetReservationTypes } from "./../../../utils/services/pages/reservation/ReservationType";
+import { getTransHeaders } from "./../../../utils/services/pages/trans/TransHeaderService";
 
 const BookingHistoryByHeader = () => {
   const isMounted = useMountedState();
   const { enqueueSnackbar } = useSnackbar();
   const [customers, setCustomers] = useState([]);
-  const [customersFiltr, setCustomersFiltr] = useState([]);
+  const [transHeader, setTransHeader] = useState([]);
   const [reservationType, setReservationType] = useState([]);
   const [isFilterDrawerShow, setIsFilterDrawerShow] = useState(false);
+
+  //Filters
+  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedTypes, setSelectedTypes] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
   useEffect(() => {
     //..
@@ -27,15 +32,11 @@ const BookingHistoryByHeader = () => {
         );
 
         const custData = [];
-        const custDataFlter = [];
+
         sorted.map((n) => {
           custData.push({
             name: n.firstName + " " + n.lastName,
             key: n._id,
-            text: n.firstName,
-            value: n.firstName,
-          });
-          return custDataFlter.push({
             text: n.firstName,
             value: n.firstName,
           });
@@ -44,7 +45,6 @@ const BookingHistoryByHeader = () => {
         if (!isMounted()) return;
 
         setCustomers(custData);
-        setCustomersFiltr(custDataFlter);
       } catch (error) {
         enqueueSnackbar("0011: An error occured while calling the server.", {
           variant: "error",
@@ -69,6 +69,20 @@ const BookingHistoryByHeader = () => {
       }
     }
 
+    async function GetTransHeader() {
+      try {
+        const { data } = await getTransHeaders();
+
+        if (!isMounted()) return;
+
+        setTransHeader(data.listRecords);
+      } catch (error) {
+        enqueueSnackbar("0013: An error occured while calling the server.", {
+          variant: "error",
+        });
+      }
+    }
+    GetTransHeader();
     fetchTypes();
     fetchCustomers();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -83,7 +97,8 @@ const BookingHistoryByHeader = () => {
         customers={customers}
         isFilterDrawerShow={isFilterDrawerShow}
         onFilterShow={onFilterShow}
-        customersFiltr={customersFiltr}
+        transHeader={transHeader}
+        setSelectedTypes={setSelectedTypes}
       />
     </>
     // <div className="container__wrapper">
