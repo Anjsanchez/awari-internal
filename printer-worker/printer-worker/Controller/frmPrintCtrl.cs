@@ -64,13 +64,12 @@ namespace resortPrintWorker.Controller
             try
             {
 
-
                 var query = @"SELECT 
                     TR.reservationHeaderId,
                     P.productCategoryId,
                     CONCAT(C.FirstName,' ',C.lastName) as 'customerName',
                     CONCAT(U.FirstName,' ',U.lastName) as 'staffName' ,
-                    R.roomLongName ,
+                    ISNULL(R.roomLongName, PC.name) as 'roomLongName' ,
                     PC.name as'catName',
 					pc.printerName,
                     P.shortName as 'productName', 
@@ -80,8 +79,8 @@ namespace resortPrintWorker.Controller
                     FROM ReservationTransLines TR 
                     JOIN Products P ON P._id = TR.productId
                     JOIN ProductCategories PC ON PC._id = P.productCategoryId
-                    JOIN ReservationRoomLines RL on RL._id = TR.reservationRoomLineId
-                    JOIN Rooms R ON rl.roomId = R._id
+                    LEFT JOIN ReservationRoomLines RL on RL._id = TR.reservationRoomLineId
+                    LEFT JOIN Rooms R ON rl.roomId = R._id
                     JOIN Users U ON tr.createdBy = U.Id
                     JOIN ReservationHeaders RH ON RH._id = TR.reservationHeaderId
                     JOIN Customers C ON c._id = RH.customerId

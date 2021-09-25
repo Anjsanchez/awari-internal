@@ -28,6 +28,7 @@ const DbByRoom = ({ rLines }) => {
     }
     return d.reservationHeader.reservationType.name;
   };
+
   return (
     <Card className="db-card-list__wrapper rm" hoverable>
       <div className="db-cl-span__wrapper">

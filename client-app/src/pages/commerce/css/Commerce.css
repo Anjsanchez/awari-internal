@@ -136,6 +136,10 @@
   width: 300px;
 }
 
+.cd__container.bh {
+  width: auto;
+}
+
 .cd__drawer-container .ant-drawer-body {
   padding: 10px;
 }
@@ -147,6 +151,10 @@
 }
 .cd-prices__container .ant-radio-wrapper {
   padding-left: 20px;
+}
+
+.cd-prices__container.bh {
+  padding: 0 15px;
 }
 
 .cd-prices__span {

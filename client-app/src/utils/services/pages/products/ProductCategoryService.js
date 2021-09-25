@@ -7,9 +7,9 @@ function prodCategoryUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getProdCategory() {
+export function getProdCategory(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function saveProdCategory(category) {

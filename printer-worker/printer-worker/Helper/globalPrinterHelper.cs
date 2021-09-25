@@ -30,6 +30,9 @@ namespace resortPrintWorker.Helper
         }
         private bool checkIfPrinterExist(string printerName)
         {
+
+            if (string.IsNullOrEmpty(printerName)) return false;
+
             foreach (var item in _printers)
                 if (item.ToLower() == printerName.ToLower())
                     return true;

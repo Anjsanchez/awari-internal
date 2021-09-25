@@ -7,9 +7,9 @@ function customerUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getCustomers() {
+export function getCustomers(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function GetCustomersWithActiveBooking() {

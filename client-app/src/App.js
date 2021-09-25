@@ -29,6 +29,7 @@ import Discounts from "./pages/functionality/discounts/Discounts";
 import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
+import BookingHistoryByHeader from "./pages/report/bookinghistory/BookingHistoryByHeader";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
 import {
   BrowserRouter as Router,
@@ -167,6 +168,11 @@ function App() {
                 path="/a/system-functionality/discounts"
                 component={Discounts}
                 keyId="13"
+              />
+              <ProtectedRoute
+                path="/a/reservation-management/report/booking-history/header"
+                component={BookingHistoryByHeader}
+                keyId="14"
               />
               <ProtectedRoute
                 path="/a/reports/SOA/:id"

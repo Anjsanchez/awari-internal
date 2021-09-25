@@ -1,12 +1,13 @@
-import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
-import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
-import BallotTwoToneIcon from "@material-ui/icons/BallotTwoTone";
-import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
 import HomeTwoToneIcon from "@material-ui/icons/HomeTwoTone";
+import BallotTwoToneIcon from "@material-ui/icons/BallotTwoTone";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
-import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
+import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
+import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
+import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
+import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
+import AssessmentTwoToneIcon from "@material-ui/icons/AssessmentTwoTone";
 export const sideBarData = [
   {
     title: "General",
@@ -20,6 +21,7 @@ export const sideBarData = [
       },
     ],
   },
+
   {
     title: "Reservation",
     id: 102,
@@ -32,18 +34,29 @@ export const sideBarData = [
       },
     ],
   },
-  // {
-  //   title: "Report",
-  //   id: 109,
-  //   subNav: [
-  //     {
-  //       subTitle: "Bookings",
-  //       icon: <AssessmentTwoToneIcon />,
-  //       path: "/a/reservation-management/reservations",
-  //       id: 14,
-  //     },
-  //   ],
-  // },
+  {
+    title: "Report",
+    id: 109,
+    subNav: [
+      {
+        subTitle: "Booking History",
+        icon: <AssessmentTwoToneIcon />,
+        id: 110,
+        subNav: [
+          {
+            title: "By Booking",
+            path: "/a/reservation-management/report/booking-history/header",
+            id: 145,
+          },
+          {
+            title: "By Room",
+            path: "/a/reservation-management/report/booking-history/room",
+            id: 15,
+          },
+        ],
+      },
+    ],
+  },
   {
     title: "Commerce",
     id: 103,

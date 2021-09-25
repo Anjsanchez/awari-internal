@@ -37,21 +37,17 @@ namespace resortPrintWorker.View
         {
             _ctrl.HandleTimerTick();
         }
-
         private void btnPause_Click(object sender, EventArgs e)
         {
             _ctrl.handleTimerAction();
         }
-
         private void btnLock_Click(object sender, EventArgs e)
         {
             _ctrl.HandleBtnLock();
         }
-
         private void frmPrint_FormClosing(object sender, FormClosingEventArgs e)
         {
             e.Cancel = true;
         }
-
     }
 }

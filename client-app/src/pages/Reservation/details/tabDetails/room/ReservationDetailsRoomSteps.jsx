@@ -92,6 +92,7 @@ const ReservationDetailsRoomSteps = ({
   const storeState = useSelector((state) => state.entities.createReservation);
 
   const handleDialogCancel = () => setAskConfirmation(false);
+
   const handleDialogShow = () => {
     setCurAction("update");
     setAskConfirmation(true);
@@ -104,8 +105,10 @@ const ReservationDetailsRoomSteps = ({
 
   const onDecideOfAction = () => {
     setAskConfirmation(false);
-    setActiveStep(0);
-    onProceedModal(curAction);
+    setTimeout(() => {
+      setActiveStep(0);
+      onProceedModal(curAction);
+    }, 100);
   };
 
   useEffect(() => {

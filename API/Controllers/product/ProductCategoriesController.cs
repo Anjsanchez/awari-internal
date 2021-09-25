@@ -30,7 +30,7 @@ namespace API.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProductCategoriesController : ControllerBase
     {
         private readonly IProductCategoryRepository _repo;
@@ -47,11 +47,13 @@ namespace API.Controllers
             _jwtConfig = optionsMonitor.CurrentValue;
         }
 
-
         [HttpGet]
-        public async Task<ActionResult> GetCategories()
+        public async Task<ActionResult> GetCategories(bool isActiveOnly = false)
         {
             var roomProductCategory = await _repo.FindAll();
+            if (isActiveOnly)
+                roomProductCategory = roomProductCategory.Where(n => n.isActive == true).ToList();
+
             var mappedCategory = _map.Map<List<ProductCategory>, List<productCategoryReadDto>>(roomProductCategory.ToList());
 
             return Ok(new GenericResponse<productCategoryReadDto>()

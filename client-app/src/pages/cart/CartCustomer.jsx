@@ -70,8 +70,9 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
         netDiscount: n.netDiscount,
         remark: n.remark,
         userId: user.id,
-        isPrinted: createTransaction.sendToKitchen,
+        isPrinted: !createTransaction.sendToKitchen,
       };
+
       objArray.push(obj);
     });
 

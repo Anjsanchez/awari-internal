@@ -38,9 +38,12 @@ namespace API.Controllers
             _jwtConfig = optionsMonitor.CurrentValue;
         }
         [HttpGet]
-        public async Task<ActionResult> GetCustomers()
+        public async Task<ActionResult> GetCustomers(bool isActiveOnly = false)
         {
             var customers = await _repo.FindAll();
+            if (isActiveOnly)
+                customers = customers.Where(n => n.isActive == true).ToList();
+
             var mappedCustomers = _map.Map<List<Customer>, List<customerReadDto>>(customers.ToList());
 
             return Ok(new GenericResponse<customerReadDto>()
