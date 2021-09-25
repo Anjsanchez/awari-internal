@@ -16,9 +16,10 @@ const BookingHistoryByHeader = () => {
   const [isFilterDrawerShow, setIsFilterDrawerShow] = useState(false);
 
   //Filters
-  const [selectedPrice, setSelectedPrice] = useState(0);
+  const [selectedDate, setSelectedDate] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState([]);
+  const [selectedVoucher, setSelectedVoucher] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(0);
 
   useEffect(() => {
     //..
@@ -93,12 +94,15 @@ const BookingHistoryByHeader = () => {
     <>
       <BookingHistoryHeader onFilterShow={onFilterShow} />
       <BhByHeaderDrawer
-        reservationType={reservationType}
         customers={customers}
-        isFilterDrawerShow={isFilterDrawerShow}
-        onFilterShow={onFilterShow}
         transHeader={transHeader}
+        onFilterShow={onFilterShow}
+        reservationType={reservationType}
+        setSelectedDate={setSelectedDate}
+        setSelectedRoom={setSelectedCustomer}
         setSelectedTypes={setSelectedTypes}
+        isFilterDrawerShow={isFilterDrawerShow}
+        setSelectedVoucher={setSelectedVoucher}
       />
     </>
     // <div className="container__wrapper">

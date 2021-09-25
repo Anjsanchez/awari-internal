@@ -20,8 +20,15 @@ const ReservationDatePicker = ({ visible }) => {
   );
 
   const onChangeRangePicker = (d) => {
+    let fromDate = moment();
+    let toDate = moment();
+
+    if (d !== null && d[0] !== null) {
+      fromDate = d[0];
+      toDate = d[1];
+    }
     store.dispatch(roomLinesSelectedReset());
-    store.dispatch(roomLinesDateAdded({ fromDate: d[0], toDate: d[1] }));
+    store.dispatch(roomLinesDateAdded({ fromDate, toDate }));
   };
 
   const disabledDate = (d) => d && d < moment().startOf("day");

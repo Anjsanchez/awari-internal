@@ -51,6 +51,9 @@ const BhByHeaderDrawer = ({
   onFilterShow,
   transHeader,
   setSelectedTypes,
+  setSelectedVoucher,
+  setSelectedCustomer,
+  setSelectedDate,
 }) => {
   const classes = useStyles();
   const [sLType, setLType] = useState([]);
@@ -104,12 +107,19 @@ const BhByHeaderDrawer = ({
     setVisible(visi);
   };
 
-  const onSelectChange = (selectedRowKeys) => setSLCustomer(selectedRowKeys);
+  const handleChangeTableCustomer = (selectedRowKeys) => {
+    setSLCustomer(selectedRowKeys);
+    setSelectedCustomer(selectedRowKeys);
+  };
+  const handleChangeVoucher = (e, v) => {
+    setSLVoucher(v);
+    setSelectedVoucher(v);
+  };
 
-  const onSearch = (e, v) => setSLVoucher(v);
-
-  const onChangeRangePicker = (d) =>
+  const onChangeRangePicker = (d) => {
+    setSelectedDate({ fromDate: d[0], toDate: d[1] });
     setSLocalDate({ fromDate: d[0], toDate: d[1] });
+  };
 
   const renderValue = () =>
     Object.keys(sLVoucher).length === 0 ? null : sLVoucher;
@@ -170,7 +180,7 @@ const BhByHeaderDrawer = ({
                           variant="outlined"
                         />
                       )}
-                      onChange={onSearch}
+                      onChange={handleChangeVoucher}
                     />
                   </div>
                 </Grid>
@@ -234,7 +244,7 @@ const BhByHeaderDrawer = ({
                   dataSource={customers}
                   rowSelection={{
                     selectedRowKeys: sLCustomer,
-                    onChange: onSelectChange,
+                    onChange: handleChangeTableCustomer,
                   }}
                 />
               </div>

@@ -46,12 +46,12 @@ export const sideBarData = [
           {
             title: "By Booking",
             path: "/a/reservation-management/report/booking-history/header",
-            id: 145,
+            id: 143,
           },
           {
             title: "By Room",
             path: "/a/reservation-management/report/booking-history/room",
-            id: 156,
+            id: 153,
           },
         ],
       },
