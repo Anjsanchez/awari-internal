@@ -49,7 +49,10 @@ namespace API.Repository.pages.trans
                         .Include(n => n.user)
                         .Include(n => n.room)
                         .Include(n => n.discount)
+                        .Include(n => n.transHeader.Customer)
+                        .Include(n => n.transHeader.reservationType)
                         .Include(n => n.transHeader)
+                        .Include(n => n.room.RoomVariant)
                         .ToListAsync();
         }
 

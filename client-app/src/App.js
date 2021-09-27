@@ -32,6 +32,7 @@ import ReservationModal from "./components/reservation/ReservationModal";
 import BookingHistoryByHeader from "./pages/report/bookinghistory/header/BookingHistoryByHeader";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
 import ABookingHistoryByTrans from "./pages/report/bookinghistory/transaction/ABookingHistoryByTrans";
+import ABookingHistoryByRoom from "./pages/report/bookinghistory/room/ABookingHistoryByRoom";
 import {
   BrowserRouter as Router,
   Switch,
@@ -179,6 +180,11 @@ function App() {
                 path="/a/reservation-management/report/booking-history/header"
                 component={BookingHistoryByHeader}
                 keyId="14"
+              />
+              <ProtectedRoute
+                path="/a/reservation-management/report/booking-history/room"
+                component={ABookingHistoryByRoom}
+                keyId="16"
               />
               <ProtectedRoute
                 path="/a/reports/SOA/:id"

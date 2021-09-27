@@ -75,4 +75,9 @@ export const resortMgmtPagesData = [
     title: "Booking History - By Transaction",
     description: "Booking History - By Transaction",
   },
+  {
+    key: 16,
+    title: "Booking History - By Room",
+    description: "Booking History - By Room",
+  },
 ];
