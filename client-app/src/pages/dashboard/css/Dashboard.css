@@ -106,7 +106,8 @@
   margin-top: 15px;
 }
 
-.db-card-list__wrapper.rac {
+.db-cl-body__container.rac {
+  margin-top: 20px;
   display: flex;
   justify-content: center;
 }

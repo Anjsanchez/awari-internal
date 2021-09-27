@@ -21,5 +21,7 @@ namespace API.Dto.trans.header
         public float grossAmount { get; set; }
         public float netDiscount { get; set; }
         public int totalNumberOfGuest { get; set; }
+        public int totalNumberOfRooms { get; set; }
+        public int totalNumberOfTrans { get; set; }
     }
 }

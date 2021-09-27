@@ -21,6 +21,9 @@
   justify-content: space-between;
   align-items: center;
 }
+.com-title__wrapper.bh {
+  padding-bottom: 20px;
+}
 .com-title__autocomplete {
   width: 190px;
 }
@@ -179,8 +182,16 @@
   padding: 0 16px;
   width: 100%;
 }
+.cd-button__container.submit {
+  padding-bottom: 5px;
+}
 .cd-button__container button {
   width: 100%;
+}
+
+.cd-button__container.submit .MuiButton-containedPrimary,
+.cd-button__container.submit .MuiButton-containedPrimary:hover {
+  background-color: rgb(33, 150, 243);
 }
 
 .cd-button__container .MuiButton-containedPrimary,

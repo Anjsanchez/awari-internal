@@ -36,6 +36,10 @@ namespace API.Models.reservation
         public virtual float netDiscount { get; set; }
         [NotMapped]
         public virtual int totalNumberOfGuest { get; set; }
+        [NotMapped]
+        public virtual int totalNumberOfRooms { get; set; }
+        [NotMapped]
+        public virtual int totalNumberOfTrans { get; set; }
 
         [Required]
         [Column("createdBy")]

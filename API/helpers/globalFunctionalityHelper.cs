@@ -70,6 +70,16 @@ namespace API.helpers.api
 
             return totalGuest;
         }
+
+        public static int getTotalNumberOfRooms(List<ReservationRoomLine> roomData, string type)
+        {
+            if (type.ToLower() == "day tour" ||
+                 type.ToLower() == "restaurant")
+                return 0;
+
+            return roomData.Count;
+        }
+
         public static float getNetAmount(List<ReservationRoomLine> roomData, List<ReservationTransLine> linesData)
         {
             float netAmount = 0f;

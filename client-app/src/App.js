@@ -29,7 +29,7 @@ import Discounts from "./pages/functionality/discounts/Discounts";
 import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
-import BookingHistoryByHeader from "./pages/report/bookinghistory/BookingHistoryByHeader";
+import BookingHistoryByHeader from "./pages/report/bookinghistory/header/BookingHistoryByHeader";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
 import {
   BrowserRouter as Router,

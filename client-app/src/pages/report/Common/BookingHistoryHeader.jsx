@@ -29,9 +29,9 @@ const useStyles = makeStyles((theme) => ({
 const BookingHistoryHeader = ({ onFilterShow }) => {
   return (
     <div>
-      <div className="com-title__wrapper">
-        <div>
-          <span className="com-title__leftSpan">By Booking - History</span>
+      <div className="com-title__wrapper bh">
+        <div className="bh-title__wrapper">
+          <span className="com-title__leftSpan bh">By Booking - History</span>
         </div>
         <div className="com-title__rightWrapper">
           <div className="div">

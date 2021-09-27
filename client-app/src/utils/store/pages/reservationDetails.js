@@ -61,7 +61,6 @@ const slice = createSlice({
     },
     toggleRemoveProduct: (r, a) => {
       r.trans = a.payload;
-      console.log(a.payload);
       if (r.trans.length === 0) return;
 
       r.totals.netAmountTrans = r.trans.reduce(

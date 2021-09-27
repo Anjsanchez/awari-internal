@@ -26,6 +26,8 @@ namespace API.Models.trans
         public float grossAmount { get; set; }
         public float netDiscount { get; set; }
         public int totalNumberOfGuest { get; set; }
+        public int totalNumberOfRooms { get; set; }
+        public int totalNumberOfTrans { get; set; }
 
         [Required]
         public Guid reservationTypeId { get; set; }

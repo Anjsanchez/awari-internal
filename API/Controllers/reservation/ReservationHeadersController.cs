@@ -193,7 +193,6 @@ namespace API.Controllers.reservation
             var withUser = await _repo.FindById(cmdMdl._id);
             var mappedData = _map.Map<ReservationHeader, reservationHeaderReadDto>(withUser);
 
-            //TODO: mag save dito for the walk in and resto
             if (mappedData.reservationType.name.ToLower() == "day tour" ||
                 mappedData.reservationType.name.ToLower() == "restaurant")
             {
@@ -621,6 +620,8 @@ namespace API.Controllers.reservation
             var linesData = await _transRepo.GetTransLineByHeaderId(_headerId);
             var roomData = await _lineRepo.GetLineByHeaderId(_headerId);
 
+            reservationHeader.totalNumberOfTrans = linesData.Count;
+            reservationHeader.totalNumberOfRooms = globalFunctionalityHelper.getTotalNumberOfRooms(roomData, reservationHeader.reservationType.name);
             reservationHeader.totalNumberOfGuest = globalFunctionalityHelper.getTotalNumberOfGuests(roomData);
             reservationHeader.netAmount = globalFunctionalityHelper.getNetAmount(roomData, linesData);
             reservationHeader.grossAmount = globalFunctionalityHelper.getGrossAmount(roomData, linesData);

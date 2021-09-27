@@ -1,6 +1,5 @@
 import moment from "moment";
 import { DatePicker } from "antd";
-import "./css/BookingHistory.css";
 import { Drawer, Table } from "antd";
 import React, { useState } from "react";
 import List from "@material-ui/core/List";
@@ -18,6 +17,7 @@ import {
   TextField,
   Button,
 } from "@material-ui/core";
+import BhPriceSlider from "../../Common/BhPriceSlider";
 
 const { RangePicker } = DatePicker;
 
@@ -45,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BhByHeaderDrawer = ({
-  reservationType,
   customers,
+  reservationType,
   isFilterDrawerShow,
   onFilterShow,
   transHeader,
@@ -54,50 +54,59 @@ const BhByHeaderDrawer = ({
   setSelectedVoucher,
   setSelectedCustomer,
   setSelectedDate,
+  setSelectedProfit,
 }) => {
   const classes = useStyles();
   const [sLType, setLType] = useState([]);
   const [sLVoucher, setSLVoucher] = useState([]);
   const [sLCustomer, setSLCustomer] = useState([]);
+  const [sLProfit, setSLProfit] = useState({
+    from: 0,
+    to: 500000,
+  });
+
   const [sLocalDate, setSLocalDate] = useState({
-    fromDate: {},
-    toDate: {},
+    fromDate: moment().startOf("month"),
+    toDate: moment().endOf("month"),
   });
 
   const [visible, setVisible] = useState([
     { id: "Reservation Types", open: false },
     { id: "customers", open: false },
     { id: "General", open: false },
+    { id: "Profit", open: false },
   ]);
 
-  const options = transHeader.map((option) => {
-    const firstLetter = option["voucher"][0].toUpperCase();
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-      ...option,
-    };
-  });
+  const options = transHeader
+    .filter((n) => n.voucher !== "")
+    .map((option) => {
+      const firstLetter = option["voucher"].toUpperCase();
+
+      return {
+        firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+        ...option,
+      };
+    });
 
   const onClearFilter = () => {
+    setSLocalDate({
+      fromDate: moment().startOf("month"),
+      toDate: moment().endOf("month"),
+    });
     setSLVoucher([]);
-    setSLocalDate({ fromDate: moment(), toDate: moment() });
-    setSLVoucher([]);
-    setSLCustomer([]);
     setLType([]);
+    setSLCustomer([]);
+    setSLProfit({ from: 0, to: 500000 });
   };
 
   const handleCheckboxCheck = (name) => {
     var xtype = [...sLType];
     const index = xtype.findIndex((x) => x === name);
 
-    if (index === -1) {
-      setLType([...sLType, name]);
-      return setSelectedTypes([...sLType, name]);
-    }
+    if (index === -1) return setLType([...sLType, name]);
 
     const filtered = xtype.filter((n) => n !== name);
     setLType(filtered);
-    setSelectedTypes(filtered);
   };
 
   const handleListCLick = (id) => {
@@ -107,23 +116,35 @@ const BhByHeaderDrawer = ({
     setVisible(visi);
   };
 
-  const handleChangeTableCustomer = (selectedRowKeys) => {
+  const handleChangeTableCustomer = (selectedRowKeys) =>
     setSLCustomer(selectedRowKeys);
-    setSelectedCustomer(selectedRowKeys);
-  };
-  const handleChangeVoucher = (e, v) => {
-    setSLVoucher(v);
-    setSelectedVoucher(v);
-  };
 
+  const handleChangeVoucher = (e, v) => {
+    if (v === null) v = [];
+    setSLVoucher(v);
+  };
   const onChangeRangePicker = (d) => {
-    setSelectedDate({ fromDate: d[0], toDate: d[1] });
-    setSLocalDate({ fromDate: d[0], toDate: d[1] });
+    let fromDate = moment().startOf("month");
+    let toDate = moment().endOf("month");
+
+    if (d !== null && d[0] !== null) {
+      fromDate = d[0];
+      toDate = d[1];
+    }
+
+    setSLocalDate({ fromDate, toDate });
   };
 
   const renderValue = () =>
     Object.keys(sLVoucher).length === 0 ? null : sLVoucher;
 
+  const onSubmitSearch = () => {
+    setSelectedProfit(sLProfit);
+    setSelectedVoucher(sLVoucher);
+    setSelectedDate(sLocalDate);
+    setSelectedCustomer(sLCustomer);
+    setSelectedTypes(sLType);
+  };
   return (
     <div>
       <Drawer
@@ -249,7 +270,28 @@ const BhByHeaderDrawer = ({
                 />
               </div>
             </Collapse>
+
+            {/* PROFIT RANGE */}
+            <ListItem button onClick={() => handleListCLick("Profit")}>
+              <ListItemText primary="Profit" />
+              {visible.open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={visible[3].open} timeout="auto" unmountOnExit>
+              <div className="cd-prices__container bh">
+                <BhPriceSlider setSLProfit={setSLProfit} sLProfit={sLProfit} />
+              </div>
+            </Collapse>
           </List>
+
+          <div className="cd-button__container submit">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onSubmitSearch}
+            >
+              SEARCH
+            </Button>
+          </div>
 
           <div className="cd-button__container">
             <Button variant="contained" color="primary" onClick={onClearFilter}>

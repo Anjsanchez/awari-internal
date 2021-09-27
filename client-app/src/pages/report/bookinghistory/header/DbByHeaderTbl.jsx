@@ -1,17 +1,31 @@
 import React from "react";
 import { Card, Table } from "antd";
-import ActiveButton from "./../../common/form/ActiveButton";
+import ActiveButton from "./../../../../common/form/ActiveButton";
 const columns = [
   {
     title: "Name",
     dataIndex: "name",
-    width: "55%",
+    width: "35%",
   },
-
+  {
+    title: "Type",
+    dataIndex: "Type",
+    width: "13%",
+  },
+  {
+    title: "Rooms",
+    dataIndex: "Rooms",
+    width: "8%",
+  },
+  {
+    title: "Trans",
+    dataIndex: "Trans",
+    width: "8%",
+  },
   {
     title: "Pax",
     dataIndex: "pax",
-    width: "10%",
+    width: "8%",
   },
   {
     title: "Gross",
@@ -30,11 +44,14 @@ const columns = [
   },
 ];
 
-const DbCheckOutTbl = ({ headers }) => {
+const DbByHeaderTbl = ({ headers }) => {
   const data = [];
   headers.map((n, i) => {
     return data.push({
       key: i + n._id,
+      Type: n.reservationType.name,
+      Rooms: n.totalNumberOfRooms,
+      Trans: n.totalNumberOfTrans,
       name: n.customer.firstName + " " + n.customer.lastName,
       Gross: n.grossAmount,
       pax: n.totalNumberOfGuest,
@@ -46,7 +63,7 @@ const DbCheckOutTbl = ({ headers }) => {
   return (
     <Card className="db-card-list__wrapper" hoverable>
       <div className="db-cl-span__wrapper">
-        <span className="db-cl__span">Today's Checkout</span>
+        <span className="db-cl__span">Checkouts</span>
         <span className="db-cl__span">
           <ActiveButton textTrue={headers.length} value={true} />
         </span>
@@ -65,4 +82,4 @@ const DbCheckOutTbl = ({ headers }) => {
   );
 };
 
-export default DbCheckOutTbl;
+export default DbByHeaderTbl;

@@ -1,25 +1,25 @@
 import React from "react";
 import { Card, Empty } from "antd";
 import ReactApexChart from "react-apexcharts";
-
-const DbChart = ({ rTrans }) => {
+const ByHeaderChartTrans = ({ filteredTransHeader }) => {
   const options = {
     labels: [],
     series: [],
   };
 
   var result = [];
-  rTrans.reduce(function (res, value) {
-    if (!res[value.product.productCategory.name]) {
-      res[value.product.productCategory.name] = {
-        name: value.product.productCategory.name,
+
+  filteredTransHeader.reduce(function (res, value) {
+    if (!res[value.reservationType.name]) {
+      res[value.reservationType.name] = {
+        name: value.reservationType.name,
         amount: 0,
       };
-      result.push(res[value.product.productCategory.name]);
+      result.push(res[value.reservationType.name]);
     }
 
-    res[value.product.productCategory.name].amount +=
-      value.product.sellingPrice * value.quantity - value.netDiscount;
+    res[value.reservationType.name].amount += value.netAmount;
+
     return res;
   }, {});
 
@@ -42,18 +42,21 @@ const DbChart = ({ rTrans }) => {
         options={options}
         series={options.series}
         type="pie"
-        width="380"
+        width="400px"
       />
     );
   };
   return (
-    <Card className="db-card-list__wrapper rac" hoverable>
+    <Card className="db-card-list__wrapper rac db" hoverable>
       <div className="db-cl-span__wrapper">
-        <span className="db-cl__span">Transaction Chart</span>
+        <span className="db-cl__span">Reservation Type Chart</span>
       </div>
-      <div className="db-cl-body__container rac">{renderBody()}</div>
+
+      <div className="db-cl-body__container rac" style={{ marginTop: "65px" }}>
+        {renderBody()}
+      </div>
     </Card>
   );
 };
 
-export default DbChart;
+export default ByHeaderChartTrans;
