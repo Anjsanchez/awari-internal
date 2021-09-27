@@ -35,9 +35,13 @@ namespace API.Controllers.functionality
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetDiscounts()
+        public async Task<ActionResult> GetDiscounts(bool isActiveOnly = false)
         {
             var discounts = await _repo.FindAll();
+            if (isActiveOnly)
+                discounts = discounts.Where(n => n.isActive == true).ToList();
+
+
             var mappedDiscounts = _map.Map<List<Discount>, List<discountReadDto>>(discounts.ToList());
 
             return Ok(new GenericResponse<discountReadDto>()

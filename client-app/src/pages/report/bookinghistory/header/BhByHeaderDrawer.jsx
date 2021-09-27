@@ -75,6 +75,8 @@ const BhByHeaderDrawer = ({
     { id: "customers", open: false },
     { id: "General", open: false },
     { id: "Profit", open: false },
+    { id: "Rooms", open: false },
+    { id: "Products", open: false },
   ]);
 
   const options = transHeader

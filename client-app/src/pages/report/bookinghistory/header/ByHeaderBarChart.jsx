@@ -25,8 +25,24 @@ const ByHeaderBarChart = ({ filteredTransHeader }) => {
 
   const series = [];
 
-  filteredTransHeader.map((value) => {
-    series.push({
+  const item = [...filteredTransHeader];
+
+  var result = [];
+  item.reduce(function (res, value, i) {
+    if (!res[value.reservationType._id]) {
+      res[value.reservationType._id] = { ...value, netAmount: 0, timesSold: 0 };
+      result.push(res[value.reservationType._id]);
+    }
+
+    res[value.reservationType._id].timesSold += 1;
+    res[value.reservationType._id].netAmount += value.netAmount;
+    res[value.reservationType._id].netDiscount += value.netDiscount;
+    res[value.reservationType._id].grossAmount += value.grossAmount;
+    return res;
+  }, {});
+
+  result.map((value) => {
+    return series.push({
       name: value.reservationType.name,
       data: [value.grossAmount, value.netAmount, value.netDiscount],
     });
@@ -53,7 +69,7 @@ const ByHeaderBarChart = ({ filteredTransHeader }) => {
   return (
     <Card className="db-card-list__wrapper rac db" hoverable>
       <div className="db-cl-span__wrapper">
-        <span className="db-cl__span">Reservation Type Chart</span>
+        <span className="db-cl__span">Bar Chart</span>
       </div>
       <div className="bh-body__container">{renderBody()}</div>
     </Card>

@@ -10,19 +10,26 @@ import BookingHistoryHeader from "./../../Common/BookingHistoryHeader";
 import { getCustomers } from "./../../../../utils/services/pages/CustomerService";
 import { getTransHeaders } from "./../../../../utils/services/pages/trans/TransHeaderService";
 import { GetReservationTypes } from "./../../../../utils/services/pages/reservation/ReservationType";
+import { getRooms } from "./../../../../utils/services/pages/rooms/RoomService";
+import { getRoomVariants } from "./../../../../utils/services/pages/rooms/RoomVariantService";
+import { getProducts } from "./../../../../utils/services/pages/products/ProductService";
+import { getProdCategory } from "./../../../../utils/services/pages/products/ProductCategoryService";
 
 const BookingHistoryByHeader = () => {
   const isMounted = useMountedState();
+  const [rooms, setRooms] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
+  const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [transHeader, setTransHeader] = useState([]);
+  const [roomVariants, setRoomVariants] = useState([]);
+  const [productVariants, setProductVariants] = useState([]);
   const [reservationType, setReservationType] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [filteredTransHeader, setFilteredTransHeader] = useState([]);
   const [isFilterDrawerShow, setIsFilterDrawerShow] = useState(false);
 
   //Filters
-
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState({});
   const [selectedCustomer, setSelectedCustomer] = useState([]);
@@ -51,7 +58,7 @@ const BookingHistoryByHeader = () => {
         const custData = [];
 
         sorted.map((n) => {
-          custData.push({
+          return custData.push({
             name: n.firstName + " " + n.lastName,
             key: n._id,
             text: n.firstName,
@@ -99,9 +106,101 @@ const BookingHistoryByHeader = () => {
         });
       }
     }
+    async function GetRooms() {
+      try {
+        const { data } = await getRooms(true);
+        const { data: variants } = await getRoomVariants(true);
+        const { listRecords } = data;
+        const { listRecords: listVariants } = variants;
+
+        const sorted = listRecords.sort((a, b) =>
+          a.roomLongName.localeCompare(b.roomLongName)
+        );
+        const sortedvariant = listVariants.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        const roomData = [];
+        const variantsData = [];
+
+        sorted.map((n) => {
+          return roomData.push({
+            name: n.roomLongName,
+            key: n._id,
+            text: n.roomLongName,
+            value: n.roomLongName,
+          });
+        });
+
+        sortedvariant.map((n) => {
+          return variantsData.push({
+            text: n.name,
+            value: n.name,
+          });
+        });
+
+        if (!isMounted()) return;
+
+        setRooms(roomData);
+        setRoomVariants(variantsData);
+      } catch (error) {
+        enqueueSnackbar("0016: An error occured while calling the server.", {
+          variant: "error",
+        });
+      }
+    }
+
+    async function GetProducts() {
+      try {
+        const { data } = await getProducts(true);
+        const { data: variants } = await getProdCategory(true);
+        const { listRecords } = data;
+        const { listRecords: listVariants } = variants;
+
+        const sorted = listRecords.sort((a, b) =>
+          a.shortName.localeCompare(b.shortName)
+        );
+
+        const sortedvariant = listVariants.sort((a, b) =>
+          a.name.localeCompare(b.name)
+        );
+
+        const productData = [];
+        const variantsData = [];
+
+        sorted.map((n) => {
+          return productData.push({
+            name: n.shortName,
+            key: n._id,
+            text: n.shortName,
+            value: n.shortName,
+            variant: n.productCategory.name,
+          });
+        });
+
+        sortedvariant.map((n) => {
+          return variantsData.push({
+            text: n.name,
+            value: n.name,
+          });
+        });
+
+        if (!isMounted()) return;
+
+        setProducts(productData);
+        setProductVariants(variantsData);
+      } catch (error) {
+        enqueueSnackbar("0017: An error occured while calling the server.", {
+          variant: "error",
+        });
+      }
+    }
+
     fetchTypes();
     fetchCustomers();
     GetTransHeader();
+    GetRooms();
+    GetProducts();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
@@ -167,9 +266,16 @@ const BookingHistoryByHeader = () => {
   };
   return (
     <>
-      <BookingHistoryHeader onFilterShow={onFilterShow} />
+      <BookingHistoryHeader
+        title="By Booking - History"
+        onFilterShow={onFilterShow}
+      />
       <BhByHeaderDrawer
         customers={customers}
+        roomVariants={roomVariants}
+        rooms={rooms}
+        products={products}
+        productVariants={productVariants}
         transHeader={transHeader}
         onFilterShow={onFilterShow}
         reservationType={reservationType}

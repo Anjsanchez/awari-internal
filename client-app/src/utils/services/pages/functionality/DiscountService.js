@@ -7,9 +7,9 @@ function discountUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getDiscounts() {
+export function getDiscounts(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function saveDiscount(discount) {

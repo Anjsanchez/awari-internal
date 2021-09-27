@@ -49,6 +49,10 @@ namespace API.Repository.pages.trans
                    .Include(n => n.product)
                    .Include(n => n.product.productCategory)
                    .Include(n => n.transHeader)
+                   .Include(n => n.transRoom.room)
+                   .Include(n => n.transHeader.reservationType)
+                   .Include(n => n.transHeader.Customer)
+
                    .Include(n => n.transRoom)
                    .Include(n => n.user)
                    .ToListAsync();

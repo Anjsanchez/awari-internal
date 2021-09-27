@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import { Slider, InputNumber, Row, Col } from "antd";
 
 const BhPriceSlider = ({ sLProfit, setSLProfit }) => {

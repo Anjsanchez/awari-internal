@@ -44,9 +44,13 @@ namespace API.Controllers
 
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> getUsers()
+        public async Task<ActionResult> getUsers(bool isActiveOnly = false)
         {
             var users = await _repo.FindAll();
+
+            if (isActiveOnly)
+                users = users.Where(n => n.isActive == true).ToList();
+
             var mappedUsers = _map.Map<List<User>, List<userReadDto>>(users.ToList());
 
             return Ok(new GenericResponse<userReadDto>()

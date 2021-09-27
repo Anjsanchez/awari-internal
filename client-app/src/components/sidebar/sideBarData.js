@@ -49,8 +49,8 @@ export const sideBarData = [
             id: 14,
           },
           {
-            title: "By Room",
-            path: "/a/reservation-management/report/booking-history/room",
+            title: "By Transaction",
+            path: "/a/reservation-management/report/booking-history/transaction",
             id: 15,
           },
         ],

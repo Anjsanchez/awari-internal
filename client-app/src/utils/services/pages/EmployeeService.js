@@ -7,10 +7,10 @@ function employeeUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getEmployees() {
+export function getEmployees(isActiveOnly = false) {
   http.SetJwt();
 
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function getEmployeeById(id) {
