@@ -291,7 +291,8 @@ namespace API.Controllers.reservation
                 rooms = mappedLines,
                 payments = mappedPayments,
                 trans = mappedTrans,
-                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                isTrans = false
             });
         }
 
@@ -423,7 +424,7 @@ namespace API.Controllers.reservation
         {
             try
             {
-                var data = await _tLine.GetPaymentByHeaderId(_headerId);
+                var data = await _tLine.GetTransByHeaderId(_headerId);
                 if (data == null || data.Count == 0) return false;
 
 

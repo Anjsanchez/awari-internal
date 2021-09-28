@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Spin, Modal } from "antd";
 import { useSnackbar } from "notistack";
 import { useMountedState } from "react-use";
 import "../css/ReservationDetailsPaymentTable.css";
@@ -8,6 +8,7 @@ import { store } from "../../../../../utils/store/configureStore";
 import ReservationDetailsPaymentModal from "./ReservationDetailsPaymentModal";
 import { addRPayments } from "../../../../../utils/store/pages/reservationDetails";
 import ReservationDetailsPaymentTableRow from "./ReservationDetailsPaymentTableRow";
+import ReservationDetailsPaymentViewModal from "./ReservationDetailsPaymentViewModal";
 
 const headCells = [
   {
@@ -62,6 +63,7 @@ const ReservationDetailsPaymentTable = (props) => {
   const [payments, setPayments] = useState([]);
   const [selectedPayment, setSelectedPayment] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
+  const [showPaymentPreviewModal, setShowPaymentPreviewModal] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
@@ -127,6 +129,8 @@ const ReservationDetailsPaymentTable = (props) => {
   useEffect(() => {
     if (props.visible.action === "cancel") return;
 
+    if (headerInStore.isTrans) return setShowPaymentPreviewModal(true);
+
     if (!headerInStore.header.isActive) {
       enqueueSnackbar("This reservation is not yet active.", {
         variant: "warning",
@@ -146,14 +150,28 @@ const ReservationDetailsPaymentTable = (props) => {
 
   const renderModal = () => {
     const { action } = props.visible;
-
-    if (!headerInStore.header.isActive) return null;
+    if (!headerInStore.isTrans) if (!headerInStore.header.isActive) return null;
 
     if (
       (action === "update" && selectedPayment.length === 0) ||
       (action === "view" && selectedPayment.length === 0)
     ) {
       return null;
+    }
+
+    if (headerInStore.isTrans) {
+      return (
+        <Modal
+          title="Payment"
+          centered
+          visible={showPaymentPreviewModal}
+          onOk={() => setShowPaymentPreviewModal(false)}
+          onCancel={() => setShowPaymentPreviewModal(false)}
+          footer={null}
+        >
+          <ReservationDetailsPaymentViewModal selectedPayment={selectedPayment}/>
+        </Modal>
+      );
     }
 
     return (

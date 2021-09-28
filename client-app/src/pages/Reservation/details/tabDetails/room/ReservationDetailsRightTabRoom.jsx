@@ -8,7 +8,7 @@ import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 
-const ReservationDetailsRightTabRoom = () => {
+const ReservationDetailsRightTabRoom = ({ isTrans }) => {
   const [visible, setVisible] = useState({ value: false, action: "cancel" });
 
   const handleVisibleModal = ({ value, action }) =>
@@ -33,40 +33,69 @@ const ReservationDetailsRightTabRoom = () => {
           <div>
             {!isRestaurant && (
               <>
-                <Tooltip placement="topLeft" title="View" arrowPointAtCenter>
-                  <IconButton
-                    aria-label="View"
-                    size="small"
-                    onClick={() =>
-                      handleVisibleModal({ value: true, action: "view" })
-                    }
-                  >
-                    <VisibilityTwoToneIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
-                  <IconButton
-                    aria-label="Modify"
-                    size="small"
-                    onClick={() =>
-                      handleVisibleModal({ value: true, action: "update" })
-                    }
-                  >
-                    <EditLocationTwoToneIcon />
-                  </IconButton>
-                </Tooltip>
+                {isTrans && (
+                  <Tooltip placement="topLeft" title="View" arrowPointAtCenter>
+                    <IconButton
+                      aria-label="View"
+                      size="small"
+                      onClick={() =>
+                        handleVisibleModal({ value: true, action: "view" })
+                      }
+                    >
+                      <VisibilityTwoToneIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                {!isTrans && (
+                  <>
+                    <Tooltip
+                      placement="topLeft"
+                      title="View"
+                      arrowPointAtCenter
+                    >
+                      <IconButton
+                        aria-label="View"
+                        size="small"
+                        onClick={() =>
+                          handleVisibleModal({ value: true, action: "view" })
+                        }
+                      >
+                        <VisibilityTwoToneIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                      placement="topLeft"
+                      title="Modify"
+                      arrowPointAtCenter
+                    >
+                      <IconButton
+                        aria-label="Modify"
+                        size="small"
+                        onClick={() =>
+                          handleVisibleModal({ value: true, action: "update" })
+                        }
+                      >
+                        <EditLocationTwoToneIcon />
+                      </IconButton>
+                    </Tooltip>
 
-                <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
-                  <IconButton
-                    aria-label="create"
-                    size="small"
-                    onClick={() =>
-                      handleVisibleModal({ value: true, action: "add" })
-                    }
-                  >
-                    <BorderColorTwoToneIcon />
-                  </IconButton>
-                </Tooltip>
+                    <Tooltip
+                      placement="topLeft"
+                      title="Create"
+                      arrowPointAtCenter
+                    >
+                      <IconButton
+                        aria-label="create"
+                        size="small"
+                        onClick={() =>
+                          handleVisibleModal({ value: true, action: "add" })
+                        }
+                      >
+                        <BorderColorTwoToneIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </>
+                )}
               </>
             )}
           </div>

@@ -42,7 +42,7 @@ const ReservationDetailsTransactionModal = (props) => {
   const [requestOnGoing, setRequestOnGoing] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
-  const { onVisible, visible, selectedRoom, onSuccessDelete } = props;
+  const { onVisible, visible, selectedRoom, onSuccessDelete, isTrans } = props;
   const {
     createdDate,
     discount,
@@ -96,6 +96,8 @@ const ReservationDetailsTransactionModal = (props) => {
 
   const Footer = () => {
     const classes = useStyles();
+    console.log(isTrans);
+    if (isTrans) return null;
     if (selectedRoom.length === 0 || selectedRoom === undefined) return null;
     return (
       <ButtonGroup

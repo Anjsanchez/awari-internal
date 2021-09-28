@@ -70,7 +70,7 @@ namespace API.Repository.pages.trans
                   .FirstOrDefaultAsync(n => n._id == id);
         }
 
-        public async Task<List<TransLine>> GetPaymentByHeaderId(Guid headerId)
+        public async Task<List<TransLine>> GetTransByHeaderId(Guid headerId)
         {
             var datas = await FindAll();
 

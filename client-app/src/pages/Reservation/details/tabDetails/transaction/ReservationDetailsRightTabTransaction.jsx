@@ -6,7 +6,7 @@ import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsTransactionTable";
 
-const ReservationDetailsRightTabTransaction = ({ header }) => {
+const ReservationDetailsRightTabTransaction = ({ header, isTrans }) => {
   const [visible, setVisible] = useState({ value: false, action: "cancel" });
 
   const handleVisibleModal = ({ value, action }) =>
@@ -35,18 +35,19 @@ const ReservationDetailsRightTabTransaction = ({ header }) => {
                 <VisibilityTwoToneIcon />
               </IconButton>
             </Tooltip>
-
-            <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
-              <IconButton
-                size="small"
-                aria-label="create"
-                onClick={() =>
-                  handleVisibleModal({ value: true, action: "add" })
-                }
-              >
-                <BorderColorTwoToneIcon />
-              </IconButton>
-            </Tooltip>
+            {!isTrans && (
+              <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
+                <IconButton
+                  size="small"
+                  aria-label="create"
+                  onClick={() =>
+                    handleVisibleModal({ value: true, action: "add" })
+                  }
+                >
+                  <BorderColorTwoToneIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </div>
         </div>
 

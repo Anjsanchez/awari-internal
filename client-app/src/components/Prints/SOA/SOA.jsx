@@ -16,6 +16,7 @@ import {
   Image,
   View,
 } from "@react-pdf/renderer";
+import { GetTransWithFullDetails } from "../../../utils/services/pages/trans/TransHeaderService";
 Font.register({
   family: "Oswald",
   src: "https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf",
@@ -153,6 +154,7 @@ const SOAe = ({
   trans,
   header,
   payments,
+  isTrans,
   productCategories,
   user,
   isDayTour,
@@ -259,13 +261,23 @@ const SOAe = ({
     );
   };
 
-  const renderTotalCharges = (d, isFormatted = true) => {
-    const roomCharges = d.grossAmount + d.mattress * 2420;
+  const renderTotalRoomCharges = (d, isFormatted = true) => {
+    const roomCharges = d.grossAmount;
 
     if (isDayTour) {
-      const transOfThisRoomDT = trans.filter(
-        (n) => n.reservationHeader._id === d.reservationHeader._id
-      );
+      let transOfThisRoomDT = [];
+
+      if (isTrans) {
+        transOfThisRoomDT = trans.filter(
+          (n) =>
+            n.transHeader.reservationType._id ===
+            d.transHeader.reservationType._id
+        );
+      } else {
+        transOfThisRoomDT = trans.filter(
+          (n) => n.reservationHeader._id === d.reservationHeader._id
+        );
+      }
 
       const transChargesDT = transOfThisRoomDT.reduce(
         (a, b) => a + b.quantity * b.product.sellingPrice,
@@ -278,9 +290,17 @@ const SOAe = ({
       return formatNumber(totalDT);
     }
 
-    const transOfThisRoom = trans.filter(
-      (n) => n.reservationRoomLine._id === d._id
-    );
+    let transOfThisRoom = [];
+
+    if (isTrans) {
+      transOfThisRoom = trans.filter(
+        (n) => n.transHeader.reservationRoomLine._id === d._id
+      );
+    } else {
+      transOfThisRoom = trans.filter(
+        (n) => n.reservationRoomLine._id === d._id
+      );
+    }
 
     const transCharges = transOfThisRoom.reduce(
       (a, b) => a + b.quantity * b.product.sellingPrice,
@@ -297,9 +317,18 @@ const SOAe = ({
     const roomDiscount = d.totalDiscount;
 
     if (isDayTour) {
-      const transOfThisRoomDT = trans.filter(
-        (n) => n.reservationHeader._id === d.reservationHeader._id
-      );
+      let transOfThisRoomDT = [];
+      if (isTrans) {
+        transOfThisRoomDT = trans.filter(
+          (n) =>
+            n.transHeader.reservationType._id ===
+            d.transHeader.reservationType._id
+        );
+      } else {
+        transOfThisRoomDT = trans.filter(
+          (n) => n.reservationHeader._id === d.reservationHeader._id
+        );
+      }
 
       const transDiscountDT = transOfThisRoomDT.reduce(
         (a, b) => a + b.netDiscount,
@@ -326,8 +355,8 @@ const SOAe = ({
     return formatNumber(total);
   };
 
-  const renderTotalSubTotal = (d) => {
-    const totalCharges = renderTotalCharges(d, false);
+  const renderRoomsxSubTotal = (d) => {
+    const totalCharges = renderTotalRoomCharges(d, false);
     const totalDiscount = renderTotalDiscount(d, false);
 
     return formatNumber(totalCharges - totalDiscount);
@@ -342,7 +371,7 @@ const SOAe = ({
 
   const renderNetTotal = (isFormatted = true) => {
     const grossAmountRooms = rooms.reduce(
-      (a, b) => a + b.grossAmount + b.mattress * 2420 - b.totalDiscount,
+      (a, b) => a + b.grossAmount - b.totalDiscount,
       0
     );
 
@@ -366,6 +395,8 @@ const SOAe = ({
   };
 
   const renderRoom = (roomsx) => {
+    const total = roomsx.grossAmount - roomsx.mattress * 2420;
+
     if (isDayTour)
       return (
         <View style={[styles.tableRow]}>
@@ -386,7 +417,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.grossAmount)}
+              {formatNumber(total)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -419,7 +450,7 @@ const SOAe = ({
         </View>
         <View style={[styles.tableCol]}>
           <Text style={[styles.tableRowText, styles.tableColSub]}>
-            {formatNumber(roomsx.grossAmount)}
+            {formatNumber(total)}
           </Text>
         </View>
         <View style={[styles.tableCol]}>
@@ -664,7 +695,7 @@ const SOAe = ({
                         { fontSize: 13 },
                       ]}
                     >
-                      {renderTotalSubTotal(roomsx)}
+                      {renderRoomsxSubTotal(roomsx)}
                     </Text>
                   </View>
                 </View>
@@ -860,7 +891,7 @@ const SOAe = ({
 
 const SOA = () => {
   const isMounted = useMountedState();
-  const { id: headerId } = useParams();
+  const { id: headerId, isTrans } = useParams();
   const [rooms, setRooms] = useState([]);
   const [trans, setTrans] = useState([]);
   const [header, setHeader] = useState({});
@@ -911,13 +942,41 @@ const SOA = () => {
       }
     }
 
+    async function fetchDataTrans() {
+      try {
+        const { data } = await GetTransWithFullDetails(headerId);
+        const { token, header, payments, rooms, trans } = data;
+
+        store.dispatch(writeToken({ token }));
+
+        if (isMounted()) {
+          const sortedTrans = trans.sort((a, b) =>
+            a.product.productCategoryId.localeCompare(
+              b.product.productCategoryId
+            )
+          );
+
+          setPayments(payments);
+          setTrans(sortedTrans);
+          setRooms(rooms);
+          setHeader(header);
+          setInitialLoading(true);
+        }
+        //
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
     setCurrentUser(store.getState().entities.user.user);
+
     fetchProductDetails();
-    fetchData();
+    fetchDataTrans();
+    if (isTrans === "true") fetchDataTrans();
+    else fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!initialLoading) return null;
-
   const isDayTour =
     header.reservationType.name === "Day Tour" ||
     header.reservationType.name === "Restaurant"
@@ -932,6 +991,7 @@ const SOA = () => {
         header={header}
         trans={trans}
         payments={payments}
+        isTrans={isTrans}
         user={currentUser}
         productCategories={productCategories}
       />

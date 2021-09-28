@@ -106,6 +106,8 @@ const ReservationDetailsTransactionTable = (props) => {
   useEffect(() => {
     if (props.visible.action === "cancel") return;
 
+    if (headerInStore.isTrans) return;
+
     if (!headerInStore.header.isActive) {
       enqueueSnackbar("This reservation is not yet active.", {
         variant: "warning",
@@ -130,7 +132,7 @@ const ReservationDetailsTransactionTable = (props) => {
   const renderModal = () => {
     const { action } = props.visible;
 
-    if (!headerInStore.header.isActive) return null;
+    if (!headerInStore.isTrans) if (!headerInStore.header.isActive) return null;
 
     if (
       (action === "add" && selectedRoom.length === 0) ||
@@ -144,6 +146,7 @@ const ReservationDetailsTransactionTable = (props) => {
         visible={props.visible}
         selectedRoom={selectedRoom}
         onSuccessDelete={onSuccessDelete}
+        isTrans={headerInStore.isTrans}
       />
     );
   };

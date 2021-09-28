@@ -14,16 +14,18 @@ const slice = createSlice({
       netPayment: 0,
       netAmount: 0,
     },
+    isTrans: false,
   },
 
   reducers: {
     addRDetails: (resx, action) => {
-      const { payments, header, rooms, trans } = action.payload;
+      const { payments, header, rooms, trans, isTrans } = action.payload;
       resx.payments = [...payments];
       resx.rooms = [...rooms];
       resx.header = header;
       resx.trans = trans;
 
+      resx.isTrans = isTrans;
       resx.totals.netPayment = resx.payments.reduce((a, b) => a + b.amount, 0);
       resx.totals.netAmountRooms = resx.rooms.reduce(
         (a, b) => a + b.totalAmount,

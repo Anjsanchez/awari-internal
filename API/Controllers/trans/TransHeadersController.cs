@@ -6,6 +6,9 @@ using API.Contracts.pages.rooms;
 using API.Contracts.pages.trans;
 using API.Data.ApiResponse;
 using API.Dto.trans.header;
+using API.Dto.trans.line;
+using API.Dto.trans.payment;
+using API.Dto.trans.room;
 using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models.trans;
@@ -59,6 +62,30 @@ namespace API.Controllers.trans
             {
                 listRecords = mappedTransHeaders,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("includesFullDetails")]
+        public async Task<ActionResult> GetHeadersWithFullDetails(Guid headerId)
+        {
+            var tHeader = await _repo.FindById(headerId);
+            var tRoom = await _roomRepo.GetLineByHeaderId(headerId);
+            var tPayment = await _paymentRepo.GetPaymentByHeaderId(headerId);
+            var tTrans = await _transRepo.GetTransByHeaderId(headerId);
+
+            var mappedDto = _map.Map<TransHeader, transHeaderReadDto>(tHeader);
+            var mappedRoom = _map.Map<List<TransRoom>, List<transRoomReadDto>>(tRoom.ToList());
+            var mappedPayments = _map.Map<List<TransPayment>, List<transPaymentReadDto>>(tPayment.ToList());
+            var mappedTrans = _map.Map<List<TransLine>, List<transReadDto>>(tTrans.ToList());
+
+            return Ok(new TransHeaderResponse()
+            {
+                header = mappedDto,
+                rooms = mappedRoom,
+                payments = mappedPayments,
+                trans = mappedTrans,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                isTrans = true
             });
         }
 

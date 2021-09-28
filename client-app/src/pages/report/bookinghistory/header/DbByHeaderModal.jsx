@@ -1,6 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { Modal, Table } from "antd";
+import { Link } from "react-router-dom";
 
 const DbByHeaderModal = ({ showModal, setShowModal, trans, prodId }) => {
   const columns = [
@@ -8,7 +9,13 @@ const DbByHeaderModal = ({ showModal, setShowModal, trans, prodId }) => {
       title: "Customer",
       dataIndex: "Customer",
       width: "40%",
-      //   render: (text, h) => <a onClick={() => tryBtn(h)}>{text}</a>,
+      render: (text, h) => (
+        <Link
+          to={`/a/reservation-management/reservations/${h.headerId}&istrans=true`}
+        >
+          {text}
+        </Link>
+      ),
     },
     {
       title: "Reservation",
@@ -32,6 +39,7 @@ const DbByHeaderModal = ({ showModal, setShowModal, trans, prodId }) => {
   filtered.map((n, i) => {
     return data.push({
       key: i + n._id,
+      headerId: n._id,
       Reservation: n.reservationType.name,
       Customer: n.customer.firstName + " " + n.customer.lastName,
       Date: moment(n.createdDate).format("MM-DD-YY"),

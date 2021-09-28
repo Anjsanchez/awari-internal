@@ -5,9 +5,9 @@ import { store } from "../../../../utils/store/configureStore";
 import ReservationDetailsLeftTab from "./ReservationDetailsLeftTab";
 import ReservationDetailsLeftTabBilling from "./ReservationDetailsLeftTabBilling";
 import ReservationDetailsRightTabRoom from "./room/ReservationDetailsRightTabRoom";
+import ReservationDetailsRightTabHeads from "./walk-in/ReservationDetailsRightTabHeads";
 import ReservationDetailsRightTabPayment from "./payment/ReservationDetailsRightTabPayment";
 import ReservationDetailsRightTabTransaction from "./transaction/ReservationDetailsRightTabTransaction";
-import ReservationDetailsRightTabHeads from "./walk-in/ReservationDetailsRightTabHeads";
 
 const ReservationDetailsTabDetails = () => {
   let isWalkIn = false;
@@ -23,14 +23,14 @@ const ReservationDetailsTabDetails = () => {
       return (
         <>
           <ReservationDetailsRightTabHeads />
-          <ReservationDetailsRightTabPayment />
+          <ReservationDetailsRightTabPayment isTrans={typeInStore.isTrans} />
         </>
       );
 
     return (
       <>
-        <ReservationDetailsRightTabPayment />
-        <ReservationDetailsRightTabRoom />
+        <ReservationDetailsRightTabPayment isTrans={typeInStore.isTrans} />
+        <ReservationDetailsRightTabRoom isTrans={typeInStore.isTrans} />
       </>
     );
   };
@@ -46,6 +46,7 @@ const ReservationDetailsTabDetails = () => {
           {renderRoomTab()}
           <ReservationDetailsRightTabTransaction
             header={typeInStore.header._id}
+            isTrans={typeInStore.isTrans}
           />
         </Grid>
       </Grid>

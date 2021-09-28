@@ -131,11 +131,19 @@ function App() {
                 component={Products}
                 keyId="11"
               />
+
+              {/* 68fa0cc0-6b43-4389-99a6-08d9822335f1&istrans=true */}
+              <ProtectedRoute
+                path="/a/reservation-management/reservations/:id&isTrans=:isTrans"
+                component={ReservationDetails}
+                keyId="2"
+              />
               <ProtectedRoute
                 path="/a/reservation-management/reservations/:id"
                 component={ReservationDetails}
                 keyId="2"
               />
+
               <ProtectedRoute
                 path="/a/reservation-management/reservations"
                 component={ActiveBooking}
@@ -185,6 +193,11 @@ function App() {
                 path="/a/reservation-management/report/booking-history/room"
                 component={ABookingHistoryByRoom}
                 keyId="16"
+              />
+              <ProtectedRoute
+                path="/a/reports/SOA/:id&isTrans=:isTrans"
+                component={SOA}
+                keyId="2"
               />
               <ProtectedRoute
                 path="/a/reports/SOA/:id"

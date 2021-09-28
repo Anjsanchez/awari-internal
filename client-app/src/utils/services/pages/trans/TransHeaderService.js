@@ -11,3 +11,8 @@ export function getTransHeaders(getToday = false) {
   http.SetJwt();
   return http.get(apiEndpoint + `?isGetToday=${getToday}`);
 }
+
+export function GetTransWithFullDetails(headerId) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);
+}

@@ -37,7 +37,7 @@ const ReservationDetailsLeftTab = () => {
     (state) => state.entities.reservationDetails
   );
 
-  const { rooms, header, trans, totals } = detailsInStore;
+  const { rooms, header, trans, totals, isTrans } = detailsInStore;
 
   const { firstName, lastName, mobile, emailAddress } = header.customer;
 
@@ -51,7 +51,8 @@ const ReservationDetailsLeftTab = () => {
     setTotalHeads(heads);
   }, [rooms, trans]);
 
-  const soa = () => hist.push(`/a/reports/SOA/${header._id}`);
+  const soa = () =>
+    hist.push(`/a/reports/SOA/${header._id}&istrans=${isTrans}`);
 
   const handleClose = () => {
     setAskConfirmation(false);
@@ -107,6 +108,7 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const renderStatus = () => {
+    if (isTrans) return <ActiveButton value={true} textTrue="Completed" />;
     if (header.isActive)
       return <ActiveButton value={true} textTrue="Checked In" />;
 
@@ -122,6 +124,38 @@ const ReservationDetailsLeftTab = () => {
           handleOk={handleOk}
         />
       );
+  };
+
+  const renderButton = () => {
+    if (isTrans) {
+      return (
+        <div className="cd-button__container rdlt">
+          <Button onClick={soa} variant="contained" color="primary">
+            PRINT SOA
+          </Button>
+        </div>
+      );
+    }
+    return (
+      <>
+        {header.isActive && (
+          <div className="cd-button__container rdlt">
+            <Button onClick={soa} variant="contained" color="primary">
+              PRINT SOA
+            </Button>
+          </div>
+        )}
+        <div className="cd-button__container rdlt">
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={handleCheckInCheckOut}
+          >
+            {header.isActive ? "CHECK-OUT" : "CHECK-IN"}
+          </Button>
+        </div>
+      </>
+    );
   };
   return (
     <>
@@ -243,7 +277,8 @@ const ReservationDetailsLeftTab = () => {
               </Grid>
             </div>
             <div className="rdlt-btn__wrapper rdlt">
-              {header.isActive && (
+              {renderButton()}
+              {/* {header.isActive && (
                 <div className="cd-button__container rdlt">
                   <Button onClick={soa} variant="contained" color="primary">
                     PRINT SOA
@@ -258,7 +293,7 @@ const ReservationDetailsLeftTab = () => {
                 >
                   {header.isActive ? "CHECK-OUT" : "CHECK-IN"}
                 </Button>
-              </div>
+              </div> */}
             </div>
           </div>
         </Card>

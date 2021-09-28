@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Table } from "antd";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const BhByTransModal = ({ showModal, setShowModal, trans, prodId }) => {
   const columns = [
@@ -8,7 +9,13 @@ const BhByTransModal = ({ showModal, setShowModal, trans, prodId }) => {
       title: "Customer",
       dataIndex: "Customer",
       width: "40%",
-      //   render: (text, h) => <a onClick={() => tryBtn(h)}>{text}</a>,
+      render: (text, h) => (
+        <Link
+          to={`/a/reservation-management/reservations/${h.headerId}&istrans=true`}
+        >
+          {text}
+        </Link>
+      ),
     },
     {
       title: "Room",
@@ -35,6 +42,7 @@ const BhByTransModal = ({ showModal, setShowModal, trans, prodId }) => {
         : n.transRoom.room.roomLongName;
     return data.push({
       key: i + n.product._id,
+      headerId: n.transHeader._id,
       productId: n.product._id,
       Room: room,
       Customer:

@@ -9,6 +9,6 @@ namespace API.Contracts.pages.trans
     {
         Task<bool> deleteRange(List<TransLine> lines);
         Task<bool> createRange(List<TransLine> lines);
-        Task<List<TransLine>> GetPaymentByHeaderId(Guid headerId);
+        Task<List<TransLine>> GetTransByHeaderId(Guid headerId);
     }
 }

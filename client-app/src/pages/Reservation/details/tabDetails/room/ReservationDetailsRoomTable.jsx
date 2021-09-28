@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Modal, Spin } from "antd";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import { useMountedState } from "react-use";
@@ -12,6 +12,7 @@ import ReservationDetailsRoomTableRow from "./ReservationDetailsRoomTableRow";
 import { toggleLoadingGlobal } from "../../../../../utils/store/pages/globalSettings";
 import { saveHeaderLines } from "./../../../../../utils/services/pages/reservation/ReservationLines";
 import { deleteReservationLine } from "../../../../../utils/services/pages/reservation/ReservationLines";
+import ReservationDetailsRoomViewModal from "./ReservationDetailsRoomViewModal";
 import {
   addRRooms,
   editRRooms,
@@ -77,6 +78,7 @@ const ReservationDetailsRoomTable = (props) => {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
+  const [showPaymentPreviewModal, setShowPaymentPreviewModal] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
@@ -246,6 +248,9 @@ const ReservationDetailsRoomTable = (props) => {
     if (props.visible.action === "cancel" || props.visible.action === "add")
       return;
 
+    if (headerInStore.reservationDetails.isTrans)
+      return setShowPaymentPreviewModal(true);
+
     if (selectedRoom.length === 0) {
       enqueueSnackbar("Select a room to modify.", {
         variant: "info",
@@ -258,7 +263,23 @@ const ReservationDetailsRoomTable = (props) => {
   const renderModal = () => {
     const { action } = props.visible;
 
-    if (action !== "add" && selectedRoom.length === 0) return null;
+    if (!headerInStore.reservationDetails.isTrans)
+      if (action !== "add" && selectedRoom.length === 0) return null;
+
+    if (headerInStore.reservationDetails.isTrans) {
+      return (
+        <Modal
+          title="Room"
+          centered
+          visible={showPaymentPreviewModal}
+          onOk={() => setShowPaymentPreviewModal(false)}
+          onCancel={() => setShowPaymentPreviewModal(false)}
+          footer={null}
+        >
+          <ReservationDetailsRoomViewModal selectedRoom={selectedRoom} />
+        </Modal>
+      );
+    }
 
     return (
       <ReservationDetailsRoomModal

@@ -12,5 +12,6 @@ namespace API.Data.ApiResponse
         public List<reservationRoomLineReadDto> rooms { get; set; }
         public List<reservationPaymentReadDto> payments { get; set; }
         public List<reservationTransReadDto> trans { get; set; }
+        public bool isTrans { get; set; } = false;
     }
 }

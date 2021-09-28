@@ -24,15 +24,17 @@ const ReservationDetailsRightTabHeads = () => {
             </div>
           </div>
           <div>
-            <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
-              <IconButton
-                aria-label="Modify"
-                size="small"
-                onClick={() => setShowmodal(!showModal)}
-              >
-                <EditLocationTwoToneIcon />
-              </IconButton>
-            </Tooltip>
+            {!typeInStore.isTrans && (
+              <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
+                <IconButton
+                  aria-label="Modify"
+                  size="small"
+                  onClick={() => setShowmodal(!showModal)}
+                >
+                  <EditLocationTwoToneIcon />
+                </IconButton>
+              </Tooltip>
+            )}
           </div>
         </div>
         <Divider light />
