@@ -267,7 +267,7 @@ const SOAe = ({
     if (isDayTour) {
       let transOfThisRoomDT = [];
 
-      if (isTrans) {
+      if (isTrans === "true") {
         transOfThisRoomDT = trans.filter(
           (n) =>
             n.transHeader.reservationType._id ===
@@ -292,7 +292,7 @@ const SOAe = ({
 
     let transOfThisRoom = [];
 
-    if (isTrans) {
+    if (isTrans === "true") {
       transOfThisRoom = trans.filter(
         (n) => n.transHeader.reservationRoomLine._id === d._id
       );
@@ -318,7 +318,7 @@ const SOAe = ({
 
     if (isDayTour) {
       let transOfThisRoomDT = [];
-      if (isTrans) {
+      if (isTrans === "true") {
         transOfThisRoomDT = trans.filter(
           (n) =>
             n.transHeader.reservationType._id ===
@@ -971,7 +971,6 @@ const SOA = () => {
     setCurrentUser(store.getState().entities.user.user);
 
     fetchProductDetails();
-    fetchDataTrans();
     if (isTrans === "true") fetchDataTrans();
     else fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
