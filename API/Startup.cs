@@ -24,6 +24,7 @@ using API.Repository.pages.rooms;
 using API.Repository.pages.trans;
 using API.Repository.pages.user;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -52,6 +53,10 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(
+            CertificateAuthenticationDefaults.AuthenticationScheme)
+            .AddCertificate();
+
             services.Configure<jwtConfig>(_config.GetSection("JwtConfig"));
 
             services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
@@ -96,6 +101,7 @@ namespace API
                     policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(new string[] { "http://localhost:3000", "http://localhost:3001" });
                 });
             });
+
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserRepository, UserRepository>();

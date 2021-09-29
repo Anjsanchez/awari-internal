@@ -24,7 +24,24 @@ API/obj/Debug/net5.0/project.razor.json
 API/obj/Debug/net5.0/ref/API.dll
 API/obj/Debug/net5.0/staticwebassets/API.StaticWebAssets.Manifest.cache
 API/obj/Debug/net5.0/staticwebassets/API.StaticWebAssets.xml
- 
+/build/
+*.suo
+*.user
+_ReSharper.*/
+*.sdf
+bin/
+obj/
+config/
+Debug/
+Release/
+*.opensdf
+*.tlog
+*.log
+TestResult.xml
+*.VisualState.xml
+Version.cs
+Version.h
+Version.cpp
 printer-worker/printer-worker/obj/debug
 printer-worker/printer-worker/bin/debug/resortMgmt.xml
  
