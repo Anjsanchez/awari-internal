@@ -67,11 +67,7 @@ const ActiveBookingTblRows = (props) => {
     const typeInlower = name.toLowerCase();
 
     if (typeInlower === "day tour" || typeInlower === "restaurant")
-      return (
-        <span className={classes.numberOfRooms__restaurant}>
-          {item.roomCount}
-        </span>
-      );
+      return <span className={classes.numberOfRooms__restaurant}>NA</span>;
 
     if (item.roomCount === 0)
       return (

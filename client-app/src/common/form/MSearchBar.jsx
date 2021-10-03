@@ -3,7 +3,14 @@ import { RiFilter3Fill } from "react-icons/ri";
 import MaterialButton from "../MaterialButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import { IconButton, Tooltip, Collapse, TextField } from "@material-ui/core";
+import {
+  IconButton,
+  Tooltip,
+  Collapse,
+  TextField,
+  Button,
+} from "@material-ui/core";
+import { FaPlus } from "react-icons/fa";
 
 const useStyles = makeStyles((theme) => ({
   roomVariant_container: {
@@ -38,7 +45,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MSearchBar = ({ onAdd, data, onSearch, searchField }) => {
+const MSearchBar = ({
+  onAdd,
+  data,
+  onSearch,
+  searchField,
+  btnName = "Add",
+}) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(false);
 
@@ -55,12 +68,17 @@ const MSearchBar = ({ onAdd, data, onSearch, searchField }) => {
   return (
     <div className={classes.roomVariant_container}>
       <div className={classes.roomVariantChild_container}>
-        <MaterialButton
+        <Button
+          className="mBtn__container"
+          variant="contained"
+          color="inherit"
           onClick={onAdd}
-          text="Add"
-          color="primary"
           style={{ maxHeight: "38px" }}
-        />
+          startIcon={<FaPlus style={{ fill: "white" }} />}
+        >
+          <span style={{ color: "white" }}>{btnName} </span>
+        </Button>
+
         <Tooltip title="Filter" placement="top">
           <IconButton
             style={{ paddingLeft: "15px" }}

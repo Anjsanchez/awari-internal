@@ -57,7 +57,7 @@ const Payments = () => {
         }, 500);
         //
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        enqueueSnackbar("0037: An error occured while calling the server.", {
           variant: "error",
         });
         return () => {
@@ -169,6 +169,7 @@ const Payments = () => {
               onSearch={handleSearch}
               data={payment}
               searchField="name"
+              btnName="ADD PAYMENT"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
               <PaymentList

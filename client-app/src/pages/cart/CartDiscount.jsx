@@ -52,12 +52,9 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
           setDiscounts([{ _id: 0, name: "Not Applicable" }, ...sortedPayment]);
         }
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0028: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
 

@@ -11,6 +11,7 @@ namespace API.Dto.reservations.header
         public Customer Customer { get; set; }
         public ReservationType reservationType { get; set; }
         public string voucher { get; set; }
+        public string agency { get; set; }
         public User user { get; set; }
         public DateTime createdDate { get; set; }
         public int roomCount { get; set; }

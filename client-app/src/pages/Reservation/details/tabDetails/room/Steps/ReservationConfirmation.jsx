@@ -59,12 +59,9 @@ const ReservationConfirmation = () => {
         store.dispatch(writeToken({ token }));
         setCRoomPrice(price);
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0032: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
 

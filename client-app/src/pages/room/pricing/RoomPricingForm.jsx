@@ -156,7 +156,7 @@ const RoomPricingForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Active Status"
-                subName="This will prevent from making transactions"
+                subName="Disabling this will prevent room from making transactions."
               />
             </Grid>
           </Grid>

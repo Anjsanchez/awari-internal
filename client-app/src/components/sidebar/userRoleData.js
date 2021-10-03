@@ -42,8 +42,8 @@ export const resortMgmtPagesData = [
 
   {
     key: 9,
-    title: "Rooms - Pricings",
-    description: "Rooms - Pricings",
+    title: "Rooms - Pricing",
+    description: "Rooms - Pricing",
   },
   {
     key: 10,

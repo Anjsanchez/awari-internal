@@ -30,20 +30,18 @@ const DbChart = ({ rTrans }) => {
 
   const renderBody = () => {
     if (options.series.length === 0) {
-      return (
-        <Card className="db-card-list__wrapper rac" hoverable>
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </Card>
-      );
+      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
 
     return (
-      <ReactApexChart
-        options={options}
-        series={options.series}
-        type="pie"
-        width="380"
-      />
+      <div className="db-cl-body__container rac">
+        <ReactApexChart
+          options={options}
+          series={options.series}
+          type="pie"
+          width="380"
+        />
+      </div>
     );
   };
   return (
@@ -51,7 +49,7 @@ const DbChart = ({ rTrans }) => {
       <div className="db-cl-span__wrapper">
         <span className="db-cl__span">Transaction Chart</span>
       </div>
-      <div className="db-cl-body__container rac">{renderBody()}</div>
+      {renderBody()}
     </Card>
   );
 };

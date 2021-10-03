@@ -208,8 +208,7 @@ const SOAe = ({
         </View>
         <View style={[styles.tableCol, styles.tableColDescription]}>
           <Text style={[styles.tableRowText]}>
-            {p.payment.name}{" "}
-            {p.paymentRefNum.trim() && " —  " + p.paymentRefNum}
+            {p.payment.name} {p.paymentRefNum.trim() && " —  " + p.type}
           </Text>
         </View>
         <View style={[styles.tableCol]}>
@@ -822,7 +821,7 @@ const SOAe = ({
             <Text style={[styles.tableRowText]}>
               I agree that I am personally liable for the payment of the
               following statement and if the person, company or association
-              indicated by me as being responsibke for payment of the same does
+              indicated by me as being responsible for payment of the same does
               not do so, that my liability for such payment shall be joint and
               several with such person, company or association.
             </Text>

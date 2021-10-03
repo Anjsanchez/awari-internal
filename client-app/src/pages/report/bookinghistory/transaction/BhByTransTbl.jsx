@@ -80,7 +80,7 @@ const BhByTransTbl = ({ trans }) => {
 
       <Card className="db-card-list__wrapper" hoverable>
         <div className="db-cl-span__wrapper">
-          <span className="db-cl__span">Product Transaction</span>
+          <span className="db-cl__span">Product Transactions</span>
           <span className="db-cl__span">
             <ActiveButton textTrue={sortedByAmt.length} value={true} />
           </span>

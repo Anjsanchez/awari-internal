@@ -87,7 +87,7 @@ const ProductCategoryForm = ({
             <Grid item xs={12}>
               <MaterialTextField
                 id="name"
-                label="Product Category name"
+                label="Category Name"
                 handleChange={handleChange}
                 errors={errors.name}
                 values={values.name}
@@ -96,7 +96,7 @@ const ProductCategoryForm = ({
             <Grid item xs={12}>
               <MaterialTextField
                 id="printerName"
-                label="Printer name"
+                label="Printer Name"
                 handleChange={handleChange}
                 errors={errors.printerName}
                 values={values.printerName}
@@ -113,7 +113,7 @@ const ProductCategoryForm = ({
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Variant Active"
-                subName="Disabling this will prevent the room tagged on this variant from transaction."
+                subName="Disabling this will prevent the product/s tagged under this category from including in the transaction."
               />
             </Grid>
             <Grid item xs={12}></Grid>

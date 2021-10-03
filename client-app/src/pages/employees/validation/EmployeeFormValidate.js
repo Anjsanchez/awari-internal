@@ -6,9 +6,12 @@ export default function employeeFormValidate(values) {
   if (!values.lastname.trim()) errors.lastname = "Last name is required";
   if (!values.firstname.trim()) errors.firstname = "First name is required";
 
+  if (values.username.indexOf(" ") >= 0)
+    errors.username = "Space is not allowed in username";
+
   if (!values.emailAddress) errors.emailAddress = "Email is required";
   else if (!/\S+@\S+\.\S+/.test(values.emailAddress))
-    errors.emailAddress = "Please provide a valid email address.";
+    errors.emailAddress = "Please provide a valid email address";
 
   if (!values.password) errors.password = "Password is required";
   else if (values.password.length < 3)

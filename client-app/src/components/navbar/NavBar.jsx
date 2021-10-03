@@ -1,12 +1,10 @@
 import "./NavBar.css";
-import me from "../../assets/tempAvatar.png";
 import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import SideBar from "../sidebar/SideBar";
 import { IconContext } from "react-icons";
 import Modal from "@material-ui/core/Modal";
-// import { RiNotification3Line } from "react-icons/ri";
+import me from "../../assets/tempAvatar.png";
 import { makeStyles } from "@material-ui/core/styles";
 import * as auth from "../../utils/services/authServices";
 
@@ -37,17 +35,18 @@ const NavBar = () => {
     setIconAnchor(event.currentTarget);
   };
 
-  const handleCloseEl = () => {
-    setIconAnchor(null);
+  const handleCloseEl = () => setIconAnchor(null);
+
+  const handleOpen = () => setOpen(true);
+
+  const handleLogOut = () => {
+    localStorage.clear();
+    setTimeout(() => {
+      window.location.replace("/");
+    }, 100);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClose = () => setOpen(false);
 
   const Transition = () => (
     <>
@@ -127,9 +126,7 @@ const NavBar = () => {
           onClose={handleCloseEl}
         >
           <MenuItem onClick={handleCloseEl}>
-            <Link to="/a/logout" className="link">
-              Log out
-            </Link>
+            <span onClick={handleLogOut}>Log Out</span>
           </MenuItem>
         </Menu>
       </IconContext.Provider>

@@ -142,7 +142,7 @@ const ABookingHistoryByTrans = () => {
         setEmployees(empData);
         setEmployeeRoles(RolesData);
       } catch (error) {
-        enqueueSnackbar("0014: An error occured while calling the server.", {
+        enqueueSnackbar("0025: An error occured while calling the server.", {
           variant: "error",
         });
       }

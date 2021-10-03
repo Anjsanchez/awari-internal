@@ -128,12 +128,9 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
       setCustomers(sortedData);
     } catch (error) {
-      enqueueSnackbar(
-        "An error occured while fetching the reservation type in the server.",
-        {
-          variant: "error",
-        }
-      );
+      enqueueSnackbar("0029: An error occured in the server.", {
+        variant: "error",
+      });
     }
   };
 
@@ -174,7 +171,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
   return (
     <div>
       <div className="header-label__wrapper">
-        <label htmlFor="grouped-demo">CURRENT GUEST</label>
+        <label htmlFor="grouped-demo">GUEST NAME</label>
       </div>
       <Autocomplete
         value={renderValue()}

@@ -78,7 +78,7 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialTextField
                 id="name"
-                label="Discount name"
+                label="Discount Name"
                 handleChange={handleChange}
                 errors={errors.name}
                 values={values.name}
@@ -95,7 +95,7 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isByPercentage}
                 handleChange={handleChange}
                 switchName="isByPercentage"
-                name="By percentage Discount"
+                name="By Percentage Discount"
                 subName="The discount will be by percentage"
               />
             </Grid>
@@ -117,20 +117,11 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
           >
             <Grid item xs={12}>
               <MSwitch
-                values={values.isRequiredCustomer}
-                handleChange={handleChange}
-                switchName="isRequiredCustomer"
-                name="Require Customer"
-                subName="Discount that requires active customer"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <MSwitch
                 values={values.isRequiredId}
                 handleChange={handleChange}
                 switchName="isRequiredId"
-                name="Require Customer Id"
-                subName="Discount that requires guest Id"
+                name="Require Customer ID"
+                subName="Discount that requires guest ID"
               />
             </Grid>
             <Grid item xs={12}>
@@ -138,7 +129,7 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isRequiredApproval}
                 handleChange={handleChange}
                 switchName="isRequiredApproval"
-                name="Require approval"
+                name="Require Approval"
                 subName="Discount that requires approval"
               />
             </Grid>

@@ -188,7 +188,7 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialTextField
                 id="numberOfServing"
-                label="Number of Serving"
+                label="Number of Serving/s"
                 type="number"
                 handleChange={handleChange}
                 errors={errors.numberOfServing}
@@ -238,7 +238,7 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 handleChange={handleChange}
                 name="Activity Type"
                 switchName="isActivityType"
-                subName="These are product that requires appointments"
+                subName="This product requires appointments"
               />
             </Grid>
             <Grid item xs={12}>

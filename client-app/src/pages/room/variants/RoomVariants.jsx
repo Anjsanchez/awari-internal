@@ -170,6 +170,7 @@ const RoomVariants = () => {
               onSearch={handleSearch}
               data={variants}
               searchField="name"
+              btnName="Add Variant"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
               <RoomVariantList

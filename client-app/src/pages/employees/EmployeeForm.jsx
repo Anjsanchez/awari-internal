@@ -166,7 +166,7 @@ const EmployeeForm = () => {
         <Grid item xs={12} md={6}>
           <MaterialTextField
             id="password2"
-            label="Re-enter password"
+            label="Re-enter Password"
             type="password"
             handleChange={handleChange}
             errors={errors.password2}
@@ -220,7 +220,7 @@ const EmployeeForm = () => {
               <Grid item xs={12} md={6}>
                 <MaterialTextField
                   id="firstname"
-                  label="First name"
+                  label="First Name"
                   handleChange={handleChange}
                   errors={errors.firstname}
                   values={values.firstname}
@@ -229,7 +229,7 @@ const EmployeeForm = () => {
               <Grid item xs={12} md={6}>
                 <MaterialTextField
                   id="lastname"
-                  label="Last name"
+                  label="Last Name"
                   handleChange={handleChange}
                   errors={errors.lastname}
                   values={values.lastname}
@@ -277,8 +277,8 @@ const EmployeeForm = () => {
                 <MSwitch
                   values={values.isActive}
                   handleChange={handleChange}
-                  name="Account active"
-                  subName="Disabling this will prevent the user from using the system"
+                  name="Account Active"
+                  subName="Disabling this will prevent the user from using the system."
                 />
               </Grid>
               <Grid item xs={12}></Grid>
@@ -305,7 +305,7 @@ const EmployeeForm = () => {
               />
             </div>
             <div className={classes.loginDiv__margin}></div>
-            <FormFooter text="Employee are the staff working in Awari Anilao Bay Resort." />
+            <FormFooter text="Employees are the staff working in Awari Anilao Bay Resort." />
           </form>
         </div>
       </div>

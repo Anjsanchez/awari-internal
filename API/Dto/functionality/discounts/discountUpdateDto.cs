@@ -13,7 +13,6 @@ namespace API.Dto.functionality.discounts
 
         public bool isByPercentage { get; set; }
         public Int32 value { get; set; }
-        public bool isRequiredCustomer { get; set; }
         public bool isActive { get; set; }
         public bool isRequiredId { get; set; }
         public bool isRequiredApproval { get; set; }

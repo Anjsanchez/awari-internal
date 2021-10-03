@@ -113,7 +113,7 @@ export const sideBarData = [
             id: 8,
           },
           {
-            title: "Pricings",
+            title: "Pricing",
             path: "/a/room-management/room-pricings",
             id: 9,
           },

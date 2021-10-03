@@ -57,7 +57,7 @@ const ProductCategory = () => {
         }, 500);
         //
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        enqueueSnackbar("0036: An error occured.", {
           variant: "error",
         });
         return () => {
@@ -173,6 +173,7 @@ const ProductCategory = () => {
               onSearch={handleSearch}
               data={prodCategory}
               searchField="name"
+              btnName="Add Category"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
               <ProductCategoryList

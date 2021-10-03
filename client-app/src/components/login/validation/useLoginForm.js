@@ -40,6 +40,13 @@ const useLoginForm = (validate) => {
         const { username, password } = values;
 
         const data = await auth.login(username, password);
+
+        if (data.singleRecord.isActive === false)
+          return enqueueSnackbar(
+            "This account is inactive. Kindly contact the administrator.",
+            { variant: "error" }
+          );
+
         store.dispatch(userAdded({ data }));
 
         let pathToRelocate;

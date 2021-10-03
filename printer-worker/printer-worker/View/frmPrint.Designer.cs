@@ -30,6 +30,7 @@ namespace resortPrintWorker.View
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPrint));
             this.btnPause = new System.Windows.Forms.Button();
             this.tmrPrint = new System.Windows.Forms.Timer(this.components);
             this.btnLock = new System.Windows.Forms.Button();
@@ -134,6 +135,7 @@ namespace resortPrintWorker.View
             this.Controls.Add(this.btnLock);
             this.Controls.Add(this.btnPause);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "frmPrint";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

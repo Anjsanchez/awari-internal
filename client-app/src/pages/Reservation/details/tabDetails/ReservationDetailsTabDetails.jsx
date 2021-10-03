@@ -29,8 +29,8 @@ const ReservationDetailsTabDetails = () => {
 
     return (
       <>
-        <ReservationDetailsRightTabPayment isTrans={typeInStore.isTrans} />
         <ReservationDetailsRightTabRoom isTrans={typeInStore.isTrans} />
+        <ReservationDetailsRightTabPayment isTrans={typeInStore.isTrans} />
       </>
     );
   };

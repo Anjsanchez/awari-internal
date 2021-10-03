@@ -22,6 +22,10 @@ namespace API.Models.reservation
         public string voucher { get; set; }
 
 
+        [StringLength(100)]
+        public string? agency { get; set; }
+
+
         [Required]
         public Guid reservationTypeId { get; set; }
         public ReservationType reservationType { get; set; }

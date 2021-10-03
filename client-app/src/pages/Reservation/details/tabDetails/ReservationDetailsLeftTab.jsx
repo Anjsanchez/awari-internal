@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import tempAvatar from "../../../../assets/tempAvatar.png";
 import MailTwoToneIcon from "@material-ui/icons/MailTwoTone";
 import { store } from "../../../../utils/store/configureStore";
+import CasinoTwoToneIcon from "@material-ui/icons/CasinoTwoTone";
 import ActiveButton from "./../../../../common/form/ActiveButton";
 import BookmarkTwoToneIcon from "@material-ui/icons/BookmarkTwoTone";
 import PhoneAndroidTwoToneIcon from "@material-ui/icons/PhoneAndroidTwoTone";
@@ -109,8 +110,7 @@ const ReservationDetailsLeftTab = () => {
 
   const renderStatus = () => {
     if (isTrans) return <ActiveButton value={true} textTrue="Completed" />;
-    if (header.isActive)
-      return <ActiveButton value={true} textTrue="Checked In" />;
+    if (header.isActive) return <ActiveButton value={true} textTrue="In" />;
 
     return <ActiveButton isWarning={true} textTrue="Pending" />;
   };
@@ -194,19 +194,43 @@ const ReservationDetailsLeftTab = () => {
                 </span>
               </ListItem>
               <Divider />
-              <ListItem
-                button
-                className="reservationDetails-body__span__wrapper"
-              >
-                <ConfirmationNumberTwoToneIcon className="reservationDetails-body__span__icon" />
-                <span className="reservationDetails-body__span__label">
-                  Voucher
-                </span>
-                <span className="reservationDetails-body__span__detail">
-                  {header.reservationType.voucher}
-                </span>
-              </ListItem>
-              <Divider />
+
+              {header.reservationType.name === "OTA/Travel Agency" && (
+                <>
+                  <ListItem
+                    button
+                    className="reservationDetails-body__span__wrapper"
+                  >
+                    <CasinoTwoToneIcon className="reservationDetails-body__span__icon" />
+                    <span className="reservationDetails-body__span__label">
+                      Agency
+                    </span>
+                    <span className="reservationDetails-body__span__detail">
+                      {header.agency}
+                    </span>
+                  </ListItem>
+                  <Divider />
+                </>
+              )}
+
+              {header.reservationType.name !== "Restaurant" &&
+                header.reservationType.name !== "Day Tour" && (
+                  <>
+                    <ListItem
+                      button
+                      className="reservationDetails-body__span__wrapper"
+                    >
+                      <ConfirmationNumberTwoToneIcon className="reservationDetails-body__span__icon" />
+                      <span className="reservationDetails-body__span__label">
+                        Voucher
+                      </span>
+                      <span className="reservationDetails-body__span__detail">
+                        {header.reservationType.voucher}
+                      </span>
+                    </ListItem>
+                    <Divider />
+                  </>
+                )}
               <ListItem
                 button
                 className="reservationDetails-body__span__wrapper"

@@ -9,7 +9,7 @@ const Customers = () => {
       <FormHeader
         header="Customers"
         second="User Management"
-        third="Customer"
+        third="Customers"
         navigate="/a/user-management/customers/new"
         SecondIcon={RiUserSmileFill}
       />

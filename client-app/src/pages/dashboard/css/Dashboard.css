@@ -111,3 +111,11 @@
   display: flex;
   justify-content: center;
 }
+.db-cl-body__container .ant-table-thead > tr > th {
+  margin: 0px;
+  font-size: 0.8rem;
+  color: rgb(33, 33, 33);
+  font-weight: 500;
+  font-family: "Poppins", sans-serif;
+  line-height: 1.235;
+}

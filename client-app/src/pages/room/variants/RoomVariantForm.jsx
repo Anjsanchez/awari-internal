@@ -95,7 +95,7 @@ const RoomVariantForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Variant Active"
-                subName="Disabling this will prevent the room tagged on this variant from transaction."
+                subName="Disabling this will prevent the room/s tagged under this variant from including in the transaction."
               />
             </Grid>
             <Grid item xs={12}></Grid>

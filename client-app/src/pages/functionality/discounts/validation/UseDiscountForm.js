@@ -20,7 +20,6 @@ const UseDiscountForm = (validate, onSuccessEdit, onSuccessAdd) => {
     name: "",
     value: "",
     isByPercentage: false,
-    isRequiredCustomer: false,
     isRequiredId: false,
     isRequiredApproval: false,
     isActive: false,
@@ -32,7 +31,6 @@ const UseDiscountForm = (validate, onSuccessEdit, onSuccessAdd) => {
     setValues({
       id: discount._id || "",
       isByPercentage: discount.isByPercentage || false,
-      isRequiredCustomer: discount.isRequiredCustomer || false,
       isRequiredId: discount.isRequiredId || false,
       isRequiredApproval: discount.isRequiredApproval || false,
       isActive: discount.isActive || false,
@@ -78,7 +76,6 @@ const UseDiscountForm = (validate, onSuccessEdit, onSuccessAdd) => {
     if (
       name === "isActive" ||
       name === "isByPercentage" ||
-      name === "isRequiredCustomer" ||
       name === "isRequiredId" ||
       name === "isRequiredApproval"
     ) {

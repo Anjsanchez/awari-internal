@@ -78,7 +78,7 @@ const PaymentForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialTextField
                 id="name"
-                label="Payment name"
+                label="Payment Name"
                 handleChange={handleChange}
                 errors={errors.name}
                 values={values.name}
@@ -95,7 +95,7 @@ const PaymentForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Payment Active"
-                subName="Disabling this will prevent this payment from transaction."
+                subName="Disabling this will prevent the payment from including in the transaction."
               />
             </Grid>
 

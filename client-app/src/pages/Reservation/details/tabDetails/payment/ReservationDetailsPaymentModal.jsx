@@ -89,12 +89,9 @@ const ReservationDetailsPaymentModal = (props) => {
 
         setReservationTypes(sortedPayment);
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0030: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
 

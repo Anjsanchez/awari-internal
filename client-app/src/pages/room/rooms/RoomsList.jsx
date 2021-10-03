@@ -10,7 +10,7 @@ const RoomsList = ({ data, onDelete, onView }) => {
         data={data}
         onView={onView}
         onDelete={onDelete}
-        displayField="searchName"
+        displayField="roomLongName"
         hasAditionalField={{
           value: true,
           field: "numberOfRooms",

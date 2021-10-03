@@ -131,13 +131,6 @@ const ReservationDetailsPaymentTable = (props) => {
 
     if (headerInStore.isTrans) return setShowPaymentPreviewModal(true);
 
-    if (!headerInStore.header.isActive) {
-      enqueueSnackbar("This reservation is not yet active.", {
-        variant: "warning",
-      });
-      return;
-    }
-
     if (props.visible.action !== "add" && selectedPayment.length === 0) {
       enqueueSnackbar("Please select a payment to update.", {
         variant: "info",
@@ -150,7 +143,6 @@ const ReservationDetailsPaymentTable = (props) => {
 
   const renderModal = () => {
     const { action } = props.visible;
-    if (!headerInStore.isTrans) if (!headerInStore.header.isActive) return null;
 
     if (
       (action === "update" && selectedPayment.length === 0) ||
@@ -169,7 +161,9 @@ const ReservationDetailsPaymentTable = (props) => {
           onCancel={() => setShowPaymentPreviewModal(false)}
           footer={null}
         >
-          <ReservationDetailsPaymentViewModal selectedPayment={selectedPayment}/>
+          <ReservationDetailsPaymentViewModal
+            selectedPayment={selectedPayment}
+          />
         </Modal>
       );
     }

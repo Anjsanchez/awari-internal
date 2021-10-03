@@ -88,12 +88,9 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
         setRooms(sortedData);
         setFilteredRooms(zz);
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0027: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
     populateReservationTypes();

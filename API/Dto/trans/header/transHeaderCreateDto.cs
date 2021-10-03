@@ -13,6 +13,8 @@ namespace API.Dto.trans.header
 
         public Guid userId { get; set; }
 
+        public string agency { get; set; }
+
         public Guid userCheckOutId { get; set; }
 
         public DateTime createdDate { get; set; }

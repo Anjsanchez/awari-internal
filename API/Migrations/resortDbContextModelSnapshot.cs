@@ -16,7 +16,7 @@ namespace API.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.7")
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("API.Models.Customer", b =>
@@ -77,6 +77,22 @@ namespace API.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("Customers");
+                });
+
+            modelBuilder.Entity("API.Models.Others.TravelAgency", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("_id");
+
+                    b.ToTable("TravelAgencies");
                 });
 
             modelBuilder.Entity("API.Models.Role", b =>
@@ -204,9 +220,6 @@ namespace API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("isRequiredApproval")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("isRequiredCustomer")
                         .HasColumnType("bit");
 
                     b.Property<bool>("isRequiredId")
@@ -373,6 +386,10 @@ namespace API.Migrations
                     b.Property<Guid>("_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("agency")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
@@ -682,6 +699,10 @@ namespace API.Migrations
                     b.Property<Guid>("_id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("agency")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("checkOutDate")
                         .HasColumnType("datetime2");

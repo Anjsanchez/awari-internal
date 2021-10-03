@@ -200,6 +200,7 @@ const Products = () => {
                 onSearch={handleSearch}
                 data={filteredProducts}
                 searchField="longName"
+                btnName="ADD PRODUCT"
               />
               <ProductList
                 data={restrictedData}

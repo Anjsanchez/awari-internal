@@ -22,7 +22,7 @@ const UseRoomForm = (validate, onSuccessEdit, onSuccessAdd) => {
     costPrice: "0",
     minimumCapacity: "",
     maximumCapacity: "",
-    numberOfRooms: "",
+    numberOfRooms: 1,
     isActive: false,
     isAllowExtraPax: false,
     isPerPaxRoomType: false,
@@ -38,12 +38,12 @@ const UseRoomForm = (validate, onSuccessEdit, onSuccessAdd) => {
       searchName: room.searchName || "",
       createdDate: room.createdDate || "",
       roomLongName: room.roomLongName || "",
-      numberOfRooms: room.numberOfRooms || "",
+      numberOfRooms: 1,
       roomVariantId: room.roomVariant._id || "",
       maximumCapacity: room.maximumCapacity || "",
       minimumCapacity: room.minimumCapacity || "",
       isAllowExtraPax: room.isAllowExtraPax || false,
-      isPerPaxRoomType: room.isPerPaxRoomType || false,
+      isPerPaxRoomType: false,
       createdBy: room.user.firstName + " " + room.user.lastName || "",
     });
   };

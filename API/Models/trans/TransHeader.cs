@@ -17,6 +17,8 @@ namespace API.Models.trans
         public Guid customerId { get; set; }
         public Customer Customer { get; set; }
 
+        [StringLength(100)]
+        public string? agency { get; set; }
 
         [Required]
         [StringLength(100)]

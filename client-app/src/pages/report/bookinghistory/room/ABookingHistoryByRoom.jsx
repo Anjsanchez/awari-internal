@@ -49,7 +49,7 @@ const ABookingHistoryByRoom = () => {
 
         setTransLines(data.listRecords);
       } catch (error) {
-        enqueueSnackbar("0013: An error occured while calling the server.", {
+        enqueueSnackbar("0024: An error occured while calling the server.", {
           variant: "error",
         });
       }
@@ -97,7 +97,7 @@ const ABookingHistoryByRoom = () => {
         setRooms(roomData);
         setRoomVariants(variantsData);
       } catch (error) {
-        enqueueSnackbar("0015: An error occured while calling the server.", {
+        enqueueSnackbar("0026: An error occured while calling the server.", {
           variant: "error",
         });
       }
@@ -171,7 +171,7 @@ const ABookingHistoryByRoom = () => {
         setInitialLoadForm(true);
         setDiscounts(discData);
       } catch (error) {
-        enqueueSnackbar("0011: An error occured while calling the server.", {
+        enqueueSnackbar("0022: An error occured while calling the server.", {
           variant: "error",
         });
       }

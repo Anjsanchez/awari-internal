@@ -11,6 +11,8 @@ namespace API.Dto.reservations.header
 
         public Guid reservationTypeId { get; set; }
 
+        public string agency { get; set; }
+
         public string voucher { get; set; }
 
         public Guid userId { get; set; }

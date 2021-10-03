@@ -12,6 +12,7 @@ const slice = createSlice({
         key: "",
       },
       voucher: "",
+      agency: "",
       customer: {},
     },
     rooms: {
@@ -122,10 +123,11 @@ const slice = createSlice({
       resx.isVisible = false;
     },
     headerTypeAdded: (resx, action) => {
-      const { name, key, voucher } = action.payload;
+      const { name, key, voucher, agency } = action.payload;
       resx.header.type.name = name;
       resx.header.type.key = key;
       resx.header.voucher = voucher;
+      resx.header.agency = agency;
     },
     headerCustomerAdded: (resx, action) => {
       resx.header.customer = action.payload;

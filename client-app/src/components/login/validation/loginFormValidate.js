@@ -2,7 +2,7 @@ export default function loginFormValidate(values) {
   let errors = {};
 
   if (!values.username.trim()) {
-    errors.username = "Username required";
+    errors.username = "Username is required";
   }
   if (!values.email) {
     errors.email = "Email required";

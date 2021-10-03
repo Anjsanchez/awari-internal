@@ -142,7 +142,7 @@ const RoomPricing = () => {
           setInitialLoadForm(true);
         }, 500);
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        enqueueSnackbar("0035: An error occured.", {
           variant: "error",
         });
         return () => {
@@ -243,6 +243,7 @@ const RoomPricing = () => {
                 onSearch={handleSearch}
                 data={filteredRooms}
                 searchField="searchName"
+                btnName="ADD PRICE"
               />
               <RoomPricingList
                 data={restrictedData}

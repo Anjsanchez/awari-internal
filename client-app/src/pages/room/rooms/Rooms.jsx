@@ -193,6 +193,7 @@ const Rooms = () => {
                 onSearch={handleSearch}
                 data={filteredRooms}
                 searchField="searchName"
+                btnName="Add Room"
               />
               <RoomsList
                 data={restrictedData}

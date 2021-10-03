@@ -33,12 +33,9 @@ const ReservationDiscount = () => {
           setDiscounts([{ _id: 0, name: "Not Applicable" }, ...sortedPayment]);
         }
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0033: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
     function populaterecords() {

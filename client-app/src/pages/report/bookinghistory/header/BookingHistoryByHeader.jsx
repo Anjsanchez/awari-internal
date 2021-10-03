@@ -70,7 +70,7 @@ const BookingHistoryByHeader = () => {
 
         setCustomers(custData);
       } catch (error) {
-        enqueueSnackbar("0011: An error occured while calling the server.", {
+        enqueueSnackbar("0021: An error occured while calling the server.", {
           variant: "error",
         });
       }
@@ -101,7 +101,7 @@ const BookingHistoryByHeader = () => {
 
         setTransHeader(data.listRecords);
       } catch (error) {
-        enqueueSnackbar("0013: An error occured while calling the server.", {
+        enqueueSnackbar("0023: An error occured while calling the server.", {
           variant: "error",
         });
       }

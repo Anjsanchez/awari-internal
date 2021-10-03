@@ -159,7 +159,12 @@ namespace resortPrintWorker.Helper
                         continue;
                     }
 
-                    if (string.IsNullOrEmpty(remarkName)) continue;
+                    if (string.IsNullOrEmpty(remarkName))
+                    {
+                        Offset = Offset + lineheight12;
+                        layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                        continue;
+                    }
                     Offset = Offset + lineheight12 + 5;
                     Offset = Offset + lineheight12;
                     layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);

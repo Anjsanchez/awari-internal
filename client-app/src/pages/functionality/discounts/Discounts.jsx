@@ -56,7 +56,7 @@ const Discounts = () => {
         }, 500);
         //
       } catch (error) {
-        enqueueSnackbar("An error occured while calling the server.", {
+        enqueueSnackbar("0037: An error occured while calling the server.", {
           variant: "error",
         });
         return () => {
@@ -170,6 +170,7 @@ const Discounts = () => {
               onSearch={handleSearch}
               data={discount}
               searchField="name"
+              btnName="ADD DISCOUNT"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
               <DiscountList

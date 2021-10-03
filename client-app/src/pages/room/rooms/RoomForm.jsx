@@ -55,12 +55,9 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
 
         setVariants(data.listRecords);
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the roles in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0034: An error occured.", {
+          variant: "error",
+        });
       }
     }
 
@@ -97,7 +94,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialTextField
                 id="roomLongName"
-                label="Room name"
+                label="Room Name"
                 handleChange={handleChange}
                 errors={errors.roomLongName}
                 values={values.roomLongName}
@@ -106,7 +103,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialTextField
                 id="searchName"
-                label="Search name"
+                label="Search Name"
                 handleChange={handleChange}
                 errors={errors.searchName}
                 values={values.searchName}
@@ -124,16 +121,6 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 displayText="name"
                 menuItemValue="_id"
                 maxWidth="100%"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <MaterialTextField
-                id="numberOfRooms"
-                label="Number of Rooms"
-                type="number"
-                handleChange={handleChange}
-                errors={errors.numberOfRooms}
-                values={values.numberOfRooms}
               />
             </Grid>
             <Grid item xs={6}>
@@ -161,7 +148,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Active Status"
-                subName="This will prevent from making transactions"
+                subName="Disabling this will prevent room from making transactions."
               />
             </Grid>
             <Grid item xs={12} md={10}>
@@ -170,16 +157,7 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 handleChange={handleChange}
                 name="Allow Extra Pax"
                 switchName="isAllowExtraPax"
-                subName="This will allow adding pax on transactions"
-              />
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <MSwitch
-                values={values.isPerPaxRoomType}
-                handleChange={handleChange}
-                switchName="isPerPaxRoomType"
-                name="Per Pax Pricing Type"
-                subName="Room price will be multiplied by pax * price"
+                subName="This will allow adding pax on transactions."
               />
             </Grid>
           </Grid>

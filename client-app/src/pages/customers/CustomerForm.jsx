@@ -135,7 +135,7 @@ const CustomerForm = () => {
                 <Grid item xs={12} sm={6}>
                   <MaterialTextField
                     id="firstname"
-                    label="First name"
+                    label="First Name"
                     handleChange={handleChange}
                     errors={errors.firstname}
                     values={values.firstname}
@@ -144,7 +144,7 @@ const CustomerForm = () => {
                 <Grid item xs={12} sm={6}>
                   <MaterialTextField
                     id="lastname"
-                    label="Last name"
+                    label="Last Name"
                     handleChange={handleChange}
                     errors={errors.lastname}
                     values={values.lastname}
@@ -153,7 +153,7 @@ const CustomerForm = () => {
                 <Grid item xs={12}>
                   <MaterialTextField
                     id="address"
-                    label="Physical Address"
+                    label="Address"
                     handleChange={handleChange}
                     errors={errors.address}
                     values={values.address}
@@ -163,7 +163,7 @@ const CustomerForm = () => {
                 <Grid item xs={12} sm={6}>
                   <MaterialTextField
                     id="emailAddress"
-                    label="Email Address"
+                    label="Email"
                     type="email"
                     handleChange={handleChange}
                     errors={errors.emailAddress}
@@ -174,7 +174,7 @@ const CustomerForm = () => {
                 <Grid item xs={12} sm={6}>
                   <MaterialTextField
                     id="mobile"
-                    label="Mobile number"
+                    label="Mobile Number"
                     type="number"
                     handleChange={handleChange}
                     errors={errors.mobile}
@@ -201,7 +201,7 @@ const CustomerForm = () => {
                     animateYearScrolling
                     allowKeyboardControl
                     inputVariant="outlined"
-                    label="Birth date"
+                    label="Birthdate"
                     format="MMMM Do YYYY"
                     value={values.birthday}
                     id="birthday"
@@ -247,7 +247,7 @@ const CustomerForm = () => {
                 />
               </div>
               <div className={classes.loginDiv__margin}></div>
-              <FormFooter text="Customer are the guest in Awari Anilao Bay Resort." />
+              <FormFooter text="Customers are the guests in Awari Anilao Bay Resort." />
             </form>
           </div>
         </div>

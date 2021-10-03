@@ -4,22 +4,28 @@ import "./css/ReservationType.css";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
-import { writeToken } from "../../../utils/store/pages/users";
 import { store } from "../../../utils/store/configureStore";
+import { writeToken } from "../../../utils/store/pages/users";
 import { headerTypeAdded } from "../../../utils/store/pages/createReservation";
+import { GetTravelAgency } from "./../../../utils/services/pages/others/TravelAgencyService";
 import { GetReservationTypes } from "./../../../utils/services/pages/reservation/ReservationType";
 
 const ReservationType = React.memo(() => {
   const { enqueueSnackbar } = useSnackbar();
+  const [travelAgency, setTravelAgency] = useState([]);
   const [reservationTypes, setReservationTypes] = useState([]);
   const [selectedType, setSelectedType] = useState({
     name: "",
     key: "",
     voucher: "",
+    agency: "",
   });
 
   const onSelectChange = (value, e) =>
     setSelectedType((n) => ({ ...n, name: e.value, key: e.key }));
+
+  const onSelectChangeAgency = (value, e) =>
+    setSelectedType((n) => ({ ...n, agency: e.value }));
 
   const handleVoucherChange = (e) =>
     setSelectedType((n) => ({ ...n, voucher: e.target.value }));
@@ -43,12 +49,9 @@ const ReservationType = React.memo(() => {
 
         setReservationTypes(sortedPayment);
       } catch (error) {
-        enqueueSnackbar(
-          "An error occured while fetching the reservation type in the server.",
-          {
-            variant: "error",
-          }
-        );
+        enqueueSnackbar("0020: An error occured in the server.", {
+          variant: "error",
+        });
       }
     }
 
@@ -65,6 +68,20 @@ const ReservationType = React.memo(() => {
       });
     }
 
+    async function populateTravelAgency() {
+      try {
+        const { data } = await GetTravelAgency();
+
+        const sortData = data.sort((a, b) => a.name.localeCompare(b.name));
+
+        setTravelAgency(sortData);
+      } catch (error) {
+        enqueueSnackbar("0019: An error occured in the server.", {
+          variant: "error",
+        });
+      }
+    }
+    populateTravelAgency();
     populateReservationTypes();
     initialLoadValues();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -73,6 +90,43 @@ const ReservationType = React.memo(() => {
     store.dispatch(headerTypeAdded(selectedType));
   }, [selectedType]);
 
+  const renderTravelAgency = (d) => {
+    if (d !== "ota/travel agency") return null;
+    return (
+      <div className="remark__container">
+        <div className="remark__wrapper">
+          <div className="header-label__wrapper">
+            <label htmlFor="voucher">AGENCY</label>
+          </div>
+          <div className="remark-input__wrapper">
+            <Select
+              id="res-type"
+              className="reservationtype__select"
+              showSearch
+              placeholder="Select a person"
+              optionFilterProp="children"
+              onChange={onSelectChangeAgency}
+              value={selectedType.agency}
+              filterSort={(optionA, optionB) =>
+                optionA.children
+                  .toLowerCase()
+                  .localeCompare(optionB.children.toLowerCase())
+              }
+              filterOption={(input, option) =>
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {travelAgency.map((n) => (
+                <Select.Option value={n.name} key={n._id}>
+                  {n.name}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+        </div>
+      </div>
+    );
+  };
   const conditionA = () => {
     if (
       selectedType.name === null ||
@@ -91,22 +145,25 @@ const ReservationType = React.memo(() => {
       return null;
 
     return (
-      <div className="remark__container">
-        <div className="remark__wrapper">
-          <div className="header-label__wrapper">
-            <label htmlFor="voucher">VOUCHER</label>
-          </div>
-          <div className="remark-input__wrapper">
-            <Input
-              id="voucher"
-              size="large"
-              key="voucher"
-              value={selectedType.voucher}
-              onChange={handleVoucherChange}
-            />
+      <>
+        {renderTravelAgency(typeInlower)}
+        <div className="remark__container">
+          <div className="remark__wrapper">
+            <div className="header-label__wrapper">
+              <label htmlFor="voucher">VOUCHER</label>
+            </div>
+            <div className="remark-input__wrapper">
+              <Input
+                id="voucher"
+                size="large"
+                key="voucher"
+                value={selectedType.voucher}
+                onChange={handleVoucherChange}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   };
 

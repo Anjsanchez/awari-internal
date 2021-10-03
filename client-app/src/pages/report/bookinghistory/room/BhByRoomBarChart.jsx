@@ -125,11 +125,7 @@ const BhByRoomBarChart = ({ filteredTrans }) => {
 
   const renderBody = () => {
     if (options.series.length === 0) {
-      return (
-        <Card className="db-card-list__wrapper rac" hoverable>
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </Card>
-      );
+      return <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />;
     }
 
     return (

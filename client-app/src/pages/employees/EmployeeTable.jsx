@@ -13,7 +13,7 @@ const headCells = [
     id: "firstName",
     numeric: false,
     disablePadding: true,
-    label: "Full name",
+    label: "Full Name",
     enableSort: true,
   },
   {

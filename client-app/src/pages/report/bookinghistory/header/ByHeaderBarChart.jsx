@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Empty } from "antd";
 import ReactApexChart from "react-apexcharts";
 const ByHeaderBarChart = ({ filteredTransHeader }) => {
-  if (filteredTransHeader.length === 0) return null;
   //..
   const options = {
     chart: {
@@ -49,13 +48,13 @@ const ByHeaderBarChart = ({ filteredTransHeader }) => {
   });
 
   const renderBody = () => {
-    if (options.length === 0) {
+    if (options.length === 0 || filteredTransHeader.length === 0)
       return (
-        <Card className="db-card-list__wrapper rac" hoverable>
-          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        </Card>
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          style={{ marginTop: "73px" }}
+        />
       );
-    }
 
     return (
       <ReactApexChart

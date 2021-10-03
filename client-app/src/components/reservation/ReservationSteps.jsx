@@ -59,14 +59,14 @@ function getStepContent(step) {
 
 const ReservationSteps = () => {
   const steps = getSteps();
-  const classes = useStyles();
   const hist = useHistory();
+  const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const [activeStep, setActiveStep] = useState(0);
 
   const typeInStore = useSelector((state) => state.entities);
   const { createReservation, user } = typeInStore;
-  const { type, voucher, customer } = createReservation.header;
+  const { type, voucher, customer, agency } = createReservation.header;
 
   const handleNext = () =>
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -78,12 +78,19 @@ const ReservationSteps = () => {
     setActiveStep(0);
   };
 
-  const customerViewModel = (mdl) => ({
-    customerId: mdl.customer._id,
-    reservationTypeId: mdl.type.key,
-    voucher: mdl.voucher,
-    userId: user.user.id,
-  });
+  const customerViewModel = (mdl) => {
+    let agency = null;
+    if (mdl.type.name.toLowerCase() === "ota/travel agency")
+      agency = mdl.agency;
+
+    return {
+      agency: agency,
+      customerId: mdl.customer._id,
+      reservationTypeId: mdl.type.key,
+      voucher: mdl.voucher,
+      userId: user.user.id,
+    };
+  };
 
   const handleDialogProceed = async () => {
     //
@@ -93,16 +100,15 @@ const ReservationSteps = () => {
       const { data } = await saveHeader(mdl);
       const { token } = data;
       store.dispatch(writeToken({ token }));
-
       setTimeout(() => {
         enqueueSnackbar("Successfully updated records!", {
           variant: "success",
         });
-
         store.dispatch(refreshValues());
         setActiveStep(0);
+        hist.replace("/a/dashboard");
         hist.replace("/a/reservation-management/reservations");
-      }, 500);
+      }, 200);
     } catch (ex) {
       if (ex && ex.status === 400) {
         enqueueSnackbar(ex.data, { variant: "error" });
@@ -125,6 +131,10 @@ const ReservationSteps = () => {
         return false;
 
       if (voucher === null || voucher === "") return true;
+
+      if (rType === "ota/travel agency")
+        if (agency === "" || agency === null || agency === undefined)
+          return true;
 
       return false;
     }

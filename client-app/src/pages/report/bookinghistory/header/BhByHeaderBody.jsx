@@ -34,7 +34,7 @@ const BhByHeaderBody = ({ filteredTransHeader }) => {
             <span className="db-title__span">
               ₱ {handleComputeTotalEarning()}
             </span>
-            <span className="db-title__subSpan">Total Earning</span>
+            <span className="db-title__subSpan">Total Earnings</span>
           </Card>
         </Grid>
         <Grid item xs={12} sm={6} md={4}>

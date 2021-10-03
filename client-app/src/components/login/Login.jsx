@@ -135,7 +135,7 @@ export default function Login() {
                 variant="body2"
                 color="textSecondary"
               >
-                Forgot Password
+                Forgot Password?
               </Typography>
             </form>
           </div>
