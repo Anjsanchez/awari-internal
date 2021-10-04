@@ -35,12 +35,12 @@ const ReservationDetailsLeftTabBilling = () => {
     if (!detailsInStore.header.isActive) return;
 
     if (netAmount === netPayment)
-      return <ActiveButton value={true} textTrue="Payment Complete" />;
+      return <ActiveButton value={true} textTrue="Complete" />;
 
     if (netAmount <= netPayment)
-      return <ActiveButton isWarning={true} textTrue="Over Payment" />;
+      return <ActiveButton isWarning={true} textTrue="Over" />;
 
-    return <ActiveButton textFalse="Incomplete Payment" />;
+    return <ActiveButton textFalse="Incomplete" />;
   };
 
   return (
@@ -61,18 +61,14 @@ const ReservationDetailsLeftTabBilling = () => {
         <div className="reservationDetails-body__wrapper">
           <List component="nav" aria-label="mailbox folders">
             <ListItem button className="reservationDetails-body__span__wrapper">
-              <span className="reservationDetails-body__span__label">
-                Net Amount
-              </span>
+              <span className="reservationDetails-body__span__label">Net</span>
               <span className="reservationDetails-body__span__detail">
                 {formatNumber(netAmount)} PHP
               </span>
             </ListItem>
             <Divider />
             <ListItem button className="reservationDetails-body__span__wrapper">
-              <span className="reservationDetails-body__span__label">
-                Amount Paid
-              </span>
+              <span className="reservationDetails-body__span__label">Paid</span>
               <span className="reservationDetails-body__span__detail">
                 {formatNumber(netPayment)} PHP
               </span>
@@ -80,7 +76,7 @@ const ReservationDetailsLeftTabBilling = () => {
             <Divider />
             <ListItem button className="reservationDetails-body__span__wrapper">
               <span className="reservationDetails-body__span__label">
-                Amount Remaining
+                Remaining
               </span>
               <span className="reservationDetails-body__span__detail">
                 {renderAmountRemaining()}

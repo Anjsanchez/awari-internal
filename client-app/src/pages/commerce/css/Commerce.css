@@ -250,7 +250,7 @@
     padding-bottom: 18px;
   }
   .com-body__pricing {
-    width: 92%;
+    /* width: 92%; */
   }
 }
 @media screen and (max-width: 600px) {

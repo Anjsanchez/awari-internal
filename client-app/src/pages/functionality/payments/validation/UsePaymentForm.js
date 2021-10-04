@@ -43,7 +43,6 @@ const UsePaymentForm = (validate, onSuccessEdit, onSuccessAdd) => {
     try {
       const currentUser = store.getState().entities.user.user.id;
       const objEmp = { ...values, userId: currentUser };
-
       const { data } = await savePayment(objEmp);
       const { token, singleRecord } = data;
 

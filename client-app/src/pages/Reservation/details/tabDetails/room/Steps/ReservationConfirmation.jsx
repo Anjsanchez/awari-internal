@@ -198,7 +198,11 @@ const ReservationConfirmation = () => {
           <List component="nav" aria-label="mailbox folders">
             <AListItem txtLbl="Adult" txtValue={storeData.heads.adult} />
             <AListItem txtLbl="Senior" txtValue={storeData.heads.senior} />
-            <AListItem txtLbl="Children" txtValue={storeData.heads.children} />
+            <AListItem
+              txtLbl="Children"
+              txtValue={storeData.heads.children}
+              hasDivider={false}
+            />
           </List>
         </div>
         <div className="reservationtype-container">
@@ -245,6 +249,7 @@ const ReservationConfirmation = () => {
             <AListItem
               Icon={MonetizationOnTwoToneIcon}
               txtLbl="Net Amount"
+              hasDivider={false}
               txtValue={
                 <ActiveButton textFalse={formatNumber(cNetAmount) + " PHP"} />
               }

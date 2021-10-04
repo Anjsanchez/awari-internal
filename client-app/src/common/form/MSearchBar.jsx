@@ -1,6 +1,5 @@
 import React from "react";
 import { RiFilter3Fill } from "react-icons/ri";
-import MaterialButton from "../MaterialButton";
 import { makeStyles } from "@material-ui/core/styles";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import {

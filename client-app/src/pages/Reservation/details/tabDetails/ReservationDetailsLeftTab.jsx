@@ -187,7 +187,7 @@ const ReservationDetailsLeftTab = () => {
               >
                 <BookmarkTwoToneIcon className="reservationDetails-body__span__icon" />
                 <span className="reservationDetails-body__span__label">
-                  Reservation Type
+                  Reservation
                 </span>
                 <span className="reservationDetails-body__span__detail">
                   {header.reservationType.name}
@@ -295,7 +295,7 @@ const ReservationDetailsLeftTab = () => {
                   </span>
                   <br />
                   <span className="reservationDetails-footer__span__detail">
-                    Transactions
+                    Trans
                   </span>
                 </Grid>
               </Grid>

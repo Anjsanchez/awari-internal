@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using API.Dto.customers;
 using API.Dto.reservations.header;
 using API.Models.reservation;
 
@@ -14,3 +13,5 @@ namespace API.Contracts.pages.reservation
         Task<ReservationHeader> GetHeadersWithFullDetails(Guid HeaderId);
     }
 }
+
+

@@ -125,8 +125,6 @@ const ReservationDetailsPaymentModal = (props) => {
 
     return (
       <>
-        <Divider />
-
         <List component="nav" aria-label="mailbox folders">
           <ListItem button className="reservationDetails-body__span__wrapper">
             <AssignmentIndTwoToneIcon className="reservationDetails-body__span__icon" />
