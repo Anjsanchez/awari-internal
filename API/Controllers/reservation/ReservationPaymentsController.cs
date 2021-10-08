@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Contracts.pages.approval;
 using API.Contracts.pages.functionality;
 using API.Contracts.pages.reservation;
 using API.Data.ApiResponse;
+using API.Dto.approval;
+using API.Dto.reservations;
 using API.Dto.reservations.payment;
 using API.helpers.api;
 using API.Migrations.Configurations;
+using API.Models.approval;
 using API.Models.functionality;
 using API.Models.reservation;
 using AutoMapper;
@@ -15,6 +19,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using static API.Models.Enum.EnumModels;
+
 namespace API.Controllers.reservation
 {
     [Route("api/[controller]")]
@@ -23,13 +29,16 @@ namespace API.Controllers.reservation
 
     public class ReservationPaymentsController : ControllerBase
     {
-
+        private readonly IReservationApprovalRepository _aprRepo;
         private readonly IReservationPaymentRepository _repo;
+        private readonly IApprovalPaymentRepository _tmpRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationPaymentsController(IReservationPaymentRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationPaymentsController(IApprovalPaymentRepository tmpRepo, IReservationPaymentRepository repo, IReservationApprovalRepository aprRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _tmpRepo = tmpRepo;
+            _aprRepo = aprRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -121,6 +130,70 @@ namespace API.Controllers.reservation
                 Success = true,
                 singleRecord = mappedCategory
             });
+        }
+
+
+        private EAction GetApprovalAction(string action)
+        {
+            var actionLower = action.ToLower();
+            if (actionLower == "modify")
+                return EAction.Modify;
+
+            return EAction.Delete;
+
+        }
+
+        private EApprovalType GetApprovalType(string type)
+        {
+            var typeInLower = type.ToLower();
+
+            if (typeInLower == "payment")
+                return EApprovalType.Payment;
+
+            if (typeInLower == "rooms")
+                return EApprovalType.Rooms;
+
+            return EApprovalType.Trans;
+        }
+
+        [HttpPut("CreatePaymentApproval/{id}")]
+        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalCreateDto createDto)
+        {
+
+            var reservationPayment = await _repo.FindById(id);
+            if (reservationPayment == null)
+                return NotFound("ReservationPayment not found in the database");
+
+            reservationPayment.approvalStatus = Status.Pending;
+            await _repo.Update(reservationPayment);
+
+
+            var apr = new ReservationApprovalCreateDto()
+            {
+                transId = createDto.transId,
+                action = GetApprovalAction(createDto.action),
+                approvalType = GetApprovalType(createDto.approvalType),
+                requestedById = createDto.requestedById,
+                remark = createDto.remark
+            };
+
+            var tmpMdl = _map.Map<ApprovalPaymentCreateDto, ApprovalPayment>(createDto.approvalPayment);
+
+            tmpMdl._id = new Guid();
+            tmpMdl.transId = createDto.transId;
+            await _tmpRepo.Create(tmpMdl);
+
+            var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);
+            cmdMdl.status = Status.Pending;
+            cmdMdl.requestedDate = DateTime.Now;
+            cmdMdl.tmpTblId = tmpMdl._id;
+
+            await _aprRepo.Create(cmdMdl);
+
+
+
+
+            return Ok();
         }
 
         [HttpPost]

@@ -17,6 +17,14 @@ export function GetPaymentByHeaderId(headerId) {
   return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);
 }
 
+export function PostCreatePaymentApproval(paymentId) {
+  http.SetJwt();
+  return http.put(
+    apiEndpoint + "/CreatePaymentApproval/" + paymentId.transId,
+    paymentId
+  );
+}
+
 export function saveReservationPayment(h) {
   http.SetJwt();
   if (h.id) {

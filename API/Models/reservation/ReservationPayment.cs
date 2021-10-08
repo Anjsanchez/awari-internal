@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using API.Models.functionality;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Models.reservation
 {
@@ -34,6 +35,7 @@ namespace API.Models.reservation
         [StringLength(100)]
         public string paymentRefNum { get; set; }
 
+        public Status approvalStatus { get; set; } = 0;
 
         [Required]
         [Column("createdBy")]

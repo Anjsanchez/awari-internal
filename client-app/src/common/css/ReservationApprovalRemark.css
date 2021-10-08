@@ -1,0 +1,10 @@
+.rar-container {
+  width: 100%;
+}
+
+.rar-container .remark__container {
+  display: block;
+}
+.rar-container .remark__container .remark__wrapper {
+  max-width: 100%;
+}

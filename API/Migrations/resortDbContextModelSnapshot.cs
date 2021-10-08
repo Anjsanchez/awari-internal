@@ -185,6 +185,92 @@ namespace API.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("API.Models.approval.ApprovalPayment", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("amount")
+                        .HasColumnType("real");
+
+                    b.Property<DateTime>("createdDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("paymentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("paymentRefNum")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("transId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("userId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("createdBy");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("paymentId");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("ApprovalPayments");
+                });
+
+            modelBuilder.Entity("API.Models.approval.ReservationApproval", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("action")
+                        .HasColumnType("int");
+
+                    b.Property<int>("approvalType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("approvedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("approvedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("remark")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("requestedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("requestedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("tmpTblId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("transId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("approvedById");
+
+                    b.HasIndex("requestedById");
+
+                    b.ToTable("ReservationApprovals");
+                });
+
             modelBuilder.Entity("API.Models.employee.employeeRole", b =>
                 {
                     b.Property<Guid>("_id")
@@ -431,6 +517,9 @@ namespace API.Migrations
 
                     b.Property<float>("amount")
                         .HasColumnType("real");
+
+                    b.Property<int>("approvalStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
@@ -959,6 +1048,40 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("API.Models.approval.ApprovalPayment", b =>
+                {
+                    b.HasOne("API.Models.functionality.Payment", "payment")
+                        .WithMany()
+                        .HasForeignKey("paymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("payment");
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("API.Models.approval.ReservationApproval", b =>
+                {
+                    b.HasOne("API.Models.User", "approvedBy")
+                        .WithMany()
+                        .HasForeignKey("approvedById");
+
+                    b.HasOne("API.Models.User", "requestedBy")
+                        .WithMany()
+                        .HasForeignKey("requestedById");
+
+                    b.Navigation("approvedBy");
+
+                    b.Navigation("requestedBy");
                 });
 
             modelBuilder.Entity("API.Models.employee.employeeRole", b =>

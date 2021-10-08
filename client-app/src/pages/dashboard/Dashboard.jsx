@@ -18,11 +18,11 @@ import { includesTransLines } from "./../../utils/services/pages/reservation/Res
 
 const Dashboard = () => {
   const isMounted = useMountedState();
+  const [rTrans, setRTrans] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [tHeaders, setTHeaders] = useState([]);
   const [rHeaders, setRHeaders] = useState([]);
   const [rRmLines, setRRmLines] = useState([]);
-  const [rTrans, setRTrans] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   useEffect(() => {
@@ -83,7 +83,6 @@ const Dashboard = () => {
       try {
         const { data } = await includesTransLines();
         const { hLines, rLines } = data;
-
         if (!isMounted()) return;
 
         let dt = [];

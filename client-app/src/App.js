@@ -23,6 +23,7 @@ import Products from "./pages/products/products/Products";
 import SpeedDials from "./components/speeddial/SpeedDials";
 import RoomPricing from "./pages/room/pricing/RoomPricing";
 import RoomVariants from "./pages/room/variants/RoomVariants";
+import ApprovalRequest from "./pages/approval/ApprovalRequest";
 import Payments from "./pages/functionality/payments/Payments";
 import GlobalLoading from "./components/loading/GlobalLoading";
 import Discounts from "./pages/functionality/discounts/Discounts";
@@ -131,8 +132,6 @@ function App() {
                 component={Products}
                 keyId="11"
               />
-
-              {/* 68fa0cc0-6b43-4389-99a6-08d9822335f1&istrans=true */}
               <ProtectedRoute
                 path="/a/reservation-management/reservations/:id&isTrans=:isTrans"
                 component={ReservationDetails}
@@ -158,6 +157,11 @@ function App() {
                 path="/a/commerce-management/shop"
                 component={Commerce}
                 keyId="3"
+              />
+              <ProtectedRoute
+                path="/a/general/approval-request"
+                component={ApprovalRequest}
+                keyId="17"
               />
               <ProtectedRoute
                 path="/a/commerce-management/cart/:id"

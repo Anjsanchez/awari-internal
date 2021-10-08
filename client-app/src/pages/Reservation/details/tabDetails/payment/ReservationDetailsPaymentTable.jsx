@@ -78,6 +78,7 @@ const ReservationDetailsPaymentTable = (props) => {
     paymentsx[index].payment = obj.payment;
 
     store.dispatch(addRPayments(paymentsx));
+    setSelectedPayment([]);
     setPayments(paymentsx);
   };
 
@@ -87,6 +88,18 @@ const ReservationDetailsPaymentTable = (props) => {
       store.dispatch(addRPayments(o));
       return o;
     });
+  };
+
+  const onSuccessRequestApproval = (obj) => {
+    const paymentsx = [...payments];
+    const index = paymentsx.findIndex((x) => x._id === obj.transId);
+
+    paymentsx[index] = { ...paymentsx[index] };
+    paymentsx[index].approvalStatus = 1;
+
+    setSelectedPayment([]);
+    store.dispatch(addRPayments(paymentsx));
+    setPayments(paymentsx);
   };
 
   const onSuccessDelete = (obj) => {
@@ -176,6 +189,7 @@ const ReservationDetailsPaymentTable = (props) => {
         visible={props.visible}
         onSuccessEdit={onSuccessEdit}
         onSuccessAdd={onSuccessAdd}
+        onSuccessRequestApproval={onSuccessRequestApproval}
         onSuccessDelete={onSuccessDelete}
       />
     );

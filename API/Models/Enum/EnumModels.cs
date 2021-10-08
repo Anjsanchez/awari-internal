@@ -7,19 +7,20 @@ namespace API.Models.Enum
             Payment = 0,
             Rooms = 1,
             Trans = 2,
-            Product = 3,
         };
 
         public enum EAction
         {
             Delete = 0,
-            Modified = 1,
+            Modify = 1,
         }
+
         public enum Status
         {
-            Pending = 0,
-            Approved = 1,
-            Rejected = 2
+            NotApplicable = 0,
+            Pending = 1,
+            Approved = 2,
+            Rejected = 3
         }
     }
 }

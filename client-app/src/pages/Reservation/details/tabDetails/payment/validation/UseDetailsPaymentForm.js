@@ -13,15 +13,22 @@ const UseDetailsPaymentForm = (
   onVisible,
   onSuccessEdit,
   onSuccessAdd,
-  onSuccessDelete
+  onSuccessDelete,
+  visible
 ) => {
   //..
   const didMount = useRef(false);
   const [errors, setErrors] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const [askConfirmationApproval, setAskConfirmationApproval] = useState({
+    value: false,
+    action: "DELETE",
+  });
   const [isRequestOnGoing, setIsRequestOnGoing] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+
+  const currentUser = store.getState().entities.user.user;
 
   const [values, setValues] = useState({
     id: "",
@@ -33,6 +40,9 @@ const UseDetailsPaymentForm = (
     remark: "",
     createdBy: "",
     createdDate: "",
+    approvalStatus: 0,
+    paymentId: "",
+    userId: "",
   });
 
   const handleValueOnLoad = (payment) => {
@@ -40,8 +50,11 @@ const UseDetailsPaymentForm = (
       isNeedRefNumber: payment.payment.isNeedRefNumber || false,
       amount: payment.amount || "",
       remark: payment.type || "",
+      approvalStatus: payment.approvalStatus || 0,
       referenceNumber: payment.paymentRefNum || "",
       name: payment.payment.name || "",
+      paymentId: payment.payment._id || "",
+      userId: payment.user.id || "",
       id: payment._id || "",
       key: payment.payment._id || "",
       createdDate: payment.createdDate || "",
@@ -63,8 +76,6 @@ const UseDetailsPaymentForm = (
   };
 
   const setObjDbModel = () => {
-    const currentUser = store.getState().entities.user.user.id;
-
     return {
       id: values.id,
       reservationHeaderId: headerId,
@@ -72,7 +83,7 @@ const UseDetailsPaymentForm = (
       amount: values.amount,
       paymentId: values.key,
       paymentRefNum: values.referenceNumber,
-      userId: currentUser,
+      userId: currentUser.id,
     };
   };
 
@@ -182,18 +193,36 @@ const UseDetailsPaymentForm = (
   const handleDelete = async (e) => {
     e.preventDefault();
     setIsDelete(true);
+
+    if (currentUser.role.rolename !== "Administrator")
+      return setAskConfirmationApproval({
+        action: "DELETE",
+        value: true,
+      });
+
     setAskConfirmation(true);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (visible.action !== "add")
+      if (currentUser.role.rolename !== "Administrator")
+        return setAskConfirmationApproval({
+          action: "MODIFY",
+          value: true,
+        });
+
     setErrors(validate(values));
   };
 
   const handleDialogCancel = () => {
+    if (visible.action !== "add")
+      setAskConfirmationApproval({
+        action: "DELETE",
+        value: false,
+      });
     setAskConfirmation(false);
   };
-
   return {
     handleChange,
     handleDelete,
@@ -207,6 +236,7 @@ const UseDetailsPaymentForm = (
     isRequestOnGoing,
     handleResetValue,
     handleDialogCancel,
+    askConfirmationApproval,
   };
 };
 

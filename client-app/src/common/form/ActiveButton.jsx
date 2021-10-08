@@ -27,13 +27,17 @@ const ActiveButton = ({
   textTrue = "Active",
   textFalse = "Inactive",
   isWarning = false,
+  onClick = null,
 }) => {
   //..
   const classes = useStyles();
 
   if (isWarning) {
     return (
-      <span className={`${classes.rowSpan} ${classes.spanContainerWarning}`}>
+      <span
+        onClick={onClick}
+        className={`${classes.rowSpan} ${classes.spanContainerWarning}`}
+      >
         {textTrue}
       </span>
     );
@@ -41,14 +45,20 @@ const ActiveButton = ({
 
   if (value === true) {
     return (
-      <span className={`${classes.rowSpan} ${classes.spanContainerActive}`}>
+      <span
+        onClick={onClick}
+        className={`${classes.rowSpan} ${classes.spanContainerActive}`}
+      >
         {textTrue}
       </span>
     );
   }
 
   return (
-    <span className={`${classes.rowSpan} ${classes.spanContainerInactive}`}>
+    <span
+      onClick={onClick}
+      className={`${classes.rowSpan} ${classes.spanContainerInactive}`}
+    >
       {textFalse}
     </span>
   );

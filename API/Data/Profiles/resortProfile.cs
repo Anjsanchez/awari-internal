@@ -27,6 +27,9 @@ using API.Dto.trans.room;
 using API.Dto.trans.line;
 using API.Models.employee;
 using API.Dto.Users.roles;
+using API.Dto.approval;
+using API.Models.approval;
+using API.Dto.approval.payment;
 
 namespace API.Data.Profiles
 {
@@ -111,6 +114,10 @@ namespace API.Data.Profiles
 
             CreateMap<ReservationHeader, transHeaderCreateDto>().ReverseMap();
 
+            CreateMap<ReservationApproval, ReservationApprovalCreateDto>().ReverseMap();
+            CreateMap<ReservationApproval, ReservationApprovalReadDto>().ReverseMap();
+            CreateMap<ApprovalPaymentCreateDto, ApprovalPayment>().ReverseMap();
+            CreateMap<ApprovalPaymentReadDto, ApprovalPayment>().ReverseMap();
         }
     }
 }

@@ -2,12 +2,13 @@ import HomeTwoToneIcon from "@material-ui/icons/HomeTwoTone";
 import BallotTwoToneIcon from "@material-ui/icons/BallotTwoTone";
 import LocalMallTwoToneIcon from "@material-ui/icons/LocalMallTwoTone";
 import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
+import AssessmentTwoToneIcon from "@material-ui/icons/AssessmentTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
-import AssessmentTwoToneIcon from "@material-ui/icons/AssessmentTwoTone";
+import AnnouncementTwoToneIcon from "@material-ui/icons/AnnouncementTwoTone";
 export const sideBarData = [
   {
     title: "General",
@@ -18,6 +19,12 @@ export const sideBarData = [
         icon: <DashboardTwoToneIcon />,
         path: "/",
         id: 1,
+      },
+      {
+        subTitle: "Approval Request",
+        icon: <AnnouncementTwoToneIcon />,
+        path: "/a/general/approval-request",
+        id: 17,
       },
     ],
   },

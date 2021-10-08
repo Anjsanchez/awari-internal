@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using API.Models;
 using API.Models.functionality;
 using API.Models.reservation;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Dto.reservations.payment
 {
@@ -18,6 +19,6 @@ namespace API.Dto.reservations.payment
         public string paymentRefNum { get; set; }
         public User user { get; set; }
         public DateTime createdDate { get; set; }
-
+        public Status approvalStatus { get; set; }
     }
 }

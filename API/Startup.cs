@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using API.Contracts;
 using API.Contracts.pages;
+using API.Contracts.pages.approval;
 using API.Contracts.pages.functionality;
 using API.Contracts.pages.Others;
 using API.Contracts.pages.products;
@@ -18,6 +19,7 @@ using API.Data.Profiles;
 using API.Migrations.Configurations;
 using API.Repository;
 using API.Repository.pages;
+using API.Repository.pages.approval;
 using API.Repository.pages.functionality;
 using API.Repository.pages.others;
 using API.Repository.pages.products;
@@ -105,7 +107,7 @@ namespace API
                         "http://10.32.33.193:9191", "http://10.32.33.1:9191",
                         "http://10.32.33.32:9090","http://10.32.34.254:9090", "http://anilaointernal.com:9090", "http://localhost:9090",  // UAT
                         "http://10.130.0.10:9090", "http://localhost:3001" ,
-                        "http://192.168.1.2:9090", "http://localhost:9090" });//ADRIAN
+                        "http://192.168.1.2:9090", "http://localhost:9090", });//ADRIAN
                 });
             });
 
@@ -128,7 +130,10 @@ namespace API
             services.AddScoped<IReservationTransRepository, ReservationTransRepository>();
             services.AddScoped<IReservationHeaderRepository, ReservationHeaderRepository>();
             services.AddScoped<IReservationPaymentRepository, ReservationPaymentRepository>();
+            services.AddScoped<IReservationApprovalRepository, ReservationApprovalRepository>();
             services.AddScoped<IReservationRoomLineRepository, ReservationRoomLineRepository>();
+
+            services.AddScoped<IApprovalPaymentRepository, ApprovalPaymentRepository>();
 
             //..TRANS
             services.AddScoped<ITransLineRepository, TransLineRepository>();

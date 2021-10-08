@@ -14,9 +14,11 @@ import { writeToken } from "../../../../../utils/store/pages/users";
 import MaterialButton from "./../../../../../common/MaterialButton";
 import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import UseDetailsPaymentForm from "./validation/UseDetailsPaymentForm";
+import GetApprovalStatus from "./../../../../../common/GetApprovalStatus";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import RDetailsPaymentFormValidate from "./validation/RDetailsPaymentFormValidate";
 import { getPayments } from "./../../../../../utils/services/pages/functionality/PaymentService";
+import ReservationApprovalRemark from "./../../../../../common/ReservationApprovalRemark";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +50,7 @@ const ReservationDetailsPaymentModal = (props) => {
     onSuccessAdd,
     selectedPayment,
     onSuccessDelete,
+    onSuccessRequestApproval,
   } = props;
   const { enqueueSnackbar } = useSnackbar();
   const [reservationTypes, setReservationTypes] = useState([]);
@@ -65,13 +68,15 @@ const ReservationDetailsPaymentModal = (props) => {
     onDecideOfAction,
     handleResetValue,
     handleDialogCancel,
+    askConfirmationApproval,
   } = UseDetailsPaymentForm(
     RDetailsPaymentFormValidate,
     headerId,
     onVisible,
     onSuccessEdit,
     onSuccessAdd,
-    onSuccessDelete
+    onSuccessDelete,
+    visible
   );
 
   useEffect(() => {
@@ -145,6 +150,16 @@ const ReservationDetailsPaymentModal = (props) => {
               {moment(values.createdDate).format("YYYY-MM-DD hh:mm A")}
             </span>
           </ListItem>
+          {values.approvalStatus !== 0 && (
+            <ListItem button className="reservationDetails-body__span__wrapper">
+              <span className="reservationDetails-body__span__label">
+                Approval Status
+              </span>
+              <span className="reservationDetails-body__span__detail">
+                <GetApprovalStatus status={values.approvalStatus} />
+              </span>
+            </ListItem>
+          )}
         </List>
       </>
     );
@@ -233,6 +248,7 @@ const ReservationDetailsPaymentModal = (props) => {
 
     if (visible.action !== "add") if (selectedPayment.length === 0) return null;
 
+    if (values.approvalStatus === 1) return null;
     return (
       <div>
         <ButtonGroup
@@ -261,9 +277,17 @@ const ReservationDetailsPaymentModal = (props) => {
       </div>
     );
   };
-
   return (
     <>
+      <ReservationApprovalRemark
+        visible={askConfirmationApproval}
+        onSuccessRequestApproval={onSuccessRequestApproval}
+        onCancel={handleDialogCancel}
+        onCancelWholeDialog={() =>
+          onVisible({ value: false, action: "cancel" })
+        }
+        values={values}
+      />
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -271,6 +295,7 @@ const ReservationDetailsPaymentModal = (props) => {
           handleOk={onDecideOfAction}
         />
       )}
+
       <Modal
         title="Payment"
         centered

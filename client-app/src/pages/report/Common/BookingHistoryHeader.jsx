@@ -11,14 +11,16 @@ const BookingHistoryHeader = ({ onFilterShow, title }) => {
         </div>
         <div className="com-title__rightWrapper">
           <div className="div">
-            <Button
-              onClick={onFilterShow}
-              variant="text"
-              color="default"
-              startIcon={<LocalBarSharpIcon style={{ fill: "#B39DDB" }} />}
-            >
-              Filter
-            </Button>
+            {onFilterShow && (
+              <Button
+                onClick={onFilterShow}
+                variant="text"
+                color="default"
+                startIcon={<LocalBarSharpIcon style={{ fill: "#B39DDB" }} />}
+              >
+                Filter
+              </Button>
+            )}
           </div>
         </div>
       </div>

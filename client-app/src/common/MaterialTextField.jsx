@@ -23,11 +23,13 @@ const MaterialTextField = (props) => {
     margin = "none",
     multiline = false,
     size = "medium",
+    disabled = false,
   } = props;
 
   return (
     <FormControl fullWidth margin={margin}>
       <TextField
+        disabled={disabled}
         size={size}
         multiline={multiline}
         id={id}

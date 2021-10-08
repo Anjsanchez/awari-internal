@@ -1,4 +1,5 @@
 using API.Models;
+using API.Models.approval;
 using API.Models.employee;
 using API.Models.functionality;
 using API.Models.Others;
@@ -29,17 +30,19 @@ namespace API.Data
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<employeeRole> EmployeeRoles { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
+        public DbSet<ApprovalPayment> ApprovalPayments { get; set; }
         public DbSet<ReservationType> ReservationTypes { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ReservationHeader> ReservationHeaders { get; set; }
         public DbSet<ReservationPayment> ReservationPayments { get; set; }
+        public DbSet<ReservationApproval> ReservationApprovals { get; set; }
         public DbSet<ReservationRoomLine> ReservationRoomLines { get; set; }
         public DbSet<ReservationTransLine> ReservationTransLines { get; set; }
 
         //..TRANS
-        public DbSet<TransHeader> TransHeaders { get; set; }
-        public DbSet<TransLine> TransLines { get; set; }
-        public DbSet<TransPayment> TransPayments { get; set; }
         public DbSet<TransRoom> TransRooms { get; set; }
+        public DbSet<TransLine> TransLines { get; set; }
+        public DbSet<TransHeader> TransHeaders { get; set; }
+        public DbSet<TransPayment> TransPayments { get; set; }
     }
 }
