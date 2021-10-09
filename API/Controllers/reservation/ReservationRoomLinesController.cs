@@ -17,6 +17,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using API.Dto.reservations;
+using static API.Models.Enum.EnumModels;
+using API.Dto.approval;
+using API.Models.approval;
+using API.Contracts.pages.approval;
+
 namespace API.Controllers.reservation
 {
     [Route("api/[controller]")]
@@ -25,13 +31,16 @@ namespace API.Controllers.reservation
 
     public class ReservationRoomLinesController : ControllerBase
     {
-
+        private readonly IReservationApprovalRepository _aprRepo;
+        private readonly IApprovalRoomRepository _tmpRepo;
         private readonly IReservationRoomLineRepository _repo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationRoomLinesController(IReservationRoomLineRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationRoomLinesController(IReservationApprovalRepository aprRepo, IApprovalRoomRepository tmpRepo, IReservationRoomLineRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _aprRepo = aprRepo;
+            _tmpRepo = tmpRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
@@ -150,6 +159,59 @@ namespace API.Controllers.reservation
                 Success = true,
                 singleRecord = mappedCategory
             });
+        }
+
+        [HttpPut("CreateRoomsApproval/{id}")]
+        public async Task<ActionResult> CreateRoomsApproval(Guid id, RequestApprovalRoomCreateDto createDto)
+        {
+
+            var reservationRoom = await _repo.FindById(id);
+            if (reservationRoom == null)
+                return NotFound("ReservationPayment not found in the database");
+
+            reservationRoom.approvalStatus = Status.Pending;
+            await _repo.Update(reservationRoom);
+
+
+            var apr = new ReservationApprovalCreateDto()
+            {
+                transId = createDto.transId,
+                action = globalFunctionalityHelper.GetApprovalAction(createDto.action),
+                approvalType = globalFunctionalityHelper.GetApprovalType(createDto.approvalType),
+                requestedById = createDto.requestedById,
+                remark = createDto.remark
+            };
+
+            var tmpMdl = new ApprovalRoom();
+
+
+
+            tmpMdl.reservationTypeId = reservationRoom.reservationHeader.reservationTypeId;
+            tmpMdl.startDate = createDto.approvalRoom.startDate;
+            tmpMdl.endDate = createDto.approvalRoom.endDate;
+            tmpMdl.discountId = createDto.approvalRoom.discountId;
+            tmpMdl.roomId = createDto.approvalRoom.roomId;
+            tmpMdl.grossAmount = createDto.approvalRoom.grossAmount;
+            tmpMdl.totalDiscount = createDto.approvalRoom.totalDiscount;
+            tmpMdl.totalAmount = createDto.approvalRoom.totalAmount;
+            tmpMdl.adultPax = createDto.approvalRoom.adultPax;
+            tmpMdl.seniorPax = createDto.approvalRoom.seniorPax;
+            tmpMdl.childrenPax = createDto.approvalRoom.childrenPax;
+            tmpMdl.mattress = createDto.approvalRoom.mattress;
+            tmpMdl.remark = createDto.approvalRoom.remark;
+
+            tmpMdl._id = new Guid();
+            tmpMdl.transId = createDto.transId;
+            await _tmpRepo.Create(tmpMdl);
+
+            var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);
+            cmdMdl.status = Status.Pending;
+            cmdMdl.requestedDate = DateTime.Now;
+            cmdMdl.tmpTblId = tmpMdl._id;
+
+            await _aprRepo.Create(cmdMdl);
+
+            return Ok();
         }
 
         [HttpPost]

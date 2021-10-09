@@ -151,12 +151,12 @@ namespace API.Controllers.reservation
         }
 
         [HttpPut("CreateTransApproval/{id}")]
-        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalTransCreateDto createDto)
+        public async Task<ActionResult> CreateTransApproval(Guid id, RequestApprovalTransCreateDto createDto)
         {
 
             var reservationTrans = await _repo.FindById(id);
             if (reservationTrans == null)
-                return NotFound("ReservationPayment not found in the database");
+                return NotFound("ReservationTrans not found in the database");
 
             reservationTrans.approvalStatus = Status.Pending;
             await _repo.Update(reservationTrans);

@@ -16,6 +16,7 @@ import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
+import GetApprovalStatus from "./../../../../../../common/GetApprovalStatus";
 import {
   roomLinesSelectedAmountAdded,
   toggleLoading,
@@ -276,6 +277,13 @@ const ReservationConfirmation = () => {
               />
             </List>
           </div>
+        )}
+        {storeData.approvalStatus !== 0 && (
+          <AListItem
+            txtLbl="Approval Status"
+            txtValue={<GetApprovalStatus status={storeData.approvalStatus} />}
+            hasDivider={false}
+          />
         )}
       </Grid>
     </Grid>

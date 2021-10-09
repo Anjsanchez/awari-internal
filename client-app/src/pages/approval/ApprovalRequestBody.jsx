@@ -27,14 +27,7 @@ const ApprovalRequestBody = ({ approvalRequests, onUpdateApprovals }) => {
                 </span>
               </Card>
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={6}>
-              <Card className="db-card__wrapper hlf trans" hoverable>
-                <span className="db-title__span hlf trans">44</span>
-                <span className="db-title__subSpan hlf trans">
-                  Aging Request
-                </span>
-              </Card>
-            </Grid> */}
+
             <Grid item xs={12} sm={12} md={12}>
               <ApprovalRequestList
                 onUpdateApprovals={onUpdateApprovals}

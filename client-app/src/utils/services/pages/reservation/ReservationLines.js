@@ -33,3 +33,8 @@ export function saveHeaderLines(h) {
 export function deleteReservationLine(lineId) {
   return http.delete(header(lineId));
 }
+
+export function PostCreateRoomLinesApproval(Lines) {
+  http.SetJwt();
+  return http.put(apiEndpoint + "/CreateRoomsApproval/" + Lines.transId, Lines);
+}

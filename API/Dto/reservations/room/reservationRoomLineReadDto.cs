@@ -5,6 +5,7 @@ using API.Models;
 using API.Models.functionality;
 using API.Models.reservation;
 using API.Models.rooms;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Dto.reservations.room
 {
@@ -19,6 +20,8 @@ namespace API.Dto.reservations.room
         public DateTime endDate { get; set; }
 
         public Room room { get; set; }
+
+        public Status approvalStatus { get; set; }
 
         public Discount discount { get; set; }
 

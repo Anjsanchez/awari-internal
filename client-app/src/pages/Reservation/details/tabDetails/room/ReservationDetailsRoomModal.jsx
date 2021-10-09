@@ -8,12 +8,15 @@ const ReservationDetailsRoomModal = ({
   visible,
   onProceedWithModal,
   selectedRoom,
+  onSuccessRequestApproval,
 }) => {
   //..
   const handleProceedModal = (action) => {
     onVisible({ value: false, action: "cancel" });
     onProceedWithModal(action);
   };
+
+  const onCancel = () => onVisible({ value: false, action: "cancel" });
 
   return (
     <div className="roomModal__container">
@@ -28,13 +31,15 @@ const ReservationDetailsRoomModal = ({
         }}
         width="auto"
         onOk={onVisible}
-        onCancel={() => onVisible({ value: false, action: "cancel" })}
+        onCancel={() => onCancel()}
         footer={null}
       >
         <ReservationDetailsRoomSteps
           selectedRoom={selectedRoom}
           visible={visible}
+          onCancelRoomDialog={() => onCancel()}
           onProceedModal={handleProceedModal}
+          onSuccessRequestApproval={onSuccessRequestApproval}
         />
       </Modal>
     </div>

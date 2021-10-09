@@ -9,6 +9,8 @@ import MaterialButton from "./../../common/MaterialButton";
 import { updateApprovalPayment } from "../../utils/services/pages/approvals/ApprovalPaymentService";
 import TransBody from "./body/TransBody";
 import { updateApprovalTrans } from "../../utils/services/pages/approvals/ApprovalTransService";
+import RoomBody from "./body/RoomBody";
+import { updateApprovalRoom } from "../../utils/services/pages/approvals/ApprovalRoomService";
 
 const ApprovalRequestModal = ({
   visible,
@@ -95,6 +97,36 @@ const ApprovalRequestModal = ({
     }
   };
 
+  const handleUpdateRoom = async () => {
+    const obj = viewMdlObj();
+    setIsLoading(true);
+    try {
+      const { data } = await updateApprovalRoom(obj);
+
+      enqueueSnackbar("Successfully update records.", {
+        variant: "success",
+      });
+
+      setAskConfirmation(false);
+      setAskDialog(false);
+
+      setTimeout(() => {
+        const returnObj = {
+          _id: selectedData._id,
+          action: action,
+          data: data,
+        };
+        onUpdateApprovals(returnObj);
+      }, 100);
+      onCancel();
+    } catch (error) {
+      enqueueSnackbar("0043: An error occured.", {
+        variant: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const Footer = () => {
     if (selectedData.approvedBy !== null) return null;
 
@@ -135,6 +167,8 @@ const ApprovalRequestModal = ({
   const renderBody = () => {
     if (selectedData.approvalType === 0)
       return <PaymentBody selectedData={selectedData} />;
+    if (selectedData.approvalType === 1)
+      return <RoomBody selectedData={selectedData} />;
     if (selectedData.approvalType === 2)
       return <TransBody selectedData={selectedData} />;
     return null;
@@ -142,6 +176,7 @@ const ApprovalRequestModal = ({
 
   const handleDialogProceed = () => {
     if (selectedData.approvalType === 0) return handleUpdatePayment();
+    if (selectedData.approvalType === 1) return handleUpdateRoom();
     if (selectedData.approvalType === 2) return handleUpdateTrans();
   };
 

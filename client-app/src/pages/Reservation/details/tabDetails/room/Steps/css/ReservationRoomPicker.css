@@ -16,6 +16,8 @@
 }
 
 .roomPicker__container .counter-spanHeader {
+  text-align: center;
+  padding-left: 0;
   padding-bottom: 5px;
   cursor: default;
 }
@@ -55,6 +57,7 @@
 }
 
 .counter-spanHeader.rrRoomLbl {
+  padding-left: 0;
   font-size: 0.85rem;
   margin-bottom: 0;
   max-width: 110px;

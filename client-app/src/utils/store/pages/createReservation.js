@@ -18,6 +18,7 @@ const slice = createSlice({
     rooms: {
       id: "",
       createdDate: "",
+      approvalStatus: 0,
       user: {},
       date: {
         fromDate: moment(),
@@ -69,6 +70,8 @@ const slice = createSlice({
         user,
         createdDate,
       } = action.payload;
+
+      resx.rooms.approvalStatus = action.payload.approvalStatus;
 
       const xDiscount =
         discount === null ? { _id: 0, name: "Not Applicable" } : discount;

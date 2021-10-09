@@ -9,6 +9,8 @@ import { ButtonGroup } from "@material-ui/core";
 import { store } from "../utils/store/configureStore";
 import { PostCreateTransApproval } from "./../utils/services/pages/reservation/ReservationTrans";
 import { PostCreatePaymentApproval } from "./../utils/services/pages/reservation/ReservationPayment";
+import { PostCreateRoomLinesApproval } from "../utils/services/pages/reservation/ReservationLines";
+import { useSelector } from "react-redux";
 
 const ReservationApprovalRemark = ({
   visible,
@@ -24,7 +26,7 @@ const ReservationApprovalRemark = ({
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
-
+  const storeS = useSelector((state) => state.entities.createReservation.rooms);
   const handleRemarkChange = (e) => setRemark(e.target.value);
   const handleDialogCancel = () => setAskConfirmation(false);
 
@@ -71,10 +73,40 @@ const ReservationApprovalRemark = ({
     };
   };
 
+  const setObjDbModeRooms = () => {
+    const currentUser = store.getState().entities.user.user;
+
+    const discId = storeS.discount._id === 0 ? null : storeS.discount._id;
+
+    return {
+      transId: values.rooms.id,
+      approvalType: approvalType,
+      action: visible.action,
+      requestedById: currentUser.id,
+      remark: remark,
+      approvalRoom: {
+        startDate: storeS.selectedStartDate.date,
+        endDate: storeS.selectedEndDate.date,
+        discountId: discId,
+        roomId: storeS.selectedStartDate.room._id,
+        grossAmount:
+          storeS.amountPrice.grossAmount + storeS.addOns.mattress * 2420,
+        totalDiscount: storeS.amountPrice.netDiscount,
+        totalAmount: storeS.amountPrice.netAmount,
+        adultPax: storeS.heads.adult,
+        seniorPax: storeS.heads.senior,
+        childrenPax: storeS.heads.children,
+        mattress: storeS.addOns.mattress,
+        remark: storeS.addOns.remarks,
+      },
+    };
+  };
+
   const handleDialogOkay = async () => {
     setIsLoading(true);
     setAskConfirmation(false);
     let obj = setObjDbModelPayment();
+
     try {
       if (approvalType === "payment") {
         await PostCreatePaymentApproval(setObjDbModelPayment())
@@ -84,6 +116,12 @@ const ReservationApprovalRemark = ({
       if (approvalType === "trans") {
         obj = setObjDbModelTrans();
         await PostCreateTransApproval(obj)
+          .catch((a) => setIsLoading(false))
+          .finally((b) => setIsLoading(false));
+      }
+      if (approvalType === "rooms") {
+        obj = setObjDbModeRooms();
+        await PostCreateRoomLinesApproval(obj)
           .catch((a) => setIsLoading(false))
           .finally((b) => setIsLoading(false));
       }

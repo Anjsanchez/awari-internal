@@ -18,13 +18,14 @@ import ReservationGuestCount from "./Steps/ReservationGuestCount";
 import MaterialButton from "./../../../../../common/MaterialButton";
 import ActiveButton from "./../../../../../common/form/ActiveButton";
 import ReservationConfirmation from "./Steps/ReservationConfirmation";
+import ReservationApprovalRemark from "./../../../../../common/ReservationApprovalRemark";
 import {
   headerRoomAllAdded,
   roomLinesResetValue,
   toggleLoading,
 } from "../../../../../utils/store/pages/createReservation";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     width: "100%",
   },
@@ -82,24 +83,52 @@ const ReservationDetailsRoomSteps = ({
   onProceedModal,
   visible,
   selectedRoom,
+  onSuccessRequestApproval,
+  onCancelRoomDialog,
 }) => {
   const steps = getSteps();
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [curAction, setCurAction] = useState("update");
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const [askConfirmationApproval, setAskConfirmationApproval] = useState({
+    value: false,
+    action: "DELETE",
+  });
 
   const storeState = useSelector((state) => state.entities.createReservation);
+  const currentUser = store.getState().entities.user.user;
 
-  const handleDialogCancel = () => setAskConfirmation(false);
-
+  const handleDialogCancel = () => {
+    if (visible.action !== "add")
+      setAskConfirmationApproval({
+        action: "DELETE",
+        value: false,
+      });
+    setAskConfirmation(false);
+  };
   const handleDialogShow = () => {
     setCurAction("update");
+
+    if (visible.action !== "add")
+      if (currentUser.role.rolename !== "Administrator")
+        return setAskConfirmationApproval({
+          action: "MODIFY",
+          value: true,
+        });
+
     setAskConfirmation(true);
   };
 
   const handleDialogShowDelete = () => {
     setCurAction("delete");
+
+    if (currentUser.role.rolename !== "Administrator")
+      return setAskConfirmationApproval({
+        action: "DELETE",
+        value: true,
+      });
+
     setAskConfirmation(true);
   };
 
@@ -163,6 +192,8 @@ const ReservationDetailsRoomSteps = ({
     const isAdd = visible.action === "add" ? true : false;
     const btnTextValue = isAdd ? "CREATE" : "MODIFY";
 
+    if (storeState.rooms.approvalStatus === 1) return null;
+
     return (
       <ButtonGroup
         className={classes.btnGrp}
@@ -212,6 +243,15 @@ const ReservationDetailsRoomSteps = ({
 
   return (
     <div className={classes.root}>
+      <ReservationApprovalRemark
+        approvalType="rooms"
+        visible={askConfirmationApproval}
+        onSuccessRequestApproval={onSuccessRequestApproval}
+        onCancel={handleDialogCancel}
+        onCancelWholeDialog={onCancelRoomDialog}
+        values={storeState}
+      />
+
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -265,7 +305,8 @@ const ReservationDetailsRoomSteps = ({
         <Paper square elevation={0} className={classes.resetContainer}>
           <div className="footer-label__div rdStep"></div>
           <span className="footer-label__span rdRstep">
-            Proceed to create a reservation.
+            {storeState.rooms.approvalStatus !== 1 &&
+              "Proceed to create a reservation."}
           </span>
           <div className="rdBtnGroup__container">{footer()}</div>
         </Paper>

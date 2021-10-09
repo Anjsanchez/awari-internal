@@ -151,7 +151,6 @@ const ReservationDetailsTransactionModal = (props) => {
           size="small"
           disabled={requestOnGoing}
           onClick={handleDelete}
-          // onClick={() => setAskConfirmation(true)}
           color="secondary"
           text="DELETE"
         />

@@ -135,6 +135,7 @@ namespace API
 
             services.AddScoped<IApprovalPaymentRepository, ApprovalPaymentRepository>();
             services.AddScoped<IApprovalTransRepository, ApprovalTransRepository>();
+            services.AddScoped<IApprovalRoomRepository, ApprovalRoomRepository>();
 
             //..TRANS
             services.AddScoped<ITransLineRepository, TransLineRepository>();

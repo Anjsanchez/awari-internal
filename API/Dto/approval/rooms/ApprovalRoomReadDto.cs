@@ -1,30 +1,17 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using API.Models.functionality;
 using API.Models.reservation;
 using API.Models.rooms;
 
-namespace API.Models.approval
+namespace API.Dto.approval
 {
-    public class ApprovalRoom
+    public class ApprovalRoomReadDto
     {
-        [Key]
-        [Required]
-        public Guid _id { get; set; }
-
-        public Guid transId { get; set; }
-
-        public Guid? discountId { get; set; }
         public Discount discount { get; set; }
-
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
-
-        public Guid reservationTypeId { get; set; }
-        public ReservationType reservationType { get; set; }
-
-        public Guid? roomId { get; set; }
         public Room room { get; set; }
+        public ReservationType reservationType { get; set; }
 
         public float grossAmount { get; set; }
         public float totalDiscount { get; set; }

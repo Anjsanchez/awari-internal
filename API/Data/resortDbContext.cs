@@ -29,6 +29,7 @@ namespace API.Data
         public DbSet<RoomPricing> RoomPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
+        public DbSet<ApprovalRoom> ApprovalRooms { get; set; }
         public DbSet<employeeRole> EmployeeRoles { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
         public DbSet<ApprovalPayment> ApprovalPayments { get; set; }

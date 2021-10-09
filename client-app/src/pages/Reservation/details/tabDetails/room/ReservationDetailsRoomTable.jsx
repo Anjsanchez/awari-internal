@@ -205,6 +205,18 @@ const ReservationDetailsRoomTable = (props) => {
     return objMdl;
   };
 
+  const onSuccessRequestApproval = (obj) => {
+    const roomsx = [...rooms];
+    const index = roomsx.findIndex((x) => x._id === obj.transId);
+
+    roomsx[index] = { ...roomsx[index] };
+    roomsx[index].approvalStatus = 1;
+
+    setSelectedRoom([]);
+    store.dispatch(editRRooms(roomsx));
+    setRooms(roomsx);
+  };
+
   const onProceedModalAddUpdateAction = async () => {
     store.dispatch(toggleLoadingGlobal(true));
     try {
@@ -287,6 +299,7 @@ const ReservationDetailsRoomTable = (props) => {
         onVisible={props.onVisible}
         visible={props.visible}
         onProceedWithModal={onProceedWithModal}
+        onSuccessRequestApproval={onSuccessRequestApproval}
       />
     );
   };
