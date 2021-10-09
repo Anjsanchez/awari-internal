@@ -7,6 +7,7 @@ import "./css/ReservationApprovalRemark.css";
 import MaterialButton from "./MaterialButton";
 import { ButtonGroup } from "@material-ui/core";
 import { store } from "../utils/store/configureStore";
+import { PostCreateTransApproval } from "./../utils/services/pages/reservation/ReservationTrans";
 import { PostCreatePaymentApproval } from "./../utils/services/pages/reservation/ReservationPayment";
 
 const ReservationApprovalRemark = ({
@@ -16,10 +17,12 @@ const ReservationApprovalRemark = ({
   onCancelWholeDialog,
   values,
   onSuccessRequestApproval,
+  approvalType = "payment",
 }) => {
   const [remark, setRemark] = useState("");
   const [error, setError] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
   const handleRemarkChange = (e) => setRemark(e.target.value);
@@ -32,12 +35,12 @@ const ReservationApprovalRemark = ({
     setAskConfirmation(true);
   };
 
-  const setObjDbModel = () => {
+  const setObjDbModelPayment = () => {
     const currentUser = store.getState().entities.user.user;
 
     return {
       transId: values.id,
-      approvalType: "payment",
+      approvalType: approvalType,
       action: visible.action,
       requestedById: currentUser.id,
       remark: remark,
@@ -53,14 +56,37 @@ const ReservationApprovalRemark = ({
     };
   };
 
+  const setObjDbModelTrans = () => {
+    const currentUser = store.getState().entities.user.user;
+    return {
+      transId: values._id,
+      approvalType: approvalType,
+      action: visible.action,
+      requestedById: currentUser.id,
+      remark: remark,
+      approvalTrans: {
+        grossAmount: values.grossAmount,
+        netAmount: values.netAmount,
+      },
+    };
+  };
+
   const handleDialogOkay = async () => {
+    setIsLoading(true);
     setAskConfirmation(false);
-
+    let obj = setObjDbModelPayment();
     try {
-      const obj = setObjDbModel();
-
-      await PostCreatePaymentApproval(obj);
-
+      if (approvalType === "payment") {
+        await PostCreatePaymentApproval(setObjDbModelPayment())
+          .catch((a) => setIsLoading(false))
+          .finally((b) => setIsLoading(false));
+      }
+      if (approvalType === "trans") {
+        obj = setObjDbModelTrans();
+        await PostCreateTransApproval(obj)
+          .catch((a) => setIsLoading(false))
+          .finally((b) => setIsLoading(false));
+      }
       setTimeout(() => {
         onCancel();
         onCancelWholeDialog();
@@ -74,6 +100,7 @@ const ReservationApprovalRemark = ({
         variant: "error",
       });
     } finally {
+      setIsLoading(false);
     }
   };
 
@@ -86,6 +113,7 @@ const ReservationApprovalRemark = ({
           aria-label="text primary button group"
         >
           <MaterialButton
+            disabled={isLoading}
             onClick={onCancel}
             size="small"
             color="secondary"
@@ -93,6 +121,7 @@ const ReservationApprovalRemark = ({
           />
 
           <MaterialButton
+            disabled={isLoading}
             size="small"
             onClick={handleValidate}
             text={visible.action}

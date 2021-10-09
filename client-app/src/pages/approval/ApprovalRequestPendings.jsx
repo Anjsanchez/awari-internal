@@ -39,14 +39,14 @@ const ApprovalRequestPendings = ({ pendings, onUpdateApprovals }) => {
         selectedData={selectedData}
         onUpdateApprovals={onUpdateApprovals}
       />
-      <Card className="db-card-list__wrapper " hoverable>
+      <Card className="db-card-list__wrapper arp" hoverable>
         <div className="db-cl-span__wrapper">
           <span className="db-cl__span">Pending Approvals</span>
           <span className="db-cl__span">
             <ActiveButton textTrue={pendings.length} value={true} />
           </span>
         </div>
-        <div className="db-cl-body__container">
+        <div className="db-cl-body__container arp">
           <List component="nav" aria-label="mailbox folders">
             {pendings.map((d) => (
               <AListItem

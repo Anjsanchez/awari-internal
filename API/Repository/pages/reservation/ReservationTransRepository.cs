@@ -64,7 +64,7 @@ namespace API.Repository.pages.reservation
              .Include(n => n.reservationHeader)
              .Include(n => n.reservationRoomLine)
              .Include(n => n.user)
-                  .FirstOrDefaultAsync(n => n._id == id);
+             .FirstOrDefaultAsync(n => n._id == id);
         }
 
         public async Task<List<ReservationTransLine>> GetTransLineByHeaderId(Guid headerId)

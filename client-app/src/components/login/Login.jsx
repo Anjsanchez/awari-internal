@@ -50,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   loginDiv__margin: {
     marginTop: "20px",
   },
+  loginDiv__marginBtn: {
+    marginTop: "20px",
+    textAlign: "center",
+  },
 }));
 
 const paperText = (
@@ -66,13 +70,12 @@ const paperText = (
 
 export default function Login() {
   //..
-  const { handleChange, values, handleSubmit, errors } =
+  const { handleChange, values, handleSubmit, errors, isLoading } =
     useLoginForm(loginFormValidate);
 
   const classes = useStyles();
 
   if (auth.IsLoggedIn()) return <Redirect to="/" />;
-
   return (
     <div className="login-container">
       <div className="login-header__icon">
@@ -119,11 +122,12 @@ export default function Login() {
                 values={values.password}
               />
 
-              <div className={classes.loginDiv__margin}>
+              <div className={classes.loginDiv__marginBtn}>
                 <MaterialButton
                   onClick={handleSubmit}
                   classes={classes.login__button}
                   text="Log In"
+                  disabled={isLoading}
                 />
               </div>
               <div className={classes.loginDiv__margin}>

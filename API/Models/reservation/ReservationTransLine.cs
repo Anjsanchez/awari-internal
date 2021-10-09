@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using API.Models.functionality;
 using API.Models.products;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Models.reservation
 {
@@ -32,6 +33,8 @@ namespace API.Models.reservation
 
         [StringLength(1000)]
         public string remark { get; set; }
+
+        public Status approvalStatus { get; set; } = 0;
 
         [Required]
         [Column("createdBy")]

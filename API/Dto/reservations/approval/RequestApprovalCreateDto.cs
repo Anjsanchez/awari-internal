@@ -11,6 +11,5 @@ namespace API.Dto.reservations
         public Guid requestedById { get; set; }
         public string remark { get; set; }
 
-        public ApprovalPaymentCreateDto approvalPayment { get; set; }
     }
 }

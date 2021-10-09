@@ -30,8 +30,8 @@ namespace API.Controllers.reservation
     public class ReservationPaymentsController : ControllerBase
     {
         private readonly IReservationApprovalRepository _aprRepo;
-        private readonly IReservationPaymentRepository _repo;
         private readonly IApprovalPaymentRepository _tmpRepo;
+        private readonly IReservationPaymentRepository _repo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
@@ -133,31 +133,10 @@ namespace API.Controllers.reservation
         }
 
 
-        private EAction GetApprovalAction(string action)
-        {
-            var actionLower = action.ToLower();
-            if (actionLower == "modify")
-                return EAction.Modify;
 
-            return EAction.Delete;
-
-        }
-
-        private EApprovalType GetApprovalType(string type)
-        {
-            var typeInLower = type.ToLower();
-
-            if (typeInLower == "payment")
-                return EApprovalType.Payment;
-
-            if (typeInLower == "rooms")
-                return EApprovalType.Rooms;
-
-            return EApprovalType.Trans;
-        }
 
         [HttpPut("CreatePaymentApproval/{id}")]
-        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalCreateDto createDto)
+        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalPaymentCreateDto createDto)
         {
 
             var reservationPayment = await _repo.FindById(id);
@@ -171,8 +150,8 @@ namespace API.Controllers.reservation
             var apr = new ReservationApprovalCreateDto()
             {
                 transId = createDto.transId,
-                action = GetApprovalAction(createDto.action),
-                approvalType = GetApprovalType(createDto.approvalType),
+                action = globalFunctionalityHelper.GetApprovalAction(createDto.action),
+                approvalType = globalFunctionalityHelper.GetApprovalType(createDto.approvalType),
                 requestedById = createDto.requestedById,
                 remark = createDto.remark
             };
@@ -189,9 +168,6 @@ namespace API.Controllers.reservation
             cmdMdl.tmpTblId = tmpMdl._id;
 
             await _aprRepo.Create(cmdMdl);
-
-
-
 
             return Ok();
         }

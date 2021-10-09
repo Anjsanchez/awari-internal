@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using static API.Models.Enum.EnumModels;
 
 namespace API.helpers.api
 {
@@ -38,6 +39,29 @@ namespace API.helpers.api
             var jwtToken = jwtTokenHandler.WriteToken(token);
 
             return jwtToken;
+        }
+
+        public static EAction GetApprovalAction(string action)
+        {
+            var actionLower = action.ToLower();
+            if (actionLower == "modify")
+                return EAction.Modify;
+
+            return EAction.Delete;
+
+        }
+
+        public static EApprovalType GetApprovalType(string type)
+        {
+            var typeInLower = type.ToLower();
+
+            if (typeInLower == "payment")
+                return EApprovalType.Payment;
+
+            if (typeInLower == "rooms")
+                return EApprovalType.Rooms;
+
+            return EApprovalType.Trans;
         }
 
         public static void DeleteImage(string imageName, string imgPath, IWebHostEnvironment _hostEnvironment)

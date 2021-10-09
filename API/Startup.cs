@@ -134,6 +134,7 @@ namespace API
             services.AddScoped<IReservationRoomLineRepository, ReservationRoomLineRepository>();
 
             services.AddScoped<IApprovalPaymentRepository, ApprovalPaymentRepository>();
+            services.AddScoped<IApprovalTransRepository, ApprovalTransRepository>();
 
             //..TRANS
             services.AddScoped<ITransLineRepository, TransLineRepository>();

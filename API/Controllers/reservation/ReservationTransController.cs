@@ -2,18 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Contracts.pages.approval;
 using API.Contracts.pages.reservation;
 using API.Contracts.pages.trans;
 using API.Data.ApiResponse;
+using API.Dto.approval;
+using API.Dto.reservations;
 using API.Dto.reservations.trans;
 using API.Dto.trans.line;
 using API.helpers.api;
 using API.Migrations.Configurations;
+using API.Models.approval;
 using API.Models.reservation;
 using API.Models.trans;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Controllers.reservation
 {
@@ -22,13 +27,17 @@ namespace API.Controllers.reservation
     public class ReservationTransController : ControllerBase
     {
 
+        private readonly IReservationApprovalRepository _aprRepo;
+        private readonly IApprovalTransRepository _tmpRepo;
         private readonly IReservationTransRepository _repo;
         private readonly ITransLineRepository _tRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationTransController(IReservationTransRepository repo, ITransLineRepository tRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationTransController(IApprovalTransRepository tmpRepo, IReservationApprovalRepository aprRepo, IReservationTransRepository repo, ITransLineRepository tRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _aprRepo = aprRepo;
+            _tmpRepo = tmpRepo;
             _tRepo = tRepo;
             _repo = repo;
             _map = mapp;
@@ -140,6 +149,51 @@ namespace API.Controllers.reservation
 
             return Ok();
         }
+
+        [HttpPut("CreateTransApproval/{id}")]
+        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalTransCreateDto createDto)
+        {
+
+            var reservationTrans = await _repo.FindById(id);
+            if (reservationTrans == null)
+                return NotFound("ReservationPayment not found in the database");
+
+            reservationTrans.approvalStatus = Status.Pending;
+            await _repo.Update(reservationTrans);
+
+
+            var apr = new ReservationApprovalCreateDto()
+            {
+                transId = createDto.transId,
+                action = globalFunctionalityHelper.GetApprovalAction(createDto.action),
+                approvalType = globalFunctionalityHelper.GetApprovalType(createDto.approvalType),
+                requestedById = createDto.requestedById,
+                remark = createDto.remark
+            };
+
+            var tmpMdl = _map.Map<ReservationTransLine, ApprovalTrans>(reservationTrans);
+
+            Guid? roomId = null;
+            if (reservationTrans.reservationRoomLine != null)
+                roomId = reservationTrans.reservationRoomLine.roomId;
+
+            tmpMdl.netAmount = createDto.approvalTrans.netAmount;
+            tmpMdl.grossAmount = createDto.approvalTrans.grossAmount;
+            tmpMdl.reservationRoomId = roomId;
+            tmpMdl._id = new Guid();
+            tmpMdl.transId = createDto.transId;
+            await _tmpRepo.Create(tmpMdl);
+
+            var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);
+            cmdMdl.status = Status.Pending;
+            cmdMdl.requestedDate = DateTime.Now;
+            cmdMdl.tmpTblId = tmpMdl._id;
+
+            await _aprRepo.Create(cmdMdl);
+
+            return Ok();
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> deleteDate(Guid id)

@@ -61,9 +61,9 @@ const ReservationDetailsTransactionTable = (props) => {
   const hist = useHistory();
   const isMounted = useMountedState();
   const [page, setPage] = useState(0);
-  const [rooms, setRooms] = useState([]);
+  const [trans, setTrans] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [selectedRoom, setSelectedRoom] = useState([]);
+  const [selectedTrans, setSelectedTrans] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
 
   const handleChangePage = (event, newPage) => setPage(newPage);
@@ -72,7 +72,7 @@ const ReservationDetailsTransactionTable = (props) => {
   const headerInStore = store.getState().entities.reservationDetails;
   const selectedRow = (obj) => {
     props.onVisible({ value: false, action: "cancel" });
-    setSelectedRoom(obj);
+    setSelectedTrans(obj);
   };
   useEffect(() => {
     //..
@@ -80,7 +80,7 @@ const ReservationDetailsTransactionTable = (props) => {
       try {
         setTimeout(() => {
           if (isMounted()) {
-            setRooms(headerInStore.trans);
+            setTrans(headerInStore.trans);
             setInitialLoadForm(true);
           }
         }, 300);
@@ -90,16 +90,26 @@ const ReservationDetailsTransactionTable = (props) => {
           variant: "error",
         });
         return () => {
-          setRooms({});
+          setTrans({});
         };
       }
     }
     fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const onSuccessRequestApproval = (obj) => {
+    const transx = [...trans];
+    const index = transx.findIndex((x) => x._id === obj.transId);
+    transx[index] = { ...transx[index] };
+    transx[index].approvalStatus = 1;
+    setSelectedTrans([]);
+    // store.dispatch(addRPayments(paymentsx));
+    setTrans(transx);
+  };
+
   const onSuccessDelete = () => {
-    const removeLine = rooms.filter((n) => n._id !== selectedRoom._id);
-    setRooms(removeLine);
+    const removeLine = trans.filter((n) => n._id !== selectedTrans._id);
+    setTrans(removeLine);
     store.dispatch(toggleRemoveProduct(removeLine));
   };
 
@@ -115,7 +125,7 @@ const ReservationDetailsTransactionTable = (props) => {
       return;
     }
 
-    if (props.visible.action !== "add" && selectedRoom.length === 0) {
+    if (props.visible.action !== "add" && selectedTrans.length === 0) {
       enqueueSnackbar("Please select a transaction to update.", {
         variant: "info",
       });
@@ -135,16 +145,17 @@ const ReservationDetailsTransactionTable = (props) => {
     if (!headerInStore.isTrans) if (!headerInStore.header.isActive) return null;
 
     if (
-      (action === "add" && selectedRoom.length === 0) ||
-      (action === "update" && selectedRoom.length === 0)
+      (action === "add" && selectedTrans.length === 0) ||
+      (action === "update" && selectedTrans.length === 0)
     )
       return null;
 
     return (
       <ReservationDetailsTransactionModal
+        onSuccessRequestApproval={onSuccessRequestApproval}
         onVisible={props.onVisible}
         visible={props.visible}
-        selectedRoom={selectedRoom}
+        selectedTrans={selectedTrans}
         onSuccessDelete={onSuccessDelete}
         isTrans={headerInStore.isTrans}
       />
@@ -155,7 +166,7 @@ const ReservationDetailsTransactionTable = (props) => {
     <>
       {renderModal()}
       <MTable
-        rows={rooms}
+        rows={trans}
         xCells={headCells}
         TblBody={ReservationDetailsRoomTableRow}
         page={page}

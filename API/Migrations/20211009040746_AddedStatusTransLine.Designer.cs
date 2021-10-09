@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211009040746_AddedStatusTransLine")]
+    partial class AddedStatusTransLine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,53 +226,6 @@ namespace API.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("ApprovalPayments");
-                });
-
-            modelBuilder.Entity("API.Models.approval.ApprovalTrans", b =>
-                {
-                    b.Property<Guid>("_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("discountId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<float>("grossAmount")
-                        .HasColumnType("real");
-
-                    b.Property<float>("netAmount")
-                        .HasColumnType("real");
-
-                    b.Property<float>("netDiscount")
-                        .HasColumnType("real");
-
-                    b.Property<Guid>("productId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("remark")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("reservationRoomId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("seniorPax")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("transId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("_id");
-
-                    b.HasIndex("discountId");
-
-                    b.HasIndex("productId");
-
-                    b.HasIndex("reservationRoomId");
-
-                    b.ToTable("ApprovalTrans");
                 });
 
             modelBuilder.Entity("API.Models.approval.ReservationApproval", b =>
@@ -1117,29 +1072,6 @@ namespace API.Migrations
                     b.Navigation("payment");
 
                     b.Navigation("user");
-                });
-
-            modelBuilder.Entity("API.Models.approval.ApprovalTrans", b =>
-                {
-                    b.HasOne("API.Models.functionality.Discount", "discount")
-                        .WithMany()
-                        .HasForeignKey("discountId");
-
-                    b.HasOne("API.Models.products.Product", "product")
-                        .WithMany()
-                        .HasForeignKey("productId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.rooms.Room", "reservationRoom")
-                        .WithMany()
-                        .HasForeignKey("reservationRoomId");
-
-                    b.Navigation("discount");
-
-                    b.Navigation("product");
-
-                    b.Navigation("reservationRoom");
                 });
 
             modelBuilder.Entity("API.Models.approval.ReservationApproval", b =>

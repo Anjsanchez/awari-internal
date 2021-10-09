@@ -18,3 +18,7 @@
   color: #484848;
   font-weight: 600;
 }
+
+.db-card-list__wrapper.arl .ant-empty {
+  height: 365px;
+}

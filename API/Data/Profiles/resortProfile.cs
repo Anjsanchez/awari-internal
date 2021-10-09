@@ -30,6 +30,7 @@ using API.Dto.Users.roles;
 using API.Dto.approval;
 using API.Models.approval;
 using API.Dto.approval.payment;
+using API.Dto.approval.trams;
 
 namespace API.Data.Profiles
 {
@@ -118,6 +119,14 @@ namespace API.Data.Profiles
             CreateMap<ReservationApproval, ReservationApprovalReadDto>().ReverseMap();
             CreateMap<ApprovalPaymentCreateDto, ApprovalPayment>().ReverseMap();
             CreateMap<ApprovalPaymentReadDto, ApprovalPayment>().ReverseMap();
+
+            CreateMap<ApprovalTransCreateDto, ApprovalTrans>().ReverseMap();
+            CreateMap<ApprovalTransReadDto, ApprovalTrans>().ReverseMap();
+
+            CreateMap<ReservationTransLine, ApprovalTransCreateDto>().ReverseMap();
+            CreateMap<ReservationTransLine, ApprovalTrans>().ReverseMap();
+
+
         }
     }
 }

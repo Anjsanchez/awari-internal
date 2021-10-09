@@ -7,6 +7,8 @@ import { ButtonGroup } from "@material-ui/core";
 import { store } from "../../utils/store/configureStore";
 import MaterialButton from "./../../common/MaterialButton";
 import { updateApprovalPayment } from "../../utils/services/pages/approvals/ApprovalPaymentService";
+import TransBody from "./body/TransBody";
+import { updateApprovalTrans } from "../../utils/services/pages/approvals/ApprovalTransService";
 
 const ApprovalRequestModal = ({
   visible,
@@ -16,6 +18,7 @@ const ApprovalRequestModal = ({
 }) => {
   const [action, setAction] = useState("");
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
   const [askDialog, setAskDialog] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
 
@@ -31,9 +34,11 @@ const ApprovalRequestModal = ({
 
   const handleUpdatePayment = async () => {
     const obj = viewMdlObj();
-
+    setIsLoading(true);
     try {
-      const { data } = await updateApprovalPayment(obj);
+      const { data } = await updateApprovalPayment(obj)
+        .catch((a) => setIsLoading(false))
+        .finally((b) => setIsLoading(false));
 
       enqueueSnackbar("Successfully update records.", {
         variant: "success",
@@ -55,6 +60,38 @@ const ApprovalRequestModal = ({
       enqueueSnackbar("0041: An error occured.", {
         variant: "error",
       });
+    } finally {
+    }
+  };
+
+  const handleUpdateTrans = async () => {
+    const obj = viewMdlObj();
+    setIsLoading(true);
+    try {
+      const { data } = await updateApprovalTrans(obj);
+
+      enqueueSnackbar("Successfully update records.", {
+        variant: "success",
+      });
+
+      setAskConfirmation(false);
+      setAskDialog(false);
+
+      setTimeout(() => {
+        const returnObj = {
+          _id: selectedData._id,
+          action: action,
+          data: data,
+        };
+        onUpdateApprovals(returnObj);
+      }, 100);
+      onCancel();
+    } catch (error) {
+      enqueueSnackbar("0041: An error occured.", {
+        variant: "error",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,12 +115,18 @@ const ApprovalRequestModal = ({
           aria-label="text primary button group"
         >
           <MaterialButton
+            disabled={isLoading}
             onClick={handleReject}
             size="small"
             color="secondary"
             text="REJECT"
           />
-          <MaterialButton size="small" onClick={handleApprove} text="APPROVE" />
+          <MaterialButton
+            disabled={isLoading}
+            size="small"
+            onClick={handleApprove}
+            text="APPROVE"
+          />
         </ButtonGroup>
       </div>
     );
@@ -92,11 +135,14 @@ const ApprovalRequestModal = ({
   const renderBody = () => {
     if (selectedData.approvalType === 0)
       return <PaymentBody selectedData={selectedData} />;
+    if (selectedData.approvalType === 2)
+      return <TransBody selectedData={selectedData} />;
     return null;
   };
 
   const handleDialogProceed = () => {
     if (selectedData.approvalType === 0) return handleUpdatePayment();
+    if (selectedData.approvalType === 2) return handleUpdateTrans();
   };
 
   return (

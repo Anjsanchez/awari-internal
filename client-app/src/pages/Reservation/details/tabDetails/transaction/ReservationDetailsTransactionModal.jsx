@@ -7,14 +7,17 @@ import MDialog from "./../../../../../common/MDialog";
 import EcoTwoToneIcon from "@material-ui/icons/EcoTwoTone";
 import { ButtonGroup, Grid, List } from "@material-ui/core";
 import AListItem from "../../../../../common/antd/AListItem";
+import { store } from "../../../../../utils/store/configureStore";
 import MaterialButton from "./../../../../../common/MaterialButton";
 import ActiveButton from "./../../../../../common/form/ActiveButton";
 import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
+import ReservationApprovalRemark from "./../../../../../common/ReservationApprovalRemark";
 import { deleteTransLine } from "../../../../../utils/services/pages/reservation/ReservationTrans";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
+import GetApprovalStatus from "./../../../../../common/GetApprovalStatus";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,8 +44,20 @@ const ReservationDetailsTransactionModal = (props) => {
   const [isDayTour, setIsDayTour] = useState(false);
   const [requestOnGoing, setRequestOnGoing] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const [selectedTransWithAmount, setSelectedTransWithAmount] = useState({});
+  const [askConfirmationApproval, setAskConfirmationApproval] = useState({
+    value: false,
+    action: "DELETE",
+  });
 
-  const { onVisible, visible, selectedRoom, onSuccessDelete, isTrans } = props;
+  const {
+    onVisible,
+    visible,
+    selectedTrans,
+    onSuccessDelete,
+    isTrans,
+    onSuccessRequestApproval,
+  } = props;
   const {
     createdDate,
     discount,
@@ -54,7 +69,8 @@ const ReservationDetailsTransactionModal = (props) => {
     reservationHeader,
     user,
     _id,
-  } = selectedRoom;
+  } = selectedTrans;
+  const currentUser = store.getState().entities.user.user;
 
   useEffect(() => {
     if (reservationHeader === undefined) return;
@@ -64,13 +80,35 @@ const ReservationDetailsTransactionModal = (props) => {
       reservationHeader.reservationType.name === "Restaurant"
     )
       setIsDayTour(true);
-  }, [reservationHeader]);
+  }, [reservationHeader]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDialogCancel = () => {
+    if (visible.action !== "add")
+      setAskConfirmationApproval({
+        action: "DELETE",
+        value: false,
+      });
+    setAskConfirmation(false);
+  };
 
   const handleOk = async () => {
     //
     setAskConfirmation(false);
     setRequestOnGoing(true);
   };
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+
+    if (currentUser.role.rolename !== "Administrator")
+      return setAskConfirmationApproval({
+        action: "DELETE",
+        value: true,
+      });
+
+    setAskConfirmation(true);
+  };
+
   useEffect(() => {
     async function execute() {
       try {
@@ -81,7 +119,7 @@ const ReservationDetailsTransactionModal = (props) => {
         });
 
         onVisible({ value: false, action: "cancel" });
-        onSuccessDelete(selectedRoom);
+        onSuccessDelete(selectedTrans);
       } catch (ex) {
         if ((ex && ex.status === 400) || ex.status === 500 || ex.status === 404)
           enqueueSnackbar(ex.data, { variant: "error" });
@@ -97,7 +135,10 @@ const ReservationDetailsTransactionModal = (props) => {
   const Footer = () => {
     const classes = useStyles();
     if (isTrans) return null;
-    if (selectedRoom.length === 0 || selectedRoom === undefined) return null;
+    if (selectedTrans.length === 0 || selectedTrans === undefined) return null;
+
+    if (selectedTrans.approvalStatus === 1) return null;
+
     return (
       <ButtonGroup
         className={classes.button}
@@ -109,7 +150,8 @@ const ReservationDetailsTransactionModal = (props) => {
           className={classes.button}
           size="small"
           disabled={requestOnGoing}
-          onClick={() => setAskConfirmation(true)}
+          onClick={handleDelete}
+          // onClick={() => setAskConfirmation(true)}
           color="secondary"
           text="DELETE"
         />
@@ -117,8 +159,19 @@ const ReservationDetailsTransactionModal = (props) => {
     );
   };
 
+  useEffect(() => {
+    if (selectedTrans.length === 0 || selectedTrans === undefined) return;
+    const gross = product.sellingPrice * quantity;
+    const total = product.sellingPrice * quantity - netDiscount;
+    setSelectedTransWithAmount({
+      ...selectedTrans,
+      netAmount: total,
+      grossAmount: gross,
+    });
+  }, [selectedTrans]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const renderBody = () => {
-    if (selectedRoom.length === 0 || selectedRoom === undefined) {
+    if (selectedTrans.length === 0 || selectedTrans === undefined) {
       return (
         <div className="errorSpan">
           <ActiveButton
@@ -233,8 +286,16 @@ const ReservationDetailsTransactionModal = (props) => {
                 txtLbl="Created Date"
                 txtValue={moment(createdDate).format("YYYY-MM-DD hh:mm A")}
                 Icon={ScheduleTwoToneIcon}
-                hasDivider={false}
               />
+              {selectedTrans.approvalStatus !== 0 && (
+                <AListItem
+                  txtLbl="Approval Status"
+                  txtValue={
+                    <GetApprovalStatus status={selectedTrans.approvalStatus} />
+                  }
+                  hasDivider={false}
+                />
+              )}
             </List>
           </div>
         </Grid>
@@ -242,14 +303,17 @@ const ReservationDetailsTransactionModal = (props) => {
     );
   };
   return (
-    <Modal
-      title="Product"
-      centered
-      visible={visible.value}
-      onOk={onVisible}
-      onCancel={() => onVisible({ value: false, action: "cancel" })}
-      footer={<Footer />}
-    >
+    <>
+      <ReservationApprovalRemark
+        approvalType="trans"
+        visible={askConfirmationApproval}
+        onSuccessRequestApproval={onSuccessRequestApproval}
+        onCancel={handleDialogCancel}
+        onCancelWholeDialog={() =>
+          onVisible({ value: false, action: "cancel" })
+        }
+        values={selectedTransWithAmount}
+      />
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -257,9 +321,17 @@ const ReservationDetailsTransactionModal = (props) => {
           handleOk={handleOk}
         />
       )}
-
-      {renderBody()}
-    </Modal>
+      <Modal
+        title="Product"
+        centered
+        visible={visible.value}
+        onOk={onVisible}
+        onCancel={() => onVisible({ value: false, action: "cancel" })}
+        footer={<Footer />}
+      >
+        {renderBody()}
+      </Modal>
+    </>
   );
 };
 

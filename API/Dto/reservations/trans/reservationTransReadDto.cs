@@ -3,6 +3,7 @@ using API.Models;
 using API.Models.functionality;
 using API.Models.products;
 using API.Models.reservation;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Dto.reservations.trans
 {
@@ -29,7 +30,7 @@ namespace API.Dto.reservations.trans
 
         public DateTime createdDate { get; set; }
 
-
+        public Status approvalStatus { get; set; }
         public bool isPrinted { get; set; }
     }
 }

@@ -18,7 +18,9 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
     {
       title: "Status",
       dataIndex: "Status",
+      name: "key",
       width: "5%",
+      sorter: (a, b) => a.statusInt - b.statusInt,
       render: (text, h) => (
         <GetApprovalStatus
           status={h.statusInt}
@@ -30,11 +32,14 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
       title: "Requester",
       dataIndex: "Requester",
       width: "20%",
+      fixed: "top",
     },
     {
       title: "Request Date",
       dataIndex: "RequestDate",
       width: "15%",
+      sorter: (a, b) =>
+        moment(a.RequestDateSort).unix() - moment(b.RequestDateSort).unix(),
     },
     {
       title: "Approver",
@@ -45,6 +50,8 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
       title: "Approved Date",
       dataIndex: "ApprovedDate",
       width: "15%",
+      sorter: (a, b) =>
+        moment(a.ApprovedDateSort).unix() - moment(b.ApprovedDateSort).unix(),
     },
   ];
 
@@ -54,20 +61,26 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
     if (n === 3) return "Rejected";
   };
 
+  const sorted = approvalRequests.sort(function (a, b) {
+    return new Date(b.requestedDate) - new Date(a.requestedDate);
+  });
+
   const data = [];
-  approvalRequests.map((n, i) => {
+  sorted.map((n, i) => {
     return data.push({
       data: n,
       key: n._id,
       statusInt: n.status,
       Status: renderStatus(n.status),
       Requester: n.requestedBy.firstName + " " + n.requestedBy.lastName[0],
+      RequestDateSort: n.requestedDate,
       RequestDate: moment(n.requestedDate).format("MM-DD-YY"),
       Approver:
         n.approvedBy !== null &&
         n.approvedBy.firstName + " " + n.approvedBy.lastName[0],
       ApprovedDate:
         n.approvedBy !== null && moment(n.approvedDate).format("MM-DD-YY"),
+      ApprovedDateSort: n.approvedDate,
     });
   });
 
@@ -79,21 +92,19 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
         selectedData={selectedData}
         onUpdateApprovals={onUpdateApprovals}
       />
-      <Card className="db-card-list__wrapper" hoverable>
+      <Card className="db-card-list__wrapper arl" hoverable>
         <div className="db-cl-span__wrapper">
-          <span className="db-cl__span">Room Transactions</span>
+          <span className="db-cl__span">Approval History</span>
           <span className="db-cl__span">
             <ActiveButton textTrue={approvalRequests.length} value={true} />
           </span>
         </div>
-        <div className="db-cl-body__container">
+        <div className="db-cl-body__container arl">
           <Table
             columns={columns}
             className="db-cl-body__table"
             dataSource={data}
             size="small"
-            pagination={false}
-            footer={null}
           />
         </div>
       </Card>

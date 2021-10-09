@@ -73,6 +73,12 @@
   padding: 15px;
   max-height: 445px;
 }
+.db-card-list__wrapper.arl {
+  max-height: 700px;
+}
+.db-card-list__wrapper.arp {
+  max-height: 700px;
+}
 
 .db-cl-span__wrapper {
   display: flex;
@@ -93,7 +99,10 @@
   padding-left: 0px;
   padding-right: 0px;
 }
-
+.db-cl-body__container.arl {
+  max-height: 100%;
+  height: 495px;
+}
 .db-cl-body__container {
   max-height: 385px;
   overflow-y: auto;
@@ -105,7 +114,10 @@
 .db-card-list__wrapper.rm {
   margin-top: 15px;
 }
-
+.db-cl-body__container.arp {
+  max-height: 100%;
+  height: 587px;
+}
 .db-cl-body__container.rac {
   margin-top: 20px;
   display: flex;

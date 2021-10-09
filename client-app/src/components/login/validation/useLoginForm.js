@@ -12,6 +12,7 @@ const useLoginForm = (validate) => {
   const location = useLocation();
   const [errors, setErrors] = useState({});
   const { enqueueSnackbar } = useSnackbar();
+  const [isLoading, setIsLoading] = useState(false);
   const [values, setValues] = useState({
     username: "",
     email: "",
@@ -38,6 +39,7 @@ const useLoginForm = (validate) => {
 
       try {
         const { username, password } = values;
+        setIsLoading(true);
 
         const data = await auth.login(username, password);
 
@@ -46,7 +48,6 @@ const useLoginForm = (validate) => {
             "This account is inactive. Kindly contact the administrator.",
             { variant: "error" }
           );
-
         store.dispatch(userAdded({ data }));
 
         let pathToRelocate;
@@ -54,14 +55,20 @@ const useLoginForm = (validate) => {
         else pathToRelocate = "/";
         hist.push(pathToRelocate);
       } catch (ex) {
+        setIsLoading(false);
         if (ex && ex.status === 400) {
           enqueueSnackbar(ex.data, { variant: "error" });
         }
         if (ex && ex.status === 500)
           enqueueSnackbar(ex.data, { variant: "error" });
+      } finally {
       }
     }
+
     fetchData();
+    return function cleanup() {
+      setIsLoading(false);
+    };
     // eslint-disable-next-line
   }, [errors]);
 
@@ -71,7 +78,7 @@ const useLoginForm = (validate) => {
     setErrors(validate(values));
   };
 
-  return { handleChange, values, handleSubmit, errors };
+  return { handleChange, values, handleSubmit, errors, isLoading };
 };
 
 export default useLoginForm;

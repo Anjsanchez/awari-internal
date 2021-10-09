@@ -17,11 +17,6 @@ export function includesTransLines() {
   return http.get(apiEndpoint + "/includesTransLines");
 }
 
-// export function GetRoomLinesByHeaderId(headerId) {
-//   http.SetJwt();
-//   return http.get(apiEndpoint + "/byHeaderId?headerId=" + headerId);
-// }
-
 export function saveTransLine(h) {
   http.SetJwt();
   return http.post(apiEndpoint, h);
@@ -29,4 +24,9 @@ export function saveTransLine(h) {
 
 export function deleteTransLine(lineId) {
   return http.delete(header(lineId));
+}
+
+export function PostCreateTransApproval(trans) {
+  http.SetJwt();
+  return http.put(apiEndpoint + "/CreateTransApproval/" + trans.transId, trans);
 }
