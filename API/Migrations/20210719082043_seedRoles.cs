@@ -16,9 +16,9 @@ namespace API.Migrations
                     { new Guid("10f269ed-f71a-4b0c-8b6d-33e3f9fe4f31"), "Room Attendant" },
                     { new Guid("d3bc4e7a-db7b-49fa-a73e-f1e1d907898c"), "Front Desk" },
                     { new Guid("5f79348b-1d63-42d3-90cc-63a5f2bb26c4"), "Kitchen" },
-                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231542"), "Manager" },
-                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231542"), "Security" },
-                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231542"), "Maintenance" },
+                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231543"), "Manager" },
+                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231544"), "Security" },
+                    { new Guid("bf8e4f15-c192-4d3e-8d40-d75c91231545"), "Maintenance" },
                 });
         }
 
