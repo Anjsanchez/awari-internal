@@ -28,10 +28,11 @@ namespace API.Data
         public DbSet<RoomVariant> RoomVariants { get; set; }
         public DbSet<RoomPricing> RoomPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
-        public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
         public DbSet<ApprovalRoom> ApprovalRooms { get; set; }
         public DbSet<employeeRole> EmployeeRoles { get; set; }
+        public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
+        public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<ApprovalPayment> ApprovalPayments { get; set; }
         public DbSet<ReservationType> ReservationTypes { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }

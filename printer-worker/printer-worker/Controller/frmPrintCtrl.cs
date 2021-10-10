@@ -138,7 +138,10 @@ namespace resortPrintWorker.Controller
                 Properties.Settings.Default.currentDate = localDateTime;
                 Properties.Settings.Default.slipNumber = localSlipNumber;
                 Properties.Settings.Default.Save();
-
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.Reload();
+                MessageBox.Show(Properties.Settings.Default.slipNumber.ToString(), "EES");
+                MessageBox.Show(localSlipNumber.ToString(), "EES");
                 numberNames.Add(tmp);
 
                 var listByCategory = new List<List<printObj>>();

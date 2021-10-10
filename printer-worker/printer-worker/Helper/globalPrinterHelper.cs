@@ -77,6 +77,7 @@ namespace resortPrintWorker.Helper
                 Font font9 = new Font("Courier New", 9);
                 Font font8 = new Font("Courier New", 8);
                 Font ftnBusinessName = new Font("Courier New", 18, FontStyle.Bold);
+                Font ftnSlipNumber = new Font("Courier New", 22, FontStyle.Bold);
                 Font fntForFooter = new Font("Courier New", 2);
 
                 float leading = 0;
@@ -104,10 +105,8 @@ namespace resortPrintWorker.Helper
                 Offset = Offset + lineheight14;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
                 Offset = Offset + lineheight12;
-                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
-                Offset = Offset + lineheight12;
 
-                graphics.DrawString(_printObj[0].slipNumber.ToString(), ftnBusinessName, brush, layout, formatCenter);
+                graphics.DrawString(_printObj[0].slipNumber.ToString(), ftnSlipNumber, brush, layout, formatCenter);
                 Offset = Offset + lineheight14;
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
                 Offset = Offset + lineheight12;
