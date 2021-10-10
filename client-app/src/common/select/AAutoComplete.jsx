@@ -5,7 +5,7 @@ const AAutoComplete = ({ data, onSelectChange, selectedData, label }) => {
   return (
     <div>
       <div className="counter-spanHeader__wrapper">
-        <span className="counter-spanHeader">{label}</span>
+        <span className="counter-spanHeader aac">{label}</span>
       </div>
       <Select
         id="res-type"

@@ -39,6 +39,7 @@ namespace resortPrintWorker.View
             this.txtPass = new System.Windows.Forms.TextBox();
             this.txtInterval = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,8 +56,7 @@ namespace resortPrintWorker.View
             // 
             // tmrPrint
             // 
-            this.tmrPrint.Enabled = true;
-            this.tmrPrint.Interval = 15000;
+            this.tmrPrint.Interval = 2000;
             this.tmrPrint.Tick += new System.EventHandler(this.tmrPrint_Tick);
             // 
             // btnLock
@@ -106,7 +106,7 @@ namespace resortPrintWorker.View
             this.txtInterval.ReadOnly = true;
             this.txtInterval.Size = new System.Drawing.Size(167, 20);
             this.txtInterval.TabIndex = 589;
-            this.txtInterval.Text = "15000";
+            this.txtInterval.Text = "2000";
             this.txtInterval.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label2
@@ -121,6 +121,16 @@ namespace resortPrintWorker.View
             this.label2.TabIndex = 590;
             this.label2.Text = "Interval";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(-13, 33);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(167, 26);
+            this.button1.TabIndex = 587;
+            this.button1.Text = "Unlock";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmPrint
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -128,6 +138,7 @@ namespace resortPrintWorker.View
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(246)))), ((int)(((byte)(246)))));
             this.ClientSize = new System.Drawing.Size(203, 217);
             this.ControlBox = false;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtInterval);
             this.Controls.Add(this.txtPass);
@@ -157,5 +168,6 @@ namespace resortPrintWorker.View
         private System.Windows.Forms.TextBox txtPass;
         private System.Windows.Forms.TextBox txtInterval;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button1;
     }
 }

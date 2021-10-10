@@ -19,5 +19,6 @@ namespace resortPrintWorker.Model
         public string quantity { get; set; }
         public string remark { get; set; }
         public string isPrinted { get; set; }
+        public int slipNumber { get; set; } = 1;
     }
 }

@@ -35,9 +35,13 @@ namespace API.Controllers.functionality
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPayments()
+        public async Task<ActionResult> GetPayments(bool isActiveOnly = false)
         {
             var payments = await _repo.FindAll();
+            if (isActiveOnly)
+                payments = payments.Where(n => n.isActive == true).ToList();
+
+
             var mappedPayments = _map.Map<List<Payment>, List<paymentReadDto>>(payments.ToList());
 
             return Ok(new GenericResponse<paymentReadDto>()

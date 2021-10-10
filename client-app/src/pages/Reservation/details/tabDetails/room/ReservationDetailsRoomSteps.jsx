@@ -56,7 +56,7 @@ const getSteps = () => [
   "Guest",
   "Room",
   "Promotions",
-  "Add Ons",
+  "Add-Ons",
   "Confirmation",
 ];
 

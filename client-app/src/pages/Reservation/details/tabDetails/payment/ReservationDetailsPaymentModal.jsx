@@ -53,7 +53,7 @@ const ReservationDetailsPaymentModal = (props) => {
     onSuccessRequestApproval,
   } = props;
   const { enqueueSnackbar } = useSnackbar();
-  const [reservationTypes, setReservationTypes] = useState([]);
+  const [payments, setPayments] = useState([]);
 
   const {
     askConfirmation,
@@ -82,7 +82,7 @@ const ReservationDetailsPaymentModal = (props) => {
   useEffect(() => {
     async function populateReservationTypes() {
       try {
-        const { data } = await getPayments();
+        const { data } = await getPayments(true);
 
         const { token, listRecords } = data;
 
@@ -92,7 +92,7 @@ const ReservationDetailsPaymentModal = (props) => {
 
         store.dispatch(writeToken({ token }));
 
-        setReservationTypes(sortedPayment);
+        setPayments(sortedPayment);
       } catch (error) {
         enqueueSnackbar("0030: An error occured in the server.", {
           variant: "error",
@@ -205,7 +205,7 @@ const ReservationDetailsPaymentModal = (props) => {
               option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
           >
-            {reservationTypes.map((n) => (
+            {payments.map((n) => (
               <Select.Option
                 value={n.name}
                 values={n.name}

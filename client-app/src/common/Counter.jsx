@@ -5,9 +5,6 @@ import { Button } from "@material-ui/core";
 const Counter = ({ name, counterV, onIncrement, onDecrement }) => {
   return (
     <div className="counter__container">
-      {/* <div className="counter-spanHeader__wrapper">
-        <span className="counter-spanHeader">{name.toUpperCase()}</span>
-      </div> */}
       <span className="counter-spanHeader">{name.toUpperCase()}</span>
       <div className="counter__wrapper">
         <Button

@@ -20,7 +20,7 @@ const ReservationDiscount = () => {
   useEffect(() => {
     async function populateDiscounts() {
       try {
-        const { data } = await getDiscounts();
+        const { data } = await getDiscounts(true);
 
         const { token, listRecords } = data;
 

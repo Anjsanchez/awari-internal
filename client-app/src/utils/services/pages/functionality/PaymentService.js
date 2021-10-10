@@ -7,9 +7,9 @@ function paymentUrl(id) {
   return `${apiEndpoint}/${id}`;
 }
 
-export function getPayments() {
+export function getPayments(isActiveOnly = false) {
   http.SetJwt();
-  return http.get(apiEndpoint);
+  return http.get(apiEndpoint + "?isActiveOnly=" + isActiveOnly);
 }
 
 export function savePayment(payment) {

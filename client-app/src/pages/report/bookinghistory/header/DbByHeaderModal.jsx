@@ -54,7 +54,7 @@ const DbByHeaderModal = ({ showModal, setShowModal, trans, prodId }) => {
         visible={showModal}
         // onOk={onVisible}
         onCancel={() => setShowModal(!showModal)}
-        // footer={<Footer />}
+        footer={<span>Click the record to view the whole transaction</span>}
       >
         <div className="db-cl-body__container">
           <Table

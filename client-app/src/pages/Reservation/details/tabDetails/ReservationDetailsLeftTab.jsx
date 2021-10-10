@@ -47,10 +47,18 @@ const ReservationDetailsLeftTab = () => {
       (a, b) => a + (b.adultPax + b.seniorPax + b.childrenPax),
       0
     );
+
+    let totalRoom = rooms.length;
+    if (
+      header.reservationType.name === "Restaurant" ||
+      header.reservationType.name === "Day Tour"
+    )
+      totalRoom = 0;
+
     setTotalTrans(trans.length);
-    setTotalRooms(rooms.length);
+    setTotalRooms(totalRoom);
     setTotalHeads(heads);
-  }, [rooms, trans]);
+  }, [rooms, trans]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const soa = () =>
     hist.push(`/a/reports/SOA/${header._id}&istrans=${isTrans}`);
@@ -300,25 +308,7 @@ const ReservationDetailsLeftTab = () => {
                 </Grid>
               </Grid>
             </div>
-            <div className="rdlt-btn__wrapper rdlt">
-              {renderButton()}
-              {/* {header.isActive && (
-                <div className="cd-button__container rdlt">
-                  <Button onClick={soa} variant="contained" color="primary">
-                    PRINT SOA
-                  </Button>
-                </div>
-              )}
-              <div className="cd-button__container rdlt">
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleCheckInCheckOut}
-                >
-                  {header.isActive ? "CHECK-OUT" : "CHECK-IN"}
-                </Button>
-              </div> */}
-            </div>
+            <div className="rdlt-btn__wrapper rdlt">{renderButton()}</div>
           </div>
         </Card>
       </div>

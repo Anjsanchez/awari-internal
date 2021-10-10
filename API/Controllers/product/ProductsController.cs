@@ -63,7 +63,7 @@ namespace API.Controllers
         public async Task<ActionResult> GetProductsWithCategory()
         {
             var products = await _repo.GetProductsWithImage(Request);
-            products = products.Where(n => n.isActive == true).ToList();
+            products = products.Where(n => n.isActive == true && n.productCategory.isActive == true).ToList();
             var mappedProducts = _map.Map<List<Product>, List<productReadDto>>(products.ToList());
 
             var roomProductCategory = await _catRepo.FindAll(true);

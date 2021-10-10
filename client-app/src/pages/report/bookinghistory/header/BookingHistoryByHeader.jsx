@@ -208,6 +208,7 @@ const BookingHistoryByHeader = () => {
 
     const tranx = [...transHeader];
 
+    console.log(transHeader);
     const filterDate = () => {
       const fromDateClone = selectedDate.fromDate
         .clone()

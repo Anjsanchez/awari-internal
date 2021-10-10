@@ -12,10 +12,13 @@ const BhByHeaderBody = ({ filteredTransHeader }) => {
   const handleComputeTotalEarning = () =>
     formatNumber(filteredTransHeader.reduce((a, b) => a + b.netAmount, 0));
 
-  const handleComputeTotalRooms = () =>
-    formatNumber(
+  const handleComputeTotalRooms = () => {
+    console.log(filteredTransHeader);
+
+    return formatNumber(
       filteredTransHeader.reduce((a, b) => a + b.totalNumberOfRooms, 0)
     );
+  };
   const handleComputeTotalTrans = () =>
     formatNumber(
       filteredTransHeader.reduce((a, b) => a + b.totalNumberOfTrans, 0)

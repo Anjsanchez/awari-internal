@@ -94,6 +94,14 @@ namespace resortPrintWorker.Controller
 
                 var numberNames = new List<List<printObj>>();
                 var tmp = new List<printObj>();
+                int localSlipNumber = Properties.Settings.Default.slipNumber;
+                DateTime localDateTime = Properties.Settings.Default.currentDate;
+
+                if(localDateTime.Date != DateTime.Now.Date)
+                {
+                    localDateTime = DateTime.Now;
+                    localSlipNumber = 1;
+                }
 
                 lastHeaderId = dt.Rows[0]["reservationHeaderId"].ToString();
 
@@ -103,6 +111,7 @@ namespace resortPrintWorker.Controller
                     {
                         numberNames.Add(tmp);
                         tmp = new List<printObj>();
+                        localSlipNumber++;
                     }
 
                     lastHeaderId = item["reservationHeaderId"].ToString();
@@ -119,11 +128,17 @@ namespace resortPrintWorker.Controller
                         reservationHeaderId = item["reservationHeaderId"].ToString(),
                         productCategoryId = item["productCategoryId"].ToString(),
                         roomLongName = item["roomLongName"].ToString(),
-                        staffName = item["staffName"].ToString()
+                        staffName = item["staffName"].ToString(),
+                        slipNumber = localSlipNumber
                     };
 
                     tmp.Add(obj);
                 }
+
+                Properties.Settings.Default.currentDate = localDateTime;
+                Properties.Settings.Default.slipNumber = localSlipNumber;
+                Properties.Settings.Default.Save();
+
                 numberNames.Add(tmp);
 
                 var listByCategory = new List<List<printObj>>();
@@ -154,10 +169,10 @@ namespace resortPrintWorker.Controller
                 {
                     if (!printrHlpr.InitiatePrint(item)) continue;
 
-                    executeUpdateRecord(item[0].reservationHeaderId, item[0].productCategoryId);
+                     executeUpdateRecord(item[0].reservationHeaderId, item[0].productCategoryId);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
             }
         }

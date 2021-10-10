@@ -8,7 +8,6 @@ const DbByHeaderTbl = ({ headers }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProdId, setSelectedProdId] = useState({});
   const item = [...headers];
-
   const columns = [
     {
       title: "Name",

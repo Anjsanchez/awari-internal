@@ -52,15 +52,16 @@ const ReservationAddOns = () => {
   };
 
   useEffect(() => {}, [mattress]);
-
   return (
     <div className="guestCount__container">
-      <Counter
-        name="mattress"
-        onIncrement={handleIncrement}
-        counterV={mattress}
-        onDecrement={handleDecrement}
-      />
+      {storeData.selectedStartDate.room.isAllowExtraPax && (
+        <Counter
+          name="mattress"
+          onIncrement={handleIncrement}
+          counterV={mattress}
+          onDecrement={handleDecrement}
+        />
+      )}
       <div className="rPromotion__wrapper">
         <MaterialTextField
           id="remarks"

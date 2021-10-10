@@ -112,10 +112,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   bottom: 12px;
-  width: 89%;
+  width: 100%;
   position: absolute;
+  left: 0;
+  padding: 0 15px;
 }
 .com-content__wrapper {
   padding: 16px;
@@ -249,9 +250,6 @@
     padding: 10px;
     padding-bottom: 18px;
   }
-  .com-body__pricing {
-    /* width: 92%; */
-  }
 }
 @media screen and (max-width: 600px) {
   .com-title__autocomplete {
@@ -267,5 +265,8 @@
   }
   .com-content__wrapper {
     padding: 10px;
+  }
+  .com-body__pricing {
+    /* width: 92%; */
   }
 }

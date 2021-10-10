@@ -107,6 +107,13 @@ namespace resortPrintWorker.Helper
                 layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
                 Offset = Offset + lineheight12;
 
+                graphics.DrawString(_printObj[0].slipNumber.ToString(), ftnBusinessName, brush, layout, formatCenter);
+                Offset = Offset + lineheight14;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                Offset = Offset + lineheight12;
+                layout = new RectangleF(new PointF(startX, startY + Offset), layoutSize);
+                Offset = Offset + lineheight12;
+
                 //.ToString("MMM dd yyyy")  
                 graphics.DrawString(DateTime.Now.ToString("MMM dd yyyy"), font9, brush, layout, formatLeft);
                 graphics.DrawString(DateTime.Now.ToLongTimeString(), font9, brush, layout, formatRight);

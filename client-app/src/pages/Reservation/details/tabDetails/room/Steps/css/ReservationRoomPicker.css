@@ -21,6 +21,10 @@
   padding-bottom: 5px;
   cursor: default;
 }
+
+.counter-spanHeader.aac {
+  padding-left: 0;
+}
 .picker-body__container .ant-collapse {
   background-color: #e3f2fd;
 }
