@@ -58,6 +58,8 @@ namespace resortPrintWorker.Controller
             }
             _mdl.txtPass.Text = "";
         }
+
+
         public void HandleTimerTick()
         {
 
@@ -94,10 +96,13 @@ namespace resortPrintWorker.Controller
 
                 var numberNames = new List<List<printObj>>();
                 var tmp = new List<printObj>();
-                int localSlipNumber = Properties.Settings.Default.slipNumber;
-                DateTime localDateTime = Properties.Settings.Default.currentDate;
 
-                if(localDateTime.Date != DateTime.Now.Date)
+                var dtSlipNo = globalSqlHelper.DbSelect(@"SELECT TOP 1 * FROM SystemSettings WHERE name = 'slipNo Sequence' 
+                                                    UNION SELECT TOP 1 * FROM SystemSettings WHERE name = 'slipNo date'");
+
+                int localSlipNumber = int.Parse(dtSlipNo.Rows[0]["value"].ToString());
+                DateTime localDateTime = DateTime.Parse(dtSlipNo.Rows[1]["value"].ToString());
+                if (localDateTime.Date != DateTime.Now.Date)
                 {
                     localDateTime = DateTime.Now;
                     localSlipNumber = 1;
@@ -134,15 +139,10 @@ namespace resortPrintWorker.Controller
 
                     tmp.Add(obj);
                 }
-
-                Properties.Settings.Default.currentDate = localDateTime;
-                Properties.Settings.Default.slipNumber = localSlipNumber;
-                Properties.Settings.Default.Save();
-                Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.Reload();
-                MessageBox.Show(Properties.Settings.Default.slipNumber.ToString(), "EES");
-                MessageBox.Show(localSlipNumber.ToString(), "EES");
                 numberNames.Add(tmp);
+                localSlipNumber++;
+                globalSqlHelper.DbExecute($"UPDATE SystemSettings set value='{localSlipNumber}' WHERE name = 'slipNo Sequence'");
+                globalSqlHelper.DbExecute($"UPDATE SystemSettings set value='{localDateTime}' WHERE name = 'slipNo date'");
 
                 var listByCategory = new List<List<printObj>>();
                 var tmpCategory = new List<printObj>();
@@ -177,6 +177,7 @@ namespace resortPrintWorker.Controller
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
             }
         }
 

@@ -1,4 +1,4 @@
-import { Radio } from "antd";
+import { Modal, Radio } from "antd";
 import { Drawer } from "antd";
 import React, { useState } from "react";
 import List from "@material-ui/core/List";
@@ -8,6 +8,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Grid, Checkbox, FormControlLabel, Button } from "@material-ui/core";
+import GuestChecker from "./../../common/GuestChecker";
 
 const CommerceDrawer = ({
   isFilterDrawerShow,
@@ -19,6 +20,7 @@ const CommerceDrawer = ({
   setSelectedPrice,
 }) => {
   const [value, setValue] = useState(0);
+  const [showModal, setShowModal] = useState(false);
   const [localSTypes, setLocalSTypes] = useState([]);
   const [localSCategs, setLocalSCategs] = useState([]);
   const [visible, setVisible] = useState([
@@ -78,6 +80,16 @@ const CommerceDrawer = ({
 
   return (
     <div>
+      <Modal
+        title="Guest Checker"
+        centered
+        visible={showModal}
+        onOk={() => setShowModal(!showModal)}
+        onCancel={() => setShowModal(!showModal)}
+        footer={null}
+      >
+        <GuestChecker />
+      </Modal>
       <Drawer
         placement="right"
         closable={false}
@@ -185,6 +197,15 @@ const CommerceDrawer = ({
             </Collapse>
           </List>
 
+          <div className="cd-button__container gc">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowModal(true)}
+            >
+              Guest Checker
+            </Button>
+          </div>
           <div className="cd-button__container">
             <Button variant="contained" color="primary" onClick={onClearFilter}>
               Clear All

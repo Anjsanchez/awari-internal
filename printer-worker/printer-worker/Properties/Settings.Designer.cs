@@ -22,29 +22,5 @@ namespace resortPrintWorker.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
-        public int slipNumber {
-            get {
-                return ((int)(this["slipNumber"]));
-            }
-            set {
-                this["slipNumber"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2021-10-09")]
-        public global::System.DateTime currentDate {
-            get {
-                return ((global::System.DateTime)(this["currentDate"]));
-            }
-            set {
-                this["currentDate"] = value;
-            }
-        }
     }
 }

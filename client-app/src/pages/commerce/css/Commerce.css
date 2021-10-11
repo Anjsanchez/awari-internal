@@ -181,6 +181,7 @@
 
 .cd-button__container {
   padding: 0 16px;
+  padding-bottom: 5px;
   width: 100%;
 }
 .cd-button__container.submit {
@@ -193,6 +194,11 @@
 .cd-button__container.submit .MuiButton-containedPrimary,
 .cd-button__container.submit .MuiButton-containedPrimary:hover {
   background-color: rgb(33, 150, 243);
+}
+
+.cd-button__container.gc .MuiButton-containedPrimary,
+.cd-button__container.gc .MuiButton-containedPrimary:hover {
+  background-color: #1890ff;
 }
 
 .cd-button__container .MuiButton-containedPrimary,

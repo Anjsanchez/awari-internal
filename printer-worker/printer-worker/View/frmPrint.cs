@@ -59,5 +59,10 @@ namespace resortPrintWorker.View
         {
             _ctrl.HandleTimerTick();
         }
+
+        private void button1_Click_2(object sender, EventArgs e)
+        {
+            _ctrl.HandleTimerTick();
+        }
     }
 }

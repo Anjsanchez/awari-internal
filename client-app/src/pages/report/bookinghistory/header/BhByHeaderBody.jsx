@@ -13,8 +13,6 @@ const BhByHeaderBody = ({ filteredTransHeader }) => {
     formatNumber(filteredTransHeader.reduce((a, b) => a + b.netAmount, 0));
 
   const handleComputeTotalRooms = () => {
-    console.log(filteredTransHeader);
-
     return formatNumber(
       filteredTransHeader.reduce((a, b) => a + b.totalNumberOfRooms, 0)
     );

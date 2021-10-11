@@ -74,7 +74,6 @@ const Commerce = () => {
         const sorted = products.sort((a, b) =>
           a.longName.localeCompare(b.longName)
         );
-        console.log("z", categories);
         store.dispatch(writeToken(token));
 
         setTimeout(() => {

@@ -43,7 +43,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> getUsers(bool isActiveOnly = false)
         {
             var users = await _repo.FindAll();
@@ -63,7 +63,7 @@ namespace API.Controllers
 
 
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> getUserById(Guid id)
         {
             var users = await _repo.FindById(id);

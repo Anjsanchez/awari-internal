@@ -54,7 +54,6 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
 
   useEffect(() => {
     if (rooms.length === 0) return;
-
     const zz = rooms.filter(
       (n) => n.reservationHeader._id === customer.headerId
     );
@@ -72,9 +71,12 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
       try {
         const { data } = await GetRoomLines();
         const { listRecords } = data;
+        listRecords.map((n) => {
+          if (n.room === null)
+            return (n.room = { roomLongName: n.remark, _id: n._id });
+        });
 
         const withOutNullValues = listRecords.filter((n) => n.room !== null);
-
         const sortedData = withOutNullValues.sort((a, b) =>
           a.room.roomLongName.localeCompare(b.room.roomLongName)
         );
