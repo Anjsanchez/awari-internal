@@ -113,7 +113,7 @@ namespace API.Controllers
                 return BadRequest("Username or Email not found");
 
             if (!BC.Verify(userDto.Password, account.Password))
-                return BadRequest("Invalid username password combination");
+                return BadRequest("Invalid username and password combination");
 
             var commandModel = _map.Map<userReadDto>(account);
 

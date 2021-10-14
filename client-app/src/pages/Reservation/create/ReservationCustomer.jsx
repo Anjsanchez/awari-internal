@@ -116,7 +116,7 @@ const ReservationCustomer = ({ action = "createReservation" }) => {
 
   const populateCustomer = async () => {
     try {
-      const { data } = await getCustomers();
+      const { data } = await getCustomers(true);
 
       const { token, listRecords } = data;
 

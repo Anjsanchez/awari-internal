@@ -233,7 +233,7 @@ const ReservationDetailsLeftTab = () => {
                         Voucher
                       </span>
                       <span className="reservationDetails-body__span__detail">
-                        {header.reservationType.voucher}
+                        {header.voucher}
                       </span>
                     </ListItem>
                     <Divider />

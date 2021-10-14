@@ -393,6 +393,29 @@ const SOAe = ({
     return grossAmountRooms;
   };
 
+  const renderNetDiscount = (isFormatted = true) => {
+    const netDiscOfRooms = rooms.reduce((a, b) => a + b.totalDiscount, 0);
+
+    const netAmountOfTrans = trans.reduce((a, b) => a + b.netDiscount, 0);
+
+    const total = netDiscOfRooms + netAmountOfTrans;
+    if (!isFormatted) return total;
+    return formatNumber(total);
+  };
+
+  const renderGrossAmount = (isFormatted = true) => {
+    const grossAmountRooms = rooms.reduce((a, b) => a + b.grossAmount, 0);
+
+    const grossAmountTrans = trans.reduce(
+      (a, b) => a + b.quantity * b.product.sellingPrice,
+      0
+    );
+
+    const total = grossAmountRooms + grossAmountTrans;
+    if (!isFormatted) return total;
+    return formatNumber(total);
+  };
+
   const renderRoom = (roomsx) => {
     const total = roomsx.grossAmount - roomsx.mattress * 2420;
 
@@ -756,6 +779,66 @@ const SOAe = ({
             </View>
           </View>
           <View style={styles.borderTotal}></View>
+          <View style={[styles.tableRow, styles.subMargin]}>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol, styles.tableColDescription]}>
+              <Text style={[styles.tableRowText]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}>
+                GROSS AMOUNT
+              </Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.tableColSub,
+                  { fontSize: 15 },
+                ]}
+              >
+                {renderGrossAmount()}
+              </Text>
+            </View>
+          </View>
+          <View style={[styles.tableRow, styles.subMargin]}>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol, styles.tableColDescription]}>
+              <Text style={[styles.tableRowText]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text style={[styles.tableRowText, styles.tableColSub]}>
+                NET DISCOUNT
+              </Text>
+            </View>
+            <View style={[styles.tableCol]}>
+              <Text
+                style={[
+                  styles.tableRowText,
+                  styles.tableColSub,
+                  { fontSize: 15 },
+                ]}
+              >
+                {renderNetDiscount()}
+              </Text>
+            </View>
+          </View>
           <View style={[styles.tableRow, styles.subMargin]}>
             <View style={[styles.tableCol]}>
               <Text style={[styles.tableRowText, styles.tableColSub]}></Text>

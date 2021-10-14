@@ -13,7 +13,7 @@ namespace API.Migrations
                 values: new object[,]
                 {
                     { Guid.NewGuid(), "Walk In" },
-                    { Guid.NewGuid(), "Online" },
+                    { Guid.NewGuid(), "Website" },
                     { Guid.NewGuid(), "Restaurant" },
                     { Guid.NewGuid(), "Day Tour" },
                     { Guid.NewGuid(), "OTA/Travel Agency" }
