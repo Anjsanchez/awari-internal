@@ -8,16 +8,18 @@ const BhByTransBarChart = ({ filteredTrans }) => {
   var result = [];
   item.reduce(function (res, value) {
     if (!res[value.product._id]) {
-      res[value.product._id] = { value, netAmount: 0 };
+      res[value.product._id] = { value, netAmount: 0, timesSold: 0 };
       result.push(res[value.product._id]);
     }
     res[value.product._id].netAmount += value.netAmount;
+    res[value.product._id].timesSold += value.quantity;
     return res;
   }, {});
 
   const sortedByAmt = result
     .sort(function (a, b) {
-      return b.netAmount - a.netAmount;
+      return b.timesSold - a.timesSold;
+      // return b.netAmount - a.netAmount;
     })
     .slice(0, 12);
 
@@ -99,7 +101,8 @@ const BhByTransBarChart = ({ filteredTrans }) => {
 
   const objSeriesData = [];
   sortedByAmt.map((n) => {
-    objSeriesData.push(n.netAmount);
+    // objSeriesData.push(n.netAmount);
+    objSeriesData.push(n.timesSold);
     return series.options.xaxis.categories.push(n.value.product.shortName);
   });
 
@@ -110,17 +113,20 @@ const BhByTransBarChart = ({ filteredTrans }) => {
       res[value.product.productCategory.name] = {
         name: value.product.productCategory.name,
         amount: 0,
+        timesSold: 0,
       };
       result.push(res[value.product.productCategory.name]);
     }
     res[value.product.productCategory.name].amount += value.netAmount;
+    res[value.product.productCategory.name].timesSold += value.quantity;
 
     return res;
   }, {});
 
   result.map((n) => {
     options.labels.push(n.name);
-    return options.series.push(n.amount);
+    return options.series.push(n.timesSold);
+    // return options.series.push(n.amount);
   });
 
   const renderBody = () => {

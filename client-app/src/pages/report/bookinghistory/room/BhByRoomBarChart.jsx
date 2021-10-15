@@ -6,18 +6,20 @@ const BhByRoomBarChart = ({ filteredTrans }) => {
   const item = [...filteredTrans];
 
   var result = [];
-  item.reduce(function (res, value) {
+  item.reduce(function (res, value, i) {
     if (!res[value.room._id]) {
-      res[value.room._id] = { value, totalAmount: 0 };
+      res[value.room._id] = { value, totalAmount: 0, timesSold: 0 };
       result.push(res[value.room._id]);
     }
     res[value.room._id].totalAmount += value.totalAmount;
+    res[value.room._id].timesSold += 1;
     return res;
   }, {});
 
   const sortedByAmt = result
     .sort(function (a, b) {
-      return b.totalAmount - a.totalAmount;
+      return b.timesSold - a.timesSold;
+      //  return b.totalAmount - a.totalAmount;
     })
     .slice(0, 12);
 
@@ -99,28 +101,32 @@ const BhByRoomBarChart = ({ filteredTrans }) => {
 
   const objSeriesData = [];
   sortedByAmt.map((n) => {
-    objSeriesData.push(n.totalAmount);
+    //   objSeriesData.push(n.totalAmount);
+    objSeriesData.push(n.timesSold);
     return series.options.xaxis.categories.push(n.value.room.roomLongName);
   });
 
-  series.series.push({ name: "products", data: objSeriesData });
+  series.series.push({ name: "Rooms", data: objSeriesData });
 
   filteredTrans.reduce(function (res, value) {
     if (!res[value.room.roomVariant.name]) {
       res[value.room.roomVariant.name] = {
         name: value.room.roomVariant.name,
         amount: 0,
+        timesSold: 0,
       };
       result.push(res[value.room.roomVariant.name]);
     }
     res[value.room.roomVariant.name].amount += value.totalAmount;
+    // res[value.room.roomVariant.name].timesSold += 1;
 
     return res;
   }, {});
 
   result.map((n) => {
     options.labels.push(n.name);
-    return options.series.push(n.amount);
+    return options.series.push(n.timesSold);
+    // return options.series.push(n.amount);
   });
 
   const renderBody = () => {

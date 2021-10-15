@@ -29,10 +29,15 @@ const ByHeaderBarChart = ({ filteredTransHeader }) => {
   var result = [];
   item.reduce(function (res, value, i) {
     if (!res[value.reservationType._id]) {
-      res[value.reservationType._id] = { ...value, netAmount: 0, timesSold: 0 };
+      res[value.reservationType._id] = {
+        ...value,
+        netAmount: 0,
+        timesSold: 0,
+        grossAmount: 0,
+        netDiscount: 0,
+      };
       result.push(res[value.reservationType._id]);
     }
-
     res[value.reservationType._id].timesSold += 1;
     res[value.reservationType._id].netAmount += value.netAmount;
     res[value.reservationType._id].netDiscount += value.netDiscount;
