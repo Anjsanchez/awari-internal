@@ -11,9 +11,14 @@ const RoomPricingList = ({ data, onDelete, onView }) => {
         data={data}
         onView={onView}
         onDelete={onDelete}
-        displayField="searchName"
+        displayField="roomLongName"
         bracketField="room"
         hasAditionalField={{
+          value: true,
+          field: "capacity",
+          additionalText: "Capacity: ",
+        }}
+        hasSecondField={{
           value: true,
           field: "sellingPrice",
           additionalText: "Price: ",

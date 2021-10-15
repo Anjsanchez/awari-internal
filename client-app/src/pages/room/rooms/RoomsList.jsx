@@ -13,8 +13,13 @@ const RoomsList = ({ data, onDelete, onView }) => {
         displayField="roomLongName"
         hasAditionalField={{
           value: true,
-          field: "numberOfRooms",
-          additionalText: "Rooms: ",
+          field: "minimumCapacity",
+          additionalText: "Min : ",
+        }}
+        hasSecondField={{
+          value: true,
+          field: "maximumCapacity",
+          additionalText: "Max : ",
         }}
       />
     </>

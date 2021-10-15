@@ -80,7 +80,7 @@ export const sideBarData = [
         id: 3,
       },
       {
-        subTitle: "Cart Item",
+        subTitle: "Cart",
         icon: <ShoppingBasketTwoToneIcon />,
         path: "/a/commerce-management/cart",
         id: 4,
@@ -132,8 +132,8 @@ export const sideBarData = [
         id: 107,
         subNav: [
           {
-            title: "Category",
-            path: "/a/product-management/category",
+            title: "Locations",
+            path: "/a/product-management/location",
             id: 10,
           },
           {

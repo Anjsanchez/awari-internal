@@ -87,7 +87,7 @@ const ProductCategoryForm = ({
             <Grid item xs={12}>
               <MaterialTextField
                 id="name"
-                label="Category Name"
+                label="Location Name"
                 handleChange={handleChange}
                 errors={errors.name}
                 values={values.name}

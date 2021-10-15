@@ -17,7 +17,11 @@ namespace API.Migrations
                     { new Guid("d3bc4e7a-db7b-52fa-a73e-f1e1d907898c"), "Family style" },
                     { new Guid("5f79348b-1d63-53d3-90cc-63a5f2bb26c4"), "Desserts" },
                     { new Guid("bf8e4f15-c192-5b3e-8d40-d75c91231542"), "Beverages" },
-                    { new Guid("bf8e4f15-c192-5b6a-8d40-d75c91231542"), "Activity" }
+                    { new Guid("bf8e4f15-c192-5b6a-8d40-d75c91231542"), "Activity" },
+
+                    // { new Guid("5f79348b-1d63-53d3-90cc-63a5f2cb26c4"), "Corkage" },
+                    // { new Guid("bf8e4f15-c192-5b3e-8d40-d75d91231542"), "Items" },
+                    // { new Guid("bf8e4f15-c192-5c6a-8d40-d75c91231542"), "Complimentary" }
          });
 
         }

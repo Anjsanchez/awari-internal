@@ -17,7 +17,32 @@ const FormList = ({
     additionalText: "w",
     bracketFieldAdtl: "",
   },
+  hasSecondField = {
+    value: false,
+    field: "roomLongName",
+    additionalText: "w",
+    bracketFieldAdtl: "",
+  },
 }) => {
+  const RenderSecondField = (renderData) => {
+    const { value, field, additionalText, bracketFieldAdtl } = hasSecondField;
+
+    if (!value) return null;
+
+    if (!bracketFieldAdtl)
+      return (
+        <div className="formList-subheader_span">
+          {additionalText + " " + renderData.data[field]}
+        </div>
+      );
+
+    return (
+      <div className="formList-subheader_span">
+        {additionalText + " " + renderData.data[bracketFieldAdtl][field]}
+      </div>
+    );
+  };
+
   const RenderAditionalField = (renderData) => {
     const { value, field, additionalText, bracketFieldAdtl } =
       hasAditionalField;
@@ -64,6 +89,7 @@ const FormList = ({
         <RenderSpanField data={renderData.data} />
 
         <RenderAditionalField data={renderData.data} />
+        <RenderSecondField data={renderData.data} />
 
         <div className="formList-button_wrapper">
           <ActiveButton value={isActive} />

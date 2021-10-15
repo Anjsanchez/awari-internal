@@ -85,6 +85,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     const grossAmount = quantity * sellingPrice;
     //..NET DISCOUNT
     const { _id, value } = selectedDiscount;
+
     const amtHalf = grossAmount / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
@@ -98,7 +99,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     }
 
     if (_id !== 0) {
-      const totalHeadsNoSenr = (numberOfServing - senior) * amtHalf;
+      const totalHeadsNoSenr = (numberOfServing * quantity - senior) * amtHalf;
       accumulatedDisc += Math.round(totalHeadsNoSenr * (value / 100));
     }
 

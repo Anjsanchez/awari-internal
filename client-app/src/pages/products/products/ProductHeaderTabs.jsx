@@ -27,7 +27,7 @@ const ProductHeaderTabs = ({ onSelect, value }) => {
     //..
     async function fetchData() {
       try {
-        const { data } = await getProdCategory();
+        const { data } = await getProdCategory(true);
         const { listRecords } = data;
 
         const sorted = listRecords.sort((a, b) => a.name.localeCompare(b.name));

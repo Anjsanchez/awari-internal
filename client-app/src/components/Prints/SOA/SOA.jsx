@@ -17,9 +17,20 @@ import {
   View,
 } from "@react-pdf/renderer";
 import { GetTransWithFullDetails } from "../../../utils/services/pages/trans/TransHeaderService";
+
 Font.register({
   family: "Oswald",
   src: "https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf",
+  // fonts: [
+  //   {
+  //     src: "https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap",
+  //     fontWeight: 700,
+  //   },
+  //   {
+  //     src: "https://fonts.googleapis.com/css2?family=Oswald:wght@400&display=swap",
+  //     fontWeight: 400,
+  //   },
+  // ],
 });
 
 const styles = StyleSheet.create({
@@ -175,7 +186,16 @@ const SOAe = ({
     return (
       <View style={[styles.tableRow, styles.productMargin]}>
         <View style={[styles.tableCol]}>
-          <Text style={[styles.tableRowText, styles.tableColSub]}>
+          <Text
+            style={
+              ([styles.tableRowText, styles.tableColSub],
+              {
+                fontFamily: "Oswald",
+                fontWeight: 300,
+                fontSize: 11,
+              })
+            }
+          >
             {pc.name}
           </Text>
         </View>
@@ -592,7 +612,16 @@ const SOAe = ({
               <div key={roomsx._id}>
                 <View style={[styles.tableRow, styles.productMargin]}>
                   <View style={[styles.tableCol]}>
-                    <Text style={[styles.tableRowText, styles.tableColSub]}>
+                    <Text
+                      style={
+                        ([styles.tableRowText, styles.tableColSub],
+                        {
+                          fontFamily: "Oswald",
+                          fontWeight: 300,
+                          fontSize: 11,
+                        })
+                      }
+                    >
                       Room
                     </Text>
                   </View>
@@ -728,7 +757,16 @@ const SOAe = ({
           {/* GROUP BY */}
           <View style={[styles.tableRow, styles.productMargin]}>
             <View style={[styles.tableCol]}>
-              <Text style={[styles.tableRowText, styles.tableColSub]}>
+              <Text
+                style={
+                  ([styles.tableRowText, styles.tableColSub],
+                  {
+                    fontFamily: "Oswald",
+                    fontWeight: 300,
+                    fontSize: 11,
+                  })
+                }
+              >
                 Payment
               </Text>
             </View>
@@ -779,7 +817,7 @@ const SOAe = ({
             </View>
           </View>
           <View style={styles.borderTotal}></View>
-          <View style={[styles.tableRow, styles.subMargin]}>
+          <View style={[styles.tableRow]}>
             <View style={[styles.tableCol]}>
               <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
             </View>
@@ -794,7 +832,7 @@ const SOAe = ({
             </View>
             <View style={[styles.tableCol]}>
               <Text style={[styles.tableRowText, styles.tableColSub]}>
-                GROSS AMOUNT
+                GROSS {"\n"} AMOUNT
               </Text>
             </View>
             <View style={[styles.tableCol]}>
@@ -802,14 +840,14 @@ const SOAe = ({
                 style={[
                   styles.tableRowText,
                   styles.tableColSub,
-                  { fontSize: 15 },
+                  { fontSize: 13 },
                 ]}
               >
                 {renderGrossAmount()}
               </Text>
             </View>
           </View>
-          <View style={[styles.tableRow, styles.subMargin]}>
+          <View style={[styles.tableRow]}>
             <View style={[styles.tableCol]}>
               <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
             </View>
@@ -824,7 +862,7 @@ const SOAe = ({
             </View>
             <View style={[styles.tableCol]}>
               <Text style={[styles.tableRowText, styles.tableColSub]}>
-                NET DISCOUNT
+                NET {"\n"}DISCOUNT
               </Text>
             </View>
             <View style={[styles.tableCol]}>
@@ -832,7 +870,7 @@ const SOAe = ({
                 style={[
                   styles.tableRowText,
                   styles.tableColSub,
-                  { fontSize: 15 },
+                  { fontSize: 13 },
                 ]}
               >
                 {renderNetDiscount()}
@@ -946,7 +984,7 @@ const SOAe = ({
             </View>
             <View style={[styles.rightBookingDetails]}>
               <View>
-                <Text style={styles.fontSmall}>
+                <Text style={[styles.fontSmall, { fontStyle: "italic font" }]}>
                   THANK YOU FOR STAYING WITH ANILAO AWARI BAY RESORT
                 </Text>
               </View>

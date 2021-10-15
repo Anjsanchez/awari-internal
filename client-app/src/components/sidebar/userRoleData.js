@@ -16,8 +16,8 @@ export const resortMgmtPagesData = [
   },
   {
     key: 4,
-    title: "Cart Item",
-    description: "Cart Item",
+    title: "Cart",
+    description: "Cart",
   },
   {
     key: 5,
@@ -47,8 +47,8 @@ export const resortMgmtPagesData = [
   },
   {
     key: 10,
-    title: "Products - Category",
-    description: "Products - Category",
+    title: "Products - Location",
+    description: "Products - Location",
   },
   {
     key: 11,

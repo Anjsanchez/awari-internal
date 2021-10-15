@@ -123,7 +123,7 @@ function App() {
                 keyId="9"
               />
               <ProtectedRoute
-                path="/a/product-management/category"
+                path="/a/product-management/location"
                 component={ProductCategory}
                 keyId="10"
               />

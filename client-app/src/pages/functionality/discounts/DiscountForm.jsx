@@ -96,7 +96,7 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 handleChange={handleChange}
                 switchName="isByPercentage"
                 name="By Percentage Discount"
-                subName="The discount will be by percentage"
+                subName="The discount will be by percentage."
               />
             </Grid>
             <Grid item xs={12}>
@@ -115,22 +115,22 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             spacing={1}
             style={{ marginTop: "10px", marginBottom: "-15px" }}
           >
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <MSwitch
                 values={values.isRequiredId}
                 handleChange={handleChange}
                 switchName="isRequiredId"
                 name="Require Customer ID"
-                subName="Discount that requires guest ID"
+                subName="Discount that requires guest ID."
               />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12}>
               <MSwitch
                 values={values.isRequiredApproval}
                 handleChange={handleChange}
                 switchName="isRequiredApproval"
                 name="Require Approval"
-                subName="Discount that requires approval"
+                subName="Discount that requires approval."
               />
             </Grid>
             <Grid item xs={12}>
@@ -138,7 +138,7 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Active Status"
-                subName="Allows discount to be used on transactions"
+                subName="Allows discount to be used on transactions."
               />
             </Grid>
             <Grid item xs={12}></Grid>

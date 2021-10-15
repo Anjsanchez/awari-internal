@@ -98,7 +98,12 @@ const EmployeeForm = () => {
     async function populateRoles() {
       try {
         const { data } = await getRoles();
-        setRoles(data);
+
+        const sorted = data.sort((a, b) =>
+          a.rolename.localeCompare(b.rolename)
+        );
+
+        setRoles(sorted);
       } catch (error) {
         enqueueSnackbar(
           "An error occured while fetching the roles in the server.",

@@ -3,8 +3,8 @@ export default function employeeFormValidate(values) {
 
   if (!values.roleId.trim()) errors.roleId = "Role is required";
   if (!values.username.trim()) errors.username = "Username is required";
-  if (!values.lastname.trim()) errors.lastname = "Last name is required";
-  if (!values.firstname.trim()) errors.firstname = "First name is required";
+  if (!values.lastname.trim()) errors.lastname = "Last Name is required";
+  if (!values.firstname.trim()) errors.firstname = "First Name is required";
 
   if (values.username.indexOf(" ") >= 0)
     errors.username = "Space is not allowed in username";

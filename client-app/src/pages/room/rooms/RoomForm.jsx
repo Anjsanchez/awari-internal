@@ -155,9 +155,9 @@ const RoomForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
               <MSwitch
                 values={values.isAllowExtraPax}
                 handleChange={handleChange}
-                name="Allow Extra Pax"
+                name="Allow Extra Mattress"
                 switchName="isAllowExtraPax"
-                subName="This will allow adding pax on transactions."
+                subName="This will allow adding an extra mattress in the room."
               />
             </Grid>
           </Grid>

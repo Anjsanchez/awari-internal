@@ -173,7 +173,7 @@ const ProductCategory = () => {
               onSearch={handleSearch}
               data={prodCategory}
               searchField="name"
-              btnName="Add Category"
+              btnName="Add Location"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
               <ProductCategoryList
@@ -203,9 +203,9 @@ const ProductCategory = () => {
   return (
     <div className="container__wrapper">
       <FormHeader
-        header="Category"
+        header="Location"
         second="Product Management"
-        third="Category"
+        third="Location"
         navigate="/"
         SecondIcon={RiShoppingBag2Fill}
         isVisibleBtn={false}

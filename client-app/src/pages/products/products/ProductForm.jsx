@@ -209,7 +209,7 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
             <Grid item xs={12}>
               <MaterialSelect
                 name="productCategoryId"
-                label="Category"
+                label="Location"
                 value={values.productCategoryId}
                 handleChangeInput={handleChange}
                 errors={errors.productCategoryId}
@@ -246,7 +246,7 @@ const ProductForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
                 values={values.isActive}
                 handleChange={handleChange}
                 name="Active Status"
-                subName="This will prevent from making transactions"
+                subName="Disabling this will prevent the product from making transactions."
               />
             </Grid>
           </Grid>

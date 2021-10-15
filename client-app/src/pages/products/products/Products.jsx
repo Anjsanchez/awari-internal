@@ -115,7 +115,11 @@ const Products = () => {
         const { data } = await getProducts();
         const { token, listRecords } = data;
 
-        const sortedProducts = listRecords.sort((a, b) =>
+        const filterActiveCategory = listRecords.filter(
+          (a) => a.productCategory.isActive === true
+        );
+
+        const sortedProducts = filterActiveCategory.sort((a, b) =>
           a.longName.localeCompare(b.longName)
         );
 

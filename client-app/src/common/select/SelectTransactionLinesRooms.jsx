@@ -74,6 +74,8 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
         listRecords.map((n) => {
           if (n.room === null)
             return (n.room = { roomLongName: n.remark, _id: n._id });
+
+          return null;
         });
 
         const withOutNullValues = listRecords.filter((n) => n.room !== null);
