@@ -162,6 +162,12 @@ namespace API.Controllers.reservation
             if (reservationHeader == null)
                 return NotFound("ReservationHeader not found in the database");
 
+            var listBookings = await _repo.GetHeaderByCustomerID(reservationHeader.customerId);
+
+            foreach (var item in listBookings)
+                if (item.isActive)
+                    return BadRequest("There is already an active reservation with this customer.");
+
             _map.Map(ReservationHeaderUpdateDto, reservationHeader);
             await _repo.Update(reservationHeader);
             await _repo.Save();
