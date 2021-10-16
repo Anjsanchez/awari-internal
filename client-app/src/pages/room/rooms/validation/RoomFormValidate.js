@@ -14,8 +14,9 @@ export default function RoomFormValidate(values) {
   if (values.minimumCapacity === "" || values.minimumCapacity === null)
     errors.minimumCapacity = "Minimum Capacity is required";
 
+  console.log(values.minimumCapacity, values.maximumCapacity);
   if (values.minimumCapacity !== "" && values.maximumCapacity !== "")
-    if (values.minimumCapacity >= values.maximumCapacity)
+    if (Number(values.minimumCapacity) >= Number(values.maximumCapacity))
       errors.minimumCapacity =
         "Minimum capacity can't be greater than Maximum capacity";
 

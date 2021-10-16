@@ -127,12 +127,14 @@ namespace API.Controllers.reservation
 
 
             float grossAmount = 0;
-
+            float childAmount = 0f;
             float discSeniorAmt = 0f;
             float netAmount = 0f;
 
-            grossAmount = 1720 * (lineDto.adultPax + lineDto.seniorPax);
-            discSeniorAmt = (1720 * lineDto.seniorPax) * (float)0.20;
+
+            childAmount = 880 * lineDto.childrenPax;
+            grossAmount = 1760 * (lineDto.adultPax + lineDto.seniorPax) + childAmount;
+            discSeniorAmt = (1760 * lineDto.seniorPax) * (float)0.20;
 
             netAmount = grossAmount - discSeniorAmt;
 

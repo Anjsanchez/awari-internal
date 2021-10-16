@@ -133,7 +133,7 @@ const SelectTransactionLinesRooms = ({ customer, activeRoom }) => {
         options={options.sort(
           (a, b) => -b.room.roomLongName.localeCompare(a.room.roomLongName)
         )}
-        groupBy={(option) => option.room.roomLongName}
+        groupBy={(option) => option.room.roomLongName[0]}
         getOptionLabel={(option) => option.room.roomLongName}
         renderInput={(params) => (
           <TextField {...params} variant="outlined" className={classes.root} />

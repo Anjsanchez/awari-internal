@@ -227,8 +227,8 @@ namespace API.Controllers.reservation
             {
                 int seniorPax = 0;
                 int adultPax = 1;
-                int totalAmount = 1720;
-                int grossAmount = 1720;
+                int totalAmount = 1760;
+                int grossAmount = 1760;
 
                 var today = DateTime.Today;
                 var age = today.Year - header.Customer.birthday.Year;
