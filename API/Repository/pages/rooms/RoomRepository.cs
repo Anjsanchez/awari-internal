@@ -95,7 +95,7 @@ namespace API.Repository.pages.rooms
         {
             var room = await GetRoomWithPricing();
 
-            var roomFilterd = room.Where(n => n.minimumCapacity <= pax && n.maximumCapacity >= pax);
+            var roomFilterd = room.Where(n => n.minimumCapacity <= pax && n.maximumCapacity >= pax && n.isActive == true);
 
             return roomFilterd;
         }

@@ -28,7 +28,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Role",
-    enableSort: false,
+    enableSort: true,
   },
   {
     id: "isActive",

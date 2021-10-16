@@ -72,6 +72,28 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
+function descendingComparatorRoleOnly(a, b, orderBy) {
+  if (
+    b["role"]["rolename"] === undefined ||
+    a["role"]["rolename"] === undefined
+  )
+    return 0;
+
+  if (
+    b["role"]["rolename"].toString().toLowerCase() <
+    a["role"]["rolename"].toString().toLowerCase()
+  )
+    return -1;
+
+  if (
+    b["role"]["rolename"].toString().toLowerCase() >
+    a["role"]["rolename"].toString().toLowerCase()
+  )
+    return 1;
+
+  return 0;
+}
+
 function descendingComparatorCustomerOnly(a, b, orderBy) {
   if (
     b["customer"]["firstName"] === undefined ||
@@ -95,6 +117,12 @@ function descendingComparatorCustomerOnly(a, b, orderBy) {
 }
 
 function getComparator(order, orderBy) {
+  if (orderBy === "rolename") {
+    return order === "desc"
+      ? (a, b) => descendingComparatorRoleOnly(a, b, orderBy)
+      : (a, b) => -descendingComparatorRoleOnly(a, b, orderBy);
+  }
+
   if (orderBy === "customerName") {
     return order === "desc"
       ? (a, b) => descendingComparatorCustomerOnly(a, b, orderBy)

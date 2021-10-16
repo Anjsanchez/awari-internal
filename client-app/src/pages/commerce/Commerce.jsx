@@ -74,12 +74,15 @@ const Commerce = () => {
         const sorted = products.sort((a, b) =>
           a.longName.localeCompare(b.longName)
         );
+
+        const sortedTypes = types.sort((a, b) => a.name.localeCompare(b.name));
+
         store.dispatch(writeToken(token));
 
         setTimeout(() => {
           if (!isMounted()) return;
 
-          setTypes(types);
+          setTypes(sortedTypes);
           setCategories(categories);
           setProducts(sorted);
           setFilteredProducts(sorted);

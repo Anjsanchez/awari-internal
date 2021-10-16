@@ -9,7 +9,7 @@ const Cart = () => {
     <div className="container__wrapper cc">
       <div className="cc-header__container">
         <div>
-          <span className="cc-title__leftSpan">Cart Item</span>
+          <span className="cc-title__leftSpan">Cart</span>
         </div>
       </div>
       <Divider className="cc-title_divider" />

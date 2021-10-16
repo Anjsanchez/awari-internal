@@ -92,7 +92,7 @@ const BhByRoomBarChart = ({ filteredTrans }) => {
         labels: {
           show: false,
           formatter: function (val) {
-            return "₱ " + val;
+            return val + " Transaction(s)";
           },
         },
       },
