@@ -67,5 +67,14 @@ namespace API.Models
 
         public User user { get; set; }
 
+#nullable enable
+        public string? ImageName { get; set; }
+#nullable disable
+        [NotMapped]
+        public IFormFile ImageFile { get; set; }
+
+        [NotMapped]
+        public string ImageSrc { get; set; }
+
     }
 }

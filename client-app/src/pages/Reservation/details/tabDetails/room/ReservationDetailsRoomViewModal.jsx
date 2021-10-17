@@ -3,7 +3,6 @@ import { useSnackbar } from "notistack";
 import { Grid, List } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import AListItem from "./../../../../../common/antd/AListItem";
-import { store } from "../../../../../utils/store/configureStore";
 import ActiveButton from "./../../../../../common/form/ActiveButton";
 import { KingBedTwoToneIcon } from "@material-ui/icons/KingBedTwoTone";
 import { ScheduleTwoToneIcon } from "@material-ui/icons/ScheduleTwoTone";
@@ -13,7 +12,6 @@ import { LocalOfferTwoToneIcon } from "@material-ui/icons/LocalOfferTwoTone";
 import { AssignmentIndTwoToneIcon } from "@material-ui/icons/AssignmentIndTwoTone";
 import { MonetizationOnTwoToneIcon } from "@material-ui/icons/MonetizationOnTwoTone";
 import { getRoomPricingsByRoomId } from "../../../../../utils/services/pages/rooms/RoomPricing";
-import { roomLinesSelectedAmountAdded } from "../../../../../utils/store/pages/createReservation";
 import { AirlineSeatIndividualSuiteTwoToneIcon } from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
 
 const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
@@ -23,14 +21,11 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
   const [cRoomPrice, setCRoomPrice] = useState({});
   const [cMattressAmt, setCMattressAmt] = useState(0);
   const [cNetDiscount, setCNetDiscount] = useState(0);
-  const storeData = store.getState().entities.createReservation.rooms;
 
   useEffect(() => {
     async function populatePricing() {
       try {
-        const { data } = await getRoomPricingsByRoomId(
-          storeData.selectedStartDate.room._id
-        );
+        const { data } = await getRoomPricingsByRoomId(selectedRoom.room._id);
 
         const { listRecords } = data;
 
@@ -38,8 +33,8 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
           (a, b) => b.capacity - a.capacity
         );
 
-        const { adult, senior } = storeData.heads;
-        const totalPax = adult + senior;
+        const { adultPax, seniorPax } = selectedRoom;
+        const totalPax = adultPax + seniorPax;
 
         let price = sortedPayment.find((n) => totalPax >= n.capacity);
 
@@ -61,7 +56,7 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
 
   //..NET MATTRESS
   useEffect(() => {
-    const { mattress } = storeData.addOns;
+    const { mattress } = selectedRoom;
 
     if (mattress === 0) return setCMattressAmt(0);
 
@@ -80,25 +75,24 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
 
   //..NET DISCOUNT
   useEffect(() => {
-    const { adult, senior } = storeData.heads;
-    const { _id, value } = storeData.discount;
-    const totalHeadsForDiscount = adult + senior;
+    const { adultPax, seniorPax, discount } = selectedRoom;
+    const totalHeadsForDiscount = adultPax + seniorPax;
     const amtHalf = cGrossAmt / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
 
-    if (senior === 0 && _id === 0) return setCNetDiscount(0);
+    if (discount === null) return setCNetDiscount(0);
 
-    if (senior !== 0) {
-      const amtMulSenior = amtHalf * senior;
+    if (seniorPax !== 0) {
+      const amtMulSenior = amtHalf * seniorPax;
 
       accumulatedDisc += Math.round(amtMulSenior * 0.2);
     }
 
-    if (_id !== 0) {
-      let amtMulAdult = amtHalf * adult;
+    if (discount !== null) {
+      let amtMulAdult = amtHalf * adultPax;
       amtMulAdult += cMattressAmt;
-      accumulatedDisc += Math.round(amtMulAdult * (value / 100));
+      accumulatedDisc += Math.round(amtMulAdult * (discount.value / 100));
     }
 
     setCNetDiscount(accumulatedDisc);
@@ -109,31 +103,29 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
 
     setCNetAmount(total);
 
-    const obj = {
-      grossAmount: cGrossAmt,
-      netAmount: total,
-      netDiscount: cNetDiscount,
-    };
-    store.dispatch(roomLinesSelectedAmountAdded(obj));
+    // const obj = {
+    //   grossAmount: cGrossAmt,
+    //   netAmount: total,
+    //   netDiscount: cNetDiscount,
+    // };
   }, [cNetDiscount, cGrossAmt, cMattressAmt]); //..NET AMOUNT
 
   const renderDiscountValue = () => {
-    const { _id, name, value } = storeData.discount;
-
-    if (_id === 0) return "Not Available - 0%";
+    if (selectedRoom.discount === null) return "Not Available - 0%";
+    const { name, value } = selectedRoom.discount;
 
     return `${name} - ${value}%`;
   };
 
   const getNumberOfDays = () => {
-    const sDate = moment(storeData.selectedStartDate.date, "MM-DD-YYYY");
-    const eDate = moment(storeData.selectedEndDate.date, "MM-DD-YYYY");
+    const sDate = moment(selectedRoom.startDate, "YYYY-MM-DDD");
+    const eDate = moment(selectedRoom.endDate, "YYYY-MM-DDD");
 
     return eDate.diff(sDate, "days");
   };
 
   const setMattressFormat = () => {
-    const { mattress } = storeData.addOns;
+    const { mattress } = selectedRoom;
 
     return (
       mattress +
@@ -148,12 +140,7 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
       Number(cRoomPrice.sellingPrice).toFixed(2)
     );
 
-    return (
-      storeData.selectedStartDate.room.roomLongName +
-      " - " +
-      priceFormat +
-      " PHP"
-    );
+    return selectedRoom.room.roomLongName + " - " + priceFormat + " PHP";
   };
 
   const formatNumber = (num) =>
@@ -167,28 +154,26 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
             <div style={{ width: "400px" }}></div>
             <AListItem
               txtLbl="In"
-              txtValue={moment(
-                storeData.selectedStartDate.date,
-                "MM-DD-YYYY"
-              ).format("MMM Do, YY")}
+              txtValue={moment(selectedRoom.startDate, "YYYY-MM-DDD").format(
+                "MMM Do, YY"
+              )}
               Icon={QueryBuilderTwoToneIcon}
             />
             <AListItem
               txtLbl="Out"
               Icon={AccessAlarmTwoToneIcon}
               hasDivider={false}
-              txtValue={moment(
-                storeData.selectedEndDate.date,
-                "MM-DD-YYYY"
-              ).format("MMM Do, YY")}
+              txtValue={moment(selectedRoom.endDate, "YYYY-MM-DDD").format(
+                "MMM Do, YY"
+              )}
             />
           </List>
         </div>
         <div className="reservationtype-container">
           <List component="nav" aria-label="mailbox folders">
-            <AListItem txtLbl="Adult" txtValue={storeData.heads.adult} />
-            <AListItem txtLbl="Senior" txtValue={storeData.heads.senior} />
-            <AListItem txtLbl="Children" txtValue={storeData.heads.children} />
+            <AListItem txtLbl="Adult" txtValue={selectedRoom.adultPax} />
+            <AListItem txtLbl="Senior" txtValue={selectedRoom.seniorPax} />
+            <AListItem txtLbl="Children" txtValue={selectedRoom.childrenPax} />
           </List>
         </div>
         <div className="reservationtype-container">
@@ -241,19 +226,19 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
             />
           </List>
         </div>
-        {storeData.user.firstName !== undefined && (
+        {selectedRoom.user.firstName !== undefined && (
           <div className="reservationtype-container">
             <List component="nav" aria-label="mailbox folders">
               <AListItem
                 txtLbl="Created By"
                 txtValue={
-                  storeData.user.firstName + " " + storeData.user.lastName
+                  selectedRoom.user.firstName + " " + selectedRoom.user.lastName
                 }
                 Icon={AssignmentIndTwoToneIcon}
               />
               <AListItem
                 txtLbl="Created Date"
-                txtValue={moment(storeData.createdDate).format(
+                txtValue={moment(selectedRoom.createdDate).format(
                   "YYYY-MM-DD hh:mm A"
                 )}
                 Icon={ScheduleTwoToneIcon}

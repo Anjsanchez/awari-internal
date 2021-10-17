@@ -44,8 +44,6 @@ namespace API.Repository.pages.products
             return products;
         }
 
-
-
         public async Task<Product> FindById(Guid id)
         {
             return await _db.Products

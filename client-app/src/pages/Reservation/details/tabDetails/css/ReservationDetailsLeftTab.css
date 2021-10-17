@@ -116,13 +116,28 @@
   position: static;
 }
 
-.rdlt-btn__wrapper.rdlt {
-  display: flex;
-  justify-content: center;
-}
 .cd-button__container.rdlt {
   padding: 0 10px;
+  display: block;
 }
+
+.cd-button__container.rdltCheckOut {
+  display: block;
+  padding: 0;
+  padding-top: 5px;
+}
+
+.cd-button__container.rdltBtn {
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+}
+
+.cd-button__container.rdltBtn button {
+  font-size: 11px;
+  width: 48%;
+}
+
 .cd-button__container.rdlt button {
   font-size: 12px;
 }

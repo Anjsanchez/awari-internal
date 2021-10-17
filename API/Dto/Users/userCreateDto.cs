@@ -8,37 +8,18 @@ namespace API.Dto.Users
 {
     public class userCreateDto
     {
-
-
-        [Required]
-        [StringLength(50)]
         public string Username { get; set; }
-
-
-        [Required]
-        [StringLength(50)]
         public string FirstName { get; set; }
-
-
-        [Required]
-        [StringLength(50)]
         public string LastName { get; set; }
-
-
-        [Required]
-        [StringLength(100)]
         public string EmailAddress { get; set; }
-
-
-        [Required]
         public string Password { get; set; }
-
-
+        public Int64 mobile { get; set; }
+        public Int64 SSS { get; set; }
+        public Int64 philHealth { get; set; }
+        public Int64 pagIbig { get; set; }
+        public DateTime birthday { get; set; }
         public Guid RoleId { get; set; }
-
         public bool isActive { get; set; }
-
         public List<employeeRole> userRoles { get; set; }
-
     }
 }

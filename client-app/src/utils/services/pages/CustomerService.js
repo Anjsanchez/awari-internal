@@ -23,11 +23,10 @@ export function getCustomerById(id) {
 }
 
 export function saveCustomer(customer) {
+  const id = customer.get("_id");
   http.SetJwt();
-  if (customer.id) {
-    const body = { ...customer };
-    // delete body._id;
-    return http.put(customerUrl(customer.id), body);
+  if (id) {
+    return http.put(customerUrl(id), customer);
   }
   return http.post(apiEndpoint, customer);
 }

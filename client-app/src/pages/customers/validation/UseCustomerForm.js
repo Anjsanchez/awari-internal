@@ -6,6 +6,7 @@ import { saveCustomer } from "./../../../utils/services/pages/CustomerService";
 
 const UseCustomerForm = (validate) => {
   //..
+  const defaultImgSrc = "/img/document.jpg";
   const hist = useHistory();
   const didMount = useRef(false);
   const [errors, setErrors] = useState({});
@@ -25,7 +26,34 @@ const UseCustomerForm = (validate) => {
     address: "",
     createdBy: "",
     createdDate: "",
+
+    imageFile: null,
+    imageSrc: defaultImgSrc,
+    imageName: "",
   });
+
+  const handleChangeImage = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let imageFile = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (x) => {
+        setValues({
+          ...values,
+          imageFile,
+          imageSrc: x.target.result,
+        });
+      };
+      reader.readAsDataURL(imageFile);
+      return;
+    }
+
+    setValues({
+      ...values,
+      imageFile: null,
+      imageSrc: defaultImgSrc,
+    });
+  };
 
   const handleValueOnLoad = (customer) => {
     setValues({
@@ -40,7 +68,31 @@ const UseCustomerForm = (validate) => {
       address: customer.address || "",
       createdDate: customer.createdDate || "",
       createdBy: customer.user.firstName + " " + customer.user.lastName || "",
+
+      imageFile: customer.imageFile || null,
+      imageSrc: customer.imageSrc || defaultImgSrc,
+      imageName: customer.imageName || "",
     });
+  };
+
+  const formObjViewModel = () => {
+    const currentUser = store.getState().entities.user.user.id;
+    console.log("2222", values);
+    const formData = new FormData();
+    formData.append("_id", values.id);
+    formData.append("customerid", values.customerid);
+    formData.append("firstname", values.firstname);
+    formData.append("lastname", values.lastname);
+    formData.append("address", values.address);
+    formData.append("mobile", values.mobile);
+    formData.append("birthday", values.birthday);
+    formData.append("isActive", values.isActive);
+    formData.append("createdDate", values.createdDate);
+    formData.append("createdBy", currentUser);
+    formData.append("imageFile", values.imageFile);
+    formData.append("imageName", values.imageName);
+
+    return formData;
   };
 
   const handleDialogProceed = async () => {
@@ -51,10 +103,13 @@ const UseCustomerForm = (validate) => {
       const currentUser = store.getState().entities.user.user.id;
       const objEmp = { ...values, userId: currentUser };
 
-      await saveCustomer(objEmp);
-      enqueueSnackbar("Successfully updated records!", { variant: "success" });
-      hist.push("/a/user-management/customers");
+      const obj = formObjViewModel();
+      setIsLoading(false);
+      await saveCustomer(obj);
+      // enqueueSnackbar("Successfully updated records!", { variant: "success" });
+      // hist.push("/a/user-management/customers");
     } catch (ex) {
+      setIsLoading(false);
       if (ex && ex.status === 400) {
         enqueueSnackbar(ex.data, { variant: "error" });
       }
@@ -102,9 +157,8 @@ const UseCustomerForm = (validate) => {
     setAskConfirmation(false);
   };
 
-  const handleChangeBirthday = (value) => {
+  const handleChangeBirthday = (value) =>
     setValues({ ...values, birthday: value });
-  };
 
   return {
     handleChange,
@@ -117,6 +171,7 @@ const UseCustomerForm = (validate) => {
     isLoading,
     handleDialogCancel,
     handleChangeBirthday,
+    handleChangeImage,
   };
 };
 

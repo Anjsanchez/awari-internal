@@ -108,7 +108,7 @@ const UseProductForm = (validate, onSuccessEdit, onSuccessAdd) => {
 
     try {
       const obj = formObjViewModel();
-
+      console.log("hey", values);
       const { data } = await saveProduct(obj);
       const { token, singleRecord } = data;
       store.dispatch(writeToken({ token }));

@@ -79,7 +79,6 @@ const RoomDisplay = (props) => {
     createdDate,
     isAllowExtraPax,
     isPerPaxRoomType,
-    numberOfRooms,
     roomLongName,
     roomVariant,
     user,
@@ -148,26 +147,6 @@ const RoomDisplay = (props) => {
             </Grid>
           </Grid>
 
-          <Grid container spacing={2} style={{ marginTop: "15px" }}>
-            <Grid item xs={6}>
-              <div>
-                <span className={classes.displayCard_span_subTitle}>
-                  Prices Available
-                </span>
-                <span className={classes.display_span_child}>
-                  PHP {Intl.NumberFormat().format(Number(1).toFixed(2))}
-                </span>
-              </div>
-            </Grid>
-            <Grid item xs={6}>
-              <div>
-                <span className={classes.displayCard_span_subTitle}>Rooms</span>
-                <span className={classes.display_span_child}>
-                  {numberOfRooms}
-                </span>
-              </div>
-            </Grid>
-          </Grid>
           <Grid container spacing={2} style={{ marginTop: "5px" }}>
             <RenderChips />
           </Grid>

@@ -60,8 +60,10 @@ const ReservationDetailsLeftTab = () => {
     setTotalHeads(heads);
   }, [rooms, trans]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const soa = () =>
-    hist.push(`/a/reports/SOA/${header._id}&istrans=${isTrans}`);
+  const soa = (isCategorized = false) =>
+    hist.push(
+      `/a/reports/SOA/${header._id}&istrans=${isTrans}&isCategorized=${isCategorized}`
+    );
 
   const handleClose = () => {
     setAskConfirmation(false);
@@ -92,6 +94,11 @@ const ReservationDetailsLeftTab = () => {
 
       hist.replace("/a/reservation-management/reservations");
     } catch (error) {
+      if (error && error.status === 400)
+        return enqueueSnackbar(error.data, {
+          variant: "error",
+        });
+
       enqueueSnackbar(
         "0003: An error occured while fetching the reservation type in the server.",
         {
@@ -134,26 +141,35 @@ const ReservationDetailsLeftTab = () => {
       );
   };
 
-  const renderButton = () => {
-    if (isTrans) {
-      return (
-        <div className="cd-button__container rdlt">
-          <Button onClick={soa} variant="contained" color="primary">
-            PRINT SOA
-          </Button>
-        </div>
-      );
-    }
+  const soaButton = () => {
     return (
       <>
-        {header.isActive && (
-          <div className="cd-button__container rdlt">
-            <Button onClick={soa} variant="contained" color="primary">
-              PRINT SOA
-            </Button>
-          </div>
-        )}
-        <div className="cd-button__container rdlt">
+        <div className="cd-button__container rdltBtn">
+          <Button
+            onClick={() => soa(false)}
+            variant="contained"
+            color="primary"
+          >
+            SOA DETAILED
+          </Button>
+          <Button onClick={() => soa(true)} variant="contained" color="primary">
+            SOA CATEGORIZED
+          </Button>
+        </div>
+      </>
+    );
+  };
+
+  const renderButton = () => {
+    if (isTrans) {
+      return <>{soaButton()}</>;
+    }
+
+    return (
+      <>
+        {header.isActive && soaButton()}
+
+        <div className="cd-button__container rdltCheckOut">
           <Button
             color="primary"
             variant="contained"
@@ -165,6 +181,7 @@ const ReservationDetailsLeftTab = () => {
       </>
     );
   };
+
   return (
     <>
       {renderConfirmation()}

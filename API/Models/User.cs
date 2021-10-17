@@ -27,6 +27,18 @@ namespace API.Models
         [Required]
         public string Password { get; set; }
 
+        [Required]
+        public Int64 mobile { get; set; }
+
+        [Required]
+        public Int64 SSS { get; set; }
+        [Required]
+        public Int64 philHealth { get; set; }
+        [Required]
+        public Int64 pagIbig { get; set; }
+        [Required]
+        public DateTime birthday { get; set; }
+
         public byte isExportFlag { get; set; } = 0;
 
         public Guid RoleId { get; set; }

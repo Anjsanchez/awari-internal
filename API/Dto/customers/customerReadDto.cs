@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using API.Dto.Users;
 using API.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Dto.customers
 {
@@ -65,5 +66,12 @@ namespace API.Dto.customers
 
 
         public userReadDto user { get; set; }
+
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageName { get; set; }
+
+        public string ImageSrc { get; set; }
+
     }
 }

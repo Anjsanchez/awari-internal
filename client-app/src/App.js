@@ -199,7 +199,7 @@ function App() {
                 keyId="16"
               />
               <ProtectedRoute
-                path="/a/reports/SOA/:id&isTrans=:isTrans"
+                path="/a/reports/SOA/:id&isTrans=:isTrans&isCategorized=:isCategorized"
                 component={SOA}
                 keyId="2"
               />

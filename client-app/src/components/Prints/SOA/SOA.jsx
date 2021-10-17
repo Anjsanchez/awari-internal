@@ -5,6 +5,7 @@ import { PDFViewer } from "@react-pdf/renderer";
 import React, { useEffect, useState } from "react";
 import { store } from "../../../utils/store/configureStore";
 import { writeToken } from "../../../utils/store/pages/users";
+import { GetTransWithFullDetails } from "../../../utils/services/pages/trans/TransHeaderService";
 import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
 import { GetHeadersWithFullDetails } from "./../../../utils/services/pages/reservation/ReservationHeader";
 import {
@@ -16,7 +17,6 @@ import {
   Image,
   View,
 } from "@react-pdf/renderer";
-import { GetTransWithFullDetails } from "../../../utils/services/pages/trans/TransHeaderService";
 
 Font.register({
   family: "Oswald",
@@ -164,6 +164,7 @@ const SOAe = ({
   rooms,
   trans,
   header,
+  isCategorized,
   payments,
   isTrans,
   productCategories,
@@ -506,8 +507,145 @@ const SOAe = ({
       </View>
     );
   };
+
+  const renderQtyCategorized = () => {
+    const qty = trans.reduce((a, b) => a + b.quantity, 0);
+
+    return formatNumber(qty);
+  };
+
+  const renderChargesCategorized = () => {
+    const transChargesDT = trans.reduce(
+      (a, b) => a + b.quantity * b.product.sellingPrice,
+      0
+    );
+
+    return formatNumber(transChargesDT);
+  };
+
+  const renderNetDiscountCategorized = () => {
+    const transDisc = trans.reduce((a, b) => a + b.netDiscount, 0);
+
+    return formatNumber(transDisc);
+  };
+
+  const renderCategorized = (roomsx) => {
+    return (
+      <div>
+        <View style={[styles.tableRow, styles.productMargin]}>
+          <View style={[styles.tableCol]}>
+            <Text
+              style={
+                ([styles.tableRowText, styles.tableColSub],
+                {
+                  fontFamily: "Oswald",
+                  fontWeight: 300,
+                  fontSize: 11,
+                })
+              }
+            >
+              Food & Beverages
+            </Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}></Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+
+        <View style={[styles.tableRow]}>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}> </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {renderQtyCategorized()}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {renderChargesCategorized()}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {renderNetDiscountCategorized()}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+      </div>
+    );
+  };
   const renderBalance = () =>
     formatNumber(renderNetTotal(false) - renderTotalPayment(false));
+
+  const renderProducts = (roomsx) => {
+    if (Boolean(renderCategorized) === true) return renderCategorized();
+
+    return productCategories.map((pc) => {
+      return trans.map((t) => {
+        if (t.product.productCategoryId !== pc._id) return null;
+
+        if (!isDayTour) {
+          if (t.reservationRoomLine.room._id !== roomsx.room._id) return null;
+
+          if (roomsx._id !== t.reservationRoomLine._id) return 0;
+        }
+
+        return (
+          <div key={t._id}>
+            {renderCategory(pc, t.reservationRoomLine)}
+
+            <View style={[styles.tableRow]}>
+              <View style={[styles.tableCol]}>
+                <Text style={[styles.tableRowText, styles.tableColSub]}>
+                  {moment(t.createdDate).format("MM-DD-YY")}
+                </Text>
+              </View>
+              <View style={[styles.tableCol, styles.tableColDescription]}>
+                <Text style={[styles.tableRowText]}>{t.product.longName}</Text>
+              </View>
+              <View style={[styles.tableCol]}>
+                <Text style={[styles.tableRowText, styles.tableColSub]}>
+                  {t.quantity}
+                </Text>
+              </View>
+              <View style={[styles.tableCol]}>
+                <Text style={[styles.tableRowText, styles.tableColSub]}>
+                  {formatNumber(t.product.sellingPrice * t.quantity)}
+                </Text>
+              </View>
+              <View style={[styles.tableCol]}>
+                <Text style={[styles.tableRowText, styles.tableColSub]}>
+                  {formatNumber(t.netDiscount)}
+                </Text>
+              </View>
+              <View style={[styles.tableCol]}>
+                <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+              </View>
+            </View>
+          </div>
+        );
+      });
+    });
+  };
 
   return (
     <Document title="Guest Folio">
@@ -647,73 +785,9 @@ const SOAe = ({
                 {renderRoom(roomsx)}
 
                 {renderMattress(roomsx)}
-                {/* GROUP BY */}
-                {productCategories.map((pc) => {
-                  return trans.map((t) => {
-                    if (t.product.productCategoryId !== pc._id) return null;
 
-                    if (!isDayTour) {
-                      if (t.reservationRoomLine.room._id !== roomsx.room._id)
-                        return null;
+                {renderProducts(roomsx)}
 
-                      if (roomsx._id !== t.reservationRoomLine._id) return 0;
-                    }
-
-                    return (
-                      <div key={t._id}>
-                        {renderCategory(pc, t.reservationRoomLine)}
-
-                        <View style={[styles.tableRow]}>
-                          <View style={[styles.tableCol]}>
-                            <Text
-                              style={[styles.tableRowText, styles.tableColSub]}
-                            >
-                              {moment(t.createdDate).format("MM-DD-YY")}
-                            </Text>
-                          </View>
-                          <View
-                            style={[
-                              styles.tableCol,
-                              styles.tableColDescription,
-                            ]}
-                          >
-                            <Text style={[styles.tableRowText]}>
-                              {t.product.longName}
-                            </Text>
-                          </View>
-                          <View style={[styles.tableCol]}>
-                            <Text
-                              style={[styles.tableRowText, styles.tableColSub]}
-                            >
-                              {t.quantity}
-                            </Text>
-                          </View>
-                          <View style={[styles.tableCol]}>
-                            <Text
-                              style={[styles.tableRowText, styles.tableColSub]}
-                            >
-                              {formatNumber(
-                                t.product.sellingPrice * t.quantity
-                              )}
-                            </Text>
-                          </View>
-                          <View style={[styles.tableCol]}>
-                            <Text
-                              style={[styles.tableRowText, styles.tableColSub]}
-                            >
-                              {formatNumber(t.netDiscount)}
-                            </Text>
-                          </View>
-                          <View style={[styles.tableCol]}>
-                            <Text
-                              style={[styles.tableRowText, styles.tableColSub]}
-                            ></Text>
-                          </View>
-                        </View>
-                      </div>
-                    );
-                  });
-                })}
                 <View style={[styles.tableRow, styles.subMargin]}>
                   <View style={[styles.tableCol]}>
                     <Text
@@ -1011,7 +1085,7 @@ const SOAe = ({
 
 const SOA = () => {
   const isMounted = useMountedState();
-  const { id: headerId, isTrans } = useParams();
+  const { id: headerId, isTrans, isCategorized } = useParams();
   const [rooms, setRooms] = useState([]);
   const [trans, setTrans] = useState([]);
   const [header, setHeader] = useState({});
@@ -1111,6 +1185,7 @@ const SOA = () => {
         trans={trans}
         payments={payments}
         isTrans={isTrans}
+        isCategorized={isCategorized}
         user={currentUser}
         productCategories={productCategories}
       />

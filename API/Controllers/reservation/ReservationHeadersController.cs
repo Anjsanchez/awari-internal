@@ -604,6 +604,25 @@ namespace API.Controllers.reservation
         }
 
 
+        private async Task<bool> checkIfThereIsPendingApproval(Guid id)
+        {
+            //CHECK IF MAY PENDING APPROVAL PA.
+
+            var pendingPymnt = await _paymentRepo.GetPaymentByHeaderId(id);
+            foreach (var item in pendingPymnt)
+                if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
+
+            var pendingTrans = await _transRepo.GetTransLineByHeaderId(id);
+            foreach (var item in pendingPymnt)
+                if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
+
+            var pendingRoom = await _lineRepo.GetLineByHeaderId(id);
+            foreach (var item in pendingPymnt)
+                if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
+
+            return true;
+        }
+
         [HttpGet("CheckOut")]
         public async Task<ActionResult> PostCheckOutReservation(Guid id)
         {
@@ -613,6 +632,10 @@ namespace API.Controllers.reservation
             var reservationHeader = await _repo.FindById(id);
             if (reservationHeader == null)
                 return NotFound("ReservationHeader Not found");
+
+            if (!await checkIfThereIsPendingApproval(reservationHeader._id))
+                return BadRequest("Kindly settle transaction with pending approval.");
+
 
             var transHeader = await _tHeader.FindById(id);
             if (transHeader != null)

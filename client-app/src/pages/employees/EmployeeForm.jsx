@@ -1,8 +1,10 @@
+import moment from "moment";
 import "./css/EmployeeForm.css";
 import { Transfer } from "antd";
 import { useSnackbar } from "notistack";
 import { HiUsers } from "react-icons/hi";
 import { Grid } from "@material-ui/core";
+import MomentUtils from "@date-io/moment";
 import MDialog from "../../common/MDialog";
 import MSwitch from "./../../common/form/MSwitch";
 import React, { useState, useEffect } from "react";
@@ -11,10 +13,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormFooter from "./../../common/form/FormFooter";
 import MaterialButton from "../../common/MaterialButton";
 import { store } from "../../utils/store/configureStore";
+import { KeyboardDatePicker } from "@material-ui/pickers";
 import UseEmployeeForm from "./validation/UseEmployeeForm";
 import { writeToken } from "../../utils/store/pages/users";
 import MaterialSelect from "../../common/form/MaterialSelect";
 import { Link, useHistory, useParams } from "react-router-dom";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MaterialTextField from "./../../common/MaterialTextField";
 import { getRoles } from "../../utils/services/pages/RoleService";
 import employeeFormValidate from "./validation/EmployeeFormValidate";
@@ -76,6 +80,7 @@ const EmployeeForm = () => {
     handleDialogProceed,
     handleDialogCancel,
     handleChangeTargetKeys,
+    handleChangeBirthday,
   } = UseEmployeeForm(employeeFormValidate);
 
   let passwordField;
@@ -148,6 +153,9 @@ const EmployeeForm = () => {
     );
   }, [values.userRoles]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const handleDateChange = (date) =>
+    handleChangeBirthday(moment(date).format("yyyy-MM-DD"));
+
   const filterOption = (inputValue, option) =>
     option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
 
@@ -180,7 +188,7 @@ const EmployeeForm = () => {
         </Grid>
       </>
     );
-
+  const formLbl = employeeIdFromUrl === "new" ? "New Customer" : "Customer";
   return (
     <>
       {askConfirmation && (
@@ -191,129 +199,194 @@ const EmployeeForm = () => {
           dialogText={dialog}
         />
       )}
-      <div className="container__wrapper ef">
-        <FormHeader
-          header="New Employee"
-          second="Management"
-          third="Employee"
-          SecondIcon={HiUsers}
-          isVisibleBtn={false}
-        />
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <div className="container__wrapper ef">
+          <FormHeader
+            header={formLbl}
+            second="Management"
+            third="Employee"
+            SecondIcon={HiUsers}
+            isVisibleBtn={false}
+          />
 
-        <div className="employeeForm-container">
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <MaterialTextField
-                  id="username"
-                  label="Username"
-                  handleChange={handleChange}
-                  errors={errors.username}
-                  values={values.username}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MaterialTextField
-                  id="emailAddress"
-                  label="Email"
-                  type="email"
-                  handleChange={handleChange}
-                  errors={errors.emailAddress}
-                  values={values.emailAddress}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MaterialTextField
-                  id="firstname"
-                  label="First Name"
-                  handleChange={handleChange}
-                  errors={errors.firstname}
-                  values={values.firstname}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <MaterialTextField
-                  id="lastname"
-                  label="Last Name"
-                  handleChange={handleChange}
-                  errors={errors.lastname}
-                  values={values.lastname}
-                />
-              </Grid>
+          <div className="employeeForm-container">
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                  <MaterialTextField
+                    id="username"
+                    label="Username"
+                    handleChange={handleChange}
+                    errors={errors.username}
+                    values={values.username}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <MaterialTextField
+                    id="emailAddress"
+                    label="Email"
+                    type="email"
+                    handleChange={handleChange}
+                    errors={errors.emailAddress}
+                    values={values.emailAddress}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <MaterialTextField
+                    id="firstname"
+                    label="First Name"
+                    handleChange={handleChange}
+                    errors={errors.firstname}
+                    values={values.firstname}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <MaterialTextField
+                    id="lastname"
+                    label="Last Name"
+                    handleChange={handleChange}
+                    errors={errors.lastname}
+                    values={values.lastname}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <MaterialTextField
+                    id="mobile"
+                    label="Mobile Number"
+                    type="number"
+                    handleChange={handleChange}
+                    errors={errors.mobile}
+                    values={values.mobile}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <MaterialTextField
+                    id="sss"
+                    label="SSS"
+                    type="number"
+                    handleChange={handleChange}
+                    errors={errors.sss}
+                    values={values.sss}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <MaterialTextField
+                    id="pagIbig"
+                    label="Pag Ibig"
+                    type="number"
+                    handleChange={handleChange}
+                    errors={errors.pagIbig}
+                    values={values.pagIbig}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <MaterialTextField
+                    id="philHealth"
+                    label="PhilHealth"
+                    type="number"
+                    handleChange={handleChange}
+                    errors={errors.philHealth}
+                    values={values.philHealth}
+                  />
+                </Grid>
 
-              {passwordField}
+                {passwordField}
 
-              <Grid item xs={12} md={6}>
-                <MaterialSelect
-                  name="roleId"
-                  label="Role"
-                  value={values.roleId}
-                  handleChangeInput={handleChange}
-                  errors={errors.roleId}
-                  datas={roles}
-                  displayText="rolename"
-                  menuItemValue="id"
-                  maxWidth="100%"
-                />
-              </Grid>
+                <Grid item xs={6}>
+                  <KeyboardDatePicker
+                    openTo="year"
+                    orientation="landscape"
+                    autoOk
+                    alpha=""
+                    variant="inline"
+                    animateYearScrolling
+                    allowKeyboardControl
+                    inputVariant="outlined"
+                    label="Birthdate"
+                    format="MMMM Do YYYY"
+                    value={values.birthday}
+                    id="birthday"
+                    onChange={(date) => handleDateChange(date)}
+                    style={{
+                      width: "100%",
+                      height: "44px",
+                      marginBottom: "30px",
+                    }}
+                  />
+                </Grid>
 
-              <Grid item xs={12}>
-                <div className="reservationDetails-title-span__wrapper">
-                  <span className="reservationDetails-title__spanHeader">
-                    Menu Access
-                  </span>
-                </div>
-                <Transfer
-                  dataSource={mockData}
-                  showSearch
-                  filterOption={filterOption}
-                  targetKeys={values.targetKeys}
-                  onChange={handleChangeTransfer}
-                  render={(item) => item.title}
-                />
+                <Grid item xs={12} md={6}>
+                  <MaterialSelect
+                    name="roleId"
+                    label="Role"
+                    value={values.roleId}
+                    handleChangeInput={handleChange}
+                    errors={errors.roleId}
+                    datas={roles}
+                    displayText="rolename"
+                    menuItemValue="id"
+                    maxWidth="100%"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <div className="reservationDetails-title-span__wrapper">
+                    <span className="reservationDetails-title__spanHeader">
+                      Menu Access
+                    </span>
+                  </div>
+                  <Transfer
+                    dataSource={mockData}
+                    showSearch
+                    filterOption={filterOption}
+                    targetKeys={values.targetKeys}
+                    onChange={handleChangeTransfer}
+                    render={(item) => item.title}
+                  />
+                </Grid>
               </Grid>
-            </Grid>
-            <Grid
-              container
-              spacing={1}
-              style={{ marginTop: "10px", marginBottom: "-15px" }}
-            >
-              <Grid item xs={12} md={6}>
-                <MSwitch
-                  values={values.isActive}
-                  handleChange={handleChange}
-                  name="Account Active"
-                  subName="Disabling this will prevent the user from using the system."
-                />
-              </Grid>
-              <Grid item xs={12}></Grid>
-            </Grid>
-            <div className={classes.loginDiv__margin}>
-              <Link
-                to="/a/user-management/employees"
-                className="link"
-                style={isLoading ? { pointerEvents: "none" } : null}
+              <Grid
+                container
+                spacing={1}
+                style={{ marginTop: "10px", marginBottom: "-15px" }}
               >
+                <Grid item xs={12} md={6}>
+                  <MSwitch
+                    values={values.isActive}
+                    handleChange={handleChange}
+                    name="Account Active"
+                    subName="Disabling this will prevent the user from using the system."
+                  />
+                </Grid>
+                <Grid item xs={12}></Grid>
+              </Grid>
+              <div className={classes.loginDiv__margin}>
+                <Link
+                  to="/a/user-management/employees"
+                  className="link"
+                  style={isLoading ? { pointerEvents: "none" } : null}
+                >
+                  <MaterialButton
+                    disabled={isLoading ? true : false}
+                    color="primary"
+                    classes={classes.login__button}
+                    text="Back"
+                  />
+                </Link>
                 <MaterialButton
                   disabled={isLoading ? true : false}
                   color="primary"
+                  onClick={handleSubmit}
                   classes={classes.login__button}
-                  text="Back"
+                  text={`${isLoading ? "Saving..." : "Save"}`}
                 />
-              </Link>
-              <MaterialButton
-                disabled={isLoading ? true : false}
-                color="primary"
-                onClick={handleSubmit}
-                classes={classes.login__button}
-                text={`${isLoading ? "Saving..." : "Save"}`}
-              />
-            </div>
-            <div className={classes.loginDiv__margin}></div>
-            <FormFooter text="Employees are the staff working in Awari Anilao Bay Resort." />
-          </form>
+              </div>
+              <div className={classes.loginDiv__margin}></div>
+              <FormFooter text="Employees are the staff working in Awari Anilao Bay Resort." />
+            </form>
+          </div>
         </div>
-      </div>
+      </MuiPickersUtilsProvider>
     </>
   );
 };

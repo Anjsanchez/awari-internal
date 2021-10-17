@@ -25,6 +25,9 @@ namespace API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -184,16 +187,31 @@ namespace API.Migrations
                     b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<long>("SSS")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime>("birthday")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("isActive")
                         .HasColumnType("bit");
 
                     b.Property<byte>("isExportFlag")
                         .HasColumnType("tinyint");
+
+                    b.Property<long>("mobile")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("pagIbig")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("philHealth")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 

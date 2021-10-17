@@ -46,5 +46,11 @@ namespace API.Dto.customers
         [Column("createdBy")]
         public Guid userId { get; set; }
 
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageName { get; set; }
+
+        public string ImageSrc { get; set; }
+
     }
 }

@@ -18,6 +18,11 @@ const UseEmployeeForm = (validate) => {
     emailAddress: "",
     firstname: "",
     lastname: "",
+    sss: "",
+    mobile: "",
+    pagIbig: "",
+    philHealth: "",
+    birthday: new Date(),
     isActive: false,
     roleId: "",
     password: "",
@@ -27,12 +32,18 @@ const UseEmployeeForm = (validate) => {
   });
 
   const handleValueOnLoad = (employee) => {
+    console.log(employee);
     setValues({
       id: employee.id || "",
       isActive: employee.isActive || false,
       username: employee.username || "",
       emailAddress: employee.emailAddress || "",
       firstname: employee.firstName || "",
+      sss: employee.sss || "",
+      mobile: employee.mobile || "",
+      birthday: employee.birthday || "",
+      pagIbig: employee.pagIbig || "",
+      philHealth: employee.philHealth || "",
       lastname: employee.lastName || "",
       password: employee.password || "updateonlynopasswordreq",
       password2: employee.password || "updateonlynopasswordreq",
@@ -126,6 +137,9 @@ const UseEmployeeForm = (validate) => {
     setErrors(validate(values));
   };
 
+  const handleChangeBirthday = (value) =>
+    setValues({ ...values, birthday: value });
+
   return {
     handleChange,
     values,
@@ -137,6 +151,7 @@ const UseEmployeeForm = (validate) => {
     handleDialogCancel,
     isLoading,
     handleChangeTargetKeys,
+    handleChangeBirthday,
   };
 };
 

@@ -8,6 +8,7 @@ using API.Dto.customers;
 using API.Models;
 using API.Models.customer;
 using API.Models.reservation;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository.pages
@@ -82,6 +83,34 @@ namespace API.Repository.pages
         {
             _db.Customers.Update(entity);
             return await Save();
+        }
+
+        public async Task<IEnumerable<Customer>> GetCustomersWithImage(HttpRequest request)
+        {
+            var products = await FindAll();
+
+            var z = products.Select(n => new Customer()
+            {
+                _id = n._id,
+                customerid = n.customerid,
+                firstName = n.firstName,
+                lastName = n.lastName,
+                address = n.address,
+                mobile = n.mobile,
+                birthday = n.birthday,
+                createdDate = n.createdDate,
+                ImageFile = n.ImageFile,
+                ImageName = n.ImageName,
+                ImageSrc = String.Format("{0}://{1}{2}/Images/customers/{3}", request.Scheme, request.Host, request.PathBase, n.ImageName),
+                isActive = n.isActive,
+                points = n.points,
+                cardAmount = n.cardAmount,
+                emailAddress = n.emailAddress,
+                user = n.user,
+                userId = n.userId
+            });
+
+            return z;
         }
     }
 

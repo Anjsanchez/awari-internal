@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Dto.customers
 {
@@ -35,6 +36,12 @@ namespace API.Dto.customers
 
         [Required]
         public bool isActive { get; set; }
+
+        public IFormFile ImageFile { get; set; }
+
+        public string ImageName { get; set; }
+
+        public string ImageSrc { get; set; }
 
     }
 }

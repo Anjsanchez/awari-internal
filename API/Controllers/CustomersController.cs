@@ -13,6 +13,7 @@ using API.Migrations.Configurations;
 using API.Models;
 using API.Models.products;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -28,14 +29,16 @@ namespace API.Controllers
         public readonly IProductRepository _prodRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
+        public readonly IWebHostEnvironment _hostEnvironment;
 
-        public CustomersController(ICustomerRepository repo, IProductRepository prodRepo, IProductCategoryRepository prodCatRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public CustomersController(ICustomerRepository repo, IWebHostEnvironment hostEnvironment, IProductRepository prodRepo, IProductCategoryRepository prodCatRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
             _prodRepo = prodRepo;
             _prodCatRepo = prodCatRepo;
             _repo = repo;
             _map = mapp;
             _jwtConfig = optionsMonitor.CurrentValue;
+            _hostEnvironment = hostEnvironment;
         }
         [HttpGet]
         public async Task<ActionResult> GetCustomers(bool isActiveOnly = false)
@@ -103,10 +106,10 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> createCustomer(customerCreateDto customerCreateDto)
+        public async Task<ActionResult> createCustomer([FromForm] customerCreateDto customerCreateDto)
         {
             if (!ModelState.IsValid)
-                return BadRequest("Invalid modelstate");
+                return BadRequest("Invalid model state");
 
             var customer = await _repo.getCustomerByCustomerId(customerCreateDto.customerid);
             if (customer != null)
@@ -115,9 +118,14 @@ namespace API.Controllers
             var cmdMdl = _map.Map<customerCreateDto, Customer>(customerCreateDto);
             cmdMdl.createdDate = DateTime.Now;
             cmdMdl._id = new Guid();
+            cmdMdl.ImageName = await globalFunctionalityHelper.SaveImage(customerCreateDto.ImageFile, "Customers", _hostEnvironment);
 
             await _repo.Create(cmdMdl);
             await _repo.Save();
+
+            var withUser = await _repo.GetCustomersWithImage(Request);
+            var filter = withUser.FirstOrDefault(n => n._id == cmdMdl._id);
+            var mappedData = _map.Map<Customer, customerCreateDto>(filter);
 
             return Ok(cmdMdl);
         }
