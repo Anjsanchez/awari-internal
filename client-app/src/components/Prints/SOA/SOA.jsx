@@ -623,9 +623,15 @@ const SOAe = ({
   };
 
   const renderCategorized = (roomsx) => {
-    const txx = trans.filter(
-      (n) => n.reservationRoomLine.room._id === roomsx.room._id
+    let txx = trans.filter(
+      (n) => n.reservationHeader._id === roomsx.reservationHeader._id
     );
+
+    if (!isDayTour) {
+      txx = trans.filter(
+        (n) => n.reservationRoomLine.room._id === roomsx.room._id
+      );
+    }
 
     return (
       <div>
