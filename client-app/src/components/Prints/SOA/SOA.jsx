@@ -508,14 +508,14 @@ const SOAe = ({
     );
   };
 
-  const renderQtyCategorized = () => {
-    const qty = trans.reduce((a, b) => a + b.quantity, 0);
+  const renderQtyCategorized = (roomsx) => {
+    const qty = roomsx.reduce((a, b) => a + b.quantity, 0);
 
     return formatNumber(qty);
   };
 
-  const renderChargesCategorized = () => {
-    const transChargesDT = trans.reduce(
+  const renderChargesCategorized = (roomsx) => {
+    const transChargesDT = roomsx.reduce(
       (a, b) => a + b.quantity * b.product.sellingPrice,
       0
     );
@@ -523,13 +523,17 @@ const SOAe = ({
     return formatNumber(transChargesDT);
   };
 
-  const renderNetDiscountCategorized = () => {
-    const transDisc = trans.reduce((a, b) => a + b.netDiscount, 0);
+  const renderNetDiscountCategorized = (roomsx) => {
+    const transDisc = roomsx.reduce((a, b) => a + b.netDiscount, 0);
 
     return formatNumber(transDisc);
   };
 
   const renderCategorized = (roomsx) => {
+    const txx = trans.filter(
+      (n) => n.reservationRoomLine.room._id === roomsx.room._id
+    );
+
     return (
       <div>
         <View style={[styles.tableRow, styles.productMargin]}>
@@ -573,17 +577,17 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {renderQtyCategorized()}
+              {renderQtyCategorized(txx)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {renderChargesCategorized()}
+              {renderChargesCategorized(txx)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {renderNetDiscountCategorized()}
+              {renderNetDiscountCategorized(txx)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -597,7 +601,7 @@ const SOAe = ({
     formatNumber(renderNetTotal(false) - renderTotalPayment(false));
 
   const renderProducts = (roomsx) => {
-    if (isCategorized === "true") return renderCategorized();
+    if (isCategorized === "true") return renderCategorized(roomsx);
 
     return productCategories.map((pc) => {
       return trans.map((t) => {
