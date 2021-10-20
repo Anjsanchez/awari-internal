@@ -597,7 +597,7 @@ const SOAe = ({
     formatNumber(renderNetTotal(false) - renderTotalPayment(false));
 
   const renderProducts = (roomsx) => {
-    if (Boolean(renderCategorized) === true) return renderCategorized();
+    if (isCategorized === true) return renderCategorized();
 
     return productCategories.map((pc) => {
       return trans.map((t) => {

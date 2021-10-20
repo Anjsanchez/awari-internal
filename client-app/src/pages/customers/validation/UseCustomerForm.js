@@ -101,7 +101,7 @@ const UseCustomerForm = (validate) => {
     setIsLoading(true);
 
     try {
-      const currentUser = store.getState().entities.user.user.id;
+      // const currentUser = store.getState().entities.user.user.id;
       // const objEmp = { ...values, userId: currentUser };
 
       const obj = formObjViewModel();
