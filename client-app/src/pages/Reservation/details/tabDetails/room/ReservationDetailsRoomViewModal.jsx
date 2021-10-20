@@ -172,7 +172,7 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
         <div className="reservationtype-container">
           <List component="nav" aria-label="mailbox folders">
             <AListItem txtLbl="Adult" txtValue={selectedRoom.adultPax} />
-            <AListItem txtLbl="Senior" txtValue={selectedRoom.seniorPax} />
+            <AListItem txtLbl="Senior/PWD" txtValue={selectedRoom.seniorPax} />
             <AListItem txtLbl="Children" txtValue={selectedRoom.childrenPax} />
           </List>
         </div>

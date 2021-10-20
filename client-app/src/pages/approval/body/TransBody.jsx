@@ -68,7 +68,7 @@ const TransBody = ({ selectedData }) => {
           />
         </Grid>
         <Grid item xs={6}>
-          <AListItem txtLbl="Senior Pax" txtValue={trans.seniorPax} />
+          <AListItem txtLbl="Senior/PWD Pax" txtValue={trans.seniorPax} />
         </Grid>
         <Grid item xs={6}>
           <AListItem txtLbl="Discount" txtValue={discountText} />

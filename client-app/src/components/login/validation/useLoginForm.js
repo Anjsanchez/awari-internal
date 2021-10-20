@@ -62,6 +62,7 @@ const useLoginForm = (validate) => {
         if (ex && ex.status === 500)
           enqueueSnackbar(ex.data, { variant: "error" });
       } finally {
+        setIsLoading(false);
       }
     }
 

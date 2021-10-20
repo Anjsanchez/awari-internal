@@ -31,7 +31,7 @@ const GuestChecker = () => {
               </div>
               <div>
                 <span>
-                  SENIOR
+                  SENIOR/PWD
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 </span>
                 <span className="header-label__description">

@@ -170,6 +170,7 @@ const SOAe = ({
   productCategories,
   user,
   isDayTour,
+  dayTourType,
 }) => {
   const formatNumber = (num) =>
     Intl.NumberFormat().format(Number(num).toFixed(2));
@@ -406,12 +407,15 @@ const SOAe = ({
   };
 
   const renderTotalPax = () => {
-    const grossAmountRooms = rooms.reduce(
-      (a, b) => a + b.adultPax + b.seniorPax,
-      0
-    );
+    if (dayTourType === "Day Tour") return null;
 
-    return grossAmountRooms;
+    if (isDayTour) {
+      return rooms.reduce(
+        (a, b) => a + b.adultPax + b.seniorPax + b.childrenPax,
+        0
+      );
+    }
+    return rooms.reduce((a, b) => a + b.adultPax + b.seniorPax, 0);
   };
 
   const renderNetDiscount = (isFormatted = true) => {
@@ -437,8 +441,99 @@ const SOAe = ({
     return formatNumber(total);
   };
 
+  const renderDayTourLine = (roomsx) => {
+    if (dayTourType !== "Day Tour") return null;
+
+    return (
+      <>
+        <View style={[styles.tableRow]}>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}>Adult</Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {roomsx.adultPax}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.adultPax * 1760)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+
+        <View style={[styles.tableRow]}>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}>Senior/PWD</Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {roomsx.seniorPax}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.seniorPax * 1760)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.totalDiscount)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+
+        <View style={[styles.tableRow]}>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+          <View style={[styles.tableCol, styles.tableColDescription]}>
+            <Text style={[styles.tableRowText]}>Children</Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {roomsx.childrenPax}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>
+              {formatNumber(roomsx.childrenPax * 880)}
+            </Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
+          </View>
+          <View style={[styles.tableCol]}>
+            <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+          </View>
+        </View>
+      </>
+    );
+  };
+
   const renderRoom = (roomsx) => {
-    const total = roomsx.grossAmount - roomsx.mattress * 2420;
+    const netDisc =
+      dayTourType === "Day Tour" ? null : formatNumber(roomsx.totalDiscount);
+
+    const total =
+      dayTourType === "Day Tour"
+        ? null
+        : formatNumber(roomsx.grossAmount - roomsx.mattress * 2420);
 
     if (isDayTour)
       return (
@@ -460,12 +555,12 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(total)}
+              {total}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.totalDiscount)}
+              {netDisc}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -492,9 +587,7 @@ const SOAe = ({
           <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
         </View>
         <View style={[styles.tableCol]}>
-          <Text style={[styles.tableRowText, styles.tableColSub]}>
-            {formatNumber(total)}
-          </Text>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>{total}</Text>
         </View>
         <View style={[styles.tableCol]}>
           <Text style={[styles.tableRowText, styles.tableColSub]}>
@@ -786,7 +879,10 @@ const SOAe = ({
                     ></Text>
                   </View>
                 </View>
+
                 {renderRoom(roomsx)}
+
+                {renderDayTourLine(roomsx)}
 
                 {renderMattress(roomsx)}
 
@@ -1184,6 +1280,7 @@ const SOA = () => {
     <PDFViewer style={{ width: "100%", height: "100vh" }}>
       <SOAe
         isDayTour={isDayTour}
+        dayTourType={header.reservationType.name}
         rooms={rooms}
         header={header}
         trans={trans}

@@ -32,7 +32,6 @@ const UseEmployeeForm = (validate) => {
   });
 
   const handleValueOnLoad = (employee) => {
-    console.log(employee);
     setValues({
       id: employee.id || "",
       isActive: employee.isActive || false,

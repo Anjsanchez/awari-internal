@@ -76,7 +76,7 @@ const RoomBody = ({ selectedData }) => {
           <AListItem txtLbl="Adult" txtValue={room.adultPax} />
         </Grid>
         <Grid item xs={6}>
-          <AListItem txtLbl="Senior" txtValue={room.seniorPax} />
+          <AListItem txtLbl="Senior/PWD" txtValue={room.seniorPax} />
         </Grid>
         <Grid item xs={6}>
           <AListItem txtLbl="Children" txtValue={room.childrenPax} />

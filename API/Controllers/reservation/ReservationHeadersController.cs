@@ -235,7 +235,7 @@ namespace API.Controllers.reservation
 
                 if (age >= 60)
                 {
-                    totalAmount = 1376;
+                    totalAmount = 1408;
                     seniorPax = 1;
                     adultPax = 0;
                 }
@@ -613,11 +613,11 @@ namespace API.Controllers.reservation
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
             var pendingTrans = await _transRepo.GetTransLineByHeaderId(id);
-            foreach (var item in pendingPymnt)
+            foreach (var item in pendingTrans)
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
             var pendingRoom = await _lineRepo.GetLineByHeaderId(id);
-            foreach (var item in pendingPymnt)
+            foreach (var item in pendingRoom)
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
             return true;

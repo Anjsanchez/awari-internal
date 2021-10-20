@@ -53,7 +53,7 @@ const ReservationDetailsRightTabHeads = () => {
             />
             <AListItem
               // key={d._id}
-              txtLbl="Senior"
+              txtLbl="Senior/PWD"
               txtValue={typeInStore.rooms[0].seniorPax}
             />
             <AListItem

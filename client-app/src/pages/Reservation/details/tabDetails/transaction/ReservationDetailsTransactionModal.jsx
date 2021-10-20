@@ -227,7 +227,7 @@ const ReservationDetailsTransactionModal = (props) => {
 
           <div className="reservationtype-container">
             <List component="nav" aria-label="mailbox folders">
-              <AListItem txtLbl="Senior Pax" txtValue={seniorPax} />
+              <AListItem txtLbl="Senior/PWD Pax" txtValue={seniorPax} />
               <AListItem
                 txtLbl="Discount"
                 txtValue={discountText}

@@ -198,7 +198,7 @@ const ReservationConfirmation = () => {
         <div className="reservationtype-container">
           <List component="nav" aria-label="mailbox folders">
             <AListItem txtLbl="Adult" txtValue={storeData.heads.adult} />
-            <AListItem txtLbl="Senior" txtValue={storeData.heads.senior} />
+            <AListItem txtLbl="Senior/PWD" txtValue={storeData.heads.senior} />
             <AListItem
               txtLbl="Children"
               txtValue={storeData.heads.children}

@@ -62,6 +62,7 @@ const ReservationGuestCount = () => {
       <Counter
         onDecrement={handleDecrement}
         name="senior"
+        label="senior/PWD"
         onIncrement={handleIncrement}
         counterV={counter.senior}
       />

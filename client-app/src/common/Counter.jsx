@@ -2,10 +2,11 @@ import "./css/Counter.css";
 import React from "react";
 import { Button } from "@material-ui/core";
 
-const Counter = ({ name, counterV, onIncrement, onDecrement }) => {
+const Counter = ({ name, label, counterV, onIncrement, onDecrement }) => {
+  if (!label) label = name;
   return (
     <div className="counter__container">
-      <span className="counter-spanHeader">{name.toUpperCase()}</span>
+      <span className="counter-spanHeader">{label.toUpperCase()}</span>
       <div className="counter__wrapper">
         <Button
           disabled={counterV === 0}
