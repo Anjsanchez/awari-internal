@@ -150,6 +150,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
           <div className="cd-mattress__war">
             <Counter
               name="Senior"
+              label="senior/PWD"
               onIncrement={() => handleIncrement("add")}
               counterV={senior}
               onDecrement={handleIncrement}
