@@ -41,7 +41,5 @@ namespace API.Dto.customers
 
         public string ImageName { get; set; }
 
-        public string ImageSrc { get; set; }
-
     }
 }

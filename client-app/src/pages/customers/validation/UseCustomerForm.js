@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import { store } from "../../../utils/store/configureStore";
 import { saveCustomer } from "./../../../utils/services/pages/CustomerService";
+import moment from "moment";
 
 const UseCustomerForm = (validate) => {
   //..
@@ -22,7 +23,7 @@ const UseCustomerForm = (validate) => {
     lastname: "",
     isActive: false,
     mobile: "",
-    birthday: new Date(),
+    birthday: moment().format("yyyy-MM-DD"),
     address: "",
     createdBy: "",
     createdDate: "",
@@ -77,18 +78,18 @@ const UseCustomerForm = (validate) => {
 
   const formObjViewModel = () => {
     const currentUser = store.getState().entities.user.user.id;
-    console.log("2222", values);
     const formData = new FormData();
     formData.append("_id", values.id);
     formData.append("customerid", values.customerid);
     formData.append("firstname", values.firstname);
     formData.append("lastname", values.lastname);
     formData.append("address", values.address);
+    formData.append("emailAddress", values.emailAddress);
     formData.append("mobile", values.mobile);
     formData.append("birthday", values.birthday);
     formData.append("isActive", values.isActive);
     formData.append("createdDate", values.createdDate);
-    formData.append("createdBy", currentUser);
+    formData.append("userId", currentUser);
     formData.append("imageFile", values.imageFile);
     formData.append("imageName", values.imageName);
 
@@ -101,13 +102,13 @@ const UseCustomerForm = (validate) => {
 
     try {
       const currentUser = store.getState().entities.user.user.id;
-      const objEmp = { ...values, userId: currentUser };
+      // const objEmp = { ...values, userId: currentUser };
 
       const obj = formObjViewModel();
       setIsLoading(false);
       await saveCustomer(obj);
-      // enqueueSnackbar("Successfully updated records!", { variant: "success" });
-      // hist.push("/a/user-management/customers");
+      enqueueSnackbar("Successfully updated records!", { variant: "success" });
+      hist.push("/a/user-management/customers");
     } catch (ex) {
       setIsLoading(false);
       if (ex && ex.status === 400) {

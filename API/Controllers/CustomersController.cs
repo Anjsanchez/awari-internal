@@ -78,11 +78,13 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetCustomerById(Guid id)
         {
-            var customer = await _repo.FindById(id);
-            if (customer == null)
+            var customer = await _repo.GetCustomersWithImage(Request);
+
+            var cust = customer.FirstOrDefault(n => n._id == id);
+            if (cust == null)
                 return NotFound("Customer Not found");
 
-            var mappedCustomer = _map.Map<Customer, customerReadDto>(customer);
+            var mappedCustomer = _map.Map<Customer, customerReadDto>(cust);
 
             return Ok(new GenericResponse<customerReadDto>()
             {
@@ -92,13 +94,23 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCustomer(Guid id, customerUpdateDto custUpdateDto)
+        public async Task<ActionResult> UpdateCustomer(Guid id, [FromForm] customerUpdateDto custUpdateDto)
         {
             var customer = await _repo.FindById(id);
             if (customer == null)
                 return NotFound("Customer not found in the database");
 
+            if (custUpdateDto.ImageFile != null)
+            {
+                custUpdateDto.ImageName = await globalFunctionalityHelper.SaveImage(custUpdateDto.ImageFile, "Customers", _hostEnvironment);
+
+                if (customer.ImageName != null)
+                    globalFunctionalityHelper.DeleteImage(customer.ImageName, "Customers", _hostEnvironment);
+            }
+
             _map.Map(custUpdateDto, customer);
+
+
             await _repo.Update(customer);
             await _repo.Save();
 

@@ -13,3 +13,7 @@
 .prf-container__span-error {
   color: red;
 }
+.prf-container__span-error.cf {
+  margin-top: 10px;
+  display: block;
+}

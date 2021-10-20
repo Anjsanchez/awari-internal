@@ -246,6 +246,11 @@ const CustomerForm = () => {
                     onChange={(date) => handleDateChange(date)}
                     style={{ width: "100%", height: "44px" }}
                   />
+                  {errors.birthday && (
+                    <span className="prf-container__span-error cf">
+                      {errors.birthday}
+                    </span>
+                  )}
                 </Grid>
               </Grid>
               <Grid

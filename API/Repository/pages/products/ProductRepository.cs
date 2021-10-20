@@ -64,7 +64,7 @@ namespace API.Repository.pages.products
         {
             var products = await FindAll();
 
-            var z = products.Select(n => new Product()
+            return products.Select(n => new Product()
             {
                 _id = n._id,
                 costPrice = n.costPrice,
@@ -86,8 +86,6 @@ namespace API.Repository.pages.products
                 user = n.user,
                 userId = n.userId
             });
-
-            return z;
         }
 
         public async Task<bool> Save()

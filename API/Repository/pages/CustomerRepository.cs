@@ -34,7 +34,7 @@ namespace API.Repository.pages
 
         public async Task<ICollection<Customer>> FindAll(bool isActiveOnly = false)
         {
-            var custs = await _db.Customers.ToListAsync();
+            var custs = await _db.Customers.Include(n => n.user).ToListAsync();
 
             if (isActiveOnly)
                 custs = custs.Where(n => n.isActive == true).ToList();
@@ -87,9 +87,9 @@ namespace API.Repository.pages
 
         public async Task<IEnumerable<Customer>> GetCustomersWithImage(HttpRequest request)
         {
-            var products = await FindAll();
+            var custs = await FindAll();
 
-            var z = products.Select(n => new Customer()
+            return custs.Select(n => new Customer()
             {
                 _id = n._id,
                 customerid = n.customerid,
@@ -109,8 +109,6 @@ namespace API.Repository.pages
                 user = n.user,
                 userId = n.userId
             });
-
-            return z;
         }
     }
 
