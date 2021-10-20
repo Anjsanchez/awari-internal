@@ -43,7 +43,7 @@ const headCells = [
     numeric: true,
     disablePadding: false,
     label: "Status",
-    enableSort: false,
+    enableSort: true,
   },
   {
     id: "Action",
