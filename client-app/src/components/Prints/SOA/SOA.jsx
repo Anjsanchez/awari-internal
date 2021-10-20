@@ -544,7 +544,7 @@ const SOAe = ({
                 })
               }
             >
-              Food & Beverages
+              Accumulated Transactions
             </Text>
           </View>
           <View style={[styles.tableCol, styles.tableColDescription]}>
