@@ -12,6 +12,10 @@ export function getHeaders(isActiveOnly = false) {
   return http.get(apiEndpoint + `?isActiveOnly=${isActiveOnly}`);
 }
 
+export function DeleteReservationHeader(HeaderId) {
+  return http.delete(header(HeaderId));
+}
+
 export function GetHeaderWithRoomCount() {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesRoomCount");
@@ -54,4 +58,12 @@ export function saveHeader(h) {
     return http.put(header(h._id), body);
   }
   return http.post(apiEndpoint, h);
+}
+
+export function PostCreateHeaderLinesApproval(Lines) {
+  http.SetJwt();
+  return http.put(
+    apiEndpoint + "/CreateHeadersApproval/" + Lines.transId,
+    Lines
+  );
 }

@@ -11,6 +11,8 @@ import TransBody from "./body/TransBody";
 import { updateApprovalTrans } from "../../utils/services/pages/approvals/ApprovalTransService";
 import RoomBody from "./body/RoomBody";
 import { updateApprovalRoom } from "../../utils/services/pages/approvals/ApprovalRoomService";
+import HeaderBody from "./body/HeaderBody";
+import { updateApprovalHeader } from "../../utils/services/pages/approvals/ApprovalHeaderService";
 
 const ApprovalRequestModal = ({
   visible,
@@ -97,6 +99,38 @@ const ApprovalRequestModal = ({
     }
   };
 
+  const handleUpdateHeader = async () => {
+    const obj = viewMdlObj();
+    setIsLoading(true);
+
+    try {
+      const { data } = await updateApprovalHeader(obj);
+
+      enqueueSnackbar("Successfully update records.", {
+        variant: "success",
+      });
+
+      setAskConfirmation(false);
+      setAskDialog(false);
+
+      setTimeout(() => {
+        const returnObj = {
+          _id: selectedData._id,
+          action: action,
+          data: data,
+        };
+        onUpdateApprovals(returnObj);
+      }, 100);
+      onCancel();
+    } catch (error) {
+      enqueueSnackbar("0048: An error occured.", {
+        variant: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleUpdateRoom = async () => {
     const obj = viewMdlObj();
     setIsLoading(true);
@@ -171,6 +205,8 @@ const ApprovalRequestModal = ({
       return <RoomBody selectedData={selectedData} />;
     if (selectedData.approvalType === 2)
       return <TransBody selectedData={selectedData} />;
+    if (selectedData.approvalType === 3)
+      return <HeaderBody selectedData={selectedData} />;
     return null;
   };
 
@@ -178,6 +214,7 @@ const ApprovalRequestModal = ({
     if (selectedData.approvalType === 0) return handleUpdatePayment();
     if (selectedData.approvalType === 1) return handleUpdateRoom();
     if (selectedData.approvalType === 2) return handleUpdateTrans();
+    if (selectedData.approvalType === 3) return handleUpdateHeader();
   };
 
   return (

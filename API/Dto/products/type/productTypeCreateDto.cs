@@ -3,13 +3,10 @@ using API.Models;
 
 namespace API.Dto.products.type
 {
-    public class productTypeReadDto
+    public class productTypeCreateDto
     {
-        public Guid _id { get; set; }
         public string name { get; set; }
-
         public bool isActive { get; set; }
-        public User user { get; set; }
-        public DateTime createdDate { get; set; }
+        public Guid userId { get; set; }
     }
 }

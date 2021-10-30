@@ -7,6 +7,7 @@ namespace API.Models.Enum
             Payment = 0,
             Rooms = 1,
             Trans = 2,
+            Header = 3
         };
 
         public enum EAction

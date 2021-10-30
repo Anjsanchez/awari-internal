@@ -9,14 +9,12 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 
-const MDialog = (props) => {
-  const {
-    handleOk,
-    openDialog,
-    handleClose,
-    dialogText = { title: "", subTitle: "" },
-  } = props;
-
+const MDialog = ({
+  handleOk,
+  openDialog,
+  handleClose,
+  dialogText = { title: "", subTitle: "" },
+}) => {
   if (!dialogText.title.trim())
     dialogText.title = "Are you sure you want to proceed?";
 

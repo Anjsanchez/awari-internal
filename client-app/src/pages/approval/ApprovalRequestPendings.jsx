@@ -16,6 +16,7 @@ const ApprovalRequestPendings = ({ pendings, onUpdateApprovals }) => {
 
     if (approvalType === 1) type = "Room";
     if (approvalType === 2) type = "Transaction";
+    if (approvalType === 3) type = "Header";
 
     if (action === 0) returnText = "Delete - " + type;
     else returnText = "Modify - " + type;

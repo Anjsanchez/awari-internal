@@ -3,14 +3,15 @@ import MDialog from "./MDialog";
 import AInput from "./antd/AInput";
 import React, { useState } from "react";
 import { useSnackbar } from "notistack";
+import { useSelector } from "react-redux";
 import "./css/ReservationApprovalRemark.css";
 import MaterialButton from "./MaterialButton";
 import { ButtonGroup } from "@material-ui/core";
 import { store } from "../utils/store/configureStore";
 import { PostCreateTransApproval } from "./../utils/services/pages/reservation/ReservationTrans";
-import { PostCreatePaymentApproval } from "./../utils/services/pages/reservation/ReservationPayment";
 import { PostCreateRoomLinesApproval } from "../utils/services/pages/reservation/ReservationLines";
-import { useSelector } from "react-redux";
+import { PostCreatePaymentApproval } from "./../utils/services/pages/reservation/ReservationPayment";
+import { PostCreateHeaderLinesApproval } from "../utils/services/pages/reservation/ReservationHeader";
 
 const ReservationApprovalRemark = ({
   visible,
@@ -26,6 +27,7 @@ const ReservationApprovalRemark = ({
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
+  
   const storeS = useSelector((state) => state.entities.createReservation.rooms);
   const handleRemarkChange = (e) => setRemark(e.target.value);
   const handleDialogCancel = () => setAskConfirmation(false);
@@ -102,10 +104,30 @@ const ReservationApprovalRemark = ({
     };
   };
 
+  const setObjDbModelHeader = () => {
+    const currentUser = store.getState().entities.user.user;
+
+    return {
+      transId: values.header._id,
+      approvalType: approvalType,
+      action: visible.action,
+      requestedById: currentUser.id,
+      remark: remark,
+      approvalHeader: {
+        customerId: values.header.customer._id,
+        voucher: values.header.voucher,
+        agency: values.header.agency,
+        reservationTypeId: values.header.reservationType._id,
+        userId: values.header.user.id,
+        createdDate: values.header.createdDate,
+      },
+    };
+  };
+
   const handleDialogOkay = async () => {
     setIsLoading(true);
     setAskConfirmation(false);
-    let obj = setObjDbModelPayment();
+    let obj = {};
 
     try {
       if (approvalType === "payment") {
@@ -125,6 +147,13 @@ const ReservationApprovalRemark = ({
           .catch((a) => setIsLoading(false))
           .finally((b) => setIsLoading(false));
       }
+      if (approvalType === "headers") {
+        obj = setObjDbModelHeader();
+        await PostCreateHeaderLinesApproval(obj)
+          .catch((a) => setIsLoading(false))
+          .finally((b) => setIsLoading(false));
+      }
+
       setTimeout(() => {
         onCancel();
         onCancelWholeDialog();

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Models.reservation
 {
@@ -44,6 +45,9 @@ namespace API.Models.reservation
         public virtual int totalNumberOfRooms { get; set; }
         [NotMapped]
         public virtual int totalNumberOfTrans { get; set; }
+
+        public Status approvalStatus { get; set; } = 0;
+
 
         [Required]
         [Column("createdBy")]

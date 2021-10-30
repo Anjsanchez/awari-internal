@@ -137,6 +137,11 @@ export const sideBarData = [
             id: 10,
           },
           {
+            title: "Classifications",
+            path: "/a/product-management/classifications",
+            id: 18,
+          },
+          {
             title: "Products",
             path: "/a/product-management/products",
             id: 11,

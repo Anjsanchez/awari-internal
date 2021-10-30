@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using API.Models;
 using API.Models.reservation;
+using static API.Models.Enum.EnumModels;
+
 namespace API.Dto.reservations.header
 {
     public class reservationHeaderReadDto
@@ -16,5 +18,6 @@ namespace API.Dto.reservations.header
         public DateTime createdDate { get; set; }
         public int roomCount { get; set; }
         public bool isActive { get; set; }
+        public Status approvalStatus { get; set; }
     }
 }

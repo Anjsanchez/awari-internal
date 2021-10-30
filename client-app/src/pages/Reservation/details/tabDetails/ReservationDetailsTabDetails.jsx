@@ -8,6 +8,7 @@ import ReservationDetailsRightTabRoom from "./room/ReservationDetailsRightTabRoo
 import ReservationDetailsRightTabHeads from "./walk-in/ReservationDetailsRightTabHeads";
 import ReservationDetailsRightTabPayment from "./payment/ReservationDetailsRightTabPayment";
 import ReservationDetailsRightTabTransaction from "./transaction/ReservationDetailsRightTabTransaction";
+import ReservationDetailsLeftTabActions from "./ReservationDetailsLeftTabActions";
 
 const ReservationDetailsTabDetails = () => {
   let isWalkIn = false;
@@ -41,6 +42,7 @@ const ReservationDetailsTabDetails = () => {
         <Grid item xs={12} md={12} lg={4}>
           <ReservationDetailsLeftTab />
           <ReservationDetailsLeftTabBilling />
+          <ReservationDetailsLeftTabActions typeInStore={typeInStore} />
         </Grid>
         <Grid item xs={12} md={12} lg={8}>
           {renderRoomTab()}

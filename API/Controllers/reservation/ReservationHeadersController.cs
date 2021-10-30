@@ -30,6 +30,12 @@ using API.Dto.trans.header;
 using API.Models.trans;
 using API.Dto.trans.payment;
 using API.Dto.trans.room;
+using API.Dto.reservations;
+using static API.Models.Enum.EnumModels;
+using API.Dto.approval;
+using API.Dto.approval.header;
+using API.Models.approval;
+using API.Contracts.pages.approval;
 
 namespace API.Controllers.reservation
 {
@@ -48,17 +54,29 @@ namespace API.Controllers.reservation
         private readonly IReservationTransRepository _transRepo;
         private readonly IReservationRoomLineRepository _lineRepo;
         private readonly IReservationPaymentRepository _paymentRepo;
-
+        private readonly IReservationApprovalRepository _aprRepo;
         private readonly ITransLineRepository _tLine;
         private readonly ITransRoomRepository _tRoom;
         private readonly ITransHeaderRepository _tHeader;
         private readonly ITransPaymentRepository _tPayment;
+
+
+        private readonly IApprovalHeaderRepository _tmpRepo;
+
+
         Guid _headerId = new Guid();
 
-        public ReservationHeadersController(ITransPaymentRepository tPayment, ITransHeaderRepository tHeader, ITransRoomRepository tRoom, ITransLineRepository tLine,
-        IRoomRepository roomsRepo, IReservationTransRepository transRepo, IReservationHeaderRepository repo, IRoomVariantRepository variantRepo,
-        IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationHeadersController(
+            ITransPaymentRepository tPayment, ITransHeaderRepository tHeader,
+            ITransRoomRepository tRoom, ITransLineRepository tLine,
+            IRoomRepository roomsRepo, IReservationTransRepository transRepo,
+            IReservationHeaderRepository repo, IRoomVariantRepository variantRepo,
+            IReservationPaymentRepository paymentRepo, IReservationRoomLineRepository lineRepo,
+            IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor,
+            IApprovalHeaderRepository tmpRepo, IReservationApprovalRepository aprRepo)
         {
+            _aprRepo = aprRepo;
+            _tmpRepo = tmpRepo;
             _tPayment = tPayment;
             _tHeader = tHeader;
             _tLine = tLine;
@@ -115,6 +133,44 @@ namespace API.Controllers.reservation
                 listRecords = reservationHeaders,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
+        }
+
+
+        [HttpPut("CreateHeadersApproval/{id}")]
+        public async Task<ActionResult> CreatePaymentApproval(Guid id, RequestApprovalHeaderCreateDto createDto)
+        {
+
+            var reservationPayment = await _repo.FindById(id);
+            if (reservationPayment == null)
+                return NotFound("ReservationHeader not found in the database");
+
+            reservationPayment.approvalStatus = Status.Pending;
+            await _repo.Update(reservationPayment);
+
+
+            var apr = new ReservationApprovalCreateDto()
+            {
+                transId = createDto.transId,
+                action = globalFunctionalityHelper.GetApprovalAction(createDto.action),
+                approvalType = globalFunctionalityHelper.GetApprovalType(createDto.approvalType),
+                requestedById = createDto.requestedById,
+                remark = createDto.remark
+            };
+
+            var tmpMdl = _map.Map<ApprovalHeaderCreateDto, ApprovalHeader>(createDto.approvalHeader);
+
+            tmpMdl._id = new Guid();
+            tmpMdl.transId = createDto.transId;
+            await _tmpRepo.Create(tmpMdl);
+
+            var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);
+            cmdMdl.status = Status.Pending;
+            cmdMdl.requestedDate = DateTime.Now;
+            cmdMdl.tmpTblId = tmpMdl._id;
+
+            await _aprRepo.Create(cmdMdl);
+
+            return Ok();
         }
 
         [HttpGet]
@@ -180,6 +236,25 @@ namespace API.Controllers.reservation
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
                 Success = true,
                 singleRecord = mappedCategory
+            });
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteReservationHeader(Guid id)
+        {
+            var reservationHeader = await _repo.FindById(id);
+            if (reservationHeader == null)
+                return NotFound("Reservation Header not found in the database");
+
+            _headerId = reservationHeader._id;
+
+            await executeDeleteReservation();
+
+
+            return Ok(new GenericResponse<reservationHeaderReadDto>()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
             });
         }
 
@@ -604,19 +679,22 @@ namespace API.Controllers.reservation
         }
 
 
-        private async Task<bool> checkIfThereIsPendingApproval(Guid id)
+        private async Task<bool> checkIfThereIsPendingApproval(ReservationHeader header)
         {
             //CHECK IF MAY PENDING APPROVAL PA.
 
-            var pendingPymnt = await _paymentRepo.GetPaymentByHeaderId(id);
+            if (header.approvalStatus == Status.Pending)
+                return false;
+
+            var pendingPymnt = await _paymentRepo.GetPaymentByHeaderId(header._id);
             foreach (var item in pendingPymnt)
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
-            var pendingTrans = await _transRepo.GetTransLineByHeaderId(id);
+            var pendingTrans = await _transRepo.GetTransLineByHeaderId(header._id);
             foreach (var item in pendingTrans)
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
-            var pendingRoom = await _lineRepo.GetLineByHeaderId(id);
+            var pendingRoom = await _lineRepo.GetLineByHeaderId(header._id);
             foreach (var item in pendingRoom)
                 if (item.approvalStatus == Models.Enum.EnumModels.Status.Pending) return false;
 
@@ -633,7 +711,7 @@ namespace API.Controllers.reservation
             if (reservationHeader == null)
                 return NotFound("ReservationHeader Not found");
 
-            if (!await checkIfThereIsPendingApproval(reservationHeader._id))
+            if (!await checkIfThereIsPendingApproval(reservationHeader))
                 return BadRequest("Kindly settle transaction with pending approval.");
 
 

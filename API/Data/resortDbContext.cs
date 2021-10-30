@@ -33,6 +33,7 @@ namespace API.Data
         public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
+        public DbSet<ApprovalHeader> ApprovalHeaders { get; set; }
         public DbSet<ApprovalPayment> ApprovalPayments { get; set; }
         public DbSet<ReservationType> ReservationTypes { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }

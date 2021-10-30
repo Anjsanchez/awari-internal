@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211021143012_AddedActiveProductTypes")]
+    partial class AddedActiveProductTypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,45 +220,6 @@ namespace API.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("API.Models.approval.ApprovalHeader", b =>
-                {
-                    b.Property<Guid>("_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("agency")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("createdDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("customerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("reservationTypeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("transId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("userId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("createdBy");
-
-                    b.Property<string>("voucher")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("_id");
-
-                    b.HasIndex("customerId");
-
-                    b.HasIndex("reservationTypeId");
-
-                    b.HasIndex("userId");
-
-                    b.ToTable("ApprovalHeaders");
                 });
 
             modelBuilder.Entity("API.Models.approval.ApprovalPayment", b =>
@@ -669,9 +632,6 @@ namespace API.Migrations
                     b.Property<string>("agency")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("approvalStatus")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("createdDate")
                         .HasColumnType("datetime2");
@@ -1250,33 +1210,6 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("API.Models.approval.ApprovalHeader", b =>
-                {
-                    b.HasOne("API.Models.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("customerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.reservation.ReservationType", "reservationType")
-                        .WithMany()
-                        .HasForeignKey("reservationTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("API.Models.User", "user")
-                        .WithMany()
-                        .HasForeignKey("userId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("reservationType");
-
-                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("API.Models.approval.ApprovalPayment", b =>

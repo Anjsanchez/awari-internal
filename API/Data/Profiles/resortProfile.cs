@@ -31,6 +31,7 @@ using API.Dto.approval;
 using API.Models.approval;
 using API.Dto.approval.payment;
 using API.Dto.approval.trams;
+using API.Dto.approval.header;
 
 namespace API.Data.Profiles
 {
@@ -69,6 +70,8 @@ namespace API.Data.Profiles
             CreateMap<productCategoryCreateDto, ProductCategory>().ReverseMap();
 
             CreateMap<ProductType, productTypeReadDto>().ReverseMap();
+            CreateMap<productTypeUpdateDto, ProductType>().ReverseMap();
+            CreateMap<productTypeCreateDto, ProductType>().ReverseMap();
 
             CreateMap<Product, productReadDto>().ReverseMap();
             CreateMap<productUpdateDto, Product>().ReverseMap();
@@ -115,10 +118,14 @@ namespace API.Data.Profiles
 
             CreateMap<ReservationHeader, transHeaderCreateDto>().ReverseMap();
 
+
             CreateMap<ReservationApproval, ReservationApprovalCreateDto>().ReverseMap();
             CreateMap<ReservationApproval, ReservationApprovalReadDto>().ReverseMap();
             CreateMap<ApprovalPaymentCreateDto, ApprovalPayment>().ReverseMap();
             CreateMap<ApprovalPaymentReadDto, ApprovalPayment>().ReverseMap();
+
+            CreateMap<ApprovalHeaderCreateDto, ApprovalHeader>().ReverseMap();
+            CreateMap<ApprovalHeaderReadDto, ApprovalHeader>().ReverseMap();
 
             CreateMap<ApprovalTransCreateDto, ApprovalTrans>().ReverseMap();
             CreateMap<ApprovalTransReadDto, ApprovalTrans>().ReverseMap();
@@ -129,6 +136,7 @@ namespace API.Data.Profiles
             CreateMap<ReservationTransLine, ApprovalTransCreateDto>().ReverseMap();
             CreateMap<ReservationTransLine, ApprovalTrans>().ReverseMap();
 
+            CreateMap<ReservationHeader, ApprovalTrans>().ReverseMap();
 
         }
     }

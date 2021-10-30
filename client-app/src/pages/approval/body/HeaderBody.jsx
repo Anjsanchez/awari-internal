@@ -3,15 +3,15 @@ import { Spin } from "antd";
 import { useSnackbar } from "notistack";
 import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import AInput from "./../../../common/antd/AInput";
-import AListItem from "./../../../common/antd/AListItem";
+import AInput from "../../../common/antd/AInput";
+import AListItem from "../../../common/antd/AListItem";
 import ActiveButton from "../../../common/form/ActiveButton";
-import GetApprovalStatus from "./../../../common/GetApprovalStatus";
-import { getApprovalTransById } from "./../../../utils/services/pages/approvals/ApprovalTransService";
+import GetApprovalStatus from "../../../common/GetApprovalStatus";
+import { getApprovalHeaderById } from "./../../../utils/services/pages/approvals/ApprovalHeaderService";
 
-const TransBody = ({ selectedData }) => {
+const HeaderBody = ({ selectedData }) => {
   const { enqueueSnackbar } = useSnackbar();
-  const [trans, setTrans] = useState({});
+  const [header, setHeader] = useState({});
   const [initialLoad, setInitialLoad] = useState(false);
 
   useEffect(() => {
@@ -19,11 +19,11 @@ const TransBody = ({ selectedData }) => {
 
     async function getPaymentInDb() {
       try {
-        const { data } = await getApprovalTransById(selectedData.tmpTblId);
-        setTrans(data.singleRecord);
+        const { data } = await getApprovalHeaderById(selectedData.tmpTblId);
+        setHeader(data.singleRecord);
         setInitialLoad(true);
       } catch (error) {
-        enqueueSnackbar("0042: An error occured.", {
+        enqueueSnackbar("0047: An error occured.", {
           variant: "error",
         });
       }
@@ -33,6 +33,7 @@ const TransBody = ({ selectedData }) => {
   }, [selectedData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (selectedData === null || selectedData === undefined) return null;
+
   const renderAction = () => {
     const action = selectedData.action === 0 ? "Delete" : "Modify";
 
@@ -41,6 +42,7 @@ const TransBody = ({ selectedData }) => {
 
     return <ActiveButton textTrue="Modify" isWarning={true} />;
   };
+
   const renderPaymentDetail = () => {
     if (!initialLoad)
       return (
@@ -48,52 +50,60 @@ const TransBody = ({ selectedData }) => {
           <Spin size="large" />;
         </div>
       );
-    const discountText = trans.discount === null ? "NA" : trans.discount.name;
-    const formatNumber = (num) =>
-      Intl.NumberFormat().format(Number(num).toFixed(2));
+
+    const renderAgency = () => {
+      if (header.reservationType.name.toLowerCase() === "ota/travel agency")
+        return (
+          <Grid item xs={6}>
+            <AListItem txtLbl="Agency" txtValue={header.agency} />
+          </Grid>
+        );
+      return null;
+    };
+
+    const renderVoucher = () => {
+      if (
+        header.reservationType.name.toLowerCase() === "website" ||
+        header.reservationType.name.toLowerCase() === "ota/travel agency"
+      )
+        return (
+          <Grid item xs={6}>
+            <AListItem txtLbl="Voucher" txtValue={header.voucher} />
+          </Grid>
+        );
+      return null;
+    };
+
     return (
       <Grid container>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={10}>
-          <AListItem txtLbl="Product" txtValue={trans.product.longName} />
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={6}>
-          <AListItem txtLbl="Quantity" txtValue={trans.quantity} />
-        </Grid>
         <Grid item xs={6}>
           <AListItem
-            txtLbl="Selling Price"
-            txtValue={trans.product.sellingPrice}
+            txtLbl="Guest"
+            txtValue={
+              header.customer.firstName + " " + header.customer.lastName
+            }
           />
         </Grid>
         <Grid item xs={6}>
-          <AListItem txtLbl="Senior/PWD Pax" txtValue={trans.seniorPax} />
+          <AListItem txtLbl="Type" txtValue={header.reservationType.name} />
         </Grid>
-        <Grid item xs={6}>
-          <AListItem txtLbl="Discount" txtValue={discountText} />
-        </Grid>
-        <Grid item xs={6}>
-          <AListItem
-            txtLbl="Gross Amount"
-            txtValue={formatNumber(trans.grossAmount)}
-          />
-        </Grid>
+
+        {renderAgency()}
+        {renderVoucher()}
         <Grid item xs={6}>
           <AListItem
-            txtLbl="Net Discount"
-            txtValue={formatNumber(trans.netDiscount)}
-          />
-        </Grid>
-        <Grid item xs={1}></Grid>
-        <Grid item xs={10}>
-          <AListItem
-            txtLbl="Net Amount"
+            txtLbl="User"
+            txtValue={header.user.firstName + " " + header.user.lastName[0]}
             hasDivider={false}
-            txtValue={formatNumber(trans.netAmount)}
           />
         </Grid>
-        <Grid item xs={1}></Grid>
+        <Grid item xs={6}>
+          <AListItem
+            txtLbl="Created Date"
+            txtValue={moment(header.createdDate).format("YYYY-MM-DD")}
+            hasDivider={false}
+          />
+        </Grid>
       </Grid>
     );
   };
@@ -103,7 +113,7 @@ const TransBody = ({ selectedData }) => {
       <List component="nav" aria-label="mailbox folders">
         <Grid container>
           <Grid item xs={6}>
-            <AListItem txtLbl="Type" txtValue="Transaction" />
+            <AListItem txtLbl="Type" txtValue="Header" />
           </Grid>
           <Grid item xs={6}>
             <AListItem txtLbl="Action" txtValue={renderAction()} />
@@ -156,4 +166,4 @@ const TransBody = ({ selectedData }) => {
   );
 };
 
-export default TransBody;
+export default HeaderBody;

@@ -186,8 +186,6 @@ namespace API.Controllers.reservation
 
             var tmpMdl = new ApprovalRoom();
 
-
-
             tmpMdl.reservationTypeId = reservationRoom.reservationHeader.reservationTypeId;
             tmpMdl.startDate = createDto.approvalRoom.startDate;
             tmpMdl.endDate = createDto.approvalRoom.endDate;

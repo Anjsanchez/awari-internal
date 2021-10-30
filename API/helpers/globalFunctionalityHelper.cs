@@ -61,6 +61,10 @@ namespace API.helpers.api
             if (typeInLower == "rooms")
                 return EApprovalType.Rooms;
 
+            if (typeInLower == "headers")
+                return EApprovalType.Header;
+
+
             return EApprovalType.Trans;
         }
 

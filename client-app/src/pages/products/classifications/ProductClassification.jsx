@@ -5,64 +5,57 @@ import SpinLoader from "./../../../common/Spin";
 import MDisplay from "./../../../common/MDisplay";
 import React, { useState, useEffect } from "react";
 import { RiShoppingBag2Fill } from "react-icons/ri";
+import ProductClassList from "./ProductCategoryList";
 import resortImg from "../../../assets/room/skybar.jpg";
-import ProductCategoryForm from "./ProductCategoryForm";
-import ProductCategoryList from "./ProductCategoryList";
 import MSearchBar from "../../../common/form/MSearchBar";
 import FormHeader from "../../../common/form/FormHeader";
 import MPagination from "../../../common/form/MPagination";
-import { store } from "../../../utils/store/configureStore";
-import { writeToken } from "../../../utils/store/pages/users";
-import { getProdCategory } from "./../../../utils/services/pages/products/ProductCategoryService";
+import ProductClassificationForm from "./ProductClassificationForm";
+import { getProdClassification } from "./../../../utils/services/pages/products/ProductClassifications";
 
-const ProductCategory = () => {
+const ProductClassification = () => {
   const isMounted = useMountedState();
   const [categoryPerPage] = useState(5);
   const { enqueueSnackbar } = useSnackbar();
   const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [prodCategory, setProdCategory] = useState([]);
+  const [prodClass, setProdClass] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
-  const [searchProdCategory, setSearchProdCategory] = useState("");
-  const [selectedProdCategory, setSelectedProdCategory] = useState({});
-  const [filteredProdCategory, setFilteredProdCategory] = useState([]);
+  const [searchProdClass, setSearchProdClass] = useState("");
+  const [selectedProdClass, setSelectedProdClass] = useState({});
+  const [filteredProdClass, setFilteredProdClass] = useState([]);
 
   // Get current posts
-  const indexOfLastCategory = currentPage * categoryPerPage;
-  const indexOfFirstCategory = indexOfLastCategory - categoryPerPage;
-  const restrictedCategory = filteredProdCategory.slice(
-    indexOfFirstCategory,
-    indexOfLastCategory
+  const indexOfLastClass = currentPage * categoryPerPage;
+  const indexOfFirstClass = indexOfLastClass - categoryPerPage;
+  const restrictedCategory = filteredProdClass.slice(
+    indexOfFirstClass,
+    indexOfLastClass
   );
 
   useEffect(() => {
     //..
     async function fetchData() {
       try {
-        const { data } = await getProdCategory();
-        const { token, listRecords } = data;
+        const { data } = await getProdClassification();
 
-        const sortedCategory = listRecords.sort((a, b) =>
+        const sortedCategory = data.sort((a, b) =>
           a.name.localeCompare(b.name)
         );
 
-        store.dispatch(writeToken({ token }));
+        if (!isMounted()) return;
 
-        setTimeout(() => {
-          if (!isMounted()) return;
-
-          setProdCategory(sortedCategory);
-          setFilteredProdCategory(sortedCategory);
-          setInitialLoadForm(true);
-        }, 500);
+        setProdClass(sortedCategory);
+        setFilteredProdClass(sortedCategory);
+        setInitialLoadForm(true);
         //
       } catch (error) {
-        enqueueSnackbar("0036: An error occured.", {
+        enqueueSnackbar("0044: An error occured.", {
           variant: "error",
         });
         return () => {
-          setProdCategory([]);
-          setFilteredProdCategory([]);
+          setProdClass([]);
+          setFilteredProdClass([]);
         };
       }
     }
@@ -71,25 +64,24 @@ const ProductCategory = () => {
 
   useEffect(() => {
     paginate(null, 1);
-    prodCategory
+    prodClass
       .filter((val) => {
-        if (searchProdCategory === "") return val;
-        if (val.name.toLowerCase().includes(searchProdCategory.toLowerCase()))
+        if (searchProdClass === "") return val;
+        if (val.name.toLowerCase().includes(searchProdClass.toLowerCase()))
           return val;
         return "";
       })
       .map((val, key) => {
-        if (searchProdCategory === "")
-          return setFilteredProdCategory(prodCategory);
-        return setFilteredProdCategory([val]);
+        if (searchProdClass === "") return setFilteredProdClass(prodClass);
+        return setFilteredProdClass([val]);
       });
-  }, [searchProdCategory]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchProdClass]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDelete = () => {};
 
   const handleView = (category) => {
     setShowForm(false);
-    setSelectedProdCategory(category);
+    setSelectedProdClass(category);
   };
 
   const handleEditView = () => setShowForm(true);
@@ -97,30 +89,28 @@ const ProductCategory = () => {
   const handleSuccessAddForm = (obj) => {
     handleCancelForm();
 
-    setFilteredProdCategory((prevState) => {
+    setFilteredProdClass((prevState) => {
       return [...prevState, obj];
     });
 
-    setProdCategory((prevState) => {
+    setProdClass((prevState) => {
       return [...prevState, obj];
     });
   };
 
   const handleSearch = (e, value) =>
-    value === null
-      ? setSearchProdCategory("")
-      : setSearchProdCategory(value.name);
+    value === null ? setSearchProdClass("") : setSearchProdClass(value.name);
 
   const paginate = (pageNumber, page) => setCurrentPage(page);
 
   const handleCancelForm = () => {
     setShowForm(false);
-    setSelectedProdCategory({});
+    setSelectedProdClass({});
   };
 
   const handleSuccessEditForm = (obj) => {
     handleCancelForm();
-    const categoryx = [...filteredProdCategory];
+    const categoryx = [...filteredProdClass];
     const index = categoryx.findIndex((x) => x._id === obj.id);
 
     categoryx[index] = { ...categoryx[index] };
@@ -128,31 +118,31 @@ const ProductCategory = () => {
     categoryx[index].isActive = obj.isActive;
     categoryx[index].printerName = obj.printerName;
 
-    setFilteredProdCategory(categoryx);
-    setProdCategory(categoryx);
+    setFilteredProdClass(categoryx);
+    setProdClass(categoryx);
   };
 
   const handleAddView = () => {
-    setSelectedProdCategory({});
+    setSelectedProdClass({});
     setShowForm(true);
   };
 
   const RenderCategoryDisplay = () => {
     if (showForm)
       return (
-        <ProductCategoryForm
-          data={selectedProdCategory}
+        <ProductClassificationForm
+          data={selectedProdClass}
           onCancel={handleCancelForm}
           onSuccessEdit={handleSuccessEditForm}
           onSuccessAdd={handleSuccessAddForm}
         />
       );
 
-    if (!selectedProdCategory.hasOwnProperty("_id")) return null;
+    if (!selectedProdClass.hasOwnProperty("_id")) return null;
 
     return (
       <MDisplay
-        data={selectedProdCategory}
+        data={selectedProdClass}
         onCancel={handleCancelForm}
         onEdit={handleEditView}
         label="product category"
@@ -171,12 +161,12 @@ const ProductCategory = () => {
             <MSearchBar
               onAdd={handleAddView}
               onSearch={handleSearch}
-              data={prodCategory}
+              data={prodClass}
               searchField="name"
-              btnName="Add Location"
+              btnName="Add Classification"
             />
             <div style={{ background: "#fff", paddingBottom: "15px" }}>
-              <ProductCategoryList
+              <ProductClassList
                 data={restrictedCategory}
                 onView={handleView}
                 onDelete={handleDelete}
@@ -185,7 +175,7 @@ const ProductCategory = () => {
               <div style={{ marginTop: "15px" }}>
                 <MPagination
                   postsPerPage={categoryPerPage}
-                  totalPosts={filteredProdCategory.length}
+                  totalPosts={filteredProdClass.length}
                   paginate={paginate}
                   page={currentPage}
                 />
@@ -203,9 +193,9 @@ const ProductCategory = () => {
   return (
     <div className="container__wrapper">
       <FormHeader
-        header="Location"
+        header="Classifications"
         second="Product Management"
-        third="Location"
+        third="Classifications"
         navigate="/"
         SecondIcon={RiShoppingBag2Fill}
         isVisibleBtn={false}
@@ -215,4 +205,4 @@ const ProductCategory = () => {
   );
 };
 
-export default ProductCategory;
+export default ProductClassification;

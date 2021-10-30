@@ -105,6 +105,7 @@ const ReservationDetailsRoomSteps = ({
         action: "DELETE",
         value: false,
       });
+
     setAskConfirmation(false);
   };
   const handleDialogShow = () => {

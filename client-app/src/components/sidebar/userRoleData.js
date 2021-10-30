@@ -85,4 +85,9 @@ export const resortMgmtPagesData = [
     title: "Approval Request",
     description: "Approval Request",
   },
+  {
+    key: 18,
+    title: "Products - Classification",
+    description: "Products - Classification",
+  },
 ];

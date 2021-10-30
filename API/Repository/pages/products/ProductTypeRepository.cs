@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.products;
 using API.Data;
@@ -17,9 +18,11 @@ namespace API.Repository.pages.products
             _db = db;
         }
 
-        public Task<bool> Create(ProductType entity)
+        public async Task<bool> Create(ProductType entity)
         {
-            throw new System.NotImplementedException();
+
+            await _db.ProductTypes.AddAsync(entity);
+            return await Save();
         }
 
         public Task<bool> Delete(ProductType entity)
@@ -29,30 +32,34 @@ namespace API.Repository.pages.products
 
         public async Task<ICollection<ProductType>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.ProductTypes.ToListAsync();
+            return await _db.ProductTypes.Include(n => n.user).ToListAsync();
         }
 
-        public Task<ProductType> FindById(Guid id)
+        public async Task<ProductType> FindById(Guid id)
         {
-            throw new System.NotImplementedException();
-
-        }
-
-        public Task<ProductType> getTypeByName(string name)
-        {
-            throw new System.NotImplementedException();
+            return await _db.ProductTypes
+         .Include(n => n.user)
+        .FirstOrDefaultAsync(n => n._id == id);
 
         }
 
-        public Task<bool> Save()
+        public async Task<ProductType> getTypeByName(string name)
         {
-            throw new System.NotImplementedException();
+            var data = await FindAll();
+            return data.FirstOrDefault(w => w.name == name);
+        }
+
+        public async Task<bool> Save()
+        {
+            var changes = await _db.SaveChangesAsync();
+            return changes > 0;
 
         }
 
-        public Task<bool> Update(ProductType entity)
+        public async Task<bool> Update(ProductType entity)
         {
-            throw new System.NotImplementedException();
+            _db.ProductTypes.Update(entity);
+            return await Save();
 
         }
     }
