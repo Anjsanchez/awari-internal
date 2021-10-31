@@ -701,6 +701,21 @@ namespace API.Controllers.reservation
             return true;
         }
 
+        private bool checkIfThereIsUnpaid(List<ReservationPayment> payments, List<ReservationTransLine> transLines, List<ReservationRoomLine> rooms)
+        {
+            var totalPayment = 0f;
+            var netAmount = 0f;
+
+            foreach (var item in payments)
+                totalPayment += item.amount;
+
+            netAmount = globalFunctionalityHelper.getNetAmount(rooms, transLines);
+            if (netAmount != totalPayment)
+                return false;
+
+            return true;
+        }
+
         [HttpGet("CheckOut")]
         public async Task<ActionResult> PostCheckOutReservation(Guid id)
         {
@@ -714,7 +729,6 @@ namespace API.Controllers.reservation
             if (!await checkIfThereIsPendingApproval(reservationHeader))
                 return BadRequest("Kindly settle transaction with pending approval.");
 
-
             var transHeader = await _tHeader.FindById(id);
             if (transHeader != null)
             {
@@ -727,6 +741,9 @@ namespace API.Controllers.reservation
             var paymentData = await _paymentRepo.GetPaymentByHeaderId(_headerId);
             var linesData = await _transRepo.GetTransLineByHeaderId(_headerId);
             var roomData = await _lineRepo.GetLineByHeaderId(_headerId);
+
+            if (!checkIfThereIsUnpaid(paymentData, linesData, roomData))
+                return BadRequest("Payment not balance. Please refresh the page.");
 
             reservationHeader.totalNumberOfTrans = linesData.Count;
             reservationHeader.totalNumberOfRooms = globalFunctionalityHelper.getTotalNumberOfRooms(roomData, reservationHeader.reservationType.name);
