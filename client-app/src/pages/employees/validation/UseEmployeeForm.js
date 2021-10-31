@@ -98,9 +98,7 @@ const UseEmployeeForm = (validate) => {
     } catch (ex) {
       //
       if (ex && ex.status === 400)
-        enqueueSnackbar(ex.data, { variant: "error" });
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
+        enqueueSnackbar("0053: " + ex.data, { variant: "error" });
 
       setIsLoading(false);
     }

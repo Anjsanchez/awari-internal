@@ -109,11 +109,8 @@ const UseDetailsPaymentForm = (
         return onSuccessAdd(singleRecord);
       }, 500);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { payment: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { payment: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0059: " + ex.data, { variant: "error" });
     } finally {
     }
   };
@@ -139,11 +136,8 @@ const UseDetailsPaymentForm = (
         onSuccessDelete(singleRecord);
       }, 500);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { payment: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { payment: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0060: " + ex.data, { variant: "error" });
     } finally {
     }
   };

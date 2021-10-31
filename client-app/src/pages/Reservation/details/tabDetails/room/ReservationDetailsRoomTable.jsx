@@ -164,11 +164,8 @@ const ReservationDetailsRoomTable = (props) => {
       setSelectedRoom([]);
       onSuccessDelete(obj);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { payment: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { payment: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0061: " + ex.data, { variant: "error" });
     }
   };
 
@@ -236,11 +233,8 @@ const ReservationDetailsRoomTable = (props) => {
       if (!obj.id) return onSuccessAdd(singleRecord);
       return onSuccessEdit(singleRecord);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { payment: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { payment: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0062: " + ex.data, { variant: "error" });
     }
   };
 

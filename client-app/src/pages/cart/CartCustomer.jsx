@@ -58,6 +58,7 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
 
     products.forEach((n) => {
       const discountId = n.discount._id === 0 ? null : n.discount._id;
+      const discount = n.discount._id === 0 ? null : n.discount;
       const roomId = room._id === undefined ? null : room._id;
 
       const obj = {
@@ -65,11 +66,13 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
         reservationRoomLineId: roomId,
         productId: n._id,
         discountId: discountId,
+        discount: discount,
         quantity: n.quantity,
         seniorPax: n.seniorPax,
         netDiscount: n.netDiscount,
         remark: n.remark,
         userId: user.id,
+        roleName: user.role.rolename,
         isPrinted: !createTransaction.sendToKitchen,
       };
 

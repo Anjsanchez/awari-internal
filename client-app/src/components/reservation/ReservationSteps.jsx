@@ -110,11 +110,8 @@ const ReservationSteps = () => {
         hist.replace("/a/reservation-management/reservations");
       }, 200);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { variant: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0051: " + ex.data, { variant: "error" });
       store.dispatch(toggleLoading(false));
     }
   };

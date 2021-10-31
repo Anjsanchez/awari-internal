@@ -708,8 +708,7 @@ const SOAe = ({
 
         if (!isDayTour) {
           if (t.reservationRoomLine.room._id !== roomsx.room._id) return null;
-
-          if (roomsx._id !== t.reservationRoomLine._id) return 0;
+          if (roomsx._id !== t.reservationRoomLine._id) return null;
         }
 
         return (
@@ -934,7 +933,6 @@ const SOAe = ({
               </div>
             );
           })}
-          {/* GROUP BY */}
           <View style={[styles.tableRow, styles.productMargin]}>
             <View style={[styles.tableCol]}>
               <Text

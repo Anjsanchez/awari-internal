@@ -5,6 +5,7 @@ import { Divider, IconButton } from "@material-ui/core";
 import VisibilityTwoToneIcon from "@material-ui/icons/VisibilityTwoTone";
 import BorderColorTwoToneIcon from "@material-ui/icons/BorderColorTwoTone";
 import ReservationDetailsRoomTable from "./ReservationDetailsTransactionTable";
+import EditLocationTwoToneIcon from "@material-ui/icons/EditLocationTwoTone";
 
 const ReservationDetailsRightTabTransaction = ({ header, isTrans }) => {
   const [visible, setVisible] = useState({ value: false, action: "cancel" });
@@ -29,24 +30,38 @@ const ReservationDetailsRightTabTransaction = ({ header, isTrans }) => {
                 aria-label="View"
                 size="small"
                 onClick={() =>
-                  handleVisibleModal({ value: true, action: "update" })
+                  handleVisibleModal({ value: true, action: "view" })
                 }
               >
                 <VisibilityTwoToneIcon />
               </IconButton>
             </Tooltip>
             {!isTrans && (
-              <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
-                <IconButton
-                  size="small"
-                  aria-label="create"
-                  onClick={() =>
-                    handleVisibleModal({ value: true, action: "add" })
-                  }
-                >
-                  <BorderColorTwoToneIcon />
-                </IconButton>
-              </Tooltip>
+              <>
+                <Tooltip placement="topLeft" title="Modify" arrowPointAtCenter>
+                  <IconButton
+                    aria-label="View"
+                    size="small"
+                    onClick={() =>
+                      handleVisibleModal({ value: true, action: "update" })
+                    }
+                  >
+                    <EditLocationTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+
+                <Tooltip placement="topLeft" title="Create" arrowPointAtCenter>
+                  <IconButton
+                    size="small"
+                    aria-label="create"
+                    onClick={() =>
+                      handleVisibleModal({ value: true, action: "add" })
+                    }
+                  >
+                    <BorderColorTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
             )}
           </div>
         </div>

@@ -111,11 +111,8 @@ const UseCustomerForm = (validate) => {
       hist.push("/a/user-management/customers");
     } catch (ex) {
       setIsLoading(false);
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { variant: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0052: " + ex.data, { variant: "error" });
     }
   };
 

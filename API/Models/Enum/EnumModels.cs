@@ -14,6 +14,7 @@ namespace API.Models.Enum
         {
             Delete = 0,
             Modify = 1,
+            Add = 2
         }
 
         public enum Status

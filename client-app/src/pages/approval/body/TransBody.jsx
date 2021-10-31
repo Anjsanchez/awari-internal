@@ -34,12 +34,14 @@ const TransBody = ({ selectedData }) => {
 
   if (selectedData === null || selectedData === undefined) return null;
   const renderAction = () => {
-    const action = selectedData.action === 0 ? "Delete" : "Modify";
+    let action = "Delete";
+    if (selectedData.action === 1) action = "Modify";
+    if (selectedData.action === 2) action = "Add";
 
     if (action === "Delete")
       return <ActiveButton textFalse="Delete" value={false} />;
 
-    return <ActiveButton textTrue="Modify" isWarning={true} />;
+    return <ActiveButton textTrue={action} value={true} />;
   };
   const renderPaymentDetail = () => {
     if (!initialLoad)

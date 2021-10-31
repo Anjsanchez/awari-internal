@@ -72,7 +72,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
       return <span>PENDING APPROVAL</span>;
     }
 
-    return <span> DELETE BOOKING</span>;
+    return <span>DELETE BOOKING</span>;
   };
 
   return (

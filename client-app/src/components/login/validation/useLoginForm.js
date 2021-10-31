@@ -56,11 +56,8 @@ const useLoginForm = (validate) => {
         hist.push(pathToRelocate);
       } catch (ex) {
         setIsLoading(false);
-        if (ex && ex.status === 400) {
-          enqueueSnackbar(ex.data, { variant: "error" });
-        }
-        if (ex && ex.status === 500)
-          enqueueSnackbar(ex.data, { variant: "error" });
+        if (ex && ex.status === 400)
+          enqueueSnackbar("0050: " + ex.data, { variant: "error" });
       } finally {
         setIsLoading(false);
       }

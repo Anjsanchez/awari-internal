@@ -62,7 +62,7 @@ namespace API.Controllers.approvals
         }
 
 
-        private async Task<bool> ModifyTranRecord(Guid tmpTblId, Guid transId, Status status)
+        private async Task<bool> ModifyTranRecord(Guid tmpTblId, Guid transId, Status status, EAction action)
         {
             var aprData = await _aprTranRepo.FindById(tmpTblId);
             if (aprData == null)
@@ -72,6 +72,24 @@ namespace API.Controllers.approvals
             if (rData == null)
                 return false;
 
+            if (action == EAction.Add)
+            {
+                if (status == Status.Rejected)
+                {
+                    rData.approvalStatus = Status.Rejected;
+                    await _rTranRepo.Update(rData);
+                    await _rTranRepo.Delete(rData);
+                    return true;
+                }
+
+                rData.approvalStatus = Status.Approved;
+                await _rTranRepo.Update(rData);
+
+                rData.approvalStatus = Status.Approved;
+                await _rTranRepo.Update(rData);
+
+                return true;
+            }
 
             if (status == Status.Rejected)
             {
@@ -80,8 +98,18 @@ namespace API.Controllers.approvals
                 return true;
             }
 
+            if (action == EAction.Delete)
+            {
+                await _rTranRepo.Delete(rData);
+                return true;
+            }
+
+            rData.seniorPax = aprData.seniorPax;
+            rData.netDiscount = aprData.netDiscount;
+            rData.discountId = aprData.discountId;
             rData.approvalStatus = Status.Approved;
-            await _rTranRepo.Delete(rData);
+
+            await _rTranRepo.Update(rData);
             return true;
 
         }
@@ -103,7 +131,7 @@ namespace API.Controllers.approvals
 
             await _reApprRepo.Update(data);
 
-            if (!await ModifyTranRecord(data.tmpTblId, data.transId, data.status))
+            if (!await ModifyTranRecord(data.tmpTblId, data.transId, data.status, data.action))
                 return NotFound("Internal Error has occured. Contact Administrator");
 
             return Ok(data);

@@ -79,6 +79,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
   };
 
   const handleRemarkChange = (n) => setRemark(n.target.value);
+
   useEffect(() => {
     //..GROSS AMOUNT
     const totalHeadsForDiscount = numberOfServing * quantity;

@@ -129,11 +129,13 @@ namespace API.Data.Profiles
 
             CreateMap<ApprovalTransCreateDto, ApprovalTrans>().ReverseMap();
             CreateMap<ApprovalTransReadDto, ApprovalTrans>().ReverseMap();
+            CreateMap<reservationTransCreateDto, ApprovalTrans>().ReverseMap();
 
             CreateMap<ApprovalRoomCreateDto, ApprovalRoom>().ReverseMap();
             CreateMap<ApprovalRoomReadDto, ApprovalRoom>().ReverseMap();
             CreateMap<ReservationRoomLine, ApprovalRoom>().ReverseMap();
             CreateMap<ReservationTransLine, ApprovalTransCreateDto>().ReverseMap();
+            CreateMap<ReservationTransLine, reservationTransDiscountUpdate>().ReverseMap();
             CreateMap<ReservationTransLine, ApprovalTrans>().ReverseMap();
 
             CreateMap<ReservationHeader, ApprovalTrans>().ReverseMap();

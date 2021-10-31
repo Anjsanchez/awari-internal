@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages.approval;
+using API.Contracts.pages.products;
 using API.Contracts.pages.reservation;
 using API.Contracts.pages.trans;
 using API.Data.ApiResponse;
@@ -28,14 +29,16 @@ namespace API.Controllers.reservation
     {
 
         private readonly IReservationApprovalRepository _aprRepo;
+        private readonly IProductRepository _prodRepo;
         private readonly IApprovalTransRepository _tmpRepo;
         private readonly IReservationTransRepository _repo;
         private readonly ITransLineRepository _tRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationTransController(IApprovalTransRepository tmpRepo, IReservationApprovalRepository aprRepo, IReservationTransRepository repo, ITransLineRepository tRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationTransController(IProductRepository prodRepo, IApprovalTransRepository tmpRepo, IReservationApprovalRepository aprRepo, IReservationTransRepository repo, ITransLineRepository tRepo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _prodRepo = prodRepo;
             _aprRepo = aprRepo;
             _tmpRepo = tmpRepo;
             _tRepo = tRepo;
@@ -113,6 +116,28 @@ namespace API.Controllers.reservation
             });
         }
 
+        [HttpPut("UpdateDiscountData/{id}")]
+        public async Task<ActionResult> UpdateDiscountData(Guid id, reservationTransDiscountUpdate updateDto)
+        {
+            var dataById = await _repo.FindById(id);
+            if (dataById == null)
+                return NotFound("Record not found in the database");
+
+            _map.Map(updateDto, dataById);
+            await _repo.Update(dataById);
+            await _repo.Save();
+
+            var withUser = await _repo.FindById(dataById._id);
+            var mappedData = _map.Map<ReservationTransLine, reservationTransReadDto>(withUser);
+
+            return Ok(new GenericResponse<reservationTransReadDto>()
+            {
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret),
+                Success = true,
+                singleRecord = mappedData
+            });
+        }
+
         [HttpPost]
         public async Task<ActionResult> createRecord(List<reservationTransCreateDto> createDto)
         {
@@ -129,6 +154,7 @@ namespace API.Controllers.reservation
                     createdDate = DateTime.Now,
                     discountId = trans.discountId,
                     netDiscount = trans.netDiscount,
+                    discount = trans.discount,
                     productId = trans.productId,
                     quantity = trans.quantity,
                     remark = trans.remark,
@@ -136,18 +162,84 @@ namespace API.Controllers.reservation
                     reservationRoomLineId = trans.reservationRoomLineId,
                     seniorPax = trans.seniorPax,
                     userId = trans.userId,
-                    isPrinted = trans.isPrinted
+                    isPrinted = trans.isPrinted,
+                    roleName = trans.roleName,
+                    approvalStatus = Status.NotApplicable
                 };
 
+                if (x.roleName.ToLower() != "administrator")
+                    if (x.discount != null)
+                    {
+                        if (x.discount.isRequiredApproval)
+                        {
+                            x.approvalStatus = Status.Pending;
+                            x.discount = null;
+                        }
+                    }
+
+                x.discount = null;
                 transLine.Add(x);
             }
 
             var createMdl = _map.Map<List<reservationTransCreateDto>, List<ReservationTransLine>>(transLine);
 
             await _repo.createRange(createMdl);
-            await _repo.Save();
+
+            await CreateMultipleApproval(createMdl);
 
             return Ok();
+        }
+
+        private async Task<bool> CreateMultipleApproval(List<ReservationTransLine> list)
+        {
+            if (list.Count == 0)
+                return true;
+
+
+
+            foreach (var item in list)
+            {
+                if (item.approvalStatus != Status.Pending)
+                    continue;
+
+                var apr = new ReservationApprovalCreateDto()
+                {
+                    transId = item._id,
+                    action = EAction.Add,
+                    approvalType = EApprovalType.Trans,
+                    requestedById = item.userId,
+                    remark = item.remark
+                };
+
+                var tmpMdl = _map.Map<ReservationTransLine, ApprovalTrans>(item);
+
+                Guid? roomId = null;
+                if (item.reservationRoomLine != null)
+                    roomId = item.reservationRoomLine.roomId;
+
+                tmpMdl.reservationRoomId = roomId;
+                tmpMdl.transId = item._id;
+
+                var prod = await _prodRepo.FindById(item.productId);
+
+                tmpMdl.grossAmount = prod.sellingPrice * item.quantity;
+                tmpMdl.netAmount = tmpMdl.grossAmount - tmpMdl.netDiscount;
+                tmpMdl._id = Guid.NewGuid();
+
+                await _tmpRepo.Create(tmpMdl);
+
+                var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);
+                cmdMdl.status = Status.Pending;
+                cmdMdl.requestedDate = DateTime.Now;
+                cmdMdl.tmpTblId = tmpMdl._id;
+
+                await _aprRepo.Create(cmdMdl);
+            }
+
+
+
+
+            return true;
         }
 
         [HttpPut("CreateTransApproval/{id}")]
@@ -179,6 +271,10 @@ namespace API.Controllers.reservation
 
             tmpMdl.netAmount = createDto.approvalTrans.netAmount;
             tmpMdl.grossAmount = createDto.approvalTrans.grossAmount;
+            tmpMdl.netDiscount = createDto.approvalTrans.netDiscount;
+            tmpMdl.discountId = createDto.approvalTrans.discountId;
+            tmpMdl.seniorPax = createDto.approvalTrans.seniorPax;
+
             tmpMdl.reservationRoomId = roomId;
             tmpMdl._id = new Guid();
             tmpMdl.transId = createDto.transId;

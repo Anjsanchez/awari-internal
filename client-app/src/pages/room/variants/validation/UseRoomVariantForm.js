@@ -52,11 +52,8 @@ const UseRoomVariantForm = (validate, onSuccessEdit, onSuccessAdd) => {
 
       return onSuccessAdd(singleRecord);
     } catch (ex) {
-      if (ex && ex.status === 400) {
-        enqueueSnackbar(ex.data, { variant: "error" });
-      }
-      if (ex && ex.status === 500)
-        enqueueSnackbar(ex.data, { variant: "error" });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0069: " + ex.data, { variant: "error" });
     } finally {
       store.dispatch(requestFinished());
     }

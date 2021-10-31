@@ -19,6 +19,7 @@ const ApprovalRequestPendings = ({ pendings, onUpdateApprovals }) => {
     if (approvalType === 3) type = "Header";
 
     if (action === 0) returnText = "Delete - " + type;
+    else if(action === 2) returnText = "Add - " + type;
     else returnText = "Modify - " + type;
     return (
       <span className="arp__span" onClick={() => spanOnClick(e)}>

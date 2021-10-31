@@ -71,6 +71,35 @@ const slice = createSlice({
       );
       r.totals.netAmount = r.totals.netAmountRooms + r.totals.netAmountTrans;
     },
+    toggleModifyProduct: (r, a) => {
+      const { discountId, netDiscount, seniorPax, transId } = a.payload;
+
+      const trans = [...r.trans];
+      const i = trans.findIndex((x) => x._id === transId);
+
+      trans[i] = { ...trans[i] };
+      trans[i].discountId = discountId;
+      trans[i].seniorPax = seniorPax;
+      trans[i].netDiscount = netDiscount;
+
+      r.trans = trans;
+
+      if (r.trans.length === 0) return;
+
+      r.totals.netAmountTrans = r.trans.reduce(
+        (a, b) => a + (b.product.sellingPrice * b.quantity - b.netDiscount),
+        0
+      );
+      r.totals.netAmount = r.totals.netAmountRooms + r.totals.netAmountTrans;
+    },
+    toggleModifyApprovalStatusTrans: (r, a) => {
+      const { transId } = a.payload;
+      const trans = [...r.trans];
+      const i = trans.findIndex((x) => x._id === transId);
+      trans[i] = { ...trans[i] };
+      trans[i].approvalStatus = 1;
+      r.trans = trans;
+    },
     toggleHeaderActiveStatus: (r, a) => {
       r.header.isActive = true;
     },
@@ -85,5 +114,7 @@ export const {
   addRRooms,
   editRRooms,
   toggleHeaderActiveStatus,
+  toggleModifyProduct,
+  toggleModifyApprovalStatusTrans,
 } = slice.actions;
 export default slice.reducer;

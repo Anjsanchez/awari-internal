@@ -1,5 +1,6 @@
 import { Spin } from "antd";
 import { useSnackbar } from "notistack";
+import { useSelector } from "react-redux";
 import { useMountedState } from "react-use";
 import { useHistory } from "react-router-dom";
 import "../css/ReservationDetailsPaymentTable.css";
@@ -8,8 +9,12 @@ import MTable from "../../../../../components/table/MTable";
 import { store } from "../../../../../utils/store/configureStore";
 import ReservationDetailsRoomTableRow from "./ReservationDetailsTransactionTableRow";
 import ReservationDetailsTransactionModal from "./ReservationDetailsTransactionModal";
-import { toggleRemoveProduct } from "../../../../../utils/store/pages/reservationDetails";
 import { toggleResetValues } from "../../../../../utils/store/pages/createTransaction";
+import ReservationDetailsTransactionUpdateModal from "./ReservationDetailsTransactionUpdateModal";
+import {
+  toggleModifyApprovalStatusTrans,
+  toggleRemoveProduct,
+} from "../../../../../utils/store/pages/reservationDetails";
 
 const headCells = [
   {
@@ -69,7 +74,10 @@ const ReservationDetailsTransactionTable = (props) => {
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleResetPage = () => setPage(0);
 
-  const headerInStore = store.getState().entities.reservationDetails;
+  const headerInStore = useSelector(
+    (state) => state.entities.reservationDetails
+  );
+
   const selectedRow = (obj) => {
     props.onVisible({ value: false, action: "cancel" });
     setSelectedTrans(obj);
@@ -98,12 +106,12 @@ const ReservationDetailsTransactionTable = (props) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSuccessRequestApproval = (obj) => {
+    store.dispatch(toggleModifyApprovalStatusTrans(obj));
     const transx = [...trans];
     const index = transx.findIndex((x) => x._id === obj.transId);
     transx[index] = { ...transx[index] };
     transx[index].approvalStatus = 1;
     setSelectedTrans([]);
-    // store.dispatch(addRPayments(paymentsx));
     setTrans(transx);
   };
 
@@ -151,14 +159,24 @@ const ReservationDetailsTransactionTable = (props) => {
       return null;
 
     return (
-      <ReservationDetailsTransactionModal
-        onSuccessRequestApproval={onSuccessRequestApproval}
-        onVisible={props.onVisible}
-        visible={props.visible}
-        selectedTrans={selectedTrans}
-        onSuccessDelete={onSuccessDelete}
-        isTrans={headerInStore.isTrans}
-      />
+      <>
+        <ReservationDetailsTransactionModal
+          onSuccessRequestApproval={onSuccessRequestApproval}
+          onVisible={props.onVisible}
+          visible={props.visible}
+          selectedTrans={selectedTrans}
+          onSuccessDelete={onSuccessDelete}
+          isTrans={headerInStore.isTrans}
+        />
+        <ReservationDetailsTransactionUpdateModal
+          onSuccessRequestApproval={onSuccessRequestApproval}
+          onVisible={props.onVisible}
+          visible={props.visible}
+          selectedTrans={selectedTrans}
+          onSuccessDelete={onSuccessDelete}
+          isTrans={headerInStore.isTrans}
+        />
+      </>
     );
   };
 
@@ -166,7 +184,7 @@ const ReservationDetailsTransactionTable = (props) => {
     <>
       {renderModal()}
       <MTable
-        rows={trans}
+        rows={headerInStore.trans}
         xCells={headCells}
         TblBody={ReservationDetailsRoomTableRow}
         page={page}

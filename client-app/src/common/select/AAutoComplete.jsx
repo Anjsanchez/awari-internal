@@ -5,13 +5,15 @@ const AAutoComplete = ({ data, onSelectChange, selectedData, label }) => {
   return (
     <div>
       <div className="counter-spanHeader__wrapper">
-        <span className="counter-spanHeader aac">{label}</span>
+        <label htmlFor="res-type" className="counter-spanHeader aac">
+          {label}
+        </label>
       </div>
       <Select
         id="res-type"
         className="reservationtype__select"
         showSearch
-        placeholder="Select a person"
+        placeholder="Select from the list"
         optionFilterProp="children"
         onChange={onSelectChange}
         value={selectedData.name}

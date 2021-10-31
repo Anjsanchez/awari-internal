@@ -301,6 +301,7 @@ const ReservationDetailsTransactionModal = (props) => {
       </Grid>
     );
   };
+
   return (
     <>
       <ReservationApprovalRemark
@@ -323,7 +324,7 @@ const ReservationDetailsTransactionModal = (props) => {
       <Modal
         title="Product"
         centered
-        visible={visible.value}
+        visible={visible.action === "view" && visible.value}
         onOk={onVisible}
         onCancel={() => onVisible({ value: false, action: "cancel" })}
         footer={<Footer />}

@@ -27,7 +27,7 @@ const ReservationApprovalRemark = ({
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
-  
+
   const storeS = useSelector((state) => state.entities.createReservation.rooms);
   const handleRemarkChange = (e) => setRemark(e.target.value);
   const handleDialogCancel = () => setAskConfirmation(false);
@@ -62,15 +62,31 @@ const ReservationApprovalRemark = ({
 
   const setObjDbModelTrans = () => {
     const currentUser = store.getState().entities.user.user;
+
+    let transId = 0;
+    let discId = null;
+
+    if (visible.action === "MODIFY") {
+      transId = values.transId;
+      discId = values.discountId;
+    } else {
+      if (values.discount !== null) discId = values.discount._id;
+      transId = values._id;
+    }
+
     return {
-      transId: values._id,
+      transId: transId,
       approvalType: approvalType,
       action: visible.action,
       requestedById: currentUser.id,
       remark: remark,
       approvalTrans: {
-        grossAmount: values.grossAmount,
+        discountId: discId,
+        seniorPax: values.seniorPax,
+        transId: transId,
+        netDiscount: values.netDiscount,
         netAmount: values.netAmount,
+        grossAmount: values.grossAmount,
       },
     };
   };
@@ -163,9 +179,8 @@ const ReservationApprovalRemark = ({
         });
       }, 50);
     } catch (ex) {
-      enqueueSnackbar("0039: An error occured while calling the server.", {
-        variant: "error",
-      });
+      if (ex && ex.status === 400)
+        enqueueSnackbar("0039: " + ex.data, { variant: "error" });
     } finally {
       setIsLoading(false);
     }

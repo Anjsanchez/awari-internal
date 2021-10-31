@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using API.Models.functionality;
+using static API.Models.Enum.EnumModels;
 
 namespace API.Dto.reservations.trans
 {
@@ -13,6 +15,7 @@ namespace API.Dto.reservations.trans
         public Guid productId { get; set; }
 
         public Guid? discountId { get; set; }
+        public Discount discount { get; set; }
 
         public Int32 quantity { get; set; }
         public Int32 seniorPax { get; set; }
@@ -22,8 +25,11 @@ namespace API.Dto.reservations.trans
 
         public Guid userId { get; set; }
 
+        public string roleName { get; set; }
+
         public DateTime createdDate { get; set; }
 
+        public Status approvalStatus { get; set; } = 0;
 
         public bool isPrinted { get; set; }
     }

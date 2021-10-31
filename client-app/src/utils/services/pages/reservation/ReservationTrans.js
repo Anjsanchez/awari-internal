@@ -30,3 +30,8 @@ export function PostCreateTransApproval(trans) {
   http.SetJwt();
   return http.put(apiEndpoint + "/CreateTransApproval/" + trans.transId, trans);
 }
+
+export function UpdateDiscountData(trans) {
+  http.SetJwt();
+  return http.put(apiEndpoint + "/UpdateDiscountData/" + trans.transId, trans);
+}

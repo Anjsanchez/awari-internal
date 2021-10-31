@@ -47,6 +47,9 @@ namespace API.helpers.api
             if (actionLower == "modify")
                 return EAction.Modify;
 
+            if (actionLower == "add")
+                return EAction.Add;
+
             return EAction.Delete;
 
         }
