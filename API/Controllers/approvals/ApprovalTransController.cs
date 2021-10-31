@@ -77,19 +77,15 @@ namespace API.Controllers.approvals
                 if (status == Status.Rejected)
                 {
                     rData.approvalStatus = Status.Rejected;
+                    rData.discountId = null;
+                    rData.seniorPax = 0;
+                    rData.netDiscount = 0;
+
                     await _rTranRepo.Update(rData);
-                    await _rTranRepo.Delete(rData);
                     return true;
                 }
 
                 rData.approvalStatus = Status.Approved;
-                await _rTranRepo.Update(rData);
-
-                rData.approvalStatus = Status.Approved;
-                rData.discountId = null;
-                rData.seniorPax = 0;
-                rData.netDiscount = 0;
-
                 await _rTranRepo.Update(rData);
 
                 return true;

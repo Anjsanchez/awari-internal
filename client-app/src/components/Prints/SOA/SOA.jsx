@@ -35,6 +35,7 @@ Font.register({
 
 const styles = StyleSheet.create({
   body: {
+    paddingTop: 10,
     paddingBottom: 65,
     paddingHorizontal: 10,
   },
@@ -756,7 +757,7 @@ const SOAe = ({
           <View style={styles.rowResort}>
             <View style={[styles.resortWrapper]}>
               <View style={styles.rowRight}>
-                <Text>Awari Anilao Bay Resort</Text>
+                <Text>Anilao Awari Bay Resort</Text>
               </View>
               <View style={styles.rowRight}>
                 <Text>Brgy Solo, Mabini, Batangas Philippines</Text>
