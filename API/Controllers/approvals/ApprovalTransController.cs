@@ -86,6 +86,10 @@ namespace API.Controllers.approvals
                 await _rTranRepo.Update(rData);
 
                 rData.approvalStatus = Status.Approved;
+                rData.discountId = null;
+                rData.seniorPax = 0;
+                rData.netDiscount = 0;
+
                 await _rTranRepo.Update(rData);
 
                 return true;
