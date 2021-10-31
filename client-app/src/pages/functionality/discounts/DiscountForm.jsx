@@ -58,6 +58,8 @@ const DiscountForm = ({ data, onCancel, onSuccessEdit, onSuccessAdd }) => {
     (state) => state.entities.roomVariant.isLoading
   );
 
+  console.log(values.isRequiredApproval);
+
   return (
     <>
       {askConfirmation && (

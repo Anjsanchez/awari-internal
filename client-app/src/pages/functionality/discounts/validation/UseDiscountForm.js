@@ -32,7 +32,7 @@ const UseDiscountForm = (validate, onSuccessEdit, onSuccessAdd) => {
       id: discount._id || "",
       isByPercentage: discount.isByPercentage || false,
       isRequiredId: discount.isRequiredId || false,
-      isRequiredApproval: false,
+      isRequiredApproval: discount.isRequiredApproval || false,
       isActive: discount.isActive || false,
       name: discount.name || "",
       value: discount.value || "",
@@ -49,7 +49,6 @@ const UseDiscountForm = (validate, onSuccessEdit, onSuccessAdd) => {
     try {
       const currentUser = store.getState().entities.user.user.id;
       const objEmp = { ...values, userId: currentUser };
-
       const { data } = await saveDiscount(objEmp);
       const { token, singleRecord } = data;
 

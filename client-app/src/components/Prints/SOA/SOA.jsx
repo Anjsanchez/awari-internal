@@ -35,7 +35,7 @@ Font.register({
 
 const styles = StyleSheet.create({
   body: {
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 65,
     paddingHorizontal: 10,
   },
