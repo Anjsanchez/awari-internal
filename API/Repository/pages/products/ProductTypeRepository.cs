@@ -32,7 +32,12 @@ namespace API.Repository.pages.products
 
         public async Task<ICollection<ProductType>> FindAll(bool isActiveOnly = false)
         {
-            return await _db.ProductTypes.Include(n => n.user).ToListAsync();
+            var data = await _db.ProductTypes.Include(n => n.user).ToListAsync();
+            if (isActiveOnly)
+                data = data.Where(n => n.isActive == true).ToList();
+
+            return data;
+
         }
 
         public async Task<ProductType> FindById(Guid id)
