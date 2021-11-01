@@ -18,6 +18,12 @@ export function getEmployeeById(id) {
   return http.get(employeeUrl(id));
 }
 
+export function updateUserPassword(d) {
+  http.SetJwt();
+
+  return http.put(apiEndpoint + "/updatePassword/" + d.empId, d);
+}
+
 export function saveEmployee(employee) {
   http.SetJwt();
   if (employee.id) {

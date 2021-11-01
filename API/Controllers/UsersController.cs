@@ -102,6 +102,21 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPut("updatePassword/{id}")]
+        public async Task<ActionResult> updateUserPassword(Guid id, userPasswordUpdateDto usrUpdateDto)
+        {
+
+            var user = await _repo.FindById(id);
+            if (user == null)
+                return NotFound("Username or Email not found");
+
+            user.Password = BC.HashPassword(usrUpdateDto.Password);
+            await _repo.Update(user);
+            await _repo.Save();
+
+            return NoContent();
+        }
+
 
         [HttpPost]
         [Route("Login")]

@@ -16,3 +16,11 @@
 .container__wrapper.ef .ant-transfer-list {
   width: 100%;
 }
+
+.ecpm__wrapper {
+  width: 80%;
+  margin: auto;
+}
+.ecpm__wrapper .dwdw {
+  padding-bottom: 10px;
+}

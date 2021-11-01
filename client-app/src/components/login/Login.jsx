@@ -133,14 +133,6 @@ export default function Login() {
               <div className={classes.loginDiv__margin}>
                 <MaterialPaper text={paperText} />
               </div>
-              <Divider className={classes.loginDiv__margin} />
-              <Typography
-                className={classes.loginDiv__margin}
-                variant="body2"
-                color="textSecondary"
-              >
-                Forgot Password?
-              </Typography>
             </form>
           </div>
         </div>

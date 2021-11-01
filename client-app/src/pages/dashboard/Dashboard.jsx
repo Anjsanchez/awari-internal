@@ -8,7 +8,6 @@ import DbByTrans from "./DbByTrans";
 import { useSnackbar } from "notistack";
 import { Grid } from "@material-ui/core";
 import DbCheckOutTbl from "./DbCheckOutTbl";
-import { useMountedState } from "react-use";
 import SpinLoader from "./../../common/Spin";
 import React, { useEffect, useState } from "react";
 import { getTransHeaders } from "./../../utils/services/pages/trans/TransHeaderService";
@@ -17,7 +16,6 @@ import { GetRoomLines } from "./../../utils/services/pages/reservation/Reservati
 import { includesTransLines } from "./../../utils/services/pages/reservation/ReservationTrans";
 
 const Dashboard = () => {
-  const isMounted = useMountedState();
   const [rTrans, setRTrans] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
   const [tHeaders, setTHeaders] = useState([]);
@@ -31,8 +29,6 @@ const Dashboard = () => {
       try {
         const { data } = await getTransHeaders(true);
         const { listRecords } = data;
-
-        if (!isMounted()) return;
 
         setTHeaders(listRecords);
       } catch (error) {
@@ -49,8 +45,6 @@ const Dashboard = () => {
         const { data } = await getHeaders(true);
         const { listRecords } = data;
 
-        if (!isMounted()) return;
-
         setRHeaders(listRecords);
       } catch (error) {
         enqueueSnackbar("0006: " + error, {
@@ -65,8 +59,6 @@ const Dashboard = () => {
       try {
         const { data } = await GetRoomLines(true);
         const { listRecords } = data;
-
-        if (!isMounted()) return;
 
         setRRmLines(listRecords);
       } catch (error) {
@@ -83,7 +75,8 @@ const Dashboard = () => {
       try {
         const { data } = await includesTransLines();
         const { hLines, rLines } = data;
-        if (!isMounted()) return;
+
+        setInitialLoadForm(true);
 
         let dt = [];
         hLines.map((n) =>
@@ -98,8 +91,7 @@ const Dashboard = () => {
             : null
         );
 
-        setRTrans(dt);
-        setInitialLoadForm(true);
+        setRTrans(rLines);
       } catch (error) {
         enqueueSnackbar("0007: " + error, {
           variant: "error",

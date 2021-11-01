@@ -16,6 +16,7 @@ namespace API.Dto.Users
         public string LastName { get; set; }
         public byte isExportFlag { get; set; } = 0;
         public Role Role { get; set; }
+        public string Password { get; set; }
         public bool isActive { get; set; }
         public List<employeeRoleReadDto> userRoles { get; set; }
         public Int64 SSS { get; set; }

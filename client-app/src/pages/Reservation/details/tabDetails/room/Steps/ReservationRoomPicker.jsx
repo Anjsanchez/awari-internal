@@ -260,6 +260,8 @@ const ReservationRoomPicker = () => {
         const zStart = moment(cur.startDate).format("MM-DD-YYYY");
         const zEnd = moment(cur.endDate).format("MM-DD-YYYY");
 
+        if (cur._id === storeData.id) return;
+
         if (dRange === zStart) {
           if (zStart === date) {
             isCheckInOnly = true;

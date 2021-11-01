@@ -22,6 +22,7 @@ const UseEmployeeForm = (validate) => {
     mobile: "",
     pagIbig: "",
     philHealth: "",
+    secretAnswer: "",
     birthday: new Date(),
     isActive: false,
     roleId: "",

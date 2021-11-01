@@ -19,6 +19,7 @@ import { writeToken } from "../../utils/store/pages/users";
 import MaterialSelect from "../../common/form/MaterialSelect";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import EmployeeChangePassModal from "./EmployeeChangePassModal";
 import MaterialTextField from "./../../common/MaterialTextField";
 import { getRoles } from "../../utils/services/pages/RoleService";
 import employeeFormValidate from "./validation/EmployeeFormValidate";
@@ -29,7 +30,17 @@ const useStyles = makeStyles((theme) => ({
   login__button: {
     borderRadius: 16,
     textTransform: "capitalize",
-    width: "100%",
+    width: "160px",
+    minWidth: "50px",
+    maxWidth: "200px",
+    marginBottom: "5px",
+    marginRight: "5px",
+  },
+  password__button: {
+    borderRadius: 16,
+    textTransform: "capitalize",
+    width: "190px",
+    minWidth: "50px",
     maxWidth: "200px",
     marginBottom: "5px",
     marginRight: "5px",
@@ -42,6 +53,8 @@ const useStyles = makeStyles((theme) => ({
 
   loginDiv__margin: {
     marginTop: "20px",
+    display: "flex",
+    justifyContent: "space-between",
   },
   employeeFormInfo_header: {
     fontFamily: `"Poppins", sans-serif`,
@@ -83,13 +96,12 @@ const EmployeeForm = () => {
     handleChangeBirthday,
   } = UseEmployeeForm(employeeFormValidate);
 
-  let passwordField;
   const hist = useHistory();
   const classes = useStyles();
   const [roles, setRoles] = useState([]);
+  const [showPasswordModal, setshowPasswordModal] = useState(false);
 
   const [mockData, setMockData] = useState([]);
-  // const [targetKeys, setTargetKeys] = useState([]);
 
   const { enqueueSnackbar } = useSnackbar();
   const { id: employeeIdFromUrl } = useParams();
@@ -125,7 +137,6 @@ const EmployeeForm = () => {
 
         const { data } = await getEmployeeById(employeeIdFromUrl);
         const { token, singleRecord } = data;
-
         store.dispatch(writeToken({ token }));
 
         handleValueOnLoad(singleRecord);
@@ -159,12 +170,12 @@ const EmployeeForm = () => {
   const filterOption = (inputValue, option) =>
     option.description.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
 
-  const handleChangeTransfer = (targetKeys, z) => {
-    handleChangeTargetKeys(targetKeys);
-  };
+  const handleChangeTransfer = (keys, z) => handleChangeTargetKeys(keys);
 
-  if (employeeIdFromUrl === "new")
-    passwordField = (
+  const showPasswordField = () => {
+    if (employeeIdFromUrl !== "new") return null;
+
+    return (
       <>
         <Grid item xs={12} md={6}>
           <MaterialTextField
@@ -188,9 +199,33 @@ const EmployeeForm = () => {
         </Grid>
       </>
     );
-  const formLbl = employeeIdFromUrl === "new" ? "New Customer" : "Customer";
+  };
+  const showPasswordButton = () => {
+    if (employeeIdFromUrl === "new") return null;
+
+    return (
+      <>
+        <div>
+          <MaterialButton
+            disabled={isLoading ? true : false}
+            color="primary"
+            onClick={() => setshowPasswordModal(true)}
+            classes={classes.password__button}
+            text="Change Password"
+          />
+        </div>
+      </>
+    );
+  };
+
+  const formLbl = employeeIdFromUrl === "new" ? "New Employee" : "Employee";
   return (
     <>
+      <EmployeeChangePassModal
+        visible={showPasswordModal}
+        onHideModal={() => setshowPasswordModal(false)}
+        empId={employeeIdFromUrl}
+      />
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -290,7 +325,7 @@ const EmployeeForm = () => {
                   />
                 </Grid>
 
-                {passwordField}
+                {showPasswordField()}
 
                 <Grid item xs={6}>
                   <KeyboardDatePicker
@@ -328,7 +363,6 @@ const EmployeeForm = () => {
                     maxWidth="100%"
                   />
                 </Grid>
-
                 <Grid item xs={12}>
                   <div className="reservationDetails-title-span__wrapper">
                     <span className="reservationDetails-title__spanHeader">
@@ -361,25 +395,28 @@ const EmployeeForm = () => {
                 <Grid item xs={12}></Grid>
               </Grid>
               <div className={classes.loginDiv__margin}>
-                <Link
-                  to="/a/user-management/employees"
-                  className="link"
-                  style={isLoading ? { pointerEvents: "none" } : null}
-                >
+                <div>
+                  <Link
+                    to="/a/user-management/employees"
+                    className="link"
+                    style={isLoading ? { pointerEvents: "none" } : null}
+                  >
+                    <MaterialButton
+                      disabled={isLoading ? true : false}
+                      color="primary"
+                      classes={classes.login__button}
+                      text="Back"
+                    />
+                  </Link>
                   <MaterialButton
                     disabled={isLoading ? true : false}
                     color="primary"
+                    onClick={handleSubmit}
                     classes={classes.login__button}
-                    text="Back"
+                    text={`${isLoading ? "Saving..." : "Save"}`}
                   />
-                </Link>
-                <MaterialButton
-                  disabled={isLoading ? true : false}
-                  color="primary"
-                  onClick={handleSubmit}
-                  classes={classes.login__button}
-                  text={`${isLoading ? "Saving..." : "Save"}`}
-                />
+                </div>
+                {showPasswordButton()}
               </div>
               <div className={classes.loginDiv__margin}></div>
               <FormFooter text="Employees are the staff working in Awari Anilao Bay Resort." />
