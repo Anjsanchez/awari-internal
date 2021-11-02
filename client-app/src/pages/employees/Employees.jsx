@@ -1,6 +1,6 @@
 import React from "react";
-import { RiUserSmileFill } from "react-icons/ri";
 import EmployeeTable from "./EmployeeTable";
+import { RiUserSmileFill } from "react-icons/ri";
 import FormHeader from "./../../common/form/FormHeader";
 
 const Employees = () => {

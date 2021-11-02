@@ -108,14 +108,16 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
           <Divider light />
           <div className="reservationDetails-body__wrapper">
             <div className="cd-button__container rdltCheckOut">
-              <Button
-                onClick={() => handleDelete()}
-                variant="contained"
-                color="primary"
-                disabled={isLoading}
-              >
-                {renderButtonText()}
-              </Button>
+              {!typeInStore.isTrans && (
+                <Button
+                  onClick={() => handleDelete()}
+                  variant="contained"
+                  color="primary"
+                  disabled={isLoading}
+                >
+                  {renderButtonText()}
+                </Button>
+              )}
             </div>
           </div>
         </Card>

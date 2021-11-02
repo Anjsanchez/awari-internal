@@ -55,6 +55,13 @@ namespace API.Repository.pages.reservation
                    .ToListAsync();
         }
 
+        public async Task<ICollection<ReservationTransLine>> FindAllTrans(bool isActiveOnly = false)
+        {
+            return await _db.ReservationTransLines
+                    .Include(n => n.product)
+                    .ToListAsync();
+        }
+
         public async Task<ReservationTransLine> FindById(Guid id)
         {
             return await _db.ReservationTransLines

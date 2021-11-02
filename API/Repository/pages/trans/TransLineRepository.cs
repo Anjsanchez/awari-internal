@@ -58,6 +58,15 @@ namespace API.Repository.pages.trans
                    .ToListAsync();
         }
 
+        public async Task<ICollection<TransLine>> FindAllTrans(bool isActiveOnly = false)
+        {
+
+            return await _db.TransLines
+           .Include(n => n.product)
+           .Include(n => n.product.productCategory)
+           .ToListAsync();
+        }
+
         public async Task<TransLine> FindById(Guid id)
         {
             return await _db.TransLines

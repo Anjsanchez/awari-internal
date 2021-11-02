@@ -1,12 +1,12 @@
 import "./Login.css";
 import React from "react";
 import { Redirect } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 import * as logo from "../../common/ApSoftwareLogo";
 import auth from "../../utils/services/authServices";
 import useLoginForm from "./validation/useLoginForm";
 import { makeStyles } from "@material-ui/core/styles";
 import MaterialPaper from "../../common/MaterialPaper";
-import { Typography, Divider } from "@material-ui/core";
 import MaterialButton from "../../common/MaterialButton";
 import MaterialTextField from "../../common/MaterialTextField";
 import loginFormValidate from "./validation/loginFormValidate";

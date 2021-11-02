@@ -10,5 +10,7 @@ namespace API.Contracts.pages.reservation
         Task<bool> deleteRange(List<ReservationTransLine> lines);
         Task<bool> createRange(List<ReservationTransLine> lines);
         Task<List<ReservationTransLine>> GetTransLineByHeaderId(Guid headerId);
+        Task<ICollection<ReservationTransLine>> FindAllTrans(bool isActiveOnly = false);
+
     }
 }

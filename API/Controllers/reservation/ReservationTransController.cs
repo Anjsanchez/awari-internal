@@ -64,10 +64,10 @@ namespace API.Controllers.reservation
         [HttpGet("includesTransLines")]
         public async Task<ActionResult> IncludesTransLines()
         {
-            var hTrans = await _repo.FindAll();
+            var hTrans = await _repo.FindAllTrans();
             var hTransDto = _map.Map<List<ReservationTransLine>, List<reservationTransReadDto>>(hTrans.ToList());
 
-            var tTrans = await _tRepo.FindAll();
+            var tTrans = await _tRepo.FindAllTrans();
             var tTransDto = _map.Map<List<TransLine>, List<transReadDto>>(tTrans.ToList());
 
             return Ok(new HTransLineWithTrans()

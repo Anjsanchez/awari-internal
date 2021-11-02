@@ -178,9 +178,7 @@ const SOAe = ({
 
   let lastId = "0";
   const renderCategory = (pc, roomId) => {
-    if (!isDayTour) {
-      if (!roomId.room._id) return null;
-    }
+    if (!isDayTour) if (!roomId.room._id) return null;
 
     if (lastId === pc._id) return null;
 
@@ -315,9 +313,7 @@ const SOAe = ({
     let transOfThisRoom = [];
 
     if (isTrans === "true") {
-      transOfThisRoom = trans.filter(
-        (n) => n.transHeader.reservationRoomLine._id === d._id
-      );
+      transOfThisRoom = trans.filter((n) => n.transRoom._id === d._id);
     } else {
       transOfThisRoom = trans.filter(
         (n) => n.reservationRoomLine._id === d._id
@@ -328,7 +324,6 @@ const SOAe = ({
       (a, b) => a + b.quantity * b.product.sellingPrice,
       0
     );
-
     const total = roomCharges + transCharges;
 
     if (!isFormatted) return total;
@@ -363,9 +358,16 @@ const SOAe = ({
       return formatNumber(totalDT);
     }
 
-    const transOfThisRoom = trans.filter(
-      (n) => n.reservationRoomLine._id === d._id
-    );
+    let transOfThisRoom = [];
+
+    if (isTrans === "true") {
+      transOfThisRoom = trans.filter((n) => n.transRoom._id === d._id);
+    } else {
+      transOfThisRoom = trans.filter(
+        (n) => n.reservationRoomLine._id === d._id
+      );
+    }
+
     const transDiscount = transOfThisRoom.reduce(
       (a, b) => a + b.netDiscount,
       0
@@ -624,14 +626,24 @@ const SOAe = ({
   };
 
   const renderCategorized = (roomsx) => {
-    let txx = trans.filter(
-      (n) => n.reservationHeader._id === roomsx.reservationHeader._id
-    );
+    let txx;
+
+    if (isTrans === "true") {
+      txx = trans.filter((n) => n.transHeader._id === roomsx.transHeader._id);
+    } else {
+      txx = trans.filter(
+        (n) => n.reservationHeader._id === roomsx.reservationHeader._id
+      );
+    }
 
     if (!isDayTour) {
-      txx = trans.filter(
-        (n) => n.reservationRoomLine.room._id === roomsx.room._id
-      );
+      if (isTrans === "true")
+        txx = trans.filter((n) => n.transRoom.room._id === roomsx.room._id);
+      else {
+        txx = trans.filter(
+          (n) => n.reservationRoomLine.room._id === roomsx.room._id
+        );
+      }
     }
 
     return (
@@ -708,13 +720,22 @@ const SOAe = ({
         if (t.product.productCategoryId !== pc._id) return null;
 
         if (!isDayTour) {
-          if (t.reservationRoomLine.room._id !== roomsx.room._id) return null;
-          if (roomsx._id !== t.reservationRoomLine._id) return null;
+          if (isTrans === "true") {
+            //
+            if (t.transRoom.room._id !== roomsx.room._id) return null;
+            if (roomsx._id !== t.transRoom._id) return null;
+          } else {
+            //
+            if (t.reservationRoomLine.room._id !== roomsx.room._id) return null;
+            if (roomsx._id !== t.reservationRoomLine._id) return null;
+          }
         }
+
+        const data = isTrans === "true" ? t.transRoom : t.reservationRoomLine;
 
         return (
           <div key={t._id}>
-            {renderCategory(pc, t.reservationRoomLine)}
+            {renderCategory(pc, data)}
 
             <View style={[styles.tableRow]}>
               <View style={[styles.tableCol]}>
