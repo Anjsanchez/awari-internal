@@ -6,9 +6,61 @@ import moment from "moment";
 const ReservationTimeLine = () => {
   const typeInStore = useSelector((state) => state.entities.reservationDetails);
 
-  console.log(typeInStore);
+  let data = [];
 
-  const data = [];
+  console.log(typeInStore);
+  const { name } = typeInStore.header.reservationType;
+  console.log(name);
+  if (name !== "Restaurant" && name !== "Day Tour") {
+    typeInStore.rooms.map((n) =>
+      data.push({
+        type: "R",
+        action: `R - ${n.room.roomLongName}`,
+        date: n.createdDate,
+      })
+    );
+  }
+
+  typeInStore.payments.map((n) =>
+    data.push({
+      type: "P",
+      action: `P - ${n.payment.name}`,
+      date: n.createdDate,
+    })
+  );
+
+  typeInStore.trans.map((n) =>
+    data.push({
+      type: "T",
+      action: `T - ${n.product.longName}`,
+      date: n.createdDate,
+    })
+  );
+
+  const sorted = data.sort(function (a, b) {
+    return new Date(a.date) - new Date(b.date);
+  });
+
+  let lastDate = "";
+  const renderBody = (d, i) => {
+    let color = "red";
+    let dateLbl = null;
+
+    if (d.type === "R") color = "blue";
+    if (d.type === "P") color = "yellow";
+
+    const newDate = moment(d.date).format("YYYY-MM-DD hh:mm A");
+    if (lastDate != newDate) {
+      dateLbl = newDate;
+      lastDate = newDate;
+    }
+
+    return (
+      <Timeline.Item color={color} label={dateLbl} key={i}>
+        {d.action}
+      </Timeline.Item>
+    );
+  };
 
   return (
     <div className="reservationdetails-grid__wrapper rtl">
@@ -23,12 +75,7 @@ const ReservationTimeLine = () => {
             >
               Booking Created
             </Timeline.Item>
-            <Timeline.Item label="2015-09-01 09:12:11">
-              Solve initial network problems
-            </Timeline.Item>
-            <Timeline.Item label="2015-09-01 09:12:11">
-              Network problems being solved
-            </Timeline.Item>
+            {sorted.map((n, i) => renderBody(n, i))}
           </Timeline>
         </div>
       </Card>
