@@ -1,20 +1,30 @@
 import React from "react";
-import { Card, Button } from "antd";
+import { Card, Button, Carousel, Image } from "antd";
 import { Grid } from "@material-ui/core";
-import EmptyContent from "./../../common/EmptyContent";
 import { store } from "../../utils/store/configureStore";
 import { toggleProductsAdded } from "../../utils/store/pages/createTransaction";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
+import "./css/Commerce.css";
 
 const CommerceBody = ({ products }) => {
   //
 
   if (products.length === 0)
     return (
-      <EmptyContent
-        text="THERE IS NO PRODUCT"
-        subText="Try checking your filter or use more general search"
-      />
+      <Carousel dotPosition="left" className="cd-carousel__wrapper">
+        <div className="cd-img__wrapper">
+          <Image preview={false} src="/img/menu/p1.png" />
+        </div>
+        <div className="cd-img__wrapper">
+          <Image preview={false} src="/img/menu/p2.png" />
+        </div>
+        <div className="cd-img__wrapper">
+          <Image preview={false} src="/img/menu/p3.png" />
+        </div>
+        <div className="cd-img__wrapper">
+          <Image preview={false} src="/img/menu/p4.png" />
+        </div>
+      </Carousel>
     );
 
   return (

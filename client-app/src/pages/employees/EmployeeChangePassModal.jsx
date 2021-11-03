@@ -1,5 +1,5 @@
 import { Modal } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
 import { Grid } from "@material-ui/core";
 import MDialog from "../../common/MDialog";
@@ -18,6 +18,10 @@ const EmployeeChangePassModal = ({ visible, onHideModal, empId }) => {
     password2: false,
   });
 
+  useEffect(() => {
+    setValues({ password: "", password2: "" });
+    setErrors({ password: false, password2: false });
+  }, [visible]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === "isActive") {
@@ -39,7 +43,7 @@ const EmployeeChangePassModal = ({ visible, onHideModal, empId }) => {
     if (!values.password2.trim()) err.password2 = "Password is required";
 
     if (values.password !== values.password2) {
-      err.password = "Password does not match the password 2";
+      err.password = "Password does not match the re-entered password";
       return setErrors(err);
     }
 

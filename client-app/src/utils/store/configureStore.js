@@ -15,9 +15,11 @@ const persistedReducer = persistReducer(persistConfig, reducer);
 const store = configureStore({
   reducer: persistedReducer,
   devTools: process.env.NODE_ENV !== "production",
+
   middleware: [
     ...getDefaultMiddleware({
       serializableCheck: false,
+      immutableCheck: { warnAfter: 128 },
     }),
     tokenLogger(),
     GlobalSettings(),

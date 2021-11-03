@@ -40,13 +40,14 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
   const [cartLength, setCartLength] = useState(0);
   const [navLink, setNavLink] = useState("/a/commerce-management/cart");
 
+  const createTransaction = useSelector(
+    (state) => state.entities.createTransaction.products
+  );
+
   useEffect(() => {
     if (employeeIdFromUrl !== undefined)
       setNavLink(navLink + "/" + employeeIdFromUrl);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const createTransaction = useSelector(
-    (state) => state.entities.createTransaction.products
-  );
 
   useEffect(() => {
     const count = createTransaction.reduce((a, b) => a + b.quantity, 0);
@@ -76,6 +77,11 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
               inputRoot: classes.inputRoot,
             }}
             getOptionSelected={(option, value) => option._id === value._id}
+            // getOptionSelected={(option, value) => {
+            //   console.log(value._id);
+            //   console.log(option);
+            //   return option._id == value._id;
+            // }}
             id="grouped-demo"
             options={options.sort(
               (a, b) => -b.firstLetter.localeCompare(a.firstLetter)

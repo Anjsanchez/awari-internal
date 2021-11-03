@@ -18,6 +18,7 @@ const CommerceDrawer = ({
   setSelectedTypes,
   setSelectedCategory,
   setSelectedPrice,
+  onFilterSearch,
 }) => {
   const [value, setValue] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -41,6 +42,7 @@ const CommerceDrawer = ({
     setSelectedPrice([]);
     setLocalSTypes([]);
     setValue(0);
+    onFilterSearch(null, false, true);
   };
 
   const handleCheckboxCheck = (name) => {
@@ -197,17 +199,21 @@ const CommerceDrawer = ({
             </Collapse>
           </List>
 
-          <div className="cd-button__container gc">
+          <div className="cd-button__container">
             <Button
               variant="contained"
               color="primary"
-              onClick={() => setShowModal(true)}
+              onClick={() => onFilterSearch(null, false)}
             >
-              Guest Checker
+              Search
             </Button>
           </div>
           <div className="cd-button__container">
-            <Button variant="contained" color="primary" onClick={onClearFilter}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => onClearFilter()}
+            >
               Clear All
             </Button>
           </div>

@@ -17,7 +17,6 @@ const Commerce = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [searchProduct, setSearchProduct] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [initialLoadForm, setInitialLoadForm] = useState(false);
   const [isFilterDrawerShow, setIsFilterDrawerShow] = useState(false);
@@ -28,9 +27,16 @@ const Commerce = () => {
   const [selectedCategory, setSelectedCategory] = useState([]);
 
   const handleSearch = (e, value) =>
-    value === null ? setSearchProduct("") : setSearchProduct(value.longName);
+    value === null ? onFilterSearch(null) : onFilterSearch(value._id);
 
-  useEffect(() => {
+  const onFilterSearch = (
+    search,
+    isFromSearchBar = true,
+    isClearItems = false
+  ) => {
+    //..
+    if (isClearItems) return setFilteredProducts([]);
+
     const prodx = [...products];
 
     const filteredCat = prodx.filter((item) => {
@@ -49,20 +55,24 @@ const Commerce = () => {
       (n) => price.from <= n.sellingPrice && price.to >= n.sellingPrice
     );
 
-    if (searchProduct === "") return setFilteredProducts(filteredPrice);
+    if (search === null && isFromSearchBar) {
+      if (selectedCategory.length === 0 && selectedTypes.length === 0)
+        return setFilteredProducts([]);
+
+      return setFilteredProducts(filteredPrice);
+    }
 
     filteredPrice
       .filter((val) => {
-        if (searchProduct === "") return val;
-        if (val.longName.toLowerCase().includes(searchProduct.toLowerCase()))
-          return val;
+        if (search === null) return val;
+        if (val._id === search) return val;
         return "";
       })
       .map((val, key) => {
-        if (searchProduct === "") return setFilteredProducts(filteredPrice);
+        if (search === null) return setFilteredProducts(filteredPrice);
         return setFilteredProducts([val]);
       });
-  }, [selectedCategory, selectedTypes, selectedPrice, searchProduct]); // eslint-disable-line react-hooks/exhaustive-deps
+  };
 
   useEffect(() => {
     //..
@@ -85,7 +95,7 @@ const Commerce = () => {
           setTypes(sortedTypes);
           setCategories(categories);
           setProducts(sorted);
-          setFilteredProducts(sorted);
+          // setFilteredProducts(sorted);
           setInitialLoadForm(true);
         }, 500);
       } catch (error) {
@@ -113,13 +123,15 @@ const Commerce = () => {
   };
 
   const onFilterShow = () => setIsFilterDrawerShow(!isFilterDrawerShow);
+  const filter = filteredProducts.length === 0 ? products : filteredProducts;
 
   return (
     <div className="container__wrapper commerce">
       <CommerceHeader
         onSearch={handleSearch}
         onFilterShow={onFilterShow}
-        products={filteredProducts}
+        products={filter}
+        onFilterSearch={onFilterSearch}
       />
       <CommerceDrawer
         types={types}
@@ -127,8 +139,9 @@ const Commerce = () => {
         onFilterShow={onFilterShow}
         setSelectedPrice={setSelectedPrice}
         setSelectedTypes={setSelectedTypes}
-        isFilterDrawerShow={isFilterDrawerShow}
         setSelectedCategory={setSelectedCategory}
+        isFilterDrawerShow={isFilterDrawerShow}
+        onFilterSearch={onFilterSearch}
       />
       <Divider className="com-divider" />
 

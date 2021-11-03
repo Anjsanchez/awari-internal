@@ -35,6 +35,7 @@ images/Products/
 config/
 Debug/
 Release/
+API/Images/Products
 *.opensdf
 *.tlog
 *.log

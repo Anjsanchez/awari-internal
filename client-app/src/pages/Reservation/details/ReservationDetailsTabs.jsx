@@ -5,6 +5,7 @@ import Tabs from "@material-ui/core/Tabs";
 import WatchLaterTwoToneIcon from "@material-ui/icons/WatchLaterTwoTone";
 import FolderOpenTwoToneIcon from "@material-ui/icons/FolderOpenTwoTone";
 import ReservationDetailsTabDetails from "./tabDetails/ReservationDetailsTabDetails";
+import ReservationTimeLine from "./tabDetails/timeline/ReservationTimeLine";
 
 const ReservationDetailsTabs = (props) => {
   const [value, setValue] = React.useState(0);
@@ -48,7 +49,9 @@ const ReservationDetailsTabs = (props) => {
       <TabPanel value={value} index={0}>
         <ReservationDetailsTabDetails />
       </TabPanel>
-      <TabPanel value={value} index={1}></TabPanel>
+      <TabPanel value={value} index={1}>
+        <ReservationTimeLine />
+      </TabPanel>
     </>
   );
 };

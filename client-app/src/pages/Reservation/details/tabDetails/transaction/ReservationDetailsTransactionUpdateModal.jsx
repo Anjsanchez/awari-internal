@@ -94,7 +94,9 @@ const ReservationDetailsTransactionUpdateModal = ({
 
     return obj;
   };
-
+  useEffect(() => {
+    setSelectedDiscount({ _id: 0, name: "Not Applicable" });
+  }, [visible]);
   useEffect(() => {
     async function populateDiscounts() {
       try {
@@ -160,6 +162,8 @@ const ReservationDetailsTransactionUpdateModal = ({
 
   const handleModify = (e) => {
     e.preventDefault();
+
+    if (Object.keys(selectedDiscount).length === 0) return;
 
     const currentUser = store.getState().entities.user.user;
 

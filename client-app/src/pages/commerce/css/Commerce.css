@@ -244,6 +244,23 @@
   border-radius: 8px 0px 0px 8px;
 }
 
+.cd-img__wrapper {
+  height: 100vh;
+  color: #fff;
+  line-height: 160px;
+  text-align: center;
+  background: #e3f2fd;
+}
+.ant-carousel-vertical .slick-dots li button {
+  background: black;
+  color: black;
+  width: 54px;
+  height: 16px;
+}
+.ant-carousel-vertical .slick-dots li.slick-active button {
+  width: 30px;
+  background: black;
+}
 .com-title__wrapper #commerceAddToCard .MuiSvgIcon-root {
   fill: black;
 }
