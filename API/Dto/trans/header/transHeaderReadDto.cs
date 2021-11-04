@@ -13,6 +13,7 @@ namespace API.Dto.trans.header
         public User user { get; set; }
         public DateTime createdDate { get; set; }
         public DateTime checkOutDate { get; set; }
+        public DateTime checkInDate { get; set; }
         public User userCheckOut { get; set; }
         public int roomCount { get; set; }
         public string agency { get; set; }

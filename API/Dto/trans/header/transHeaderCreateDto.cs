@@ -10,6 +10,7 @@ namespace API.Dto.trans.header
         public Guid reservationTypeId { get; set; }
 
         public string voucher { get; set; }
+        public DateTime checkInDate { get; set; }
 
         public Guid userId { get; set; }
 

@@ -225,6 +225,7 @@ namespace API.Controllers.reservation
                     return BadRequest("There is already an active reservation with this customer.");
 
             _map.Map(ReservationHeaderUpdateDto, reservationHeader);
+            reservationHeader.checkInDate = DateTime.Now;
             await _repo.Update(reservationHeader);
             await _repo.Save();
 

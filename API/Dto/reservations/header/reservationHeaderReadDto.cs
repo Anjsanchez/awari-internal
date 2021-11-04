@@ -19,5 +19,6 @@ namespace API.Dto.reservations.header
         public int roomCount { get; set; }
         public bool isActive { get; set; }
         public Status approvalStatus { get; set; }
+        public DateTime checkInDate { get; set; }
     }
 }

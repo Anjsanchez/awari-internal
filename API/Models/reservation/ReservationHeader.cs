@@ -57,5 +57,7 @@ namespace API.Models.reservation
         public bool isActive { get; set; }
 
         public DateTime createdDate { get; set; }
+
+        public DateTime checkInDate { get; set; } = DateTime.Now;
     }
 }

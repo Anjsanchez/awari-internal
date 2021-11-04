@@ -62,8 +62,6 @@ const DbByHeaderModal = ({ showModal, setShowModal, trans, prodId }) => {
             className="db-cl-body__table"
             dataSource={data}
             size="small"
-            pagination={{ pageSize: 5 }}
-            scroll={{ y: 5 }}
             footer={null}
           />
         </div>

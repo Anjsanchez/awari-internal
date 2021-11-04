@@ -49,5 +49,7 @@ namespace API.Models.trans
 
         public DateTime createdDate { get; set; }
         public DateTime checkOutDate { get; set; }
+        public DateTime checkInDate { get; set; }
+
     }
 }

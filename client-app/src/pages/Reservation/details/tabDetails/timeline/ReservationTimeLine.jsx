@@ -3,13 +3,23 @@ import moment from "moment";
 import { Card, Timeline } from "antd";
 import "./css/ReservationTimeLine.css";
 import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const ReservationTimeLine = () => {
   const typeInStore = useSelector((state) => state.entities.reservationDetails);
-
+  const { isTrans } = useParams();
   let data = [];
 
   const { name } = typeInStore.header.reservationType;
+
+  if (typeInStore.header.isActive || (isTrans !== undefined && isTrans)) {
+    data.push({
+      type: "P",
+      action: `Check-In`,
+      date: typeInStore.header.checkInDate,
+    });
+  }
+
   if (name !== "Restaurant" && name !== "Day Tour") {
     typeInStore.rooms.map((n) =>
       data.push({

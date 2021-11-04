@@ -1,12 +1,12 @@
 import { Modal } from "antd";
 import MDialog from "./MDialog";
 import AInput from "./antd/AInput";
-import React, { useState } from "react";
 import { useSnackbar } from "notistack";
 import { useSelector } from "react-redux";
 import "./css/ReservationApprovalRemark.css";
 import MaterialButton from "./MaterialButton";
 import { ButtonGroup } from "@material-ui/core";
+import React, { useState, useEffect } from "react";
 import { store } from "../utils/store/configureStore";
 import { PostCreateTransApproval } from "./../utils/services/pages/reservation/ReservationTrans";
 import { PostCreateRoomLinesApproval } from "../utils/services/pages/reservation/ReservationLines";
@@ -40,6 +40,9 @@ const ReservationApprovalRemark = ({
     setAskConfirmation(true);
   };
 
+  useEffect(() => {
+    setRemark("");
+  }, [visible]);
   const setObjDbModelPayment = () => {
     const currentUser = store.getState().entities.user.user;
 
