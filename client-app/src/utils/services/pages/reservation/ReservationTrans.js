@@ -17,6 +17,11 @@ export function includesTransLines() {
   return http.get(apiEndpoint + "/includesTransLines");
 }
 
+export function getTransLineByUserId(user) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/transByUserId/" + user);
+}
+
 export function saveTransLine(h) {
   http.SetJwt();
   return http.post(apiEndpoint, h);

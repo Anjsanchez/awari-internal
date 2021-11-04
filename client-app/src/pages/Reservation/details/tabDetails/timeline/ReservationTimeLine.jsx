@@ -1,16 +1,15 @@
-import { Card, Timeline } from "antd";
 import React from "react";
+import moment from "moment";
+import { Card, Timeline } from "antd";
 import "./css/ReservationTimeLine.css";
 import { useSelector } from "react-redux";
-import moment from "moment";
+
 const ReservationTimeLine = () => {
   const typeInStore = useSelector((state) => state.entities.reservationDetails);
 
   let data = [];
 
-  console.log(typeInStore);
   const { name } = typeInStore.header.reservationType;
-  console.log(name);
   if (name !== "Restaurant" && name !== "Day Tour") {
     typeInStore.rooms.map((n) =>
       data.push({
@@ -50,7 +49,7 @@ const ReservationTimeLine = () => {
     if (d.type === "P") color = "yellow";
 
     const newDate = moment(d.date).format("YYYY-MM-DD hh:mm A");
-    if (lastDate != newDate) {
+    if (lastDate !== newDate) {
       dateLbl = newDate;
       lastDate = newDate;
     }
@@ -58,6 +57,21 @@ const ReservationTimeLine = () => {
     return (
       <Timeline.Item color={color} label={dateLbl} key={i}>
         {d.action}
+      </Timeline.Item>
+    );
+  };
+
+  const renderCheckOut = () => {
+    if (!typeInStore.isTrans) return null;
+
+    return (
+      <Timeline.Item
+        label={moment(typeInStore.header.checkOutDate).format(
+          "YYYY-MM-DD hh:mm A"
+        )}
+        color="green"
+      >
+        Check Out
       </Timeline.Item>
     );
   };
@@ -76,6 +90,7 @@ const ReservationTimeLine = () => {
               Booking Created
             </Timeline.Item>
             {sorted.map((n, i) => renderBody(n, i))}
+            {renderCheckOut()}
           </Timeline>
         </div>
       </Card>

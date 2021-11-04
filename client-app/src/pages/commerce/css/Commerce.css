@@ -136,6 +136,11 @@
 
 /* drawer */
 
+.cd-button__container.div {
+  padding: 0 16px;
+  margin-bottom: 15px;
+}
+
 .cd__container {
   width: 300px;
 }
@@ -263,6 +268,16 @@
 }
 .com-title__wrapper #commerceAddToCard .MuiSvgIcon-root {
   fill: black;
+}
+
+/* timeline */
+.ct-container__wrapper {
+  height: 60vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-width: 420px;
+  padding-top: 20px;
+  max-height: 60vh;
 }
 
 @media screen and (max-width: 768px) {

@@ -1,14 +1,18 @@
-import { Modal, Radio } from "antd";
-import { Drawer } from "antd";
-import React, { useState } from "react";
+import { useSnackbar } from "notistack";
 import List from "@material-ui/core/List";
+import { Drawer, Divider, Radio } from "antd";
 import ListItem from "@material-ui/core/ListItem";
 import Collapse from "@material-ui/core/Collapse";
+import React, { useState, useEffect } from "react";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import ListItemText from "@material-ui/core/ListItemText";
-import { Grid, Checkbox, FormControlLabel, Button } from "@material-ui/core";
 import GuestChecker from "./../../common/GuestChecker";
+import { store } from "../../utils/store/configureStore";
+import ListItemText from "@material-ui/core/ListItemText";
+import CommerceTimeline from "./Transactions/CommerceTimeline";
+import CommerceTransaction from "./Transactions/CommerceTransaction";
+import { Grid, Checkbox, FormControlLabel, Button } from "@material-ui/core";
+import { getTransLineByUserId } from "./../../utils/services/pages/reservation/ReservationTrans";
 
 const CommerceDrawer = ({
   isFilterDrawerShow,
@@ -21,9 +25,13 @@ const CommerceDrawer = ({
   onFilterSearch,
 }) => {
   const [value, setValue] = useState(0);
+  const [trans, setTrans] = useState([]);
+  const { enqueueSnackbar } = useSnackbar();
   const [showModal, setShowModal] = useState(false);
   const [localSTypes, setLocalSTypes] = useState([]);
   const [localSCategs, setLocalSCategs] = useState([]);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [showModalTransaction, setShowModalTransaction] = useState(false);
   const [visible, setVisible] = useState([
     { id: "Classification", open: false },
     { id: "prices", open: false },
@@ -80,18 +88,42 @@ const CommerceDrawer = ({
     setVisible(visi);
   };
 
+  useEffect(() => {
+    const getRecords = async () => {
+      const { id } = store.getState().entities.user.user;
+
+      try {
+        const { data } = await getTransLineByUserId(id);
+
+        const sorted = data.listRecords.sort(function (a, b) {
+          return new Date(a.createdDate) - new Date(b.createdDate);
+        });
+
+        setTrans(sorted);
+      } catch (error) {
+        enqueueSnackbar("0071: An error occured.", {
+          variant: "error",
+        });
+      }
+    };
+
+    getRecords();
+  }, []);
+
   return (
     <div>
-      <Modal
-        title="Guest Checker"
-        centered
-        visible={showModal}
-        onOk={() => setShowModal(!showModal)}
-        onCancel={() => setShowModal(!showModal)}
-        footer={null}
-      >
-        <GuestChecker />
-      </Modal>
+      <GuestChecker visible={showModal} setOnVisible={setShowModal} />
+      <CommerceTimeline
+        trans={trans}
+        visible={showTimeline}
+        setOnVisible={setShowTimeline}
+      />
+      <CommerceTransaction
+        trans={trans}
+        setTrans={setTrans}
+        visible={showModalTransaction}
+        setOnVisible={setShowModalTransaction}
+      />
       <Drawer
         placement="right"
         closable={false}
@@ -215,6 +247,38 @@ const CommerceDrawer = ({
               onClick={() => onClearFilter()}
             >
               Clear All
+            </Button>
+          </div>
+
+          <Divider className="cd-button__container div" />
+          <div className="cd-button__container">
+            <span className="com-title__leftSpan"> Actions</span>
+          </div>
+          <div className="cd-button__container gc">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowModal(true)}
+            >
+              Guest Checker
+            </Button>
+          </div>
+          <div className="cd-button__container gc">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowTimeline(true)}
+            >
+              Transaction Timeline
+            </Button>
+          </div>
+          <div className="cd-button__container gc">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setShowModalTransaction(true)}
+            >
+              My Transactions
             </Button>
           </div>
         </div>

@@ -77,11 +77,6 @@ const CommerceHeader = ({ onFilterShow, products, onSearch }) => {
               inputRoot: classes.inputRoot,
             }}
             getOptionSelected={(option, value) => option._id === value._id}
-            // getOptionSelected={(option, value) => {
-            //   console.log(value._id);
-            //   console.log(option);
-            //   return option._id == value._id;
-            // }}
             id="grouped-demo"
             options={options.sort(
               (a, b) => -b.firstLetter.localeCompare(a.firstLetter)

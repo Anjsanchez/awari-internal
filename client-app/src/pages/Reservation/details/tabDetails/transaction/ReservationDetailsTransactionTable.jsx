@@ -106,6 +106,8 @@ const ReservationDetailsTransactionTable = (props) => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSuccessRequestApproval = (obj) => {
+    if (obj === null) return; //call but no action.
+
     store.dispatch(toggleModifyApprovalStatusTrans(obj));
     const transx = [...trans];
     const index = transx.findIndex((x) => x._id === obj.transId);

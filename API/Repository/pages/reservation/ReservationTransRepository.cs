@@ -49,8 +49,10 @@ namespace API.Repository.pages.reservation
                    .Include(n => n.discount)
                    .Include(n => n.product)
                    .Include(n => n.product.productCategory)
+                   .Include(n => n.reservationHeader.reservationType)
                    .Include(n => n.reservationHeader)
                    .Include(n => n.reservationRoomLine)
+                   .Include(n => n.reservationRoomLine.room)
                    .Include(n => n.user)
                    .ToListAsync();
         }
@@ -79,6 +81,25 @@ namespace API.Repository.pages.reservation
             var datas = await FindAll();
 
             return datas.Where(n => n.reservationHeaderId == headerId).ToList();
+        }
+
+        public async Task<List<ReservationTransLine>> GetTransLineByUserId(Guid userId)
+        {
+
+            var trans = await _db.ReservationTransLines
+                 .Include(n => n.product)
+                 .Include(n => n.discount)
+                 .Include(n => n.reservationHeader.reservationType)
+                 .Include(n => n.reservationHeader)
+                 .Include(n => n.reservationHeader.Customer)
+                 .Include(n => n.reservationRoomLine)
+                 .Include(n => n.reservationRoomLine.room)
+                 .Include(n => n.user)
+                 .ToListAsync();
+
+
+            trans = trans.Where(n => n.userId == userId).ToList();
+            return trans.ToList();
         }
 
         public async Task<bool> Save()

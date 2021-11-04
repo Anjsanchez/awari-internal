@@ -17,6 +17,7 @@ import ReservationApprovalRemark from "./../../../../../common/ReservationApprov
 import { toggleModifyProduct } from "../../../../../utils/store/pages/reservationDetails";
 import { getDiscounts } from "./../../../../../utils/services/pages/functionality/DiscountService";
 import { UpdateDiscountData } from "../../../../../utils/services/pages/reservation/ReservationTrans";
+import ActiveButton from "./../../../../../common/form/ActiveButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,6 +45,7 @@ const ReservationDetailsTransactionUpdateModal = ({
   selectedTrans,
   isTrans,
   onSuccessRequestApproval,
+  isFromCommerce = false,
 }) => {
   //..
   const isMounted = useMountedState();
@@ -66,12 +68,13 @@ const ReservationDetailsTransactionUpdateModal = ({
     action: "DELETE",
   });
 
-  const { product, quantity, seniorPax, discount } = selectedTrans;
+  const { product, quantity, seniorPax, discount, pendingStatus } =
+    selectedTrans;
 
   useEffect(() => {
     setSenior(seniorPax);
 
-    if (discount === null)
+    if (discount === null || discount === undefined)
       return setSelectedDiscount({ _id: 0, name: "Not Applicable" });
 
     setSelectedDiscount(discount);
@@ -91,12 +94,16 @@ const ReservationDetailsTransactionUpdateModal = ({
       grossAmount: grossAmount,
       netAmount: netAmount,
     };
-
     return obj;
   };
+
   useEffect(() => {
-    setSelectedDiscount({ _id: 0, name: "Not Applicable" });
-  }, [visible]);
+    if (discount === null || discount === undefined)
+      return setSelectedDiscount({ _id: 0, name: "Not Applicable" });
+
+    setSelectedDiscount(discount);
+  }, [visible]); // eslint-disable-line react-hooks/exhaustive-deps
+
   useEffect(() => {
     async function populateDiscounts() {
       try {
@@ -179,18 +186,44 @@ const ReservationDetailsTransactionUpdateModal = ({
     setAskConfirmation(true);
   };
 
+  const handleDelete = (e) => {
+    e.preventDefault();
+
+    if (Object.keys(selectedDiscount).length === 0) return;
+
+    const currentUser = store.getState().entities.user.user;
+
+    if (currentUser.role.rolename !== "Administrator") {
+      setTransObj(objViewModel());
+
+      return setAskConfirmationApproval({
+        action: "DELETE",
+        value: true,
+      });
+    }
+
+    setAskConfirmation(true);
+  };
+
   const handleOk = async () => {
     //
     setAskConfirmation(false);
     setRequestOnGoing(true);
 
-    const discountId = selectedDiscount._id === 0 ? null : selectedDiscount._id;
+    const currentUser = store.getState().entities.user.user;
 
+    const isAdmin =
+      currentUser.role.rolename === "Administrator" ? true : false;
+
+    const discountId = selectedDiscount._id === 0 ? null : selectedDiscount._id;
+    const discount = selectedDiscount._id === 0 ? null : selectedDiscount;
     const obj = {
       transId: selectedTrans._id,
       seniorPax: senior,
       netDiscount: netDiscount,
       discountId: discountId,
+      discount: discount,
+      isAdmin,
     };
 
     try {
@@ -199,7 +232,10 @@ const ReservationDetailsTransactionUpdateModal = ({
       enqueueSnackbar("Successfully updated records!", { variant: "success" });
 
       store.dispatch(toggleModifyProduct(obj));
+
+      if (isFromCommerce) onSuccessRequestApproval(obj);
       setRequestOnGoing(false);
+
       onVisible({ value: false, action: "cancel" });
     } catch (ex) {
       setRequestOnGoing(false);
@@ -225,12 +261,22 @@ const ReservationDetailsTransactionUpdateModal = ({
         color="primary"
         aria-label="text primary button group"
       >
+        {isFromCommerce && (
+          <MaterialButton
+            className={classes.button}
+            size="small"
+            disabled={requestOnGoing}
+            onClick={handleDelete}
+            color="secondary"
+            text="DELETE"
+          />
+        )}
         <MaterialButton
           className={classes.button}
           size="small"
           disabled={requestOnGoing}
           onClick={handleModify}
-          color="secondary"
+          color="primary"
           text="MODIFY"
         />
       </ButtonGroup>
@@ -264,8 +310,16 @@ const ReservationDetailsTransactionUpdateModal = ({
           txtLbl="Quantity"
           txtValue={quantity}
           Icon={EcoTwoToneIcon}
-          hasDivider={false}
+          hasDivider={selectedTrans.approvalStatus === 1 && true}
         />
+
+        {selectedTrans.approvalStatus === 1 && (
+          <AListItem
+            txtLbl="Approval Status"
+            txtValue={<ActiveButton isWarning={true} textTrue="Pending" />}
+            hasDivider={false}
+          />
+        )}
 
         <div className="cd-mattress__war">
           <Counter
@@ -302,6 +356,7 @@ const ReservationDetailsTransactionUpdateModal = ({
           onVisible({ value: false, action: "cancel" })
         }
         values={transObj}
+        isFromCommerce={isFromCommerce}
       />
       {askConfirmation && (
         <MDialog

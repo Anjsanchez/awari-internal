@@ -21,6 +21,7 @@ const ReservationApprovalRemark = ({
   values,
   onSuccessRequestApproval,
   approvalType = "payment",
+  isFromCommerce = false,
 }) => {
   const [remark, setRemark] = useState("");
   const [error, setError] = useState(false);
@@ -70,8 +71,12 @@ const ReservationApprovalRemark = ({
       transId = values.transId;
       discId = values.discountId;
     } else {
-      if (values.discount !== null) discId = values.discount._id;
-      transId = values._id;
+      if (isFromCommerce) transId = values.transId;
+
+      if (!isFromCommerce) {
+        if (values.discount !== null) discId = values.discount._id;
+        transId = values._id;
+      }
     }
 
     return {

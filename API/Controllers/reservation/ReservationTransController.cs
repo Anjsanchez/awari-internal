@@ -94,6 +94,21 @@ namespace API.Controllers.reservation
             });
         }
 
+        [HttpGet("transByUserId/{id}")]
+        public async Task<ActionResult> GetTransById(Guid id)
+        {
+            var data = await _repo.GetTransLineByUserId(id);
+
+            var mappedData = _map.Map<List<ReservationTransLine>, List<reservationTransReadDto>>(data.ToList());
+            return Ok(new GenericResponse<reservationTransReadDto>()
+            {
+                listRecords = mappedData,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateData(Guid id, reservationTransUpdateDto updateDto)
         {
@@ -268,7 +283,7 @@ namespace API.Controllers.reservation
             Guid? roomId = null;
             if (reservationTrans.reservationRoomLine != null)
                 roomId = reservationTrans.reservationRoomLine.roomId;
-
+            tmpMdl.discount = null;
             tmpMdl.netAmount = createDto.approvalTrans.netAmount;
             tmpMdl.grossAmount = createDto.approvalTrans.grossAmount;
             tmpMdl.netDiscount = createDto.approvalTrans.netDiscount;
