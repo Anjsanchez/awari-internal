@@ -20,6 +20,8 @@ namespace API.Models.approval
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
 
+        public Guid reservationHeaderId { get; set; }
+
         public Guid reservationTypeId { get; set; }
         public ReservationType reservationType { get; set; }
 

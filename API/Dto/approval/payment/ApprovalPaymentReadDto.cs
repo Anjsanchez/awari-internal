@@ -14,6 +14,7 @@ namespace API.Dto.approval.payment
 
         public float amount { get; set; }
 
+        public Guid reservationHeaderId { get; set; }
         public Payment payment { get; set; }
 
         public string paymentRefNum { get; set; }

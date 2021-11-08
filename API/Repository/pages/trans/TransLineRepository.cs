@@ -45,26 +45,32 @@ namespace API.Repository.pages.trans
         public async Task<ICollection<TransLine>> FindAll(bool isActiveOnly = false)
         {
             return await _db.TransLines
-                   .Include(n => n.discount)
-                   .Include(n => n.product)
-                   .Include(n => n.product.productCategory)
-                   .Include(n => n.transHeader)
-                   .Include(n => n.transRoom.room)
-                   .Include(n => n.transHeader.reservationType)
-                   .Include(n => n.transHeader.Customer)
+             .Include(n => n.discount)
+             .Include(n => n.product)
+             .Include(n => n.product.productCategory)
+             .Include(n => n.transHeader)
+             .Include(n => n.transRoom.room)
+             .Include(n => n.transHeader.reservationType)
+             .Include(n => n.transHeader.Customer)
 
-                   .Include(n => n.transRoom)
-                   .Include(n => n.user)
-                   .ToListAsync();
+             .Include(n => n.transRoom)
+             .Include(n => n.user)
+             .ToListAsync();
         }
 
-        public async Task<ICollection<TransLine>> FindAllTrans(bool isActiveOnly = false)
+        public async Task<ICollection<TransLine>> FindAllTrans(bool isActiveOnly = false, bool filterTransTodayOnly = true)
         {
+            if (filterTransTodayOnly)
+                return await _db.TransLines
+               .Include(n => n.product)
+               .Include(n => n.product.productCategory)
+               .Where(n => n.createdDate == DateTime.Now)
+               .ToListAsync();
 
             return await _db.TransLines
-           .Include(n => n.product)
-           .Include(n => n.product.productCategory)
-           .ToListAsync();
+                .Include(n => n.product)
+                .Include(n => n.product.productCategory)
+                .ToListAsync();
         }
 
         public async Task<TransLine> FindById(Guid id)

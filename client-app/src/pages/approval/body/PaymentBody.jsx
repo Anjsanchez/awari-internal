@@ -1,7 +1,10 @@
+import { Spin, Tooltip } from "antd";
+import { useHistory } from "react-router-dom";
+import { Grid, List, IconButton } from "@material-ui/core";
+import ExploreTwoToneIcon from "@material-ui/icons/ExploreTwoTone";
+
 import moment from "moment";
-import { Spin } from "antd";
 import { useSnackbar } from "notistack";
-import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AInput from "./../../../common/antd/AInput";
 import AListItem from "./../../../common/antd/AListItem";
@@ -10,6 +13,7 @@ import GetApprovalStatus from "./../../../common/GetApprovalStatus";
 import { getApprovalPaymentById } from "./../../../utils/services/pages/approvals/ApprovalPaymentService";
 
 const PaymentBody = ({ selectedData }) => {
+  const hist = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [payment, setPayment] = useState({});
   const [initialLoad, setInitialLoad] = useState(false);
@@ -42,6 +46,12 @@ const PaymentBody = ({ selectedData }) => {
 
     return <ActiveButton textTrue="Modify" isWarning={true} />;
   };
+
+  const handleNavigate = () =>
+    hist.push(
+      "/a/reservation-management/reservations/" + payment.reservationHeaderId
+    );
+
   const renderPaymentDetail = () => {
     if (!initialLoad)
       return (
@@ -126,7 +136,28 @@ const PaymentBody = ({ selectedData }) => {
           </Grid>
         </Grid>
 
-        <span className="pBody-title__wrapper">DETAILS</span>
+        <div className="details__container">
+          <span className="pBody-title__wrapper">DETAILS</span>
+          {selectedData.approvedBy === null &&
+            payment.reservationHeaderId !==
+              "00000000-0000-0000-0000-000000000000" && (
+              <span className="hBody-btnIcon">
+                <Tooltip
+                  placement="topLeft"
+                  title="Navigate"
+                  arrowPointAtCenter
+                >
+                  <IconButton
+                    aria-label="Navigate"
+                    size="small"
+                    onClick={() => handleNavigate()}
+                  >
+                    <ExploreTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+              </span>
+            )}
+        </div>
 
         {renderPaymentDetail()}
       </List>

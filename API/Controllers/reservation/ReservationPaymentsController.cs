@@ -160,6 +160,7 @@ namespace API.Controllers.reservation
 
             tmpMdl._id = new Guid();
             tmpMdl.transId = createDto.transId;
+            tmpMdl.reservationHeaderId = reservationPayment.reservationHeaderId;
             await _tmpRepo.Create(tmpMdl);
 
             var cmdMdl = _map.Map<ReservationApprovalCreateDto, ReservationApproval>(apr);

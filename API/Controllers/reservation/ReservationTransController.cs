@@ -239,6 +239,7 @@ namespace API.Controllers.reservation
 
                 tmpMdl.grossAmount = prod.sellingPrice * item.quantity;
                 tmpMdl.netAmount = tmpMdl.grossAmount - tmpMdl.netDiscount;
+                tmpMdl.reservationHeaderId = item.reservationHeaderId;
                 tmpMdl._id = Guid.NewGuid();
 
                 await _tmpRepo.Create(tmpMdl);
@@ -289,7 +290,7 @@ namespace API.Controllers.reservation
             tmpMdl.netDiscount = createDto.approvalTrans.netDiscount;
             tmpMdl.discountId = createDto.approvalTrans.discountId;
             tmpMdl.seniorPax = createDto.approvalTrans.seniorPax;
-
+            tmpMdl.reservationHeaderId = reservationTrans.reservationHeaderId;
             tmpMdl.reservationRoomId = roomId;
             tmpMdl._id = new Guid();
             tmpMdl.transId = createDto.transId;

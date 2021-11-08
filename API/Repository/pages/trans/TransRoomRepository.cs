@@ -46,7 +46,6 @@ namespace API.Repository.pages.trans
         public async Task<ICollection<TransRoom>> FindAll(bool isActiveOnly = false)
         {
             return await _db.TransRooms
-                        .Include(n => n.user)
                         .Include(n => n.room)
                         .Include(n => n.discount)
                         .Include(n => n.transHeader.Customer)

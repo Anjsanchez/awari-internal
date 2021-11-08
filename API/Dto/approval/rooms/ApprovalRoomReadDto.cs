@@ -13,6 +13,7 @@ namespace API.Dto.approval
         public Room room { get; set; }
         public ReservationType reservationType { get; set; }
 
+        public Guid reservationHeaderId { get; set; }
         public float grossAmount { get; set; }
         public float totalDiscount { get; set; }
         public float totalAmount { get; set; }

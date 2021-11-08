@@ -9,7 +9,9 @@ namespace API.Dto.approval.trams
     {
         public Guid _id { get; set; }
         public Guid transId { get; set; }
+        public Guid reservationHeaderId { get; set; }
         public Room reservationRoom { get; set; }
+
         public Product product { get; set; }
         public Discount discount { get; set; }
         public Int32 quantity { get; set; }
