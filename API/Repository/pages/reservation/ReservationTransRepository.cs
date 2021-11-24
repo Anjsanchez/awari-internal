@@ -57,8 +57,15 @@ namespace API.Repository.pages.reservation
                    .ToListAsync();
         }
 
-        public async Task<ICollection<ReservationTransLine>> FindAllTrans(bool isActiveOnly = false)
+        public async Task<ICollection<ReservationTransLine>> FindAllTrans(bool isActiveOnly = false, bool filterTransTodayOnly = true)
         {
+            if (filterTransTodayOnly)
+                return await _db.ReservationTransLines
+                        .Include(n => n.product)
+                        .Where(n => n.createdDate == DateTime.Now)
+                        .ToListAsync();
+
+
             return await _db.ReservationTransLines
                     .Include(n => n.product)
                     .ToListAsync();

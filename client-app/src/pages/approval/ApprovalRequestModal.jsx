@@ -161,6 +161,7 @@ const ApprovalRequestModal = ({
       setIsLoading(false);
     }
   };
+
   const Footer = () => {
     if (selectedData.approvedBy !== null) return null;
 

@@ -48,6 +48,7 @@ const ABookingHistoryByRoom = () => {
         if (!isMounted()) return;
 
         setTransLines(data.listRecords);
+        setInitialLoadForm(true);
       } catch (error) {
         enqueueSnackbar("0024: An error occured while calling the server.", {
           variant: "error",
@@ -168,7 +169,6 @@ const ABookingHistoryByRoom = () => {
 
         if (!isMounted()) return;
 
-        setInitialLoadForm(true);
         setDiscounts(discData);
       } catch (error) {
         enqueueSnackbar("0022: An error occured while calling the server.", {
@@ -184,8 +184,6 @@ const ABookingHistoryByRoom = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    setInitialLoadForm(false);
-
     const tranx = [...transLines];
 
     const filterDate = () => {
@@ -233,7 +231,7 @@ const ABookingHistoryByRoom = () => {
       });
 
     setFilteredTransLines(filteredDiscounts);
-    setInitialLoadForm(true);
+
     //..
   }, [
     selectedRoom,

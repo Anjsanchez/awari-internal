@@ -1,7 +1,10 @@
+import { Spin, Tooltip } from "antd";
+import { useHistory } from "react-router-dom";
+import { Grid, List, IconButton } from "@material-ui/core";
+import ExploreTwoToneIcon from "@material-ui/icons/ExploreTwoTone";
+
 import moment from "moment";
-import { Spin } from "antd";
 import { useSnackbar } from "notistack";
-import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AInput from "../../../common/antd/AInput";
 import AListItem from "../../../common/antd/AListItem";
@@ -10,6 +13,7 @@ import GetApprovalStatus from "../../../common/GetApprovalStatus";
 import { getApprovalRoomById } from "./../../../utils/services/pages/approvals/ApprovalRoomService";
 
 const RoomBody = ({ selectedData }) => {
+  const hist = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [room, setRoom] = useState({});
   const [initialLoad, setInitialLoad] = useState(false);
@@ -41,6 +45,11 @@ const RoomBody = ({ selectedData }) => {
 
     return <ActiveButton textTrue="Modify" isWarning={true} />;
   };
+  const handleNavigate = () =>
+    hist.push(
+      "/a/reservation-management/reservations/" + room.reservationHeaderId
+    );
+
   const renderPaymentDetail = () => {
     if (!initialLoad)
       return (
@@ -163,7 +172,28 @@ const RoomBody = ({ selectedData }) => {
           </Grid>
         </Grid>
 
-        <span className="pBody-title__wrapper">DETAILS</span>
+        <div className="details__container">
+          <span className="pBody-title__wrapper">DETAILS</span>
+          {selectedData.approvedBy === null &&
+            room.reservationHeaderId !==
+              "00000000-0000-0000-0000-000000000000" && (
+              <span className="hBody-btnIcon">
+                <Tooltip
+                  placement="topLeft"
+                  title="Navigate"
+                  arrowPointAtCenter
+                >
+                  <IconButton
+                    aria-label="Navigate"
+                    size="small"
+                    onClick={() => handleNavigate()}
+                  >
+                    <ExploreTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+              </span>
+            )}
+        </div>
 
         {renderPaymentDetail()}
       </List>

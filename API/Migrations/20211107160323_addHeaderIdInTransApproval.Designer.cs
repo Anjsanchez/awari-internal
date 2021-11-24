@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211107160323_addHeaderIdInTransApproval")]
+    partial class addHeaderIdInTransApproval
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -279,9 +281,6 @@ namespace API.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid>("reservationHeaderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("transId")
                         .HasColumnType("uniqueidentifier");
 
@@ -329,9 +328,6 @@ namespace API.Migrations
 
                     b.Property<string>("remark")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("reservationHeaderId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("reservationTypeId")
                         .HasColumnType("uniqueidentifier");

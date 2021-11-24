@@ -111,7 +111,6 @@ namespace API.Controllers.approvals
 
             await _rTranRepo.Update(rData);
             return true;
-
         }
 
         [HttpPut("{id}")]

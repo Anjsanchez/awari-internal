@@ -12,12 +12,12 @@ import { store } from "../../../../../utils/store/configureStore";
 import MaterialButton from "./../../../../../common/MaterialButton";
 import FastfoodTwoToneIcon from "@material-ui/icons/FastfoodTwoTone";
 import PieChartTwoToneIcon from "@material-ui/icons/PieChartTwoTone";
+import ActiveButton from "./../../../../../common/form/ActiveButton";
 import AAutoComplete from "./../../../../../common/select/AAutoComplete";
 import ReservationApprovalRemark from "./../../../../../common/ReservationApprovalRemark";
 import { toggleModifyProduct } from "../../../../../utils/store/pages/reservationDetails";
 import { getDiscounts } from "./../../../../../utils/services/pages/functionality/DiscountService";
 import { UpdateDiscountData } from "../../../../../utils/services/pages/reservation/ReservationTrans";
-import ActiveButton from "./../../../../../common/form/ActiveButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {

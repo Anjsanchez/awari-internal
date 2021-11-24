@@ -1,7 +1,10 @@
+import { Spin, Tooltip } from "antd";
+import { useHistory } from "react-router-dom";
+import { Grid, List, IconButton } from "@material-ui/core";
+import ExploreTwoToneIcon from "@material-ui/icons/ExploreTwoTone";
+
 import moment from "moment";
-import { Spin } from "antd";
 import { useSnackbar } from "notistack";
-import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AInput from "./../../../common/antd/AInput";
 import AListItem from "./../../../common/antd/AListItem";
@@ -10,14 +13,16 @@ import GetApprovalStatus from "./../../../common/GetApprovalStatus";
 import { getApprovalTransById } from "./../../../utils/services/pages/approvals/ApprovalTransService";
 
 const TransBody = ({ selectedData }) => {
+  const hist = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [trans, setTrans] = useState({});
   const [initialLoad, setInitialLoad] = useState(false);
 
+  console.log(trans);
   useEffect(() => {
     if (selectedData === null || selectedData === undefined) return null;
 
-    async function getPaymentInDb() {
+    async function getData() {
       try {
         const { data } = await getApprovalTransById(selectedData.tmpTblId);
         setTrans(data.singleRecord);
@@ -29,7 +34,7 @@ const TransBody = ({ selectedData }) => {
       }
     }
 
-    getPaymentInDb();
+    getData();
   }, [selectedData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (selectedData === null || selectedData === undefined) return null;
@@ -43,6 +48,11 @@ const TransBody = ({ selectedData }) => {
 
     return <ActiveButton textTrue={action} value={true} />;
   };
+  const handleNavigate = () =>
+    hist.push(
+      "/a/reservation-management/reservations/" + trans.reservationHeaderId
+    );
+
   const renderPaymentDetail = () => {
     if (!initialLoad)
       return (
@@ -150,7 +160,28 @@ const TransBody = ({ selectedData }) => {
           </Grid>
         </Grid>
 
-        <span className="pBody-title__wrapper">DETAILS</span>
+        <div className="details__container">
+          <span className="pBody-title__wrapper">DETAILS</span>
+          {selectedData.approvedBy === null &&
+            trans.reservationHeaderId !==
+              "00000000-0000-0000-0000-000000000000" && (
+              <span className="hBody-btnIcon">
+                <Tooltip
+                  placement="topLeft"
+                  title="Navigate"
+                  arrowPointAtCenter
+                >
+                  <IconButton
+                    aria-label="Navigate"
+                    size="small"
+                    onClick={() => handleNavigate()}
+                  >
+                    <ExploreTwoToneIcon />
+                  </IconButton>
+                </Tooltip>
+              </span>
+            )}
+        </div>
 
         {renderPaymentDetail()}
       </List>

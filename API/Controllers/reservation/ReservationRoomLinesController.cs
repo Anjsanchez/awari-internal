@@ -199,7 +199,7 @@ namespace API.Controllers.reservation
             tmpMdl.childrenPax = createDto.approvalRoom.childrenPax;
             tmpMdl.mattress = createDto.approvalRoom.mattress;
             tmpMdl.remark = createDto.approvalRoom.remark;
-
+            tmpMdl.reservationHeaderId = reservationRoom.reservationHeaderId;
             tmpMdl._id = new Guid();
             tmpMdl.transId = createDto.transId;
             await _tmpRepo.Create(tmpMdl);

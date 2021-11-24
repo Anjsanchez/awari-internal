@@ -20,6 +20,7 @@ namespace API.Models.approval
 
         public float amount { get; set; }
 
+        public Guid reservationHeaderId { get; set; }
         public Guid paymentId { get; set; }
         public Payment payment { get; set; }
 

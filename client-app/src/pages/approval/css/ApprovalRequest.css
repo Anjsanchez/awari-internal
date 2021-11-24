@@ -22,3 +22,17 @@
 .db-card-list__wrapper.arl .ant-empty {
   height: 365px;
 }
+
+.details__container {
+  text-align: center;
+}
+
+.details__container .pBody-title__wrapper {
+  display: inline-block;
+}
+
+.hBody-btnIcon {
+  padding-top: 10px;
+  right: 0;
+  position: absolute;
+}

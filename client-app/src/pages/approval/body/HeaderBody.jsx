@@ -1,19 +1,21 @@
+import { Spin, Tooltip } from "antd";
+import { useHistory } from "react-router-dom";
+import { Grid, List, IconButton } from "@material-ui/core";
+import ExploreTwoToneIcon from "@material-ui/icons/ExploreTwoTone";
 import moment from "moment";
-import { Spin } from "antd";
 import { useSnackbar } from "notistack";
-import { Grid, List } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
 import AInput from "../../../common/antd/AInput";
+import React, { useEffect, useState } from "react";
 import AListItem from "../../../common/antd/AListItem";
 import ActiveButton from "../../../common/form/ActiveButton";
 import GetApprovalStatus from "../../../common/GetApprovalStatus";
 import { getApprovalHeaderById } from "./../../../utils/services/pages/approvals/ApprovalHeaderService";
 
 const HeaderBody = ({ selectedData }) => {
-  const { enqueueSnackbar } = useSnackbar();
+  const hist = useHistory();
   const [header, setHeader] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
   const [initialLoad, setInitialLoad] = useState(false);
-
   useEffect(() => {
     if (selectedData === null || selectedData === undefined) return null;
 
@@ -41,6 +43,10 @@ const HeaderBody = ({ selectedData }) => {
       return <ActiveButton textFalse="Delete" value={false} />;
 
     return <ActiveButton textTrue="Modify" isWarning={true} />;
+  };
+
+  const handleNavigate = (id) => {
+    hist.push("/a/reservation-management/reservations/" + header.transId);
   };
 
   const renderPaymentDetail = () => {
@@ -158,7 +164,22 @@ const HeaderBody = ({ selectedData }) => {
           </Grid>
         </Grid>
 
-        <span className="pBody-title__wrapper">DETAILS</span>
+        <div className="details__container">
+          <span className="pBody-title__wrapper">DETAILS</span>
+          {selectedData.approvedBy === null && (
+            <span className="hBody-btnIcon">
+              <Tooltip placement="topLeft" title="Navigate" arrowPointAtCenter>
+                <IconButton
+                  aria-label="Navigate"
+                  size="small"
+                  onClick={() => handleNavigate()}
+                >
+                  <ExploreTwoToneIcon />
+                </IconButton>
+              </Tooltip>
+            </span>
+          )}
+        </div>
 
         {renderPaymentDetail()}
       </List>
