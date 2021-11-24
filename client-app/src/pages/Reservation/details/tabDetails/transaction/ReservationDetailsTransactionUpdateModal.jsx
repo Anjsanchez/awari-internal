@@ -68,8 +68,7 @@ const ReservationDetailsTransactionUpdateModal = ({
     action: "DELETE",
   });
 
-  const { product, quantity, seniorPax, discount, pendingStatus } =
-    selectedTrans;
+  const { product, quantity, seniorPax, discount } = selectedTrans;
 
   useEffect(() => {
     setSenior(seniorPax);
