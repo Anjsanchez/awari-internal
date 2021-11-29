@@ -1,4 +1,5 @@
 using System;
+using API.Models.rooms;
 
 namespace API.Dto.trans.room
 {
@@ -14,6 +15,10 @@ namespace API.Dto.trans.room
         public Guid? roomId { get; set; }
 
         public Guid? discountId { get; set; }
+
+        public Guid? roomPricingId { get; set; }
+
+        public Int32 lateCheckOutPenalty { get; set; } = 0;
 
         public float grossAmount { get; set; }
         public float totalDiscount { get; set; }

@@ -28,7 +28,7 @@ const ReservationDetails = () => {
 
         if (data.header === null || data.header === undefined)
           hist.replace("/a/reservation-management/reservations");
-
+        console.log("ws");
         store.dispatch(addRDetails(data));
 
         if (isMounted()) setInitialLoadForm(true);

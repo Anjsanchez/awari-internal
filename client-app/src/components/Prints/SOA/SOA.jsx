@@ -281,7 +281,7 @@ const SOAe = ({
     );
   };
 
-  const renderTotalRoomCharges = (d, isFormatted = true) => {
+  const renderSubTotalRoomCharges = (d, isFormatted = true) => {
     const roomCharges = d.grossAmount;
 
     if (isDayTour) {
@@ -330,7 +330,7 @@ const SOAe = ({
     return formatNumber(total);
   };
 
-  const renderTotalDiscount = (d, isFormatted = true) => {
+  const renderSubTotalDiscount = (d, isFormatted = true) => {
     const roomDiscount = d.totalDiscount;
 
     if (isDayTour) {
@@ -379,11 +379,21 @@ const SOAe = ({
     return formatNumber(total);
   };
 
-  const renderRoomsxSubTotal = (d) => {
-    const totalCharges = renderTotalRoomCharges(d, false);
-    const totalDiscount = renderTotalDiscount(d, false);
+  const renderSubTotalLateCheckOut = (d) => {
+    if (isDayTour) return 0;
+    if (d.lateCheckOutPenalty === 0) return 0;
 
-    return formatNumber(totalCharges - totalDiscount);
+    const total = d.roomPricing.sellingPrice * (d.lateCheckOutPenalty / 100);
+
+    return total;
+  };
+
+  const renderRoomsxSubTotal = (d) => {
+    const totalCharges = renderSubTotalRoomCharges(d, false);
+    const totalDiscount = renderSubTotalDiscount(d, false);
+    const totalRoomLatecheck = renderSubTotalLateCheckOut(d);
+
+    return formatNumber(totalCharges + totalRoomLatecheck - totalDiscount);
   };
 
   const renderTotalPayment = (isFormatted = true) => {
@@ -404,7 +414,7 @@ const SOAe = ({
       0
     );
 
-    const total = grossAmountRooms + grossAmountTrans;
+    const total = grossAmountRooms + getNetLateCheckOut() + grossAmountTrans;
     if (!isFormatted) return total;
     return formatNumber(total);
   };
@@ -439,9 +449,25 @@ const SOAe = ({
       0
     );
 
-    const total = grossAmountRooms + grossAmountTrans;
+    const netLateCheckOut = getNetLateCheckOut();
+
+    const total = grossAmountRooms + netLateCheckOut + grossAmountTrans;
+
     if (!isFormatted) return total;
+
     return formatNumber(total);
+  };
+
+  const getNetLateCheckOut = () => {
+    if (isDayTour) return 0;
+
+    const getTotalCheckOutPercentage = rooms.reduce((a, b) => {
+      if (b.lateCheckOutPenalty === 0) return a;
+      if (b.roomPricing === null) return a;
+      return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
+    }, 0);
+
+    return getTotalCheckOutPercentage;
   };
 
   const renderDayTourLine = (roomsx) => {
@@ -596,6 +622,41 @@ const SOAe = ({
           <Text style={[styles.tableRowText, styles.tableColSub]}>
             {formatNumber(roomsx.totalDiscount)}
           </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderRoomLateCheckOut = (roomsx) => {
+    if (isDayTour) return null;
+    if (roomsx.lateCheckOutPenalty === 0) return null;
+
+    const total =
+      roomsx.roomPricing.sellingPrice * (roomsx.lateCheckOutPenalty / 100);
+
+    return (
+      <View style={[styles.tableRow]}>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol, styles.tableColDescription]}>
+          <Text style={[styles.tableRowText]}>
+            Late check out fee - {roomsx.lateCheckOutPenalty}%
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>
+            {formatNumber(total)}{" "}
+          </Text>
+        </View>
+        <View style={[styles.tableCol]}>
+          <Text style={[styles.tableRowText, styles.tableColSub]}>0</Text>
         </View>
         <View style={[styles.tableCol]}>
           <Text style={[styles.tableRowText, styles.tableColSub]}></Text>
@@ -908,6 +969,8 @@ const SOAe = ({
                 </View>
 
                 {renderRoom(roomsx)}
+
+                {renderRoomLateCheckOut(roomsx)}
 
                 {renderDayTourLine(roomsx)}
 

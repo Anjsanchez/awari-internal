@@ -419,6 +419,8 @@ namespace API.Controllers.reservation
                         grossAmount = trans.grossAmount,
                         mattress = trans.mattress,
                         remark = trans.remark,
+                        lateCheckOutPenalty = trans.lateCheckOutPenalty,
+                        roomPricingId = trans.roomPricingId,
                         roomId = trans.roomId,
                         seniorPax = trans.seniorPax,
                         startDate = trans.startDate,
@@ -711,11 +713,14 @@ namespace API.Controllers.reservation
                 totalPayment += item.amount;
 
             netAmount = globalFunctionalityHelper.getNetAmount(rooms, transLines);
+
             if (netAmount != totalPayment)
                 return false;
 
             return true;
         }
+
+
 
         [HttpGet("CheckOut")]
         public async Task<ActionResult> PostCheckOutReservation(Guid id)

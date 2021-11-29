@@ -35,11 +35,15 @@ const slice = createSlice({
         (a, b) => a + (b.product.sellingPrice * b.quantity - b.netDiscount),
         0
       );
+      console.log("22", rooms);
 
       const getTotalCheckOutPercentage = rooms.reduce((a, b) => {
         if (b.lateCheckOutPenalty === 0) return a;
+        if (b.roomPricing === null) return a;
         return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
       }, 0);
+
+      console.log("223");
 
       resx.totals.netAmount =
         resx.totals.netAmountRooms +

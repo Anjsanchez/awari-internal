@@ -35,6 +35,11 @@ namespace API.Models.trans
         public Int32 seniorPax { get; set; }
         public Int32 childrenPax { get; set; }
 
+        public Guid? roomPricingId { get; set; }
+        public RoomPricing roomPricing { get; set; }
+
+        public Int32 lateCheckOutPenalty { get; set; } = 0;
+
 
         public Int32 mattress { get; set; }
         [StringLength(1000)]

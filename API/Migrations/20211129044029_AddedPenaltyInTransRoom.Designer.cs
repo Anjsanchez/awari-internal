@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211129044029_AddedPenaltyInTransRoom")]
+    partial class AddedPenaltyInTransRoom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1218,9 +1220,6 @@ namespace API.Migrations
                     b.Property<Guid?>("roomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("roomPricingId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("seniorPax")
                         .HasColumnType("int");
 
@@ -1245,8 +1244,6 @@ namespace API.Migrations
                     b.HasIndex("discountId");
 
                     b.HasIndex("roomId");
-
-                    b.HasIndex("roomPricingId");
 
                     b.HasIndex("transHeaderId");
 
@@ -1762,10 +1759,6 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("roomId");
 
-                    b.HasOne("API.Models.rooms.RoomPricing", "roomPricing")
-                        .WithMany()
-                        .HasForeignKey("roomPricingId");
-
                     b.HasOne("API.Models.trans.TransHeader", "transHeader")
                         .WithMany("TransRoom")
                         .HasForeignKey("transHeaderId")
@@ -1781,8 +1774,6 @@ namespace API.Migrations
                     b.Navigation("discount");
 
                     b.Navigation("room");
-
-                    b.Navigation("roomPricing");
 
                     b.Navigation("transHeader");
 

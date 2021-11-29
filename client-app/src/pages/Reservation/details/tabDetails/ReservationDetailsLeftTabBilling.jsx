@@ -49,24 +49,6 @@ const ReservationDetailsLeftTabBilling = () => {
     return <ActiveButton textFalse="Incomplete" />;
   };
 
-  const renderLateCheckOut = () => {
-    if (getTotalCheckOutPercentage === 0) return null;
-
-    return (
-      <>
-        <ListItem button className="reservationDetails-body__span__wrapper">
-          <span className="reservationDetails-body__span__label">
-            Late Check Out
-          </span>
-          <span className="reservationDetails-body__span__detail">
-            {formatNumber(getTotalCheckOutPercentage)} PHP
-          </span>
-        </ListItem>
-        <Divider />
-      </>
-    );
-  };
-
   return (
     <div className="reservationdetails-grid__wrapper first">
       <Card className="reservationDetails-card__wrapper" hoverable>
@@ -84,7 +66,6 @@ const ReservationDetailsLeftTabBilling = () => {
         <Divider light />
         <div className="reservationDetails-body__wrapper">
           <List component="nav" aria-label="mailbox folders">
-            {renderLateCheckOut()}
             <ListItem button className="reservationDetails-body__span__wrapper">
               <span className="reservationDetails-body__span__label">Net</span>
               <span className="reservationDetails-body__span__detail">

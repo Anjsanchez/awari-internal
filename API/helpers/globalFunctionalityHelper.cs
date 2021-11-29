@@ -117,16 +117,37 @@ namespace API.helpers.api
             foreach (var item in roomData)
                 netAmount += item.totalAmount;
 
+            netAmount += getTotalLateCheckOut(roomData);
+
             foreach (var item in linesData)
                 netAmount += item.quantity * item.product.sellingPrice - item.netDiscount;
 
             return netAmount;
         }
+
+        public static float getTotalLateCheckOut(List<ReservationRoomLine> rooms)
+        {
+
+            double incrementFee = 0f;
+            foreach (var item in rooms)
+            {
+                if (item.lateCheckOutPenalty == 0) continue;
+                if (item.roomPricing == null) continue;
+
+                var penaltyPercent = (double)item.lateCheckOutPenalty / 100;
+                incrementFee += item.roomPricing.sellingPrice * penaltyPercent;
+            }
+
+            return (float)incrementFee;
+        }
+
         public static float getGrossAmount(List<ReservationRoomLine> roomData, List<ReservationTransLine> linesData)
         {
             float grossAmount = 0f;
             foreach (var item in roomData)
                 grossAmount += item.grossAmount;
+
+            grossAmount += getTotalLateCheckOut(roomData);
 
             foreach (var item in linesData)
                 grossAmount += item.quantity * item.product.sellingPrice;
