@@ -198,6 +198,7 @@ const ReservationDetailsRoomTable = (props) => {
       userId: headerInStore.user.user.id,
       discountId,
       id: id,
+      roomPricingId: amountPrice.paymentId,
     };
     return objMdl;
   };

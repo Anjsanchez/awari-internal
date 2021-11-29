@@ -21,7 +21,11 @@ namespace API.Dto.reservations.room
 
         public Room room { get; set; }
 
+        public RoomPricing roomPricing { get; set; }
+
         public Status approvalStatus { get; set; }
+
+        public Int32 lateCheckOutPenalty { get; set; } = 0;
 
         public Discount discount { get; set; }
 

@@ -6,6 +6,7 @@ import MDialog from "./../../../../common/MDialog";
 import { Divider, Button } from "@material-ui/core";
 import { store } from "../../../../utils/store/configureStore";
 import ReservationApprovalRemark from "./../../../../common/ReservationApprovalRemark";
+import ReservationDetailsLeftTabLateCheckOut from "./ReservationDetailsLeftTabLateCheckOut";
 import { DeleteReservationHeader } from "./../../../../utils/services/pages/reservation/ReservationHeader";
 
 const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
@@ -13,6 +14,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
+  const [isVisibleLateCheckOut, setIsVisibleLateCheckOut] = useState(false);
   const [askConfirmationApproval, setAskConfirmationApproval] = useState({
     value: false,
     action: "DELETE",
@@ -43,9 +45,8 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
     setAskConfirmation(false);
   };
 
-  const onSuccessRequestApproval = () => {
+  const onSuccessRequestApproval = () =>
     hist.replace("/a/reservation-management/reservations");
-  };
 
   const onDeleteHeaderAdmin = async () => {
     setAskConfirmation(false);
@@ -68,13 +69,39 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
   };
 
   const renderButtonText = () => {
-    if (typeInStore.header.approvalStatus === 1) {
+    if (typeInStore.header.approvalStatus === 1)
       return <span>PENDING APPROVAL</span>;
-    }
 
     return <span>DELETE BOOKING</span>;
   };
 
+  const renderLateChecKout = () => {
+    const { name } = typeInStore.header.reservationType;
+    if (name === "Restaurant" || name === "Day Tour") return null;
+
+    return (
+      <ReservationDetailsLeftTabLateCheckOut
+        visible={isVisibleLateCheckOut}
+        onVisible={() => setIsVisibleLateCheckOut(false)}
+        onCancel={() => setIsVisibleLateCheckOut(false)}
+      />
+    );
+  };
+
+  const renderBtnLateCheckOut = () => {
+    const { name } = typeInStore.header.reservationType;
+    if (name === "Restaurant" || name === "Day Tour") return null;
+    return (
+      <Button
+        onClick={() => setIsVisibleLateCheckOut(true)}
+        variant="contained"
+        color="primary"
+        disabled={isLoading}
+      >
+        <span>Late check out</span>
+      </Button>
+    );
+  };
   return (
     <>
       {askConfirmation && (
@@ -84,6 +111,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
           handleOk={() => onDeleteHeaderAdmin()}
         />
       )}
+      {renderLateChecKout()}
 
       <ReservationApprovalRemark
         approvalType="headers"
@@ -109,14 +137,18 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
           <div className="reservationDetails-body__wrapper">
             <div className="cd-button__container rdltCheckOut">
               {!typeInStore.isTrans && (
-                <Button
-                  onClick={() => handleDelete()}
-                  variant="contained"
-                  color="primary"
-                  disabled={isLoading}
-                >
-                  {renderButtonText()}
-                </Button>
+                <>
+                  {renderBtnLateCheckOut()}
+                  <Button
+                    style={{ marginTop: 5 }}
+                    onClick={() => handleDelete()}
+                    variant="contained"
+                    color="primary"
+                    disabled={isLoading}
+                  >
+                    {renderButtonText()}
+                  </Button>
+                </>
               )}
             </div>
           </div>

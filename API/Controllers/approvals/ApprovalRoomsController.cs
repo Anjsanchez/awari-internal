@@ -98,6 +98,7 @@ namespace API.Controllers.approvals
             rData.childrenPax = aprData.childrenPax;
             rData.mattress = aprData.mattress;
             rData.remark = aprData.remark;
+            rData.roomPricingId = aprData.roomPricingId;
 
             rData.approvalStatus = Status.Approved;
             await _rRoomRepo.Update(rData);

@@ -43,6 +43,7 @@ namespace API.Repository.pages.reservation
                         .Include(n => n.room)
                         .Include(n => n.discount)
                         .Include(n => n.reservationHeader)
+                        .Include(n => n.roomPricing)
                         .Include(n => n.reservationHeader.reservationType)
                         .ToListAsync();
         }
@@ -53,6 +54,7 @@ namespace API.Repository.pages.reservation
                         .Include(n => n.user)
                         .Include(n => n.room)
                         .Include(n => n.discount)
+                        .Include(n => n.roomPricing)
                         .Include(n => n.reservationHeader)
                         .Include(n => n.reservationHeader.reservationType)
                         .FirstOrDefaultAsync(n => n._id == id);

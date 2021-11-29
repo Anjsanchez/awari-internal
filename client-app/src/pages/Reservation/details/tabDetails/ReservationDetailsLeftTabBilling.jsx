@@ -12,6 +12,12 @@ const ReservationDetailsLeftTabBilling = () => {
 
   const { netPayment, netAmount } = detailsInStore.totals;
 
+  const getTotalCheckOutPercentage = detailsInStore.rooms.reduce((a, b) => {
+    if (b.lateCheckOutPenalty === 0) return a;
+    if (b.roomPricing === null) return a;
+    return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
+  }, 0);
+
   const formatNumber = (num) =>
     Intl.NumberFormat().format(Number(num).toFixed(2));
 
@@ -43,6 +49,24 @@ const ReservationDetailsLeftTabBilling = () => {
     return <ActiveButton textFalse="Incomplete" />;
   };
 
+  const renderLateCheckOut = () => {
+    if (getTotalCheckOutPercentage === 0) return null;
+
+    return (
+      <>
+        <ListItem button className="reservationDetails-body__span__wrapper">
+          <span className="reservationDetails-body__span__label">
+            Late Check Out
+          </span>
+          <span className="reservationDetails-body__span__detail">
+            {formatNumber(getTotalCheckOutPercentage)} PHP
+          </span>
+        </ListItem>
+        <Divider />
+      </>
+    );
+  };
+
   return (
     <div className="reservationdetails-grid__wrapper first">
       <Card className="reservationDetails-card__wrapper" hoverable>
@@ -60,6 +84,7 @@ const ReservationDetailsLeftTabBilling = () => {
         <Divider light />
         <div className="reservationDetails-body__wrapper">
           <List component="nav" aria-label="mailbox folders">
+            {renderLateCheckOut()}
             <ListItem button className="reservationDetails-body__span__wrapper">
               <span className="reservationDetails-body__span__label">Net</span>
               <span className="reservationDetails-body__span__detail">

@@ -22,6 +22,9 @@ namespace API.Models.approval
 
         public Guid reservationHeaderId { get; set; }
 
+        public Guid? roomPricingId { get; set; }
+        public RoomPricing roomPricing { get; set; }
+
         public Guid reservationTypeId { get; set; }
         public ReservationType reservationType { get; set; }
 

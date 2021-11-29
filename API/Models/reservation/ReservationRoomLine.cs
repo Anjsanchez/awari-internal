@@ -28,6 +28,8 @@ namespace API.Models.reservation
         public Guid? roomId { get; set; }
         public Room room { get; set; }
 
+        public Guid? roomPricingId { get; set; }
+        public RoomPricing roomPricing { get; set; }
 
         public float grossAmount { get; set; }
         public float totalDiscount { get; set; }
@@ -38,6 +40,7 @@ namespace API.Models.reservation
         public Int32 seniorPax { get; set; }
         public Int32 childrenPax { get; set; }
 
+        public Int32 lateCheckOutPenalty { get; set; } = 0;
 
         public Int32 mattress { get; set; }
         [StringLength(1000)]

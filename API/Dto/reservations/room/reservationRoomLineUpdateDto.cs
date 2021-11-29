@@ -17,6 +17,8 @@ namespace API.Dto.reservations.room
 
         public Guid roomId { get; set; }
 
+        public Guid? roomPricingId { get; set; }
+
         public Guid? discountId { get; set; }
 
         public float grossAmount { get; set; }

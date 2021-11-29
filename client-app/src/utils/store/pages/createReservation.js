@@ -46,6 +46,7 @@ const slice = createSlice({
         netDiscount: 0,
         netAmount: 0,
         grossAmount: 0,
+        paymentId: null,
       },
     },
     isLoading: false,
@@ -169,10 +170,11 @@ const slice = createSlice({
       resx.rooms.addOns.remarks = action.payload;
     },
     roomLinesSelectedAmountAdded: (resx, action) => {
-      const { grossAmount, netAmount, netDiscount } = action.payload;
+      const { grossAmount, netAmount, netDiscount, paymentId } = action.payload;
       resx.rooms.amountPrice.grossAmount = grossAmount;
       resx.rooms.amountPrice.netAmount = netAmount;
       resx.rooms.amountPrice.netDiscount = netDiscount;
+      resx.rooms.amountPrice.paymentId = paymentId;
     },
     roomLinesResetValue: (re, action) => {
       re.rooms.id = "";
@@ -183,6 +185,7 @@ const slice = createSlice({
       re.rooms.discount = {};
       re.rooms.addOns = { mattress: 0, remarks: "" };
       re.rooms.amountPrice = { netAmount: 0, netDiscount: 0, grossAmount: 0 };
+      re.rooms.approvalStatus = 0;
     },
   },
 });

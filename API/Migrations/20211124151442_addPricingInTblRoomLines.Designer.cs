@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211124151442_addPricingInTblRoomLines")]
+    partial class addPricingInTblRoomLines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -339,9 +341,6 @@ namespace API.Migrations
                     b.Property<Guid?>("roomId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("roomPricingId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("seniorPax")
                         .HasColumnType("int");
 
@@ -364,8 +363,6 @@ namespace API.Migrations
                     b.HasIndex("reservationTypeId");
 
                     b.HasIndex("roomId");
-
-                    b.HasIndex("roomPricingId");
 
                     b.ToTable("ApprovalRooms");
                 });
@@ -794,9 +791,6 @@ namespace API.Migrations
 
                     b.Property<float>("grossAmount")
                         .HasColumnType("real");
-
-                    b.Property<int>("lateCheckOutPenalty")
-                        .HasColumnType("int");
 
                     b.Property<int>("mattress")
                         .HasColumnType("int");
@@ -1342,17 +1336,11 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("roomId");
 
-                    b.HasOne("API.Models.rooms.RoomPricing", "roomPricing")
-                        .WithMany()
-                        .HasForeignKey("roomPricingId");
-
                     b.Navigation("discount");
 
                     b.Navigation("reservationType");
 
                     b.Navigation("room");
-
-                    b.Navigation("roomPricing");
                 });
 
             modelBuilder.Entity("API.Models.approval.ApprovalTrans", b =>

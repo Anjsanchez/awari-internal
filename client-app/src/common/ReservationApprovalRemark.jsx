@@ -124,6 +124,7 @@ const ReservationApprovalRemark = ({
         childrenPax: storeS.heads.children,
         mattress: storeS.addOns.mattress,
         remark: storeS.addOns.remarks,
+        roomPricingId: storeS.amountPrice.paymentId,
       },
     };
   };

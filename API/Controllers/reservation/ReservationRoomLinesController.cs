@@ -114,6 +114,20 @@ namespace API.Controllers.reservation
             });
         }
 
+        [HttpPut("UpdateAdditionalRates/{id}")]
+        public async Task<ActionResult> UpdateAdditionalRates(Guid id, reservationRoomLineAdditionalRoomDto lineDto)
+        {
+            var reservationRoomLine = await _repo.FindById(id);
+            if (reservationRoomLine == null)
+                return NotFound("ReservationRoomLine not found in the database");
+
+            reservationRoomLine.lateCheckOutPenalty = lineDto.lateCheckOutPenalty;
+            await _repo.Update(reservationRoomLine);
+            await _repo.Save();
+
+            return Ok();
+        }
+
         [HttpPut("UpdateHeadsOnWalkIn/{id}")]
         public async Task<ActionResult> UpdateHeadsOnWalkIn(Guid id, reservationRoomLineWalkInUpdateDto lineDto)
         {
@@ -200,7 +214,10 @@ namespace API.Controllers.reservation
             tmpMdl.mattress = createDto.approvalRoom.mattress;
             tmpMdl.remark = createDto.approvalRoom.remark;
             tmpMdl.reservationHeaderId = reservationRoom.reservationHeaderId;
+            tmpMdl.roomPricingId = createDto.approvalRoom.roomPricingId;
+
             tmpMdl._id = new Guid();
+
             tmpMdl.transId = createDto.transId;
             await _tmpRepo.Create(tmpMdl);
 

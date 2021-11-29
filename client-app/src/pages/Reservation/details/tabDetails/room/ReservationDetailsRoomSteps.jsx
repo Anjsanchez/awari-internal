@@ -108,6 +108,7 @@ const ReservationDetailsRoomSteps = ({
 
     setAskConfirmation(false);
   };
+
   const handleDialogShow = () => {
     setCurAction("update");
 

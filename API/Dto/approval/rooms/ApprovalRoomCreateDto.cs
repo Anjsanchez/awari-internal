@@ -7,6 +7,7 @@ namespace API.Dto.approval
         public DateTime startDate { get; set; }
         public DateTime endDate { get; set; }
         public Guid? discountId { get; set; }
+        public Guid? roomPricingId { get; set; }
         public Guid roomId { get; set; }
 
         public float grossAmount { get; set; }

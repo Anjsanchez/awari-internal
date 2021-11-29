@@ -38,3 +38,11 @@ export function PostCreateRoomLinesApproval(Lines) {
   http.SetJwt();
   return http.put(apiEndpoint + "/CreateRoomsApproval/" + Lines.transId, Lines);
 }
+
+export function UpdateAdditionalRates(Lines) {
+  http.SetJwt();
+  return http.put(
+    apiEndpoint + "/UpdateAdditionalRates/" + Lines.transId,
+    Lines
+  );
+}

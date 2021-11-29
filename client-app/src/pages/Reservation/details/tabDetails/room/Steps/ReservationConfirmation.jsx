@@ -5,18 +5,18 @@ import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import AListItem from "./../../../../../../common/antd/AListItem";
 import KingBedTwoToneIcon from "@material-ui/icons/KingBedTwoTone";
+import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import { store } from "../../../../../../utils/store/configureStore";
 import { writeToken } from "../../../../../../utils/store/pages/users";
 import ActiveButton from "./../../../../../../common/form/ActiveButton";
-import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
 import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
+import GetApprovalStatus from "./../../../../../../common/GetApprovalStatus";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
 import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
-import GetApprovalStatus from "./../../../../../../common/GetApprovalStatus";
 import {
   roomLinesSelectedAmountAdded,
   toggleLoading,
@@ -123,7 +123,9 @@ const ReservationConfirmation = () => {
       grossAmount: cGrossAmt,
       netAmount: total,
       netDiscount: cNetDiscount,
+      paymentId: cRoomPrice._id,
     };
+
     store.dispatch(roomLinesSelectedAmountAdded(obj));
     store.dispatch(toggleLoading(false));
   }, [cNetDiscount, cGrossAmt, cMattressAmt]); //..NET AMOUNT
