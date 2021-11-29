@@ -90,4 +90,9 @@ export const resortMgmtPagesData = [
     title: "Products - Classification",
     description: "Products - Classification",
   },
+  {
+    key: 19,
+    title: "View Reservations",
+    description: "View Reservations",
+  },
 ];

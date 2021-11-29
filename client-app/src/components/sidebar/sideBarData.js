@@ -9,6 +9,9 @@ import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone"
 import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
 import AnnouncementTwoToneIcon from "@material-ui/icons/AnnouncementTwoTone";
+import FeaturedPlayListTwoToneIcon from "@material-ui/icons/FeaturedPlayListTwoTone";
+import BeenhereTwoToneIcon from "@material-ui/icons/BeenhereTwoTone";
+
 export const sideBarData = [
   {
     title: "General",
@@ -35,9 +38,15 @@ export const sideBarData = [
     subNav: [
       {
         subTitle: "Active Bookings",
-        icon: <BallotTwoToneIcon />,
+        icon: <BeenhereTwoToneIcon />,
         path: "/a/reservation-management/reservations",
         id: 2,
+      },
+      {
+        subTitle: "View Reservations",
+        icon: <FeaturedPlayListTwoToneIcon />,
+        path: "/a/reservation-management/view-reservations",
+        id: 19,
       },
     ],
   },

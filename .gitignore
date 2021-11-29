@@ -46,4 +46,5 @@ Version.h
 Version.cpp
 printer-worker/printer-worker/obj/debug
 printer-worker/printer-worker/bin/debug/resortMgmt.xml
- 
+ API/appsettings.Development.json
+API/appsettings.Development.json
