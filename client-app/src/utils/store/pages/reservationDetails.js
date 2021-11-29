@@ -16,7 +16,6 @@ const slice = createSlice({
     },
     isTrans: false,
   },
-
   reducers: {
     addRDetails: (resx, action) => {
       const { payments, header, rooms, trans, isTrans } = action.payload;
@@ -27,6 +26,7 @@ const slice = createSlice({
 
       resx.isTrans = isTrans;
       resx.totals.netPayment = resx.payments.reduce((a, b) => a + b.amount, 0);
+
       resx.totals.netAmountRooms = resx.rooms.reduce(
         (a, b) => a + b.totalAmount,
         0
@@ -35,8 +35,16 @@ const slice = createSlice({
         (a, b) => a + (b.product.sellingPrice * b.quantity - b.netDiscount),
         0
       );
+
+      const getTotalCheckOutPercentage = rooms.reduce((a, b) => {
+        if (b.lateCheckOutPenalty === 0) return a;
+        return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
+      }, 0);
+
       resx.totals.netAmount =
-        resx.totals.netAmountRooms + resx.totals.netAmountTrans;
+        resx.totals.netAmountRooms +
+        resx.totals.netAmountTrans +
+        getTotalCheckOutPercentage;
     },
     addRPayments: (resx, action) => {
       resx.payments = [...action.payload];
@@ -100,6 +108,33 @@ const slice = createSlice({
       trans[i].approvalStatus = 1;
       r.trans = trans;
     },
+    toggleModifyLateCheckOutPenalty: (r, a) => {
+      const { transId, lateCheckOutPenalty } = a.payload;
+      const rooms = [...r.rooms];
+
+      const i = rooms.findIndex((x) => x._id === transId);
+
+      rooms[i] = { ...rooms[i] };
+      rooms[i].lateCheckOutPenalty = lateCheckOutPenalty;
+      r.rooms = rooms;
+
+      r.totals.netAmountRooms = r.rooms.reduce((a, b) => a + b.totalAmount, 0);
+      r.totals.netAmountTrans = r.trans.reduce(
+        (a, b) => a + (b.product.sellingPrice * b.quantity - b.netDiscount),
+        0
+      );
+
+      const getTotalCheckOutPercentage = rooms.reduce((a, b) => {
+        if (b.lateCheckOutPenalty === 0) return a;
+        if (b.roomPricing === null) return a;
+        return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
+      }, 0);
+
+      r.totals.netAmount =
+        r.totals.netAmountRooms +
+        r.totals.netAmountTrans +
+        getTotalCheckOutPercentage;
+    },
     toggleHeaderActiveStatus: (r, a) => {
       r.header.isActive = true;
     },
@@ -116,5 +151,6 @@ export const {
   toggleHeaderActiveStatus,
   toggleModifyProduct,
   toggleModifyApprovalStatusTrans,
+  toggleModifyLateCheckOutPenalty,
 } = slice.actions;
 export default slice.reducer;
