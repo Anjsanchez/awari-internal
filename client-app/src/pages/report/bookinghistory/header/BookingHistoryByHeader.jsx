@@ -213,9 +213,13 @@ const BookingHistoryByHeader = () => {
 
     return <BhByHeaderBody filteredTransHeader={filteredTransHeader} />;
   };
+
   return (
     <>
       <BookingHistoryHeader
+        onExportBtnDate={selectedDate}
+        onExportBtnData={filteredTransHeader}
+        onExportBtnShow={true}
         title="By Booking - History"
         onFilterShow={onFilterShow}
       />
