@@ -50,8 +50,11 @@ namespace API
     public class Startup
     {
         public IConfiguration _config { get; }
-        public Startup(IConfiguration config)
+        private IWebHostEnvironment _env { get; set; }
+
+        public Startup(IConfiguration config, IWebHostEnvironment env)
         {
+            _env = env;
             _config = config;
         }
 
@@ -63,8 +66,17 @@ namespace API
 
             services.Configure<jwtConfig>(_config.GetSection("JwtConfig"));
 
-            services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
-                (_config.GetConnectionString("resortConnection")));
+            if (_env.IsDevelopment())
+            {
+                services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+                          (_config.GetConnectionString("productionConnection")));
+            }
+            if (_env.IsProduction())
+            {
+                services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+               (_config.GetConnectionString("productionConnection")));
+            }
+
 
             services.AddControllers().AddNewtonsoftJson(s =>
             {
