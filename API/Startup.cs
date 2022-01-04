@@ -69,7 +69,7 @@ namespace API
             if (_env.IsDevelopment())
             {
                 services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
-                          (_config.GetConnectionString("productionConnection")));
+                          (_config.GetConnectionString("resortConnection")));
             }
             if (_env.IsProduction())
             {
