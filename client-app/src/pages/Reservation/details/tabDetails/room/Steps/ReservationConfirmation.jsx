@@ -128,7 +128,7 @@ const ReservationConfirmation = () => {
 
     store.dispatch(roomLinesSelectedAmountAdded(obj));
     store.dispatch(toggleLoading(false));
-  }, [cNetDiscount, cGrossAmt, cMattressAmt]); //..NET AMOUNT
+  }, [cNetDiscount, cGrossAmt, cMattressAmt]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const renderDiscountValue = () => {
     const { _id, name, value } = storeData.discount;

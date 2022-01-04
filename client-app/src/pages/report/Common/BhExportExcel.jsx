@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Button } from "@material-ui/core";
 import ReactExport from "react-data-export";
 import FileDownloadTwoToneIcon from "@mui/icons-material/FileDownloadTwoTone";
@@ -53,7 +53,7 @@ const initializeDetailedDataSet = (data) => {
       { value: formatNumber(n.netAmount) },
     ];
 
-    preData.push(value);
+    return preData.push(value);
   });
 
   return preData;

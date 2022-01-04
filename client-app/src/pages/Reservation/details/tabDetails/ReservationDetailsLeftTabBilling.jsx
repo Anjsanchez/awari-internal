@@ -12,12 +12,6 @@ const ReservationDetailsLeftTabBilling = () => {
 
   const { netPayment, netAmount } = detailsInStore.totals;
 
-  const getTotalCheckOutPercentage = detailsInStore.rooms.reduce((a, b) => {
-    if (b.lateCheckOutPenalty === 0) return a;
-    if (b.roomPricing === null) return a;
-    return a + b.roomPricing.sellingPrice * (b.lateCheckOutPenalty / 100);
-  }, 0);
-
   const formatNumber = (num) =>
     Intl.NumberFormat().format(Number(num).toFixed(2));
 
