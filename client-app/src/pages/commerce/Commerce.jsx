@@ -119,7 +119,7 @@ const Commerce = () => {
     if (selectedPrice === 7) return { from: 500, to: 700 };
     if (selectedPrice === 9) return { from: 700, to: 900 };
     if (selectedPrice === 10) return { from: 1000, to: 90000 };
-    return { from: 0, to: 90000 };
+    return { from: 0, to: 1000000 };
   };
 
   const onFilterShow = () => setIsFilterDrawerShow(!isFilterDrawerShow);
