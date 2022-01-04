@@ -112,7 +112,7 @@ const Commerce = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getPriceRange = () => {
-    if (selectedPrice === 0) return { from: 0, to: 90000 };
+    if (selectedPrice === 0) return { from: 0, to: 1000000 };
     if (selectedPrice === 1) return { from: 0, to: 100 };
     if (selectedPrice === 3) return { from: 100, to: 300 };
     if (selectedPrice === 5) return { from: 300, to: 500 };
