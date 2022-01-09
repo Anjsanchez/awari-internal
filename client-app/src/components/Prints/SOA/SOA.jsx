@@ -644,7 +644,7 @@ const SOAe = ({
         </View>
         <View style={[styles.tableCol, styles.tableColDescription]}>
           <Text style={[styles.tableRowText]}>
-            Late check out fee - {roomsx.lateCheckOutPenalty}%
+            Late Check-Out Fee - {roomsx.lateCheckOutPenalty}%
           </Text>
         </View>
         <View style={[styles.tableCol]}>
