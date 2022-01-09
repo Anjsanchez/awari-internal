@@ -26,7 +26,7 @@ const ReservationDetailsLeftTabBilling = () => {
       return (
         <ActiveButton
           isWarning={true}
-          textTrue={fNetAmt - fNetPayment + "PHP"}
+          textTrue={(fNetAmt - fNetPayment).toFixed(2) + "PHP"}
         />
       );
 
