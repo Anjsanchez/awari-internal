@@ -83,9 +83,11 @@ const ReservationConfirmation = () => {
   useEffect(() => {
     const daysNum = getNumberOfDays();
 
+    const late = getTotalOfLateCheckOut();
+
     const total = cRoomPrice.sellingPrice * daysNum;
 
-    setCGrossAmt(total);
+    setCGrossAmt(total + late);
   }, [cRoomPrice]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //..NET DISCOUNT
