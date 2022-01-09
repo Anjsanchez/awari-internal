@@ -1,4 +1,5 @@
 import moment from "moment";
+import { useSnackbar } from "notistack";
 import "./css/ReservationConfirmation.css";
 import { Grid, List } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
@@ -6,6 +7,7 @@ import AListItem from "./../../../../../../common/antd/AListItem";
 import KingBedTwoToneIcon from "@material-ui/icons/KingBedTwoTone";
 import ScheduleTwoToneIcon from "@material-ui/icons/ScheduleTwoTone";
 import { store } from "../../../../../../utils/store/configureStore";
+import { writeToken } from "../../../../../../utils/store/pages/users";
 import ActiveButton from "./../../../../../../common/form/ActiveButton";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccessAlarmTwoToneIcon from "@material-ui/icons/AccessAlarmTwoTone";
@@ -13,6 +15,7 @@ import QueryBuilderTwoToneIcon from "@material-ui/icons/QueryBuilderTwoTone";
 import GetApprovalStatus from "./../../../../../../common/GetApprovalStatus";
 import AssignmentIndTwoToneIcon from "@material-ui/icons/AssignmentIndTwoTone";
 import MonetizationOnTwoToneIcon from "@material-ui/icons/MonetizationOnTwoTone";
+import { getRoomPricingsByRoomId } from "./../../../../../../utils/services/pages/rooms/RoomPricing";
 import AirlineSeatIndividualSuiteTwoToneIcon from "@material-ui/icons/AirlineSeatIndividualSuiteTwoTone";
 import {
   roomLinesSelectedAmountAdded,
@@ -20,32 +23,72 @@ import {
 } from "../../../../../../utils/store/pages/createReservation";
 //
 const ReservationConfirmation = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [cGrossAmt, setCGrossAmt] = useState(0);
   const [cNetAmount, setCNetAmount] = useState(0);
+  const [cRoomPrice, setCRoomPrice] = useState({});
   const [cMattressAmt, setCMattressAmt] = useState(0);
   const [cNetDiscount, setCNetDiscount] = useState(0);
 
   const storeData = store.getState().entities.createReservation.rooms;
 
-  const onSetMattress = () => {
+  useEffect(() => {
+    async function populatePricing() {
+      if (Object.keys(storeData.selectedStartDate.room).length === 0) return;
+
+      try {
+        const { data } = await getRoomPricingsByRoomId(
+          storeData.selectedStartDate.room._id
+        );
+
+        const { listRecords } = data;
+
+        const sortedPayment = listRecords.sort(
+          (a, b) => b.capacity - a.capacity
+        );
+
+        const { adult, senior } = storeData.heads;
+        const totalPax = adult + senior;
+
+        let price = sortedPayment.find((n) => totalPax >= n.capacity);
+
+        if (price === undefined) {
+          price = sortedPayment
+            .sort((a, b) => a.capacity - b.capacity)
+            .find((n) => totalPax <= n.capacity);
+        }
+
+        setCRoomPrice(price);
+      } catch (error) {
+        enqueueSnackbar("0032: An error occured in the server.", {
+          variant: "error",
+        });
+      }
+    }
+
+    populatePricing();
+  }, [storeData]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  //..NET MATTRESS
+  useEffect(() => {
     const { mattress } = storeData.addOns;
 
     if (mattress === 0) return setCMattressAmt(0);
 
     const total = mattress * 2420;
-
     setCMattressAmt(total);
-  };
+  }, [cRoomPrice]); // eslint-disable-line react-hooks/exhaustive-deps
+
   //..GROSS AMOUNT
   useEffect(() => {
-    onSetMattress();
     const daysNum = getNumberOfDays();
 
     const late = getTotalOfLateCheckOut();
 
-    const total = storeData.roomPricing.sellingPrice * daysNum;
+    const total = cRoomPrice.sellingPrice * daysNum;
+
     setCGrossAmt(total + late);
-  }, [storeData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [cRoomPrice]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //..NET DISCOUNT
   useEffect(() => {
@@ -82,7 +125,7 @@ const ReservationConfirmation = () => {
       grossAmount: cGrossAmt,
       netAmount: total,
       netDiscount: cNetDiscount,
-      paymentId: storeData.roomPricing._id,
+      paymentId: cRoomPrice._id,
     };
 
     store.dispatch(roomLinesSelectedAmountAdded(obj));
@@ -116,9 +159,8 @@ const ReservationConfirmation = () => {
   };
 
   const getRoomName = () => {
-    console.log("X", storeData);
     const priceFormat = Intl.NumberFormat().format(
-      Number(storeData.amountPrice.netAmount).toFixed(2)
+      Number(cRoomPrice.sellingPrice).toFixed(2)
     );
 
     return (
