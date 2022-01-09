@@ -172,6 +172,27 @@ const ReservationConfirmation = () => {
   const formatNumber = (num) =>
     Intl.NumberFormat().format(Number(num).toFixed(2));
 
+  const getTotalOfLateCheckOut = () => {
+    if (storeData.lateCheckOutPenalty === 0) return 0;
+    if (storeData.roomPricing === null) return 0;
+    return (
+      storeData.roomPricing.sellingPrice * (storeData.lateCheckOutPenalty / 100)
+    );
+  };
+  const renderLateCheckOut = () => {
+    if (getTotalOfLateCheckOut() === 0) return null;
+    return (
+      <AListItem
+        txtLbl="Late Check-Out"
+        txtValue={
+          <ActiveButton
+            value={true}
+            textTrue={formatNumber(getTotalOfLateCheckOut()) + " PHP"}
+          />
+        }
+      />
+    );
+  };
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -231,6 +252,7 @@ const ReservationConfirmation = () => {
 
         <div className="reservationtype-container">
           <List component="nav" aria-label="mailbox folders">
+            {renderLateCheckOut()}
             <AListItem
               txtLbl="Gross Amount"
               txtValue={
