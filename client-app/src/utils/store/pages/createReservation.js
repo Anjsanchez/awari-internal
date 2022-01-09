@@ -186,6 +186,8 @@ const slice = createSlice({
     },
     roomLinesResetValue: (re, action) => {
       re.rooms.id = "";
+      re.rooms.roomPricing = {};
+      re.rooms.lateCheckOutPenalty = 0;
       re.rooms.date = { fromDate: moment(), toDate: moment() };
       re.rooms.heads = { adult: 0, children: 0, senior: 0 };
       re.rooms.selectedStartDate = { room: {}, date: "" };
