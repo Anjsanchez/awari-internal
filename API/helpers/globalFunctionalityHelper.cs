@@ -125,6 +125,7 @@ namespace API.helpers.api
             return netAmount;
         }
 
+
         public static float getTotalLateCheckOut(List<ReservationRoomLine> rooms)
         {
 

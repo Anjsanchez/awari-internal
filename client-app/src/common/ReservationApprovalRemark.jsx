@@ -168,9 +168,9 @@ const ReservationApprovalRemark = ({
       }
       if (approvalType === "rooms") {
         obj = setObjDbModeRooms();
-        await PostCreateRoomLinesApproval(obj)
-          .catch((a) => setIsLoading(false))
-          .finally((b) => setIsLoading(false));
+        await PostCreateRoomLinesApproval(obj).finally((b) =>
+          setIsLoading(false)
+        );
       }
       if (approvalType === "headers") {
         obj = setObjDbModelHeader();
@@ -188,7 +188,7 @@ const ReservationApprovalRemark = ({
         });
       }, 50);
     } catch (ex) {
-      if (ex && ex.status === 400)
+      if ((ex && ex.status === 400) || ex.status === 404)
         enqueueSnackbar("0039: " + ex.data, { variant: "error" });
     } finally {
       setIsLoading(false);

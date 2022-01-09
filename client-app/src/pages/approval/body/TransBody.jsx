@@ -18,7 +18,6 @@ const TransBody = ({ selectedData }) => {
   const [trans, setTrans] = useState({});
   const [initialLoad, setInitialLoad] = useState(false);
 
-  console.log(trans);
   useEffect(() => {
     if (selectedData === null || selectedData === undefined) return null;
 

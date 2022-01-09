@@ -164,7 +164,8 @@ const ReservationDetailsRoomTable = (props) => {
       setSelectedRoom([]);
       onSuccessDelete(obj);
     } catch (ex) {
-      if (ex && ex.status === 400)
+      console.log("e", ex);
+      if ((ex && ex.status === 400) || ex.status === 404)
         enqueueSnackbar("0061: " + ex.data, { variant: "error" });
     }
   };

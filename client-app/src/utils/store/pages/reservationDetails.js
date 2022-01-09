@@ -110,7 +110,6 @@ const slice = createSlice({
       r.trans = trans;
     },
     toggleModifyLateCheckOutPenalty: (r, a) => {
-      console.log("try", a.payload);
       const { transId, lateCheckOutPenalty } = a.payload;
       const rooms = [...r.rooms];
 
