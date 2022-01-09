@@ -16,23 +16,18 @@ const ReservationDetailsLeftTabBilling = () => {
     Intl.NumberFormat().format(Number(num).toFixed(2));
 
   const renderAmountRemaining = () => {
-    const netAmt = formatNumber(netAmount);
-    const netPay = formatNumber(netPayment);
-
-    if (formatNumber(netAmt) === formatNumber(netPay))
+    if (formatNumber(netAmount) === formatNumber(netPayment))
       return <ActiveButton value={true} textTrue="0.00 PHP" />;
 
-    if (formatNumber(netAmt) <= formatNumber(netPay))
+    if (netAmount <= netPayment)
       return (
         <ActiveButton
           isWarning={true}
-          textTrue={formatNumber(netAmt - netPay) + "PHP"}
+          textTrue={netAmount - netPayment + "PHP"}
         />
       );
 
-    return (
-      <ActiveButton textFalse={formatNumber(netAmount - netPayment) + "PHP"} />
-    );
+    return <ActiveButton textFalse={netAmount - netPayment + "PHP"} />;
   };
   const renderPaymentStatus = () => {
     if (!detailsInStore.header.isActive) return;
