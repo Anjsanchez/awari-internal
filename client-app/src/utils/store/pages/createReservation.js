@@ -19,6 +19,8 @@ const slice = createSlice({
       id: "",
       createdDate: "",
       approvalStatus: 0,
+      roomPricing: {},
+      lateCheckOutPenalty: 0,
       user: {},
       date: {
         fromDate: moment(),
@@ -69,6 +71,8 @@ const slice = createSlice({
         totalAmount,
         totalDiscount,
         user,
+        lateCheckOutPenalty,
+        roomPricing,
         createdDate,
       } = action.payload;
 
@@ -76,6 +80,10 @@ const slice = createSlice({
 
       const xDiscount =
         discount === null ? { _id: 0, name: "Not Applicable" } : discount;
+
+      resx.rooms.lateCheckOutPenalty = lateCheckOutPenalty;
+      resx.rooms.roomPricing = roomPricing;
+
       resx.rooms.user = user;
       resx.rooms.createdDate = createdDate;
       resx.rooms.id = _id;
@@ -187,6 +195,17 @@ const slice = createSlice({
       re.rooms.amountPrice = { netAmount: 0, netDiscount: 0, grossAmount: 0 };
       re.rooms.approvalStatus = 0;
     },
+    // roomLineLateCheckOut: (re, action) => {
+
+    //   const { transId, lateCheckOutPenalty } = a.payload;
+    //   const rooms = [...r.rooms];
+
+    //   const i = rooms.findIndex((x) => x._id === transId);
+
+    //   rooms[i] = { ...rooms[i] };
+    //   rooms[i].lateCheckOutPenalty = lateCheckOutPenalty;
+
+    // },
   },
 });
 
