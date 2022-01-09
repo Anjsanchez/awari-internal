@@ -82,8 +82,7 @@ const ReservationConfirmation = () => {
       grossAmount: cGrossAmt,
       netAmount: total,
       netDiscount: cNetDiscount,
-      // paymentId: cRoomPrice._id,
-      paymentId: 0,
+      paymentId: storeData.roomPricing._id,
     };
 
     store.dispatch(roomLinesSelectedAmountAdded(obj));
@@ -117,6 +116,7 @@ const ReservationConfirmation = () => {
   };
 
   const getRoomName = () => {
+    console.log("X", storeData);
     const priceFormat = Intl.NumberFormat().format(
       Number(storeData.amountPrice.netAmount).toFixed(2)
     );
