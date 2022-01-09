@@ -76,6 +76,15 @@ const ReservationDetailsRoomTableRow = (props) => {
     return childrenPax + adultPax + seniorPax;
   };
 
+  const renderTotalAmountRows = (row) => {
+    if (row.lateCheckOutPenalty === 0) return row.totalAmount;
+    if (row.roomPricing === null) return row.totalAmount;
+
+    const lateCheckOut =
+      row.roomPricing.sellingPrice * (row.lateCheckOutPenalty / 100);
+    return Number(row.totalAmount + lateCheckOut).toFixed(2);
+  };
+
   return (
     <TableBody style={{ width: "100%" }}>
       {stableSort(rows, getComparator(order, orderBy))
@@ -109,7 +118,7 @@ const ReservationDetailsRoomTableRow = (props) => {
               <TableCell align="right">
                 <span className={classes.rowSpan}>
                   {Intl.NumberFormat().format(
-                    Number(row.totalAmount).toFixed(2)
+                    Number(renderTotalAmountRows(row)).toFixed(2)
                   )}
                 </span>
               </TableCell>
