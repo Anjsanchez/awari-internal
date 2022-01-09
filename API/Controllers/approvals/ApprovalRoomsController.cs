@@ -26,16 +26,20 @@ namespace API.Controllers.approvals
         private readonly IApprovalRoomRepository _aprRoomRepo;
         private readonly IReservationRoomLineRepository _rRoomRepo;
         private readonly IReservationApprovalRepository _reApprRepo;
+        private readonly IReservationTransRepository _transRepo;
 
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ApprovalRoomsController(IReservationApprovalRepository reApprRepo,
+        public ApprovalRoomsController(
+        IReservationTransRepository transRepo,
+        IReservationApprovalRepository reApprRepo,
         IReservationRoomLineRepository rTranRepo,
         IApprovalRoomRepository aprTranRepo,
         IMapper mapp,
         IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _transRepo = transRepo;
             _rRoomRepo = rTranRepo;
             _reApprRepo = reApprRepo;
             _aprRoomRepo = aprTranRepo;
@@ -58,9 +62,7 @@ namespace API.Controllers.approvals
                 singleRecord = mappedTran,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
-
         }
-
 
         private async Task<bool> ModifyTranRecord(Guid tmpTblId, Guid transId, Status status, EAction action)
         {
@@ -114,6 +116,9 @@ namespace API.Controllers.approvals
                 return NotFound("Data not found in the database");
 
             if (updateDto.action == "approved")
+                if (await IsRoomLineAlreadyHaveTransaction(data.transId)) return NotFound("This room already have a transaction.");
+
+            if (updateDto.action == "approved")
                 data.status = Models.Enum.EnumModels.Status.Approved;
             else
                 data.status = Models.Enum.EnumModels.Status.Rejected;
@@ -129,7 +134,15 @@ namespace API.Controllers.approvals
             return Ok(data);
         }
 
+        private async Task<bool> IsRoomLineAlreadyHaveTransaction(Guid id)
+        {
+            var transLineOfRoomData = await _transRepo.GetTransLineByRoomLineId(id);
 
+            if (transLineOfRoomData.Count != 0)
+                return true;
+
+            return false;
+        }
 
     }
 }

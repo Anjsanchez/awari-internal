@@ -133,6 +133,8 @@ const ApprovalRequestModal = ({
 
   const handleUpdateRoom = async () => {
     const obj = viewMdlObj();
+    setAskConfirmation(false);
+    setAskDialog(false);
     setIsLoading(true);
     try {
       const { data } = await updateApprovalRoom(obj);
@@ -140,9 +142,6 @@ const ApprovalRequestModal = ({
       enqueueSnackbar("Successfully update records.", {
         variant: "success",
       });
-
-      setAskConfirmation(false);
-      setAskDialog(false);
 
       setTimeout(() => {
         const returnObj = {
@@ -153,12 +152,12 @@ const ApprovalRequestModal = ({
         onUpdateApprovals(returnObj);
       }, 100);
       onCancel();
-    } catch (error) {
-      enqueueSnackbar("0043: An error occured.", {
-        variant: "error",
-      });
+    } catch (ex) {
+      if ((ex && ex.status === 400) || ex.status === 404)
+        enqueueSnackbar("0043: " + ex.data, { variant: "error" });
     } finally {
       setIsLoading(false);
+      setAskDialog(false);
     }
   };
 

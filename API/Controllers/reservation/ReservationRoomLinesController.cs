@@ -34,11 +34,13 @@ namespace API.Controllers.reservation
         private readonly IReservationApprovalRepository _aprRepo;
         private readonly IApprovalRoomRepository _tmpRepo;
         private readonly IReservationRoomLineRepository _repo;
+        private readonly IReservationTransRepository _transRepo;
         private readonly IMapper _map;
         private readonly jwtConfig _jwtConfig;
 
-        public ReservationRoomLinesController(IReservationApprovalRepository aprRepo, IApprovalRoomRepository tmpRepo, IReservationRoomLineRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
+        public ReservationRoomLinesController(IReservationTransRepository transRepo, IReservationApprovalRepository aprRepo, IApprovalRoomRepository tmpRepo, IReservationRoomLineRepository repo, IMapper mapp, IOptionsMonitor<jwtConfig> optionsMonitor)
         {
+            _transRepo = transRepo;
             _aprRepo = aprRepo;
             _tmpRepo = tmpRepo;
             _repo = repo;
@@ -185,6 +187,8 @@ namespace API.Controllers.reservation
             if (reservationRoom == null)
                 return NotFound("ReservationPayment not found in the database");
 
+            if (await IsRoomLineAlreadyHaveTransaction(id)) return NotFound("This reservation already have a transaction.");
+
             reservationRoom.approvalStatus = Status.Pending;
             await _repo.Update(reservationRoom);
 
@@ -262,6 +266,8 @@ namespace API.Controllers.reservation
             if (reservationLine == null)
                 return NotFound("Reservation line not found in the database");
 
+            if (await IsRoomLineAlreadyHaveTransaction(id)) return NotFound("This reservation already have a transaction.");
+
             await _repo.Delete(reservationLine);
             await _repo.Save();
 
@@ -273,6 +279,16 @@ namespace API.Controllers.reservation
                 Success = true,
                 singleRecord = mappedCategory
             });
+        }
+
+        private async Task<bool> IsRoomLineAlreadyHaveTransaction(Guid id)
+        {
+            var transLineOfRoomData = await _transRepo.GetTransLineByRoomLineId(id);
+
+            if (transLineOfRoomData.Count != 0)
+                return true;
+
+            return false;
         }
 
 

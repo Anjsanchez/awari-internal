@@ -90,6 +90,12 @@ namespace API.Repository.pages.reservation
             return datas.Where(n => n.reservationHeaderId == headerId).ToList();
         }
 
+        public async Task<List<ReservationTransLine>> GetTransLineByRoomLineId(Guid roomHeaderId)
+        {
+            var datas = await FindAll();
+            return datas.Where(n => n.reservationRoomLineId == roomHeaderId).ToList();
+        }
+
         public async Task<List<ReservationTransLine>> GetTransLineByUserId(Guid userId)
         {
 
