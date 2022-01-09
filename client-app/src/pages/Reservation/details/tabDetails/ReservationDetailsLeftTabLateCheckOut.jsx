@@ -58,7 +58,9 @@ const ReservationDetailsLeftTabLateCheckOut = ({
   useEffect(() => {
     if (Object.keys(selectedRoom).length === 0) return;
 
-    const findValue = roomRate.find((n) => n.value === selectedRoom.values);
+    const findValue = roomRate.find(
+      (n) => n.value === selectedRoom.values.lateCheckOutPenalty
+    );
     setSelectedPrice(findValue);
   }, [selectedRoom]);
 
@@ -99,9 +101,21 @@ const ReservationDetailsLeftTabLateCheckOut = ({
   const handleChangeRoom = (s, e) => setSelectedRoom(e);
   const handleChangePrice = (s, e) => setSelectedPrice(e);
 
+  const isTheRecordHasRoomPricingAvailable = () => {
+    //checking for the old records.
+    if (selectedRoom.values.roomPricing === null) return false;
+    return true;
+  };
+
   const handleExecuteUpdate = async () => {
-    setIsLoading(true);
     setAskConfirmation(false);
+    if (!isTheRecordHasRoomPricingAvailable())
+      return enqueueSnackbar(
+        "Late check out is not available on this booking.",
+        { variant: "error" }
+      );
+
+    setIsLoading(true);
 
     let obj = {
       transId: selectedRoom.key,
@@ -163,11 +177,7 @@ const ReservationDetailsLeftTabLateCheckOut = ({
             }
           >
             {rooms.map((n) => (
-              <Select.Option
-                value={n.room.roomLongName}
-                key={n._id}
-                values={n.lateCheckOutPenalty}
-              >
+              <Select.Option value={n.room.roomLongName} key={n._id} values={n}>
                 {n.room.roomLongName}
               </Select.Option>
             ))}
