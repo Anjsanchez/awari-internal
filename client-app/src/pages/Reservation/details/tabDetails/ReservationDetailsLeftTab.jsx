@@ -73,7 +73,11 @@ const ReservationDetailsLeftTab = () => {
     if (!header.isActive) return setAskConfirmation(true);
 
     const { netAmount, netPayment } = totals;
-    if (netAmount !== netPayment) {
+
+    const fNetAmt = Number.parseFloat(netAmount).toFixed(2);
+    const fNetPayment = Number.parseFloat(netPayment).toFixed(2);
+
+    if (fNetAmt !== fNetPayment) {
       return enqueueSnackbar("Please settle the exact amount", {
         variant: "error",
       });
