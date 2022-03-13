@@ -1,6 +1,6 @@
 import moment from "moment";
 import { DatePicker } from "antd";
-import { Drawer, Table } from "antd";
+import { Drawer } from "antd";
 import React, { useState } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -89,6 +89,14 @@ const BhByHeaderDrawer = ({
       };
     });
 
+  const customerOption = customers.map((opt) => {
+    const firstLetter = opt.name[0].toUpperCase();
+    return {
+      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+      ...opt,
+    };
+  });
+
   const onClearFilter = () => {
     setSLocalDate({
       fromDate: moment().startOf("month"),
@@ -117,13 +125,16 @@ const BhByHeaderDrawer = ({
     setVisible(visi);
   };
 
-  const handleChangeTableCustomer = (selectedRowKeys) =>
-    setSLCustomer(selectedRowKeys);
+  const handleChangeTableCustomer = (e, v) => {
+    if (v === null) return setSLCustomer([]);
+    setSLCustomer([v.key]);
+  };
 
   const handleChangeVoucher = (e, v) => {
     if (v === null) v = [];
     setSLVoucher(v);
   };
+
   const onChangeRangePicker = (d) => {
     let fromDate = moment().startOf("month");
     let toDate = moment().endOf("month");
@@ -248,26 +259,28 @@ const BhByHeaderDrawer = ({
             </ListItem>
             <Collapse in={visible[1].open} timeout="auto" unmountOnExit>
               <div className="cd-prices__container bh">
-                <Table
+                <Autocomplete
                   size="small"
-                  style={{ marginTop: 10 }}
-                  bordered
-                  columns={[
-                    {
-                      title: "Name",
-                      name: "key",
-                      dataIndex: "name",
-                      filters: customers,
-                      onFilter: (value, record) =>
-                        record.name.indexOf(value) === 0,
-                      sorter: (a, b) => a.name.length - b.name.length,
-                    },
-                  ]}
-                  dataSource={customers}
-                  rowSelection={{
-                    selectedRowKeys: sLCustomer,
-                    onChange: handleChangeTableCustomer,
+                  classes={{
+                    option: classes.option,
+                    groupLabel: classes.groupLabel,
+                    inputRoot: classes.inputRoot,
                   }}
+                  getOptionSelected={(option, value) =>
+                    option._id === value._id
+                  }
+                  id="grouped-demo"
+                  options={customerOption.sort(
+                    (a, b) => -b.firstLetter.localeCompare(a.firstLetter)
+                  )}
+                  groupBy={(option) => option.firstLetter}
+                  getOptionLabel={(option) => {
+                    return option["name"];
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Search" variant="outlined" />
+                  )}
+                  onChange={handleChangeTableCustomer}
                 />
               </div>
             </Collapse>
