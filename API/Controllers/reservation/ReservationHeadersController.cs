@@ -715,7 +715,14 @@ namespace API.Controllers.reservation
             netAmount = globalFunctionalityHelper.getNetAmount(rooms, transLines);
 
             if (netAmount != totalPayment)
-                return false;
+            {
+
+                double netDecimal = Math.Ceiling(netAmount);
+                double netPayment = Math.Ceiling(totalPayment);
+
+                //Try parsing the values muna kasi baka rounding issue lang.
+                if (netDecimal != netPayment) return false;
+            }
 
             return true;
         }
