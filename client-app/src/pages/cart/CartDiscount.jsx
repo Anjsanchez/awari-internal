@@ -96,7 +96,13 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
 
-      accumulatedDisc += Math.round(amtMulSenior * 0.2);
+      const discAmount12 = Math.round(amtMulSenior * 0.12);
+
+      const amountToBeDiscountedBy20 = amtMulSenior - discAmount12;
+
+      const discAmount20 = Math.round(amountToBeDiscountedBy20 * 0.2);
+
+      accumulatedDisc += Math.round(discAmount20 + discAmount12);
     }
 
     if (_id !== 0) {

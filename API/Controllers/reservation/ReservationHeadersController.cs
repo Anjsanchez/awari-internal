@@ -727,10 +727,8 @@ namespace API.Controllers.reservation
             return true;
         }
 
-
-
         [HttpGet("CheckOut")]
-        public async Task<ActionResult> PostCheckOutReservation(Guid id)
+        public async Task<ActionResult> PostCheckOutReservation(Guid id, bool isFromCheckOutReservation = true)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -754,9 +752,11 @@ namespace API.Controllers.reservation
             var paymentData = await _paymentRepo.GetPaymentByHeaderId(_headerId);
             var linesData = await _transRepo.GetTransLineByHeaderId(_headerId);
             var roomData = await _lineRepo.GetLineByHeaderId(_headerId);
-
-            if (!checkIfThereIsUnpaid(paymentData, linesData, roomData))
-                return BadRequest("Payment not balance. Please refresh the page.");
+            
+            if(isFromCheckOutReservation){
+                if (!checkIfThereIsUnpaid(paymentData, linesData, roomData))
+                    return BadRequest("Payment not balance. Please refresh the page.");
+            }
 
             reservationHeader.totalNumberOfTrans = linesData.Count;
             reservationHeader.totalNumberOfRooms = globalFunctionalityHelper.getTotalNumberOfRooms(roomData, reservationHeader.reservationType.name);

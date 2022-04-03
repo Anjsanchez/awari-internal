@@ -7,7 +7,10 @@ import { Divider, Button } from "@material-ui/core";
 import { store } from "../../../../utils/store/configureStore";
 import ReservationApprovalRemark from "./../../../../common/ReservationApprovalRemark";
 import ReservationDetailsLeftTabLateCheckOut from "./ReservationDetailsLeftTabLateCheckOut";
-import { DeleteReservationHeader } from "./../../../../utils/services/pages/reservation/ReservationHeader";
+import {
+  DeleteReservationHeader,
+  PostCheckOutForfeitedPayment,
+} from "./../../../../utils/services/pages/reservation/ReservationHeader";
 
 const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
   const hist = useHistory();
@@ -15,6 +18,8 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [askConfirmation, setAskConfirmation] = useState(false);
   const [isVisibleLateCheckOut, setIsVisibleLateCheckOut] = useState(false);
+  const [isVisibleForeightedPayment, setIsVisibleForeightedPayment] =
+    useState(false);
   const [askConfirmationApproval, setAskConfirmationApproval] = useState({
     value: false,
     action: "DELETE",
@@ -90,6 +95,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
 
   const renderBtnLateCheckOut = () => {
     const { name } = typeInStore.header.reservationType;
+    console.log(typeInStore.header);
     if (name === "Restaurant" || name === "Day Tour") return null;
     return (
       <Button
@@ -102,8 +108,66 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
       </Button>
     );
   };
+
+  const renderBtnForfeitedBookingWithPayment = () => {
+    const { name } = typeInStore.header.reservationType;
+    if (name === "Restaurant" || name === "Day Tour") return null;
+    if (typeInStore.header.isActive) return null;
+
+    return (
+      <Button
+        onClick={() => setIsVisibleForeightedPayment(true)}
+        variant="contained"
+        style={{ marginTop: 5 }}
+        color="primary"
+        disabled={isLoading}
+      >
+        <span>Forfeited Payment</span>
+      </Button>
+    );
+  };
+
+  const handleOkForfeitedPayment = async () => {
+    setIsVisibleForeightedPayment(false);
+
+    try {
+      await PostCheckOutForfeitedPayment(typeInStore.header._id);
+
+      enqueueSnackbar("Check out complete", {
+        variant: "success",
+      });
+
+      hist.replace("/a/reservation-management/reservations");
+    } catch (error) {
+      if (error && error.status === 400)
+        return enqueueSnackbar(error.data, {
+          variant: "error",
+        });
+
+      enqueueSnackbar(
+        "0066: An error occured while fetching the reservation type in the server.",
+        {
+          variant: "error",
+        }
+      );
+    }
+  };
+
+  const renderConfirmation = () => {
+    if (isVisibleForeightedPayment)
+      return (
+        <MDialog
+          openDialog={isVisibleForeightedPayment}
+          handleClose={() => setIsVisibleForeightedPayment(false)}
+          handleOk={handleOkForfeitedPayment}
+        />
+      );
+  };
+
   return (
     <>
+      {renderConfirmation()}
+
       {askConfirmation && (
         <MDialog
           openDialog={askConfirmation}
@@ -139,6 +203,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
               {!typeInStore.isTrans && (
                 <>
                   {renderBtnLateCheckOut()}
+                  {renderBtnForfeitedBookingWithPayment()}
                   <Button
                     style={{ marginTop: 5 }}
                     onClick={() => handleDelete()}

@@ -26,6 +26,16 @@ export function PostCheckOutReservation(headerId) {
   return http.get(apiEndpoint + "/CheckOut?id=" + headerId);
 }
 
+export function PostCheckOutForfeitedPayment(headerId) {
+  http.SetJwt();
+  return http.get(
+    apiEndpoint +
+      "/CheckOut?id=" +
+      headerId +
+      "&isFromCheckOutReservation=false"
+  );
+}
+
 export function GetHeadersWithFullDetails(headerId) {
   http.SetJwt();
   return http.get(apiEndpoint + "/includesFullDetails?headerId=" + headerId);
