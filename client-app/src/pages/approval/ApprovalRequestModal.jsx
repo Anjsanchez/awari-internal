@@ -154,7 +154,7 @@ const ApprovalRequestModal = ({
       onCancel();
     } catch (ex) {
       if ((ex && ex.status === 400) || ex.status === 404)
-        enqueueSnackbar("0043: " + ex.data, { variant: "error" });
+        enqueueSnackbar("0073: " + ex.data, { variant: "error" });
     } finally {
       setIsLoading(false);
       setAskDialog(false);

@@ -147,10 +147,10 @@ namespace API.Controllers.reservation
             float discSeniorAmt = 0f;
             float netAmount = 0f;
 
-        
+
             childAmount = 880 * lineDto.childrenPax;
             grossAmount = 1760 * (lineDto.adultPax + lineDto.seniorPax) + childAmount;
-            
+
             //Calculate discount.
             //Una ang 12%, then 20%
 
@@ -158,7 +158,7 @@ namespace API.Controllers.reservation
             float discAmount20 = ((1760 * lineDto.seniorPax) - discAmount12) * (float)0.20;
 
             discSeniorAmt = discAmount20 + discAmount12;
-            
+
             netAmount = grossAmount - discSeniorAmt;
 
             reservationRoomLine.grossAmount = grossAmount;
@@ -194,8 +194,12 @@ namespace API.Controllers.reservation
             if (reservationRoom == null)
                 return NotFound("ReservationPayment not found in the database");
 
-            if (await IsRoomLineAlreadyHaveTransaction(id)) return NotFound("This reservation already have a transaction.");
-
+            if (await IsRoomLineAlreadyHaveTransaction(id))
+            {
+                var action = globalFunctionalityHelper.GetApprovalAction(createDto.action);
+                if (action == EAction.Delete)
+                    return NotFound("This reservation already have a transaction.");
+            }
             reservationRoom.approvalStatus = Status.Pending;
             await _repo.Update(reservationRoom);
 

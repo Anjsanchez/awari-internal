@@ -66,10 +66,19 @@ namespace API
 
             services.Configure<jwtConfig>(_config.GetSection("JwtConfig"));
 
+
             if (_env.IsDevelopment())
             {
-                services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
-                          (_config.GetConnectionString("resortConnection")));
+                if (Environment.MachineName == "HLPHVB51000032")
+                {
+                    services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+                                (_config.GetConnectionString("laptopDevConnection")));
+                }
+                else
+                {
+                    services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+                                (_config.GetConnectionString("desktopDevConnection")));
+                }
             }
             if (_env.IsProduction())
             {

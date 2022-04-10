@@ -191,7 +191,7 @@ const ReservationConfirmation = () => {
     if (getTotalOfLateCheckOut() === 0) return null;
     return (
       <AListItem
-        txtLbl="Late Check-Out"
+        txtLbl="Early Check-In/Late Check-Out"
         txtValue={
           <ActiveButton
             value={true}

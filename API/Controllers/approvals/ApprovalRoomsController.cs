@@ -116,9 +116,6 @@ namespace API.Controllers.approvals
                 return NotFound("Data not found in the database");
 
             if (updateDto.action == "approved")
-                if (await IsRoomLineAlreadyHaveTransaction(data.transId)) return NotFound("This room already have a transaction.");
-
-            if (updateDto.action == "approved")
                 data.status = Models.Enum.EnumModels.Status.Approved;
             else
                 data.status = Models.Enum.EnumModels.Status.Rejected;

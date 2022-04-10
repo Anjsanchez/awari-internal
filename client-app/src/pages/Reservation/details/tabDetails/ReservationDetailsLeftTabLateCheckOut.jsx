@@ -111,7 +111,7 @@ const ReservationDetailsLeftTabLateCheckOut = ({
     setAskConfirmation(false);
     if (!isTheRecordHasRoomPricingAvailable())
       return enqueueSnackbar(
-        "Late check out is not available on this booking.",
+        "Early Check-In/Late Check-Out is not available on this booking.",
         { variant: "error" }
       );
 
@@ -137,7 +137,7 @@ const ReservationDetailsLeftTabLateCheckOut = ({
       }, 50);
     } catch (ex) {
       if (ex && ex.status === 400)
-        enqueueSnackbar("0039: " + ex.data, { variant: "error" });
+        enqueueSnackbar("0072: " + ex.data, { variant: "error" });
     } finally {
       setIsLoading(false);
     }
@@ -145,7 +145,7 @@ const ReservationDetailsLeftTabLateCheckOut = ({
 
   return (
     <Modal
-      title="Late Check-Out"
+      title="Early Check-In/Late Check-Out"
       centered
       visible={visible}
       onOk={onVisible}
