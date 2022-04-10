@@ -104,7 +104,7 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
         color="primary"
         disabled={isLoading}
       >
-        <span>Late check out</span>
+        <span>Early Check-In/Late check-out</span>
       </Button>
     );
   };
