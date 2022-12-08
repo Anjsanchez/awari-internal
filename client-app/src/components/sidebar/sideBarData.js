@@ -44,7 +44,7 @@ export const sideBarData = [
       {
         subTitle: "View Reservations",
         icon: <FeaturedPlayListTwoToneIcon />,
-        path: "/a/reservation-management/view-reservations",
+        path: "/a/reservation-management/view/dashboard",
         id: 19,
       },
     ],

@@ -28,6 +28,7 @@ import Payments from "./pages/functionality/payments/Payments";
 import GlobalLoading from "./components/loading/GlobalLoading";
 import Discounts from "./pages/functionality/discounts/Discounts";
 import ActiveBooking from "./pages/Reservation/active/ActiveBooking";
+import ViewReservationDashBoard from "./pages/Reservation/view-reservation/ViewReservationDashBoard";
 import ProductCategory from "./pages/products/category/ProductCategory";
 import ReservationModal from "./components/reservation/ReservationModal";
 import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
@@ -102,7 +103,6 @@ function App() {
                 component={CustomerForm}
                 keyId="6"
               />
-
               <ProtectedRoute
                 path="/a/user-management/customers"
                 component={Customers}
@@ -153,6 +153,12 @@ function App() {
                 path="/a/reservation-management/reservations"
                 component={ActiveBooking}
                 keyId="2"
+              />
+
+              <ProtectedRoute
+                path="/a/reservation-management/view/DashBoard"
+                component={ViewReservationDashBoard}
+                keyId="19"
               />
               <ProtectedRoute
                 path="/a/commerce-management/shop/:id"
