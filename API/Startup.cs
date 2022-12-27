@@ -77,7 +77,7 @@ namespace API
                 else if (Environment.MachineName == "PHESL51318")
                 {
                     services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
-                                (_config.GetConnectionString("laptopDevConnection")));
+                                (_config.GetConnectionString("PHESLConnection")));
                 }
                 else
                 {

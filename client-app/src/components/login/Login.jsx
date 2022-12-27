@@ -91,7 +91,7 @@ export default function Login() {
                 Log In
               </Typography>
               <p className="login-header__span">
-                Log in on the internal platform
+                Log in on the internal platform {process.env.REACT_TEST_NAME} h
               </p>
             </div>
             <div className="login-logo-client">
