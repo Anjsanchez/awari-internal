@@ -81,6 +81,11 @@ namespace API
                     services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
                                 (_config.GetConnectionString("PHESLConnection")));
                 }
+                else if (Environment.MachineName == "PRSP")
+                {
+                    services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+                                (_config.GetConnectionString("PRSPConnection")));
+                }
                 else
                 {
                     services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
