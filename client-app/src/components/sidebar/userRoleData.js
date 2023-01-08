@@ -130,4 +130,9 @@ export const resortMgmtPagesData = [
     title: "Vendors",
     description: "Vendors",
   },
+  {
+    key: 27,
+    title: "Purchase Receiving",
+    description: "Purchase Receiving",
+  },
 ];

@@ -31,6 +31,11 @@ namespace API.Models.inventory
         public User CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public Guid? ReceivedById { get; set; }
+        public User ReceivedBy { get; set; }
+        public DateTime? ReceivedByDate { get; set; }
+
+        public string InvoiceNumber { get; set; }
         public float TotalQuantity { get; set; }
         public RcvStatus RcvStatus { get; set; }
     }

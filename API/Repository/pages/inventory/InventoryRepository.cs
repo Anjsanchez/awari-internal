@@ -364,25 +364,27 @@ namespace API.Repository.pages.inventory
                 };
             }
         }
-
-        public async Task<PurchaseOrderReadDto> GetPurchaseOrderHeaderAndLine(Guid? id = null)
+        public async Task<PurchaseOrderLines> GetPurchaseOrderLinesById(Guid? id = null)
         {
-            var POHeaders = await GetPurchaseOrders(id);
-            var poHeader = POHeaders.FirstOrDefault();
-
-            var poLines = _db.PurchaseOrderLines
+            var poLines = await _db.PurchaseOrderLines
                 .Include(n => n.InventoryMaster)
-                .Include(n=> n.InventoryMaster.InventoryUnit)
-                .Where(n => n.PurchaseOrderId == id)
-                .ToList();
+                .Include(n => n.InventoryMaster.InventoryUnit)
+                .FirstOrDefaultAsync(n => n._id == id);
 
-            return new PurchaseOrderReadDto()
-            {
-                Header = poHeader,
-                Lines = poLines
-            };
-
+            return poLines;
         }
+
+        public async Task<List<PurchaseOrderLines>> GetPurchaseOrderLinesByPurchOrder(Guid? id = null)
+        {
+            var poLines = await _db.PurchaseOrderLines
+                .Include(n => n.InventoryMaster)
+                .Include(n => n.InventoryMaster.InventoryUnit)
+                .Where(n => n.PurchaseOrderId == id)
+                .ToListAsync();
+
+            return poLines;
+        }
+ 
 
         public async Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null)
         {
@@ -496,6 +498,68 @@ namespace API.Repository.pages.inventory
                 await _db.SaveChangesAsync();
 
                 return new ResultResponse() { result = result.success, message = data._id.ToString() };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> UpsertPurchaseLineReceive(PurchaseOrderLines data, float oldQty)
+        {
+            try
+            {
+                 
+                data.ReceivedDate = DateTime.Now;
+                if(data.ReceivedQuantity >= data.LineQuantity)
+                    data.LineStatus = Models.Enum.EnumModels.RcvStatus.Received;
+                else
+                    data.LineStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                
+                _db.PurchaseOrderLines.Update(data);
+                await _db.SaveChangesAsync();
+
+
+
+                var invItem = _db.InventoryMaster.FirstOrDefault(n => n._id == data.InventoryMasterId);
+                invItem.QtyMainInventory -= oldQty;
+                invItem.QtyMainInventory += data.ReceivedQuantity;
+
+                _db.InventoryMaster.Update(invItem);
+                await _db.SaveChangesAsync();
+
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PatchPurchaseOrdersReceive(PurchaseOrder data)
+        {
+            try
+            {
+                data.ReceivedByDate = DateTime.Now;
+                data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Received;
+                var lines =  await GetPurchaseOrderLinesByPurchOrder(data._id);
+                foreach (var item in lines)
+                   if(item.LineStatus == Models.Enum.EnumModels.RcvStatus.Unreceived)
+                        data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                
+                _db.PurchaseOrders.Update(data).Property(x => x.PurchaseOrderNumber).IsModified = false;
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
             }
             catch (System.Exception ex)
             {

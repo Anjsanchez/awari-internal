@@ -16,11 +16,15 @@ namespace API.Dto.inventory
         public string ApprovalStatus { get; set; }
         public string RcvStatus { get; set; }
 
+        public string InvoiceNumber { get; set; }
 
         public Guid? ApprovedById { get; set; }
         public User ApprovedBy { get; set; }
         public DateTime? ApprovedDate { get; set; }
 
+        public Guid? ReceivedById { get; set; }
+        public User ReceivedBy { get; set; }
+        public DateTime? ReceivedByDate { get; set; }
 
         public Guid RequestedById { get; set; }
         public User RequestedBy { get; set; }

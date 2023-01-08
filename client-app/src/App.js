@@ -52,6 +52,8 @@ import {
 import PurchaseOrderForm from "./pages/inventory-management/journal/purchase-order/PurchaseOrderForm";
 import PurchaseRequisition from "./pages/inventory-management/journal/purchase-requisition/PurchaseRequisition";
 import PurchaseRequisitionForm from "./pages/inventory-management/journal/purchase-requisition/PurchaseRequisitionForm";
+import GoodsReceiving from "./pages/inventory-management/journal/goods-receiving/GoodsReceiving";
+import GoodReceivingForm from "./pages/inventory-management/journal/goods-receiving/GoodReceivingForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -241,7 +243,7 @@ function App() {
                 keyId="22"
               />
               <ProtectedRoute
-                path="/a/inventory-management/purchase-order/:id"
+                path="/a/inventory-management/purchase-order/:id&fromPage=:fromPage"
                 component={PurchaseOrderForm}
                 keyId="24"
               />
@@ -259,6 +261,16 @@ function App() {
                 path="/a/inventory-management/purchase-requisition"
                 component={PurchaseRequisition}
                 keyId="25"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/goods-receiving/:id&fromPage=:fromPage"
+                component={GoodReceivingForm}
+                keyId="27"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/goods-receiving"
+                component={GoodsReceiving}
+                keyId="27"
               />
               <ProtectedRoute
                 path="/a/user-management/vendors"

@@ -6,7 +6,19 @@ namespace API.Dto.inventory
     {
         public Guid _id { get; set; }
         public string ApprovalStatus { get; set; }
-        public Guid ApprovedById { get; set; }
+        public Guid ApprovedById { get; set; } 
+    }
+    public class PurchaseOrderReceivedUpdateDto
+    {
+        public Guid _id { get; set; }
+        public string InvoiceNumber { get; set; }
+        public Guid ReceivedById { get; set; }
+    }
+    public class PurchaseOrderLineApprovalUpdateDto
+    {
+        public Guid _id { get; set; }
+        public string ReceivedQuantity { get; set; }
+        public Guid ReceivedById { get; set; }
     }
 
     public class PurchaseReqApprovalUpdateDto

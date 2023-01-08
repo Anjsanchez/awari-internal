@@ -6,47 +6,73 @@ import { store } from "../../../../utils/store/configureStore";
 import { Link, useParams, useHistory } from "react-router-dom";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import MaterialDataGrid from "./../../../../common/MaterialDataGrid";
-import MaterialTableSelect from "../../../../common/MaterialTableSelect";
 import { GetVendors } from "../../../../utils/services/pages/CustomerService";
 import InventoryFinder from "../../../../common/product-finder/InventoryFinder";
 import { getEmployees } from "./../../../../utils/services/pages/EmployeeService";
 import { toggleLoadingGlobal } from "../../../../utils/store/pages/globalSettings";
 import {
-  PostPurchaseOrderLines,
   GetPurchaseOrderHeaderAndLine,
+  PatchPurchaseLineReceive,
+  PatchPurchaseOrdersReceive,
 } from "../../../../utils/services/pages/inventory/InventoryService";
+import MaterialTextField from "../../../../common/MaterialTextField";
 
-export default function PurchaseOrderForm() {
+export default function GoodReceivingForm() {
   const hist = useHistory();
   const { id: IdFromUrl, fromPage } = useParams();
-  const [users, setUsers] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
-  const [vendors, setVendors] = useState([]);
   const [poLines, setPoLines] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState({});
   const [showInvFinder, setShowInvFinder] = useState(false);
+  const [poIsReceived, setPoIsReceived] = useState(false);
   const [mockData, setMockData] = useState({
-    vendorId: "",
-    requestedById: "",
+    invoiceNumber: "",
   });
+
   const tableColumns = [
     {
       field: "name",
       headerName: "Inventory Name",
       width: 400,
     },
+
+    {
+      field: "unit",
+      headerName: "Unit",
+      width: 120,
+      sortable: false,
+    },
     {
       field: "lineQuantity",
-      headerName: "Quantity",
+      headerName: "Ordered Quantity",
       type: "number",
       width: 170,
       sortable: false,
     },
     {
-      field: "unit",
-      headerName: "Unit",
+      field: "receivedQuantity",
+      headerName: "Received Quantity",
+      type: "number",
       width: 170,
       sortable: false,
+      editable: poIsReceived ? false : true,
+    },
+    {
+      field: "lineStatus",
+      headerName: "Received Status",
+      width: 180,
+    },
+    {
+      field: "receiver",
+      headerName: "Received By",
+      width: 200,
+      sortable: false,
+    },
+    {
+      field: "receivedDate",
+      headerName: "Received Date",
+      width: 250,
+      sortable: true,
     },
     {
       field: "note",
@@ -64,12 +90,8 @@ export default function PurchaseOrderForm() {
     const { name, value } = e.target;
     setMockData({ ...mockData, [name]: value });
   };
-
   useEffect(() => {
     const calling = async () => {
-      await _getVendors();
-      await _getUsers();
-
       if (IdFromUrl !== "new") {
         await _getPurchaseOrder();
       }
@@ -83,11 +105,11 @@ export default function PurchaseOrderForm() {
 
     GetPurchaseOrderHeaderAndLine(IdFromUrl)
       .then((resp) => {
-        const { requestedById, vendorId } = resp.data.singleRecord.header;
+        const { invoiceNumber, rcvStatus } = resp.data.singleRecord.header;
         setMockData({
-          requestedById,
-          vendorId,
+          invoiceNumber,
         });
+        if (rcvStatus == "1") setPoIsReceived(true);
 
         const data = resp.data.singleRecord.lines.map((n) => {
           return {
@@ -95,6 +117,9 @@ export default function PurchaseOrderForm() {
             id: n._id,
             name: n.inventoryMaster.name,
             unit: n.inventoryMaster.inventoryUnit.name,
+            receiver:
+              n.receivedBy &&
+              n.receivedBy.firstName + " " + n.receivedBy.lastName,
           };
         });
         setPoLines(data);
@@ -108,50 +133,7 @@ export default function PurchaseOrderForm() {
         store.dispatch(toggleLoadingGlobal(false));
       });
   };
-  const _getUsers = async () => {
-    //
-    store.dispatch(toggleLoadingGlobal(true));
 
-    getEmployees(true)
-      .then((resp) => {
-        const data = resp.data.listRecords.map((obj) => ({
-          ...obj,
-          display: obj.firstName + " " + obj.lastName,
-        }));
-
-        setUsers(data);
-      })
-      .catch(() => {
-        enqueueSnackbar("getEmployees: error", {
-          variant: "error",
-        });
-      })
-      .finally(() => {
-        store.dispatch(toggleLoadingGlobal(false));
-      });
-  };
-  const _getVendors = async () => {
-    //
-    store.dispatch(toggleLoadingGlobal(true));
-
-    GetVendors(true)
-      .then((resp) => {
-        const data = resp.data.listRecords.map((obj) => ({
-          ...obj,
-          id: obj._id,
-        }));
-
-        setVendors(data);
-      })
-      .catch(() => {
-        enqueueSnackbar("GetVendors: error", {
-          variant: "error",
-        });
-      })
-      .finally(() => {
-        store.dispatch(toggleLoadingGlobal(false));
-      });
-  };
   const _handleAddPOLines = (selectedInv, mockData) => {
     const obj = {
       id: selectedInv._id,
@@ -173,25 +155,24 @@ export default function PurchaseOrderForm() {
     const newData = poLines.filter((n) => n.id !== selectedRecord.id);
     setPoLines(newData);
   };
+
   const _handlePostRecords = async () => {
     const currentUser = store.getState().entities.user.user;
     const obj = {
-      header: {
-        ...mockData,
-        createdById: currentUser.id,
-      },
-      lines: [...poLines],
+      invoiceNumber: mockData.invoiceNumber,
+      _id: IdFromUrl,
+      ReceivedById: currentUser.id,
     };
 
     store.dispatch(toggleLoadingGlobal(true));
 
     const promises = [
-      PostPurchaseOrderLines(obj)
+      PatchPurchaseOrdersReceive(obj)
         .then(() => {
           enqueueSnackbar("Adjusting the records SUCCESS.", {
             variant: "success",
           });
-          hist.push("/a/inventory-management/purchase-order");
+          hist.push("/a/inventory-management/goods-receiving");
         })
         .catch((error) => {
           enqueueSnackbar(`PostPurchaseOrderLines Error`, {
@@ -204,8 +185,38 @@ export default function PurchaseOrderForm() {
     ];
     await Promise.all(promises);
   };
+
   const HandleSelectedRowChange = (data) => setSelectedRecord(data);
 
+  const _handleReceivedQtyUpdate = async (data) => {
+    store.dispatch(toggleLoadingGlobal(true));
+
+    const currentUser = store.getState().entities.user.user;
+    const obj = {
+      _id: data.id,
+      ReceivedQuantity: data.value,
+      ReceivedById: currentUser.id,
+    };
+
+    const promises = [
+      PatchPurchaseLineReceive(obj)
+        .then(() => {
+          _getPurchaseOrder();
+          enqueueSnackbar("Received quantity SUCCESS.", {
+            variant: "success",
+          });
+        })
+        .catch((error) => {
+          enqueueSnackbar(`Received quantity ERROR. PatchPurchaseLineReceive`, {
+            variant: "error",
+          });
+        })
+        .finally(() => {
+          store.dispatch(toggleLoadingGlobal(false));
+        }),
+    ];
+    await Promise.all(promises);
+  };
   return (
     <div className="container__wrapper">
       <InventoryFinder
@@ -217,9 +228,9 @@ export default function PurchaseOrderForm() {
 
       <FormHeader
         isVisibleBtn={false}
-        header="Purchase Order"
+        header="Goods Receiving"
         second="Inventory Management"
-        third="Purchase Order"
+        third="Goods Receiving"
       />
       <ValidatorForm
         onSubmit={() => _handlePostRecords()}
@@ -227,24 +238,13 @@ export default function PurchaseOrderForm() {
       >
         <Grid container alignItems="center">
           <Grid item md={6} xs={10}>
-            <MaterialTableSelect
-              style={{ marginBottom: 10 }}
-              data={vendors}
-              label="Vendor"
-              name="vendorId"
-              value={mockData.vendorId || ""}
-              onChange={(e) => setValue(e)}
-              displayKey="_id"
-              displayAttribute="name"
-            />
-            <MaterialTableSelect
-              data={users}
-              label="Requested By"
-              name="requestedById"
-              value={mockData.requestedById || ""}
-              onChange={(e) => setValue(e)}
-              displayKey="id"
-              displayAttribute="display"
+            <MaterialTextField
+              id="invoiceNumber"
+              label="InvoiceNumber"
+              handleChange={setValue}
+              values={mockData.invoiceNumber || ""}
+              required={true}
+              disabled={poIsReceived}
             />
           </Grid>
           <Grid
@@ -260,6 +260,9 @@ export default function PurchaseOrderForm() {
               tableData={poLines}
               onSelectedRow={HandleSelectedRowChange}
               tableColumns={tableColumns}
+              processUpdate={
+                poIsReceived ? undefined : _handleReceivedQtyUpdate
+              }
             />
           </Grid>
         </Grid>
@@ -274,7 +277,7 @@ export default function PurchaseOrderForm() {
               Back
             </Button>
           </Link>
-          {IdFromUrl === "new" && (
+          {!poIsReceived && (
             <Button
               type="submit"
               variant="outlined"

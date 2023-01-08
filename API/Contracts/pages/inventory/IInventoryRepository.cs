@@ -14,9 +14,12 @@ namespace API.Contracts.pages.inventory
         Task<List<InventoryMaster>> GetInventoryMaster(bool isActiveOnly = false);
         Task<List<PurchaseOrder>> GetPurchaseOrders(Guid? id = null);
         Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null);
-        Task<PurchaseOrderReadDto> GetPurchaseOrderHeaderAndLine(Guid? id = null);
+        Task<PurchaseOrderLines> GetPurchaseOrderLinesById(Guid? id = null);
+        Task<List<PurchaseOrderLines>> GetPurchaseOrderLinesByPurchOrder(Guid? id = null);
         Task<PurchaseReqReadDto> GetPurchaseReqHeaderAndLine(Guid? id = null);
         Task<ResultResponse> UpsertPurchaseOrderApproval(PurchaseOrder data);
+        Task<ResultResponse> PatchPurchaseOrdersReceive(PurchaseOrder data);
+        Task<ResultResponse> UpsertPurchaseLineReceive(PurchaseOrderLines data, float oldQty);
         Task<ResultResponse> UpsertPurchaseReqApproval(PurchaseReq data);
         Task<ResultResponse> PostPurchaseOrderLines(List<PurchaseOrderLines> data);
         Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data);

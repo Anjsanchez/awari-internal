@@ -111,6 +111,9 @@
   display: flex;
   justify-content: flex-start;
 }
+.po-approvalFilter__wrapper.rcv {
+  justify-content: flex-end;
+}
 
 @media only screen and (max-width: 720px) {
   .po-header__wrapper {

@@ -198,6 +198,11 @@ export const sideBarData = [
             id: 24,
           },
           {
+            title: "Goods Receiving",
+            path: "/a/inventory-management/goods-receiving",
+            id: 27,
+          },
+          {
             title: "Purchase Requisition",
             path: "/a/inventory-management/purchase-requisition",
             id: 25,

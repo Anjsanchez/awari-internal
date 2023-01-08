@@ -6,6 +6,12 @@ const Enums = {
     Action: "Action",
     All: "All",
   },
+  ReceivedStatus: {
+    Unreceived: "Unreceived",
+    Received: "Received",
+    Partial: "Partial",
+    All: "All",
+  },
 };
 
 // Lock object to prevent modification (true static).

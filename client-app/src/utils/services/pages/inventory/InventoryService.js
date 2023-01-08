@@ -66,6 +66,12 @@ export function PatchPurchaseOrdersApproval(data) {
   const body = { ...data };
   return http.put(`${apiEndpoint}/PatchPurchaseOrdersApproval`, body);
 }
+export function PatchPurchaseOrdersReceive(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/PatchPurchaseOrdersReceive`, body);
+}
 
 export function PatchPurchaseReqApproval(data) {
   http.SetJwt();
@@ -91,6 +97,13 @@ export function PostPurchaseOrderLines(data) {
 
   const body = { ...data };
   return http.post(`${apiEndpoint}/PostPurchaseOrderLines`, body);
+}
+
+export function PatchPurchaseLineReceive(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/PatchPurchaseLineReceive`, body);
 }
 
 export function PostPurchaseReqLines(data) {

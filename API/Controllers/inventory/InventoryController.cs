@@ -200,12 +200,78 @@ namespace API.Controllers.inventory
         [HttpGet("GetPurchaseOrderHeaderAndLine")]
         public async Task<ActionResult> GetPurchaseOrderHeaderAndLine(Guid? id)
         {
-            var data = await _repo.GetPurchaseOrderHeaderAndLine(id);
+            var POHeaders = await _repo.GetPurchaseOrders(id);
+            var poHeader = POHeaders.FirstOrDefault();
+            var lines = await _repo.GetPurchaseOrderLinesByPurchOrder(id);
+            var map = _map.Map<List<PurchaseOrderLines>, List<PurchaseOrderLinesReadDto>>(lines);
+
+            var da = new PurchaseOrderReadDto()
+            {
+                Header = poHeader,
+                Lines = map
+            };
+
             return Ok(new GenericResponse<PurchaseOrderReadDto>()
             {
-                singleRecord = data,
+                singleRecord = da,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
+        }
+
+        [HttpPut("PatchPurchaseLineReceive")]
+        public async Task<ActionResult> PatchPurchaseLineReceive([FromBody] PurchaseOrderLineApprovalUpdateDto dto)
+        {
+            try
+            {
+                var data = await _repo.GetPurchaseOrderLinesById(dto._id);
+                float oldQty = data.ReceivedQuantity;
+
+                _map.Map(dto, data);
+
+                var result = await _repo.UpsertPurchaseLineReceive(data, oldQty);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<PurchaseOrderHeaderReadDto>()
+                {
+                    listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPut("PatchPurchaseOrdersReceive")]
+        public async Task<ActionResult> PatchPurchaseOrdersReceive([FromBody] PurchaseOrderReceivedUpdateDto dto)
+        {
+            try
+            {
+                var data = await _repo.GetPurchaseOrders(dto._id);
+
+                var singleData = data.FirstOrDefault();
+                _map.Map(dto, singleData);
+
+                var result = await _repo.PatchPurchaseOrdersReceive(singleData);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<PurchaseOrderHeaderReadDto>()
+                {
+                    listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         [HttpPut("PatchPurchaseOrdersApproval")]

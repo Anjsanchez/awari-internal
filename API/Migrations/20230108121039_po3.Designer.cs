@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230108121039_po3")]
+    partial class po3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -713,7 +715,7 @@ namespace API.Migrations
                     b.Property<int>("RcvStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReceivedByDate")
+                    b.Property<DateTime>("ReceivedByDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ReceivedById")
@@ -767,9 +769,6 @@ namespace API.Migrations
                     b.Property<Guid>("PurchaseOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ReceivedById")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("ReceivedDate")
                         .HasColumnType("datetime2");
 
@@ -781,8 +780,6 @@ namespace API.Migrations
                     b.HasIndex("InventoryMasterId");
 
                     b.HasIndex("PurchaseOrderId");
-
-                    b.HasIndex("ReceivedById");
 
                     b.ToTable("PurchaseOrderLines");
                 });
@@ -1897,15 +1894,9 @@ namespace API.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("API.Models.User", "ReceivedBy")
-                        .WithMany()
-                        .HasForeignKey("ReceivedById");
-
                     b.Navigation("InventoryMaster");
 
                     b.Navigation("PurchaseOrder");
-
-                    b.Navigation("ReceivedBy");
                 });
 
             modelBuilder.Entity("API.Models.inventory.PurchaseReq", b =>

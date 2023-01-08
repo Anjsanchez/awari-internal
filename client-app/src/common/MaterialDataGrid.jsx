@@ -28,6 +28,7 @@ export default function MaterialDataGrid({
   sortModel = undefined,
   addLink = "",
   modifyLink = "",
+  processUpdate = undefined,
 }) {
   const AlternateRowColor = ({ className, index, ...other }) => (
     <GridRow
@@ -130,12 +131,13 @@ export default function MaterialDataGrid({
           onRowClick={(d) => onSelectedRow(d.row)}
           rowsPerPageOptions={[15, 30, 45]}
           pageSize={15}
-          // onPageSizeChange={(dta) => setPgSize(dta)}
           rows={tableData}
           columns={tableColumns}
           rowHeight={35}
           components={{ Row: AlternateRowColor }}
           sortModel={sortModel}
+          experimentalFeatures={{ newEditingApi: true }}
+          onCellValueChange={processUpdate}
         />
       </div>
     </>

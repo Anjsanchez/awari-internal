@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(resortDbContext))]
-    partial class resortDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230108121310_po4")]
+    partial class po4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -713,7 +715,7 @@ namespace API.Migrations
                     b.Property<int>("RcvStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReceivedByDate")
+                    b.Property<DateTime>("ReceivedByDate")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("ReceivedById")
