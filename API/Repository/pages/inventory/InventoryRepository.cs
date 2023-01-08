@@ -432,6 +432,9 @@ namespace API.Repository.pages.inventory
                 _db.PurchaseReq.Update(data).Property(x => x.PurchaseRequisitionNumber).IsModified = false;
                 await _db.SaveChangesAsync();
 
+                if (data.ApprovalStatus == Models.Enum.EnumModels.PurchaseOrderStatus.Approved)
+                    await UpdateInventoryQuantity(data);
+
                 return new ResultResponse() { result = result.success };
             }
             catch (System.Exception ex)
@@ -442,6 +445,26 @@ namespace API.Repository.pages.inventory
                     result = result.error
                 };
             }
+        }
+
+        private async Task UpdateInventoryQuantity(PurchaseReq data)
+        {
+            var listItems = new List<InventoryMaster>();
+
+            var reqLines = _db.PurchaseReqLines
+                              .Where(n => n.PurchaseReqId == data._id)
+                              .ToList();
+
+            foreach (var item in reqLines)
+            {
+                var invItem = _db.InventoryMaster.FirstOrDefault(n => n._id == item.InventoryMasterId);
+                invItem.QtyProductionInventory += item.LineQuantity;
+                invItem.QtyMainInventory -= item.LineQuantity;
+                listItems.Add(invItem);
+            }
+
+            _db.InventoryMaster.UpdateRange(listItems);
+            await _db.SaveChangesAsync();
         }
 
         public async Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data)
