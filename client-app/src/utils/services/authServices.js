@@ -1,10 +1,10 @@
 import http from "./httpServices";
 import { useSelector } from "react-redux";
 import { store } from "../store/configureStore";
-import { apiUrl } from "../../config/config.json";
 import { userRemove } from "../store/pages/users";
+import { GetApiUrl } from "../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/users";
+const apiEndpoint = GetApiUrl + "/users";
 
 export function logout() {
   store.dispatch(userRemove());
@@ -17,6 +17,7 @@ export function IsLoggedIn() {
 }
 
 export async function login(username, password) {
+  console.log(apiEndpoint);
   let endPoint = `${apiEndpoint}/login`;
 
   const { data } = await http.post(endPoint, {

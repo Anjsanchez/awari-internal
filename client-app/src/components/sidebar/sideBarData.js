@@ -4,13 +4,14 @@ import DashboardTwoToneIcon from "@material-ui/icons/DashboardTwoTone";
 import AssessmentTwoToneIcon from "@material-ui/icons/AssessmentTwoTone";
 import LocalOfferTwoToneIcon from "@material-ui/icons/LocalOfferTwoTone";
 import AccountCircleTwoToneIcon from "@material-ui/icons/AccountCircleTwoTone";
+import CookieTwoToneIcon from "@mui/icons-material/CookieTwoTone";
 import ShoppingBasketTwoToneIcon from "@material-ui/icons/ShoppingBasketTwoTone";
 import EmojiFoodBeverageTwoToneIcon from "@material-ui/icons/EmojiFoodBeverageTwoTone";
 import AccountBalanceWalletTwoToneIcon from "@material-ui/icons/AccountBalanceWalletTwoTone";
 import AnnouncementTwoToneIcon from "@material-ui/icons/AnnouncementTwoTone";
 import FeaturedPlayListTwoToneIcon from "@material-ui/icons/FeaturedPlayListTwoTone";
 import BeenhereTwoToneIcon from "@material-ui/icons/BeenhereTwoTone";
-
+import MenuBookTwoToneIcon from "@material-ui/icons/MenuBookTwoTone";
 export const sideBarData = [
   {
     title: "General",
@@ -110,6 +111,11 @@ export const sideBarData = [
             path: "/a/user-management/customers",
             id: 6,
           },
+          {
+            title: "Vendors",
+            path: "/a/user-management/vendors",
+            id: 26,
+          },
         ],
       },
       {
@@ -153,6 +159,48 @@ export const sideBarData = [
             title: "Products",
             path: "/a/product-management/products",
             id: 11,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Inventory Management",
+    id: 111,
+    subNav: [
+      {
+        subTitle: "Inventory",
+        icon: <CookieTwoToneIcon />,
+        id: 112,
+        subNav: [
+          { title: "Types", path: "/a/inventory-management/types", id: 20 },
+          { title: "Units", path: "/a/inventory-management/units", id: 22 },
+          {
+            title: "Inventory Master",
+            path: "/a/inventory-management/master",
+            id: 21,
+          },
+        ],
+      },
+      {
+        subTitle: "Journals",
+        icon: <MenuBookTwoToneIcon />,
+        id: 113,
+        subNav: [
+          {
+            title: "BOM",
+            path: "/a/inventory-management/bill-of-materials",
+            id: 23,
+          },
+          {
+            title: "Purchase Order",
+            path: "/a/inventory-management/purchase-order",
+            id: 24,
+          },
+          {
+            title: "Purchase Requisition",
+            path: "/a/inventory-management/purchase-requisition",
+            id: 25,
           },
         ],
       },

@@ -1,7 +1,7 @@
-import { apiUrl } from "../../../../config/config.json";
 import http from "./../../httpServices";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/TravelAgency";
+const apiEndpoint = GetApiUrl + "/TravelAgency";
 
 export function GetTravelAgency() {
   http.SetJwt();

@@ -12,6 +12,7 @@ using API.helpers.api;
 using API.Migrations.Configurations;
 using API.Models;
 using API.Models.products;
+using API.Models.user_management;
 using AutoMapper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,36 @@ namespace API.Controllers
             return Ok(new GenericResponse<customerReadDto>()
             {
                 listRecords = mappedCustomers,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpPut("UpsertVendors")]
+        public async Task<ActionResult<int>> UpsertVendors(VendorDto dto)
+        {
+
+            var cmdMdl = _map.Map<VendorDto, Vendor>(dto);
+
+            var result = await _repo.UpsertVendors(cmdMdl);
+
+            if (result.result == Data.ApiResponse.result.error)
+                return BadRequest(result.message);
+
+            return Ok(new GenericResponse<VendorDto>()
+            {
+                singleRecord = null,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("GetVendors")]
+        public async Task<ActionResult> GetVendors(bool isActiveOnly = false)
+        {
+            var data = await _repo.GetVendors(isActiveOnly);
+
+            return Ok(new GenericResponse<Vendor>()
+            {
+                listRecords = data,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }

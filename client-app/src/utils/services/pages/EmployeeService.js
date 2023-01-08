@@ -1,7 +1,6 @@
 import http from "./../httpServices";
-import { apiUrl } from "../../../config/config.json";
-
-const apiEndpoint = apiUrl + "/users";
+import { GetApiUrl } from "../../../config/ConfigBuilder";
+const apiEndpoint = GetApiUrl + "/users";
 
 function employeeUrl(id) {
   return `${apiEndpoint}/${id}`;

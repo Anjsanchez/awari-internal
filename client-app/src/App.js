@@ -35,13 +35,21 @@ import ReservationDetails from "./pages/Reservation/details/ReservationDetails";
 import ABookingHistoryByRoom from "./pages/report/bookinghistory/room/ABookingHistoryByRoom";
 import BookingHistoryByHeader from "./pages/report/bookinghistory/header/BookingHistoryByHeader";
 import ABookingHistoryByTrans from "./pages/report/bookinghistory/transaction/ABookingHistoryByTrans";
+import InventoryTypes from "./pages/inventory-management/inventory/inventory-types/InventoryTypes";
+import InventoryMaster from "./pages/inventory-management/inventory/inventory-master/InventoryMaster";
+import InventoryUnits from "./pages/inventory-management/inventory/inventory-units/InventoryUnits";
 import ProductClassification from "./pages/products/classifications/ProductClassification";
+import BillOfMaterial from "./pages/inventory-management/journal/bill-of-material/BillOfMaterial";
+
+import PurchaseOrder from "./pages/inventory-management/journal/purchase-order/PurchaseOrder";
+import Vendors from "./pages/customers/vendors/Vendors";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
 } from "react-router-dom";
+import PurchaseOrderForm from "./pages/inventory-management/journal/purchase-order/PurchaseOrderForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -209,6 +217,42 @@ function App() {
                 path="/a/reservation-management/report/booking-history/room"
                 component={ABookingHistoryByRoom}
                 keyId="16"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/types"
+                component={InventoryTypes}
+                keyId="20"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/master"
+                component={InventoryMaster}
+                keyId="21"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/units"
+                component={InventoryUnits}
+                keyId="22"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/bill-of-materials"
+                component={BillOfMaterial}
+                keyId="22"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/purchase-order/:id"
+                component={PurchaseOrderForm}
+                keyId="24"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/purchase-order"
+                component={PurchaseOrder}
+                keyId="24"
+              />
+
+              <ProtectedRoute
+                path="/a/user-management/vendors"
+                component={Vendors}
+                keyId="26"
               />
               <ProtectedRoute
                 path="/a/reports/SOA/:id&isTrans=:isTrans&isCategorized=:isCategorized"

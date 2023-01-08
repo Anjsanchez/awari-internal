@@ -1,7 +1,7 @@
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 import http from "../../httpServices";
 
-const apiEndpoint = apiUrl + "/RequestApprovals";
+const apiEndpoint = GetApiUrl + "/RequestApprovals";
 
 export function GetRequestApprovals() {
   http.SetJwt();

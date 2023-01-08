@@ -95,4 +95,39 @@ export const resortMgmtPagesData = [
     title: "View Reservations",
     description: "View Reservations",
   },
+  {
+    key: 20,
+    title: "Inventory Types",
+    description: "Inventory Types",
+  },
+  {
+    key: 21,
+    title: "Inventory Master",
+    description: "Inventory Master",
+  },
+  {
+    key: 22,
+    title: "Inventory Units",
+    description: "Inventory Units",
+  },
+  {
+    key: 23,
+    title: "BOM",
+    description: "BOM",
+  },
+  {
+    key: 24,
+    title: "Purchase Order",
+    description: "Purchase Order",
+  },
+  {
+    key: 25,
+    title: "Purchase Requisition",
+    description: "Purchase Requisition",
+  },
+  {
+    key: 26,
+    title: "Vendors",
+    description: "Vendors",
+  },
 ];

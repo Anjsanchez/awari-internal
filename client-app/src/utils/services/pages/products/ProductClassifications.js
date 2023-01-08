@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/ProductTypes";
+const apiEndpoint = GetApiUrl + "/ProductTypes";
 
 function prodClassificationUrl(id) {
   return `${apiEndpoint}/${id}`;

@@ -1,0 +1,122 @@
+.landingTbl-toolTip__wrapper {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.landTbl-toopTip__header__wrapper {
+  display: flex;
+  justify-content: space-between;
+  background-blend-mode: darken;
+  padding-left: 10px;
+  align-items: center;
+  border-right: solid #e1e1e1 1px;
+  border-top: solid #e1e1e1 1px;
+  border-left: solid #e1e1e1 1px;
+}
+
+.landingTbl-tooltip-rightText {
+  font-size: 15px;
+  font-weight: 500;
+  margin-right: 20px;
+}
+.Shadow-modal__wrapper .Shadow-modal__container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  min-width: 700px;
+  background-color: rgb(255, 255, 255);
+}
+.Shadow-modal__container .Shadow-modal-button__container {
+  padding: 10px 0 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.Shadow-modal__container .Shadow-modal-button__container button,
+.memberconfiguration-form__wrapper button {
+  width: 100px;
+}
+
+.Shadow-modal__container .Shadow-modal-title__container {
+  display: flex;
+  justify-content: space-between;
+  background: #3f51b5;
+  color: #fff;
+  font-weight: normal;
+  font-size: 16px;
+  padding: 7px;
+  padding-left: 20px;
+  align-items: center;
+}
+
+.Shadow-modal__container .Shadow-modal-title__container svg {
+  color: white;
+}
+
+.Shadow-modal__wrapper .shadow-memberModal__wrapper .MuiFormControl-root {
+  width: 90%;
+  left: 5%;
+  margin-bottom: 10px;
+}
+
+.Shadow-modal__wrapper .Shadow-modal__container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  min-width: 700px;
+  background-color: rgb(255, 255, 255);
+}
+
+.Shadow-modal__container .Shadow-modal-body__container {
+  padding: 15px;
+  padding-top: 40px;
+}
+
+.Shadow-modal__container
+  .Shadow-modal-body__container.formPage
+  .MuiTextField-root {
+  /* width: 90%;
+  left: 5%;*/
+  margin-bottom: 20px;
+}
+
+.Shadow-modal__wrapper .Mswitch-container__wrapper {
+  width: 90%;
+  left: 5%;
+  margin-bottom: 10px;
+  position: relative;
+}
+.pms-select__wrapper {
+  width: 100%;
+  /* left: 5%; */
+  /* margin-bottom: 10px; */
+}
+
+.po-header__wrapper {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.po-statusFilter__wrapper,
+.po-approvalFilter__wrapper {
+  min-width: 245px;
+}
+.po-approvalFilter__wrapper {
+  display: flex;
+  justify-content: flex-start;
+}
+
+@media only screen and (max-width: 720px) {
+  .po-header__wrapper {
+    display: block;
+  }
+  .po-approvalFilter__wrapper {
+    margin-top: 15px;
+  }
+}

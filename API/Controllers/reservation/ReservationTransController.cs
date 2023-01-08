@@ -199,11 +199,12 @@ namespace API.Controllers.reservation
             var createMdl = _map.Map<List<reservationTransCreateDto>, List<ReservationTransLine>>(transLine);
 
             await _repo.createRange(createMdl);
-
+            await _repo.HandleProductWithBomLine(createMdl);
             await CreateMultipleApproval(createMdl);
 
             return Ok();
         }
+        
 
         private async Task<bool> CreateMultipleApproval(List<ReservationTransLine> list)
         {
@@ -314,7 +315,13 @@ namespace API.Controllers.reservation
             if (dataById == null)
                 return NotFound("Record not found in the database");
 
+
             await _repo.Delete(dataById);
+
+            var data = new List<ReservationTransLine> { dataById };
+
+            await _repo.HandleProductWithBomLine(data, false);
+            
             await _repo.Save();
 
             var mappedData = _map.Map<ReservationTransLine, reservationTransReadDto>(dataById);

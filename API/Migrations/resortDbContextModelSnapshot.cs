@@ -555,6 +555,213 @@ namespace API.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("API.Models.inventory.BomLine", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HeaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LineId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Quantity")
+                        .HasColumnType("real");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("HeaderId");
+
+                    b.HasIndex("LineId");
+
+                    b.ToTable("BomLines");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryMaster", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("InventoryTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InventoryUnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ProductCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("QtyMainInventory")
+                        .HasColumnType("real");
+
+                    b.Property<float>("QtyProductionInventory")
+                        .HasColumnType("real");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("createdBy");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("InventoryTypeId");
+
+                    b.HasIndex("InventoryUnitId");
+
+                    b.HasIndex("ProductCategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InventoryMaster");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryType", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("createdBy");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InventoryTypes");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryUnit", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("createdBy");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("InventoryUnits");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.PurchaseOrder", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ApprovalStatus")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ApprovedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("ApprovedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PurchaseOrderNumber")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("RcvStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("RequestDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RequestedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("TotalQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<Guid>("VendorId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("ApprovedById");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("RequestedById");
+
+                    b.HasIndex("VendorId");
+
+                    b.ToTable("PurchaseOrders");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.PurchaseOrderLines", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InventoryMasterId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("LineQuantity")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PurchaseOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("_id");
+
+                    b.HasIndex("InventoryMasterId");
+
+                    b.HasIndex("PurchaseOrderId");
+
+                    b.ToTable("PurchaseOrderLines");
+                });
+
             modelBuilder.Entity("API.Models.products.Product", b =>
                 {
                     b.Property<Guid>("_id")
@@ -1255,6 +1462,35 @@ namespace API.Migrations
                     b.ToTable("TransRooms");
                 });
 
+            modelBuilder.Entity("API.Models.user_management.Vendor", b =>
+                {
+                    b.Property<Guid>("_id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EmailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("Mobile")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("_id");
+
+                    b.ToTable("Vendors");
+                });
+
             modelBuilder.Entity("API.Models.Customer", b =>
                 {
                     b.HasOne("API.Models.User", "user")
@@ -1432,6 +1668,134 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("user");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.BomLine", b =>
+                {
+                    b.HasOne("API.Models.products.Product", "Header")
+                        .WithMany()
+                        .HasForeignKey("HeaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.inventory.InventoryMaster", "Line")
+                        .WithMany()
+                        .HasForeignKey("LineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Header");
+
+                    b.Navigation("Line");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryMaster", b =>
+                {
+                    b.HasOne("API.Models.inventory.InventoryType", "InventoryType")
+                        .WithMany()
+                        .HasForeignKey("InventoryTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.inventory.InventoryUnit", "InventoryUnit")
+                        .WithMany()
+                        .HasForeignKey("InventoryUnitId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.products.ProductCategory", "ProductCategory")
+                        .WithMany()
+                        .HasForeignKey("ProductCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryType");
+
+                    b.Navigation("InventoryUnit");
+
+                    b.Navigation("ProductCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryType", b =>
+                {
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.InventoryUnit", b =>
+                {
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.PurchaseOrder", b =>
+                {
+                    b.HasOne("API.Models.User", "ApprovedBy")
+                        .WithMany()
+                        .HasForeignKey("ApprovedById");
+
+                    b.HasOne("API.Models.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "RequestedBy")
+                        .WithMany()
+                        .HasForeignKey("RequestedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.user_management.Vendor", "Vendor")
+                        .WithMany()
+                        .HasForeignKey("VendorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApprovedBy");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("RequestedBy");
+
+                    b.Navigation("Vendor");
+                });
+
+            modelBuilder.Entity("API.Models.inventory.PurchaseOrderLines", b =>
+                {
+                    b.HasOne("API.Models.inventory.InventoryMaster", "InventoryMaster")
+                        .WithMany()
+                        .HasForeignKey("InventoryMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.inventory.PurchaseOrder", "PurchaseOrder")
+                        .WithMany()
+                        .HasForeignKey("PurchaseOrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InventoryMaster");
+
+                    b.Navigation("PurchaseOrder");
                 });
 
             modelBuilder.Entity("API.Models.products.Product", b =>

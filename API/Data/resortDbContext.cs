@@ -2,11 +2,13 @@ using API.Models;
 using API.Models.approval;
 using API.Models.employee;
 using API.Models.functionality;
+using API.Models.inventory;
 using API.Models.Others;
 using API.Models.products;
 using API.Models.reservation;
 using API.Models.rooms;
 using API.Models.trans;
+using API.Models.user_management;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
@@ -28,10 +30,17 @@ namespace API.Data
         public DbSet<RoomVariant> RoomVariants { get; set; }
         public DbSet<RoomPricing> RoomPricings { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<InventoryUnit> InventoryUnits { get; set; }
+        public DbSet<InventoryType> InventoryTypes { get; set; }
+        public DbSet<InventoryMaster> InventoryMaster { get; set; }
         public DbSet<ApprovalRoom> ApprovalRooms { get; set; }
+        public DbSet<BomLine> BomLines { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
         public DbSet<employeeRole> EmployeeRoles { get; set; }
         public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<PurchaseOrderLines> PurchaseOrderLines { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<ApprovalHeader> ApprovalHeaders { get; set; }
         public DbSet<ApprovalPayment> ApprovalPayments { get; set; }

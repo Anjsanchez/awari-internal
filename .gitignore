@@ -48,3 +48,12 @@ printer-worker/printer-worker/obj/debug
 printer-worker/printer-worker/bin/debug/resortMgmt.xml
  API/appsettings.Development.json
 API/appsettings.Development.json
+.vs/slnx.sqlite
+API/.vs/API/DesignTimeBuild/.dtbcache.v2
+API/.vs/API/v17/fileList.bin
+API/.vs/API/v17/TestStore/0/000.testlog
+API/.vs/API/v17/TestStore/0/testlog.manifest
+API/.vs/API/v17/.futdcache.v1
+API/.vs/API/DesignTimeBuild/.dtbcache.v2
+API/.vs/API/DesignTimeBuild/.dtbcache.v2
+.vs/awari-internal/v17/workspaceFileList.bin

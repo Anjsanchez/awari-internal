@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/ReservationTrans";
+const apiEndpoint = GetApiUrl + "/ReservationTrans";
 
 function header(id) {
   return `${apiEndpoint}/${id}`;

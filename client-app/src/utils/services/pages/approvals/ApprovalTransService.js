@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/ApprovalTrans";
+const apiEndpoint = GetApiUrl + "/ApprovalTrans";
 
 function TransUrl(id) {
   return `${apiEndpoint}/${id}`;

@@ -35,7 +35,7 @@ const MSwitch = (props) => {
   const classes = useStyles();
 
   return (
-    <div className="">
+    <div className="Mswitch-container__wrapper">
       <span className={classes.employeeFormInfo_header}>{name}</span>
       <div className="">
         <span className={classes.employeeFormInfo_helper}>{subName}</span>

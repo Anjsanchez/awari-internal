@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace API.Models.Enum
 {
     public class EnumModels
@@ -23,6 +25,19 @@ namespace API.Models.Enum
             Pending = 1,
             Approved = 2,
             Rejected = 3
+        }
+
+        public enum PurchaseOrderStatus
+        {
+            Pending = 0,
+            Rejected = 1,
+            Approved = 2
+        }
+
+        public enum RcvStatus
+        {
+            Unreceived = 0,
+            Received = 1,
         }
     }
 }

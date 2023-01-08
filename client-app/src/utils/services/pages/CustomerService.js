@@ -1,7 +1,6 @@
 import http from "./../httpServices";
-import { apiUrl } from "../../../config/config.json";
-
-const apiEndpoint = apiUrl + "/customers";
+import { GetApiUrl } from "../../../config/ConfigBuilder";
+const apiEndpoint = GetApiUrl + "/customers";
 
 function customerUrl(id) {
   return `${apiEndpoint}/${id}`;
@@ -29,4 +28,16 @@ export function saveCustomer(customer) {
     return http.put(customerUrl(id), customer);
   }
   return http.post(apiEndpoint, customer);
+}
+
+export function GetVendors(isActiveOnly = false) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetVendors?isActiveOnly=" + isActiveOnly);
+}
+
+export function UpsertVendors(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/UpsertVendors`, body);
 }

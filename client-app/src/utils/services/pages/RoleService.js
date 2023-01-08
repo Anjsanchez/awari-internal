@@ -1,7 +1,6 @@
-import { apiUrl } from "../../../config/config.json";
 import http from "./../httpServices";
-
-const apiEndpoint = apiUrl + "/roles";
+import { GetApiUrl } from "../../../config/ConfigBuilder";
+const apiEndpoint = GetApiUrl + "/roles";
 
 export function getRoles() {
   http.SetJwt();

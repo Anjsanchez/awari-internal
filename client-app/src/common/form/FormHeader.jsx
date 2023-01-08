@@ -40,10 +40,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FormHeader = (props) => {
+const FormHeader = ({
+  header,
+  second,
+  third,
+  navigate,
+  isVisibleBtn = true,
+}) => {
   const classes = useStyles();
 
-  const { header, second, third, navigate, isVisibleBtn = true } = props;
   return (
     <>
       <IconContext.Provider value={{ size: "0.875rem" }}>

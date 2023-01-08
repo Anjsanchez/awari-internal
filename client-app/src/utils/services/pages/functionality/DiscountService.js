@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/discounts";
+const apiEndpoint = GetApiUrl + "/discounts";
 
 function discountUrl(id) {
   return `${apiEndpoint}/${id}`;

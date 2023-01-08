@@ -32,6 +32,10 @@ using API.Models.approval;
 using API.Dto.approval.payment;
 using API.Dto.approval.trams;
 using API.Dto.approval.header;
+using API.Dto.inventory;
+using API.Models.inventory;
+using API.Models.user_management;
+using System.Collections.Generic;
 
 namespace API.Data.Profiles
 {
@@ -69,6 +73,12 @@ namespace API.Data.Profiles
             CreateMap<productCategoryUpdateDto, ProductCategory>().ReverseMap();
             CreateMap<productCategoryCreateDto, ProductCategory>().ReverseMap();
 
+            CreateMap<BomLineDto, BomLine>().ReverseMap();
+            CreateMap<VendorDto, Vendor>().ReverseMap();
+            CreateMap<InventoryMasterDto, InventoryMaster>().ReverseMap();
+            CreateMap<InventoryTypeDto, InventoryType>().ReverseMap();
+            CreateMap<InventoryUnitDto, InventoryUnit>().ReverseMap();
+
             CreateMap<ProductType, productTypeReadDto>().ReverseMap();
             CreateMap<productTypeUpdateDto, ProductType>().ReverseMap();
             CreateMap<productTypeCreateDto, ProductType>().ReverseMap();
@@ -87,9 +97,16 @@ namespace API.Data.Profiles
 
             CreateMap<ReservationType, reservationTypeReadDto>().ReverseMap();
 
+
             CreateMap<ReservationPayment, reservationPaymentReadDto>().ReverseMap();
             CreateMap<reservationPaymentUpdateDto, ReservationPayment>().ReverseMap();
             CreateMap<reservationPaymentCreateDto, ReservationPayment>().ReverseMap();
+            
+            CreateMap<PurchaseOrder, PurchaseOrderHeaderReadDto>().ReverseMap();
+            CreateMap<PurchaseOrderApprovalUpdateDto, PurchaseOrder>().ReverseMap();
+            CreateMap<PurchaseOrderHeaderCreateDto, PurchaseOrder>().ReverseMap();
+ 
+            CreateMap<PurchaseOrderLineCreateDto, PurchaseOrderLines>().ReverseMap();
 
             CreateMap<ReservationHeader, reservationHeaderReadDto>().ReverseMap();
             CreateMap<reservationHeaderUpdateDto, ReservationHeader>().ReverseMap();

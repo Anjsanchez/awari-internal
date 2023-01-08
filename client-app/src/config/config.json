@@ -1,3 +1,7 @@
 {
+  "ApiURL": {
+    "productionAPI": "http://10.32.33.193:70/api",
+    "developmentAPI": "https://localhost:44324/api"
+  },
   "apiUrl": "http://10.32.33.193:70/api"
 }

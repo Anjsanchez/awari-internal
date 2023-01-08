@@ -1,7 +1,6 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
-
-const apiEndpoint = apiUrl + "/TransRooms";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
+const apiEndpoint = GetApiUrl + "/TransRooms";
 
 export function getTransRooms() {
   http.SetJwt();

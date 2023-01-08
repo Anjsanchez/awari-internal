@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using API.Contracts.pages;
 using API.Data;
+using API.Data.ApiResponse;
 using API.Dto.customers;
 using API.Models;
 using API.Models.customer;
+using API.Models.inventory;
 using API.Models.reservation;
+using API.Models.user_management;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -110,7 +113,72 @@ namespace API.Repository.pages
                 userId = n.userId
             });
         }
+
+        public async Task<List<Vendor>> GetVendors(bool isActiveOnly = false)
+        {
+            try
+            {
+                var datas = await _db.Vendors
+                .ToListAsync();
+
+                if (isActiveOnly)
+                    datas = datas.Where(n => n.IsActive == true).ToList();
+
+                return datas;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ResultResponse> UpsertVendors(Vendor data)
+        {
+            try
+            {
+                var res = await _db.Vendors
+                    .FirstOrDefaultAsync(n => n._id == data._id);
+
+                if (res == null)
+                {
+                    var DataIfNameExist = await _db.Vendors
+                    .FirstOrDefaultAsync(n => n.Name.ToLower() == data.Name.ToLower());
+
+                    if (DataIfNameExist != null)
+                    {
+                        return new ResultResponse()
+                        {
+                            message = "Name already exist in the database.",
+                            result = result.error
+                        };
+                    }
+
+                    data._id = new Guid();
+                    data.CreatedDate = DateTime.Now;
+                    await _db.Vendors.AddAsync(data);
+                }
+                else
+                {
+                    res.IsActive = data.IsActive;
+                    res.Address = data.Address;
+                    res.EmailAddress = data.EmailAddress;
+                    res.Mobile = data.Mobile;
+                    res.Name = data.Name;
+                    _db.Vendors.Update(res);
+                }
+
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
     }
-
-
 }

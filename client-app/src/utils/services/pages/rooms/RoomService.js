@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/rooms";
+const apiEndpoint = GetApiUrl + "/rooms";
 
 function roomUrl(id) {
   return `${apiEndpoint}/${id}`;

@@ -1,7 +1,7 @@
 import http from "../../httpServices";
-import { apiUrl } from "../../../../config/config.json";
+import { GetApiUrl } from "../../../../config/ConfigBuilder";
 
-const apiEndpoint = apiUrl + "/ApprovalPayments";
+const apiEndpoint = GetApiUrl + "/ApprovalPayments";
 
 function paymentUrl(id) {
   return `${apiEndpoint}/${id}`;

@@ -115,6 +115,32 @@ namespace API.Repository.pages.reservation
             return trans.ToList();
         }
 
+        public async Task HandleProductWithBomLine(List<ReservationTransLine> transLines, bool subtract = true)
+        {
+            foreach (var item in transLines)
+            {
+                var bomLines = _db.BomLines
+                    .Where(n => n.HeaderId == item.productId)
+                    .ToList();
+                
+                if (bomLines == null || bomLines.Count == 0) continue;
+
+                foreach (var bomLine in bomLines)
+                {
+                    var inventData = _db.InventoryMaster
+                        .Where(n => n._id == bomLine.LineId)
+                        .FirstOrDefault();
+                    if (subtract)
+                        inventData.QtyProductionInventory -= bomLine.Quantity * item.quantity;
+                    else
+                        inventData.QtyProductionInventory += bomLine.Quantity * item.quantity;
+
+                    _db.InventoryMaster.Update(inventData);
+                    await Save();
+                }
+            }
+        }
+
         public async Task<bool> Save()
         {
             var changes = await _db.SaveChangesAsync();

@@ -9,6 +9,7 @@ namespace API.Contracts.pages.reservation
     {
         Task<bool> deleteRange(List<ReservationTransLine> lines);
         Task<bool> createRange(List<ReservationTransLine> lines);
+        Task HandleProductWithBomLine(List<ReservationTransLine> lines, bool subtract = true);
         Task<List<ReservationTransLine>> GetTransLineByHeaderId(Guid headerId);
         Task<List<ReservationTransLine>> GetTransLineByRoomLineId(Guid roomHeaderId);
         Task<List<ReservationTransLine>> GetTransLineByUserId(Guid userId);

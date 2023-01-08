@@ -1,5 +1,5 @@
-import { TextField, FormControl } from "@material-ui/core";
 import React from "react";
+import { TextField, FormControl } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles((theme) => ({
@@ -10,25 +10,25 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MaterialTextField = (props) => {
+const MaterialTextField = ({
+  label,
+  id,
+  values,
+  handleChange,
+  errors,
+  type = "text",
+  margin = "none",
+  multiline = false,
+  size = "medium",
+  disabled = false,
+  required = false,
+}) => {
   const classes = useStyles();
-
-  const {
-    label,
-    id,
-    values,
-    handleChange,
-    errors,
-    type = "text",
-    margin = "none",
-    multiline = false,
-    size = "medium",
-    disabled = false,
-  } = props;
 
   return (
     <FormControl fullWidth margin={margin}>
       <TextField
+        required={required}
         disabled={disabled}
         size={size}
         multiline={multiline}
