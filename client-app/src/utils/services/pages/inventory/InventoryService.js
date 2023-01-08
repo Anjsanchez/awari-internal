@@ -54,11 +54,24 @@ export function GetPurchaseOrders() {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetPurchaseOrders");
 }
+
+export function GetPurchaseRequisition() {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetPurchaseRequisition");
+}
+
 export function PatchPurchaseOrdersApproval(data) {
   http.SetJwt();
 
   const body = { ...data };
   return http.put(`${apiEndpoint}/PatchPurchaseOrdersApproval`, body);
+}
+
+export function PatchPurchaseReqApproval(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/PatchPurchaseReqApproval`, body);
 }
 
 export function GetBomLines(Guid) {
@@ -79,6 +92,14 @@ export function PostPurchaseOrderLines(data) {
   const body = { ...data };
   return http.post(`${apiEndpoint}/PostPurchaseOrderLines`, body);
 }
+
+export function PostPurchaseReqLines(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.post(`${apiEndpoint}/PostPurchaseReqLines`, body);
+}
+
 export function DeleteBomLineRecord(headerId, lineId) {
   http.SetJwt();
   return http.delete(
@@ -92,4 +113,8 @@ export function DeleteBomLineRecord(headerId, lineId) {
 export function GetPurchaseOrderHeaderAndLine(id) {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetPurchaseOrderHeaderAndLine?id=" + id);
+}
+export function GetPurchaseReqHeaderAndLine(id) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetPurchaseReqHeaderAndLine?id=" + id);
 }

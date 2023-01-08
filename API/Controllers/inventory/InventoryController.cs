@@ -69,31 +69,7 @@ namespace API.Controllers.inventory
             });
         }
 
-        [HttpGet("GetPurchaseOrders")]
-        public async Task<ActionResult> GetPurchaseOrders(Guid? id)
-        {
-            var data = await _repo.GetPurchaseOrders(id);
-            var map = _map.Map<List<PurchaseOrder>, List<PurchaseOrderHeaderReadDto>>(data);
-
-            
-            return Ok(new GenericResponse<PurchaseOrderHeaderReadDto>()
-            {
-                listRecords = map,
-                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
-            });
-        }
-
-        [HttpGet("GetPurchaseOrderHeaderAndLine")]
-        public async Task<ActionResult> GetPurchaseOrderHeaderAndLine(Guid? id)
-        {
-            var data = await _repo.GetPurchaseOrderHeaderAndLine(id);  
-            return Ok(new GenericResponse<PurchaseOrderReadDto>()
-            {
-                singleRecord = data,
-                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
-            });
-        }
-
+   
         [HttpGet("GetBomLines")]
         public async Task<ActionResult> GetBomLines(Guid bomLineHeaderId)
         {
@@ -114,6 +90,123 @@ namespace API.Controllers.inventory
             return Ok();
         }
 
+        [HttpGet("GetPurchaseRequisition")]
+        public async Task<ActionResult> GetPurchaseRequisition(Guid? id)
+        {
+            var data = await _repo.GetPurchaseRequisition(id);
+            var map = _map.Map<List<PurchaseReq>, List<PurchaseReqHeaderReadDto>>(data);
+
+
+            return Ok(new GenericResponse<PurchaseReqHeaderReadDto>()
+            {
+                listRecords = map,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("GetPurchaseReqHeaderAndLine")]
+        public async Task<ActionResult> GetPurchaseReqHeaderAndLine(Guid? id)
+        {
+            var data = await _repo.GetPurchaseReqHeaderAndLine(id);
+            return Ok(new GenericResponse<PurchaseReqReadDto>()
+            {
+                singleRecord = data,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpPut("PatchPurchaseReqApproval")]
+        public async Task<ActionResult> PatchPurchaseReqApproval([FromBody] PurchaseReqApprovalUpdateDto dto)
+        {
+
+            try
+            {
+                var data = await _repo.GetPurchaseRequisition(dto._id);
+
+                var singleData = data.FirstOrDefault();
+                _map.Map(dto, singleData);
+
+                var result = await _repo.UpsertPurchaseReqApproval(singleData);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<PurchaseReqHeaderReadDto>()
+                {
+                    listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        [HttpPost("PostPurchaseReqLines")]
+        public async Task<ActionResult> PostPurchaseReqLines([FromBody] PurchaseReqCreateDto dto)
+        {
+            try
+            {
+
+                var headerMdl = _map.Map<PurchaseReqHeaderCreateDto, PurchaseReq>(dto.Header);
+
+                foreach (var item in dto.Lines)
+                    headerMdl.TotalQuantity += int.Parse(item.LineQuantity);
+
+                var result = await _repo.PostPurchaseReqHeader(headerMdl);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                foreach (var item in dto.Lines)
+                    item.PurchaseReqId = result.message;
+
+                var lineMdl = _map.Map<List<PurchaseReqLineCreateDto>, List<PurchaseReqLines>>(dto.Lines);
+
+                result = await _repo.PostPurchaseReqLines(lineMdl);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<InventoryMaster>()
+                {
+                    singleRecord = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        [HttpGet("GetPurchaseOrders")]
+        public async Task<ActionResult> GetPurchaseOrders(Guid? id)
+        {
+            var data = await _repo.GetPurchaseOrders(id);
+            var map = _map.Map<List<PurchaseOrder>, List<PurchaseOrderHeaderReadDto>>(data);
+
+
+            return Ok(new GenericResponse<PurchaseOrderHeaderReadDto>()
+            {
+                listRecords = map,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("GetPurchaseOrderHeaderAndLine")]
+        public async Task<ActionResult> GetPurchaseOrderHeaderAndLine(Guid? id)
+        {
+            var data = await _repo.GetPurchaseOrderHeaderAndLine(id);
+            return Ok(new GenericResponse<PurchaseOrderReadDto>()
+            {
+                singleRecord = data,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
 
         [HttpPut("PatchPurchaseOrdersApproval")]
         public async Task<ActionResult> PatchPurchaseOrdersApproval([FromBody] PurchaseOrderApprovalUpdateDto dto)

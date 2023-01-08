@@ -41,6 +41,8 @@ namespace API.Data
         public DbSet<TravelAgency> TravelAgencies { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderLines> PurchaseOrderLines { get; set; }
+        public DbSet<PurchaseReq> PurchaseReq { get; set; }
+        public DbSet<PurchaseReqLines> PurchaseReqLines { get; set; }
         public DbSet<SystemSetting> SystemSettings { get; set; }
         public DbSet<ApprovalHeader> ApprovalHeaders { get; set; }
         public DbSet<ApprovalPayment> ApprovalPayments { get; set; }

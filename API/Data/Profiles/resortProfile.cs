@@ -105,8 +105,12 @@ namespace API.Data.Profiles
             CreateMap<PurchaseOrder, PurchaseOrderHeaderReadDto>().ReverseMap();
             CreateMap<PurchaseOrderApprovalUpdateDto, PurchaseOrder>().ReverseMap();
             CreateMap<PurchaseOrderHeaderCreateDto, PurchaseOrder>().ReverseMap();
- 
             CreateMap<PurchaseOrderLineCreateDto, PurchaseOrderLines>().ReverseMap();
+
+            CreateMap<PurchaseReq, PurchaseReqHeaderReadDto>().ReverseMap();
+            CreateMap<PurchaseReqApprovalUpdateDto, PurchaseReq>().ReverseMap();
+            CreateMap<PurchaseReqHeaderCreateDto, PurchaseReq>().ReverseMap();
+            CreateMap<PurchaseReqLineCreateDto, PurchaseReqLines>().ReverseMap();
 
             CreateMap<ReservationHeader, reservationHeaderReadDto>().ReverseMap();
             CreateMap<reservationHeaderUpdateDto, ReservationHeader>().ReverseMap();

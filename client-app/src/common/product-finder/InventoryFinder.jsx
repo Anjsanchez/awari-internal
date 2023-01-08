@@ -16,6 +16,7 @@ export default function InventoryFinder({
   onCloseModal,
   onSaveRecord,
   showNote = false,
+  applyQntyValidation = false,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [inventory, setInventory] = useState([]);
@@ -25,7 +26,22 @@ export default function InventoryFinder({
     unit: "",
     unitId: "",
     note: "",
+    prodQty: "",
+    qtyMainInventory: "",
   });
+
+  const HandleSaveRecord = (selectedInv, mockSelectedData) => {
+    const { quantity, qtyMainInventory } = mockSelectedData;
+    if (applyQntyValidation) {
+      if (Math.floor(quantity) > Math.floor(qtyMainInventory)) {
+        enqueueSnackbar("We do not have that QTY in MAIN inventory.", {
+          variant: "error",
+        });
+        return;
+      }
+    }
+    onSaveRecord(selectedInv, mockSelectedData);
+  };
 
   useEffect(() => {
     store.dispatch(toggleLoadingGlobal(true));
@@ -63,6 +79,8 @@ export default function InventoryFinder({
       ...mockSelectedData,
       unit: val.inventoryUnit.name,
       unitId: val.inventoryUnitId,
+      qtyMainInventory: val.qtyMainInventory,
+      qtyProductionInventory: val.qtyProductionInventory,
     });
 
     setSelectedInv(val);
@@ -98,7 +116,7 @@ export default function InventoryFinder({
         </div>
         <div className="Shadow-modal-body__container">
           <ValidatorForm
-            onSubmit={() => onSaveRecord(selectedInv, mockSelectedData)}
+            onSubmit={() => HandleSaveRecord(selectedInv, mockSelectedData)}
           >
             <Grid container alignItems="center" spacing={1}>
               <Grid item xs={12}>
@@ -145,6 +163,29 @@ export default function InventoryFinder({
                   disabled={true}
                 />
               </Grid>
+              <Grid item xs={6}>
+                <MaterialTextField
+                  id="qtyProductionInventory"
+                  label="Production QTY"
+                  handleChange={setValue}
+                  values={mockSelectedData.qtyProductionInventory || ""}
+                  size="small"
+                  disabled={true}
+                  required={false}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <MaterialTextField
+                  id="qtyMainInventory"
+                  label="Main Inventory QTY"
+                  handleChange={setValue}
+                  values={mockSelectedData.qtyMainInventory || ""}
+                  required={false}
+                  size="small"
+                  disabled={true}
+                />
+              </Grid>
+
               {showNote && (
                 <Grid item xs={12}>
                   <MaterialTextField

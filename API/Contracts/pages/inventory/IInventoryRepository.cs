@@ -13,10 +13,16 @@ namespace API.Contracts.pages.inventory
         Task<List<InventoryUnit>> GetInventoryUnits(bool isActiveOnly = false);
         Task<List<InventoryMaster>> GetInventoryMaster(bool isActiveOnly = false);
         Task<List<PurchaseOrder>> GetPurchaseOrders(Guid? id = null);
+        Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null);
         Task<PurchaseOrderReadDto> GetPurchaseOrderHeaderAndLine(Guid? id = null);
+        Task<PurchaseReqReadDto> GetPurchaseReqHeaderAndLine(Guid? id = null);
         Task<ResultResponse> UpsertPurchaseOrderApproval(PurchaseOrder data);
+        Task<ResultResponse> UpsertPurchaseReqApproval(PurchaseReq data);
         Task<ResultResponse> PostPurchaseOrderLines(List<PurchaseOrderLines> data);
+        Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data);
         Task<ResultResponse> PostPurchaseOrderHeader(PurchaseOrder data);
+
+        Task<ResultResponse> PostPurchaseReqHeader(PurchaseReq data);
 
         Task<List<BomLine>> GetBomLines(Guid bomLineHeaderId);
         Task DeleteBomLineRecord(Guid bomLineHeaderId, Guid bomLineId);

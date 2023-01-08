@@ -50,6 +50,8 @@ import {
   Redirect,
 } from "react-router-dom";
 import PurchaseOrderForm from "./pages/inventory-management/journal/purchase-order/PurchaseOrderForm";
+import PurchaseRequisition from "./pages/inventory-management/journal/purchase-requisition/PurchaseRequisition";
+import PurchaseRequisitionForm from "./pages/inventory-management/journal/purchase-requisition/PurchaseRequisitionForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -248,7 +250,16 @@ function App() {
                 component={PurchaseOrder}
                 keyId="24"
               />
-
+              <ProtectedRoute
+                path="/a/inventory-management/purchase-requisition/:id"
+                component={PurchaseRequisitionForm}
+                keyId="25"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/purchase-requisition"
+                component={PurchaseRequisition}
+                keyId="25"
+              />
               <ProtectedRoute
                 path="/a/user-management/vendors"
                 component={Vendors}

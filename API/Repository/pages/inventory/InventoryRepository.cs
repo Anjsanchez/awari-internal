@@ -383,5 +383,105 @@ namespace API.Repository.pages.inventory
             };
 
         }
+
+        public async Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null)
+        {
+            try
+            {
+                var datas = await _db.PurchaseReq
+                        .Include(n => n.ApprovedBy)
+                        .Include(n => n.CreatedBy)
+                        .Include(n => n.RequestedBy)
+                        .ToListAsync();
+
+                if (id != null)
+                    datas = datas.Where(n => n._id == id).ToList();
+
+                return datas;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+        }
+
+        public async Task<PurchaseReqReadDto> GetPurchaseReqHeaderAndLine(Guid? id = null)
+        {
+            var POHeaders = await GetPurchaseRequisition(id);
+            var poHeader = POHeaders.FirstOrDefault();
+
+            var poLines = _db.PurchaseReqLines
+                .Include(n => n.InventoryMaster)
+                .Include(n => n.InventoryMaster.InventoryUnit)
+                .Where(n => n.PurchaseReqId == id)
+                .ToList();
+
+            return new PurchaseReqReadDto()
+            {
+                Header = poHeader,
+                Lines = poLines
+            };
+        }
+
+        public async Task<ResultResponse> UpsertPurchaseReqApproval(PurchaseReq data)
+        {
+            try
+            {
+                data.ApprovedDate = DateTime.Now;
+                _db.PurchaseReq.Update(data).Property(x => x.PurchaseRequisitionNumber).IsModified = false;
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data)
+        {
+            try
+            {
+                _db.PurchaseReqLines.UpdateRange(data);
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PostPurchaseReqHeader(PurchaseReq data)
+        {
+            try
+            {
+                data.RequestDate = DateTime.Now;
+                data.CreatedDate = DateTime.Now;
+                _db.PurchaseReq.Update(data);
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success, message = data._id.ToString() };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
     }
 }
