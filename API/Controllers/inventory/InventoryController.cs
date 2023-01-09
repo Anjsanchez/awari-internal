@@ -183,6 +183,20 @@ namespace API.Controllers.inventory
         }
 
 
+        [HttpGet("GetInventoryAdjustments")]
+        public async Task<ActionResult> GetInventoryAdjustments(Guid? id)
+        {
+            var data = await _repo.GetInventoryAdjustments(id);
+            var map = _map.Map<List<InventoryAdjustment>, List<InventoryAdjustmentHeaderReadDto>>(data);
+
+
+            return Ok(new GenericResponse<InventoryAdjustmentHeaderReadDto>()
+            {
+                listRecords = map,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
         [HttpGet("GetPurchaseOrders")]
         public async Task<ActionResult> GetPurchaseOrders(Guid? id)
         {
@@ -212,6 +226,27 @@ namespace API.Controllers.inventory
             };
 
             return Ok(new GenericResponse<PurchaseOrderReadDto>()
+            {
+                singleRecord = da,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
+
+        [HttpGet("GetInvAdjHeaderAndLine")]
+        public async Task<ActionResult> GetInvAdjHeaderAndLine(Guid? id)
+        {
+            var datas = await _repo.GetInventoryAdjustments(id);
+            var data = datas.FirstOrDefault();
+            var lines = await _repo.GetInvAdjLinesByInvAdjustment(id);
+            var map = _map.Map<List<InventoryAdjustmentLines>, List<InvAdjustmentLinesReadDto>>(lines);
+
+            var da = new InventoryAdjustmentReadDto()
+            {
+                Header = data,
+                Lines = map
+            };
+
+            return Ok(new GenericResponse<InventoryAdjustmentReadDto>()
             {
                 singleRecord = da,
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
@@ -293,6 +328,71 @@ namespace API.Controllers.inventory
                 return Ok(new GenericResponse<PurchaseOrderHeaderReadDto>()
                 {
                     listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+
+        [HttpPut("PatchInvAdjApproval")]
+        public async Task<ActionResult> PatchInvAdjApproval([FromBody] InvAdjApprovalUpdateDto dto)
+        {
+
+            try
+            {
+                var data = await _repo.GetInventoryAdjustments(dto._id);
+
+                var singleData = data.FirstOrDefault();
+                _map.Map(dto, singleData);
+
+                var result = await _repo.UpsertInvAdjApproval(singleData);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<InventoryAdjustmentHeaderReadDto>()
+                {
+                    listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost("PostInvAdjLines")]
+        public async Task<ActionResult> PostInvAdjLines([FromBody] InvAdjCreateDto dto)
+        {
+            try
+            {
+                var headerMdl = _map.Map<InvAdjHeaderCreateDto, InventoryAdjustment>(dto.Header);
+
+                var result = await _repo.PostInvAdjHeader(headerMdl);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                foreach (var item in dto.Lines)
+                    item.InventoryAdjustmentId = result.message;
+
+                var lineMdl = _map.Map<List<InvAdjLineCreateDto>, List<InventoryAdjustmentLines>>(dto.Lines);
+
+                result = await _repo.PostInvAdjLines(lineMdl);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<InventoryMaster>()
+                {
+                    singleRecord = null,
                     Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
                 });
             }

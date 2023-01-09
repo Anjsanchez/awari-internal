@@ -12,6 +12,14 @@ const Enums = {
     Partial: "Partial",
     All: "All",
   },
+  AdjustmentAction: {
+    Decrease: "Decrease",
+    Increase: "Increase",
+  },
+  InventoryLocation: {
+    Main: "Main",
+    Production: "Production",
+  },
 };
 
 // Lock object to prevent modification (true static).

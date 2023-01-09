@@ -10,6 +10,8 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import { ValidatorForm } from "react-material-ui-form-validator";
 import { toggleLoadingGlobal } from "../../utils/store/pages/globalSettings";
 import { GetInventoryMaster } from "../../utils/services/pages/inventory/InventoryService";
+import MaterialTableSelect from "../MaterialTableSelect";
+import Enums from "../../utils/services/pages/inventory/Enums";
 
 export default function InventoryFinder({
   showModal,
@@ -17,6 +19,7 @@ export default function InventoryFinder({
   onSaveRecord,
   showNote = false,
   applyQntyValidation = false,
+  showAdjustmentAction = false,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [inventory, setInventory] = useState([]);
@@ -28,6 +31,8 @@ export default function InventoryFinder({
     note: "",
     prodQty: "",
     qtyMainInventory: "",
+    adjustmentAction: Enums.AdjustmentAction.Decrease,
+    inventoryLocation: Enums.InventoryLocation.Main,
   });
 
   const HandleSaveRecord = (selectedInv, mockSelectedData) => {
@@ -185,7 +190,58 @@ export default function InventoryFinder({
                   disabled={true}
                 />
               </Grid>
-
+              {showAdjustmentAction && (
+                <>
+                  <Grid item xs={6}>
+                    <MaterialTableSelect
+                      data={[
+                        {
+                          id: Enums.AdjustmentAction.Decrease,
+                          display: "Decrease",
+                        },
+                        {
+                          id: Enums.AdjustmentAction.Increase,
+                          display: "Increase",
+                        },
+                      ]}
+                      required={showAdjustmentAction && true}
+                      label="Adjustment Action"
+                      name="adjustmentAction"
+                      value={
+                        mockSelectedData.adjustmentAction ||
+                        Enums.AdjustmentAction.Decrease
+                      }
+                      onChange={(e) => setValue(e)}
+                      displayKey="id"
+                      displayAttribute="display"
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <MaterialTableSelect
+                      data={[
+                        {
+                          id: Enums.InventoryLocation.Main,
+                          display: "Main",
+                        },
+                        {
+                          id: Enums.InventoryLocation.Production,
+                          display: "Production",
+                        },
+                      ]}
+                      required={showAdjustmentAction && true}
+                      label="Inventory Location"
+                      name="inventoryLocation"
+                      value={
+                        mockSelectedData.inventoryLocation ||
+                        Enums.InventoryLocation.Main
+                      }
+                      onChange={(e) => setValue(e)}
+                      displayKey="id"
+                      displayAttribute="display"
+                    />
+                  </Grid>
+                </>
+              )}
               {showNote && (
                 <Grid item xs={12}>
                   <MaterialTextField

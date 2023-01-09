@@ -12,6 +12,7 @@ export default function MaterialTableSelect({
   readOnly = false,
   displayAttribute,
   displayKey,
+  required = true,
 }) {
   const RenderDisplay = (n) => {
     if (displayKey !== undefined) {
@@ -30,7 +31,7 @@ export default function MaterialTableSelect({
   return (
     <>
       <FormControl
-        required
+        required={required}
         variant="outlined"
         style={{ ...style }}
         size={size}

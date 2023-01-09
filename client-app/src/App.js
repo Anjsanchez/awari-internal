@@ -54,6 +54,8 @@ import PurchaseRequisition from "./pages/inventory-management/journal/purchase-r
 import PurchaseRequisitionForm from "./pages/inventory-management/journal/purchase-requisition/PurchaseRequisitionForm";
 import GoodsReceiving from "./pages/inventory-management/journal/goods-receiving/GoodsReceiving";
 import GoodReceivingForm from "./pages/inventory-management/journal/goods-receiving/GoodReceivingForm";
+import InventoryAdjustment from "./pages/inventory-management/journal/inventory-adjustment/InventoryAdjustment";
+import InventoryAdjustmentForm from "./pages/inventory-management/journal/inventory-adjustment/InventoryAdjustmentForm";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -266,6 +268,16 @@ function App() {
                 path="/a/inventory-management/goods-receiving/:id&fromPage=:fromPage"
                 component={GoodReceivingForm}
                 keyId="27"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/inventory-adjustment/:id"
+                component={InventoryAdjustmentForm}
+                keyId="28"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/inventory-adjustment"
+                component={InventoryAdjustment}
+                keyId="28"
               />
               <ProtectedRoute
                 path="/a/inventory-management/goods-receiving"

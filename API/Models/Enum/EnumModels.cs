@@ -39,5 +39,15 @@ namespace API.Models.Enum
             Unreceived = 0,
             Received = 1,
         }
+        public enum AdjustmentAction
+        {
+            Decrease = 0,
+            Increase = 1
+        }
+        public enum InventoryLocation
+        {
+            Main,
+            Production
+        }
     }
 }

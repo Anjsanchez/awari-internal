@@ -54,6 +54,10 @@ export function GetPurchaseOrders() {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetPurchaseOrders");
 }
+export function GetInventoryAdjustments() {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetInventoryAdjustments");
+}
 
 export function GetPurchaseRequisition() {
   http.SetJwt();
@@ -65,6 +69,13 @@ export function PatchPurchaseOrdersApproval(data) {
 
   const body = { ...data };
   return http.put(`${apiEndpoint}/PatchPurchaseOrdersApproval`, body);
+}
+
+export function PatchInvAdjApproval(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/PatchInvAdjApproval`, body);
 }
 export function PatchPurchaseOrdersReceive(data) {
   http.SetJwt();
@@ -98,6 +109,12 @@ export function PostPurchaseOrderLines(data) {
   const body = { ...data };
   return http.post(`${apiEndpoint}/PostPurchaseOrderLines`, body);
 }
+export function PostInvAdjLines(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.post(`${apiEndpoint}/PostInvAdjLines`, body);
+}
 
 export function PatchPurchaseLineReceive(data) {
   http.SetJwt();
@@ -127,6 +144,11 @@ export function GetPurchaseOrderHeaderAndLine(id) {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetPurchaseOrderHeaderAndLine?id=" + id);
 }
+export function GetInvAdjHeaderAndLine(id) {
+  http.SetJwt();
+  return http.get(apiEndpoint + "/GetInvAdjHeaderAndLine?id=" + id);
+}
+
 export function GetPurchaseReqHeaderAndLine(id) {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetPurchaseReqHeaderAndLine?id=" + id);

@@ -39,6 +39,12 @@ namespace API.Data
         public DbSet<employeeRole> EmployeeRoles { get; set; }
         public DbSet<ApprovalTrans> ApprovalTrans { get; set; }
         public DbSet<TravelAgency> TravelAgencies { get; set; }
+
+
+        public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
+        public DbSet<InventoryAdjustmentLines> InventoryAdjustmentLines { get; set; }
+        
+
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderLines> PurchaseOrderLines { get; set; }
         public DbSet<PurchaseReq> PurchaseReq { get; set; }

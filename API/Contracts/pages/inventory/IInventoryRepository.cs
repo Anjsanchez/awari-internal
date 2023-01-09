@@ -13,17 +13,22 @@ namespace API.Contracts.pages.inventory
         Task<List<InventoryUnit>> GetInventoryUnits(bool isActiveOnly = false);
         Task<List<InventoryMaster>> GetInventoryMaster(bool isActiveOnly = false);
         Task<List<PurchaseOrder>> GetPurchaseOrders(Guid? id = null);
+        Task<List<InventoryAdjustment>> GetInventoryAdjustments(Guid? id = null);
         Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null);
         Task<PurchaseOrderLines> GetPurchaseOrderLinesById(Guid? id = null);
         Task<List<PurchaseOrderLines>> GetPurchaseOrderLinesByPurchOrder(Guid? id = null);
+        Task<List<InventoryAdjustmentLines>> GetInvAdjLinesByInvAdjustment(Guid? id = null);
         Task<PurchaseReqReadDto> GetPurchaseReqHeaderAndLine(Guid? id = null);
         Task<ResultResponse> UpsertPurchaseOrderApproval(PurchaseOrder data);
+        Task<ResultResponse> UpsertInvAdjApproval(InventoryAdjustment data);
         Task<ResultResponse> PatchPurchaseOrdersReceive(PurchaseOrder data);
         Task<ResultResponse> UpsertPurchaseLineReceive(PurchaseOrderLines data, float oldQty);
         Task<ResultResponse> UpsertPurchaseReqApproval(PurchaseReq data);
         Task<ResultResponse> PostPurchaseOrderLines(List<PurchaseOrderLines> data);
+        Task<ResultResponse> PostInvAdjLines(List<InventoryAdjustmentLines> data);
         Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data);
         Task<ResultResponse> PostPurchaseOrderHeader(PurchaseOrder data);
+        Task<ResultResponse> PostInvAdjHeader(InventoryAdjustment data);
 
         Task<ResultResponse> PostPurchaseReqHeader(PurchaseReq data);
 

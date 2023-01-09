@@ -207,6 +207,11 @@ export const sideBarData = [
             path: "/a/inventory-management/purchase-requisition",
             id: 25,
           },
+          {
+            title: "Inventory Adjustment",
+            path: "/a/inventory-management/inventory-adjustment",
+            id: 28,
+          },
         ],
       },
     ],

@@ -291,7 +291,7 @@ namespace API.Repository.pages.inventory
                         .Include(n => n.RequestedBy)
                         .ToListAsync();
 
-                if(id != null)
+                if (id != null)
                     datas = datas.Where(n => n._id == id).ToList();
 
                 return datas;
@@ -325,7 +325,7 @@ namespace API.Repository.pages.inventory
 
 
 
-        public async  Task<ResultResponse> PostPurchaseOrderHeader(PurchaseOrder data)
+        public async Task<ResultResponse> PostPurchaseOrderHeader(PurchaseOrder data)
         {
             try
             {
@@ -384,7 +384,7 @@ namespace API.Repository.pages.inventory
 
             return poLines;
         }
- 
+
 
         public async Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null)
         {
@@ -469,6 +469,41 @@ namespace API.Repository.pages.inventory
             await _db.SaveChangesAsync();
         }
 
+        private async Task UpdateInventoryQuantityThruInventoryAdjustment(InventoryAdjustment data)
+        {
+            var listItems = new List<InventoryMaster>();
+
+            var reqLines = _db.InventoryAdjustmentLines
+                              .Where(n => n.InventoryAdjustmentId == data._id)
+                              .ToList();
+
+            foreach (var item in reqLines)
+            {
+                var invItem = _db.InventoryMaster.FirstOrDefault(n => n._id == item.InventoryMasterId);
+
+                if(item.InventoryLocation == Models.Enum.EnumModels.InventoryLocation.Production)
+                {
+                    if (item.AdjustmentAction == Models.Enum.EnumModels.AdjustmentAction.Increase)
+                        invItem.QtyProductionInventory += item.Quantity;
+                    if (item.AdjustmentAction == Models.Enum.EnumModels.AdjustmentAction.Decrease)
+                        invItem.QtyProductionInventory -= item.Quantity;
+                }
+
+                if (item.InventoryLocation == Models.Enum.EnumModels.InventoryLocation.Main)
+                {
+                    if (item.AdjustmentAction == Models.Enum.EnumModels.AdjustmentAction.Increase)
+                        invItem.QtyMainInventory += item.Quantity;
+                    if (item.AdjustmentAction == Models.Enum.EnumModels.AdjustmentAction.Decrease)
+                        invItem.QtyMainInventory -= item.Quantity;
+                }
+
+                listItems.Add(invItem);
+            }
+
+            _db.InventoryMaster.UpdateRange(listItems);
+            await _db.SaveChangesAsync();
+        }
+
         public async Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data)
         {
             try
@@ -513,13 +548,13 @@ namespace API.Repository.pages.inventory
         {
             try
             {
-                 
+
                 data.ReceivedDate = DateTime.Now;
-                if(data.ReceivedQuantity >= data.LineQuantity)
+                if (data.ReceivedQuantity >= data.LineQuantity)
                     data.LineStatus = Models.Enum.EnumModels.RcvStatus.Received;
                 else
                     data.LineStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
-                
+
                 _db.PurchaseOrderLines.Update(data);
                 await _db.SaveChangesAsync();
 
@@ -551,15 +586,113 @@ namespace API.Repository.pages.inventory
             {
                 data.ReceivedByDate = DateTime.Now;
                 data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Received;
-                var lines =  await GetPurchaseOrderLinesByPurchOrder(data._id);
+                var lines = await GetPurchaseOrderLinesByPurchOrder(data._id);
                 foreach (var item in lines)
-                   if(item.LineStatus == Models.Enum.EnumModels.RcvStatus.Unreceived)
+                    if (item.LineStatus == Models.Enum.EnumModels.RcvStatus.Unreceived)
                         data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
-                
+
                 _db.PurchaseOrders.Update(data).Property(x => x.PurchaseOrderNumber).IsModified = false;
                 await _db.SaveChangesAsync();
 
                 return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<List<InventoryAdjustment>> GetInventoryAdjustments(Guid? id = null)
+        {
+            try
+            {
+                var datas = await _db.InventoryAdjustments
+                        .Include(n => n.ApprovedBy)
+                        .Include(n => n.CreatedBy)
+                        .Include(n => n.RequestedBy)
+                        .ToListAsync();
+
+                if (id != null)
+                    datas = datas.Where(n => n._id == id).ToList();
+
+                return datas;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<InventoryAdjustmentLines>> GetInvAdjLinesByInvAdjustment(Guid? id = null)
+        {
+            var poLines = await _db.InventoryAdjustmentLines
+                               .Include(n => n.InventoryMaster)
+                               .Include(n => n.InventoryMaster.InventoryUnit)
+                               .Where(n => n.InventoryAdjustmentId == id)
+                               .ToListAsync();
+
+            return poLines;
+        }
+
+        public async Task<ResultResponse> UpsertInvAdjApproval(InventoryAdjustment data)
+        {
+            try
+            {
+                data.ApprovedDate = DateTime.Now;
+                _db.InventoryAdjustments.Update(data).Property(x => x.JournalNumber).IsModified = false;
+                await _db.SaveChangesAsync();
+
+
+                if (data.ApprovalStatus == Models.Enum.EnumModels.PurchaseOrderStatus.Approved)
+                    await UpdateInventoryQuantityThruInventoryAdjustment(data);
+
+
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PostInvAdjLines(List<InventoryAdjustmentLines> data)
+        {
+            try
+            {
+                _db.InventoryAdjustmentLines.UpdateRange(data);
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PostInvAdjHeader(InventoryAdjustment data)
+        {
+            try
+            {
+                data.RequestDate = DateTime.Now;
+                data.CreatedDate = DateTime.Now;
+                _db.InventoryAdjustments.Update(data);
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success, message = data._id.ToString() };
             }
             catch (System.Exception ex)
             {
