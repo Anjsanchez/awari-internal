@@ -11,11 +11,11 @@ import InventoryFinder from "../../../../common/product-finder/InventoryFinder";
 import { getEmployees } from "./../../../../utils/services/pages/EmployeeService";
 import { toggleLoadingGlobal } from "../../../../utils/store/pages/globalSettings";
 import {
-  PostPurchaseOrderLines,
   GetInvAdjHeaderAndLine,
   PostInvAdjLines,
 } from "../../../../utils/services/pages/inventory/InventoryService";
 import MaterialTextField from "../../../../common/MaterialTextField";
+import Enums from "../../../../utils/services/pages/inventory/Enums";
 
 export default function InventoryAdjustmentForm() {
   const hist = useHistory();
@@ -28,7 +28,9 @@ export default function InventoryAdjustmentForm() {
   const [mockData, setMockData] = useState({
     reason: "",
     requestedById: "",
+    adjustmentType: Enums.InventoryAdjustmentType.Breakage,
   });
+
   const tableColumns = [
     {
       field: "name",
@@ -91,10 +93,12 @@ export default function InventoryAdjustmentForm() {
 
     GetInvAdjHeaderAndLine(IdFromUrl)
       .then((resp) => {
-        const { requestedById, reason } = resp.data.singleRecord.header;
+        const { requestedById, reason, adjustmentType } =
+          resp.data.singleRecord.header;
         setMockData({
           requestedById,
           reason,
+          adjustmentType,
         });
 
         const data = resp.data.singleRecord.lines.map((n) => {
@@ -162,7 +166,14 @@ export default function InventoryAdjustmentForm() {
     const newData = invLines.filter((n) => n.id !== selectedRecord.id);
     setInvLines(newData);
   };
+
   const _handlePostRecords = async () => {
+    if (invLines.length === 0) {
+      enqueueSnackbar(`Please add inventory lines.`, {
+        variant: "warning",
+      });
+      return;
+    }
     const currentUser = store.getState().entities.user.user;
     const obj = {
       header: {
@@ -194,6 +205,11 @@ export default function InventoryAdjustmentForm() {
     await Promise.all(promises);
   };
   const HandleSelectedRowChange = (data) => setSelectedRecord(data);
+
+  const reasonData = [];
+  Object.keys(Enums.InventoryAdjustmentType).map((key) => {
+    reasonData.push({ display: key, id: key });
+  });
 
   return (
     <div className="container__wrapper">
@@ -231,6 +247,19 @@ export default function InventoryAdjustmentForm() {
               label="Requested By"
               name="requestedById"
               value={mockData.requestedById || ""}
+              onChange={(e) => setValue(e)}
+              displayKey="id"
+              displayAttribute="display"
+            />
+            <MaterialTableSelect
+              style={{ marginTop: 10 }}
+              data={reasonData}
+              label="Inventory Adjustment Type"
+              value={
+                mockData.adjustmentType ||
+                Enums.InventoryAdjustmentType.Breakage
+              }
+              name="adjustmentType"
               onChange={(e) => setValue(e)}
               displayKey="id"
               displayAttribute="display"

@@ -240,7 +240,7 @@ export default function GoodReceivingForm() {
           <Grid item md={6} xs={10}>
             <MaterialTextField
               id="invoiceNumber"
-              label="InvoiceNumber"
+              label="Invoice Number"
               handleChange={setValue}
               values={mockData.invoiceNumber || ""}
               required={true}

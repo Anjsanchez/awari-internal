@@ -14,5 +14,7 @@ namespace API.Dto.inventory
         public float QtyMainInventory { get; set; }
         public float QtyProductionInventory { get; set; }
         public bool IsActive { get; set; }
+
+        public string Note { get; set; }
     }
 }

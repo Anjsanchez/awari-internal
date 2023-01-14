@@ -51,6 +51,7 @@ namespace API.Controllers
             if (isActiveOnly)
                 users = users.Where(n => n.isActive == true).ToList();
 
+            users = users.OrderBy(n => n.FirstName).ToList();
             var mappedUsers = _map.Map<List<User>, List<userReadDto>>(users.ToList());
 
             return Ok(new GenericResponse<userReadDto>()

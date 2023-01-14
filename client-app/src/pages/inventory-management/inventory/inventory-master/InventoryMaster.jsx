@@ -57,6 +57,12 @@ export default function InventoryTypes() {
       sortable: true,
       type: "boolean",
     },
+    {
+      field: "note",
+      headerName: "Note",
+      width: 450,
+      sortable: false,
+    },
   ];
 
   useEffect(() => {

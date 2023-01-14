@@ -37,5 +37,7 @@ namespace API.Models.inventory
 
         public DateTime CreatedDate { get; set; }
 
+        public string Note { get; set; }
+
     }
 }

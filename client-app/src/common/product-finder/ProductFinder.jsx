@@ -20,6 +20,10 @@ export default function ProductFinder({
   const [selectedProd, setSelectedProd] = useState({});
 
   useEffect(() => {
+    if (showModal === false) return;
+  }, [showModal]);
+
+  useEffect(() => {
     store.dispatch(toggleLoadingGlobal(true));
     getProducts(true)
       .then((resp) => {

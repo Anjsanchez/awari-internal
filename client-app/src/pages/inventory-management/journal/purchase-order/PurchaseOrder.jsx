@@ -52,7 +52,7 @@ export default function PurchaseOrder() {
     },
     {
       field: "requester",
-      headerName: "Requester",
+      headerName: "Requested By",
       width: 200,
       sortable: false,
     },
@@ -197,10 +197,11 @@ export default function PurchaseOrder() {
             data={[
               { name: "Approved", _id: Enums.ApprovalStatus.Approved },
               { name: "Rejected", _id: Enums.ApprovalStatus.Rejected },
+              { name: "Cancelled", _id: Enums.ApprovalStatus.Cancelled },
               { name: "Pending", _id: Enums.ApprovalStatus.Pending },
               { name: "All", _id: Enums.ApprovalStatus.All },
             ]}
-            label="PO Status filter"
+            label="PO Status Filter"
             value={mockData.filter || Enums.ApprovalStatus.Pending}
             name="filter"
             onChange={(e) => setValue(e)}
@@ -213,6 +214,7 @@ export default function PurchaseOrder() {
             data={[
               { name: "Approve Request", _id: Enums.ApprovalStatus.Approved },
               { name: "Reject Request", _id: Enums.ApprovalStatus.Rejected },
+              { name: "Cancel Request", _id: Enums.ApprovalStatus.Cancelled },
             ]}
             label="Approval Action"
             value={mockData.action || Enums.ApprovalStatus.Action}

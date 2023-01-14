@@ -35,6 +35,21 @@ export default function InventoryFinder({
     inventoryLocation: Enums.InventoryLocation.Main,
   });
 
+  useEffect(() => {
+    if (showModal === false) return;
+
+    setMockSelectedData({
+      quantity: "",
+      unit: "",
+      unitId: "",
+      note: "",
+      prodQty: "",
+      qtyMainInventory: "",
+      adjustmentAction: Enums.AdjustmentAction.Decrease,
+      inventoryLocation: Enums.InventoryLocation.Main,
+    });
+  }, [showModal]);
+
   const HandleSaveRecord = (selectedInv, mockSelectedData) => {
     const { quantity, qtyMainInventory } = mockSelectedData;
     if (applyQntyValidation) {

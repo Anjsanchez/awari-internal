@@ -14,6 +14,7 @@ namespace API.Models.inventory
         public int JournalNumber { get; set; }
 
         public PurchaseOrderStatus ApprovalStatus { get; set; }
+        public InventoryAdjustmentType AdjustmentType { get; set; }
 
         public Guid? ApprovedById { get; set; }
         public User ApprovedBy { get; set; }

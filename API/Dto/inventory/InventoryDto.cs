@@ -19,6 +19,7 @@ namespace API.Dto.inventory
 
         public string ApprovalStatus { get; set; }
 
+        public string AdjustmentType { get; set; }
         public Guid? ApprovedById { get; set; }
         public User ApprovedBy { get; set; }
         public DateTime? ApprovedDate { get; set; }
@@ -53,7 +54,7 @@ namespace API.Dto.inventory
 
     public class InventoryAdjustmentReadDto
     {
-        public InventoryAdjustment Header { get; set; }
+        public InventoryAdjustmentHeaderReadDto Header { get; set; }
         public List<InvAdjustmentLinesReadDto> Lines { get; set; }
     }
 
@@ -68,6 +69,7 @@ namespace API.Dto.inventory
         public string CreatedById { get; set; }
         public string RequestedById { get; set; }
         public string Reason { get; set; }
+        public string AdjustmentType { get; set; }
     }
     public class InvAdjLineCreateDto
     {

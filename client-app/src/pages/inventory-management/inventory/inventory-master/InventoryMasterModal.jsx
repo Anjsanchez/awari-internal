@@ -35,11 +35,12 @@ export default function InventoryMasterModal({
     inventoryTypeId: "",
     inventoryUnitId: "",
     productCategoryId: "",
+    note: "",
   });
 
   useEffect(() => {
     const GetInvTypes = () => {
-      GetInventoryTypes()
+      GetInventoryTypes(true)
         .then((resp) => {
           const newData = resp.data.listRecords.map((obj) => ({
             ...obj,
@@ -59,7 +60,7 @@ export default function InventoryMasterModal({
     };
 
     const GetInvUnits = () => {
-      GetInventoryUnits()
+      GetInventoryUnits(true)
         .then((resp) => {
           const newData = resp.data.listRecords.map((obj) => ({
             ...obj,
@@ -79,7 +80,7 @@ export default function InventoryMasterModal({
     };
 
     const GetProdCategory = () => {
-      getProdCategory()
+      getProdCategory(true)
         .then((resp) => {
           const newData = resp.data.listRecords.map((obj) => ({
             ...obj,
@@ -114,6 +115,7 @@ export default function InventoryMasterModal({
         inventoryTypeId: "",
         inventoryUnitId: "",
         productCategoryId: "",
+        note: "",
       });
 
     setMockSelectedData({ ...selectedData });
@@ -184,6 +186,7 @@ export default function InventoryMasterModal({
                   handleChange={setValue}
                   values={mockSelectedData.qtyMainInventory || ""}
                   required={true}
+                  disabled={!isActionAdd}
                   type="number"
                   size="small"
                 />
@@ -193,6 +196,7 @@ export default function InventoryMasterModal({
                   id="qtyProductionInventory"
                   label="Prod Inventory QTY"
                   handleChange={setValue}
+                  disabled={!isActionAdd}
                   values={mockSelectedData.qtyProductionInventory || ""}
                   required={true}
                   type="number"
@@ -219,6 +223,17 @@ export default function InventoryMasterModal({
                   onChange={(e) => setValue(e)}
                   displayKey="_id"
                   displayAttribute="name"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <MaterialTextField
+                  id="note"
+                  label="Note"
+                  handleChange={setValue}
+                  values={mockSelectedData.note || ""}
+                  required={false}
+                  size="small"
                 />
               </Grid>
               <Grid item xs={6}>

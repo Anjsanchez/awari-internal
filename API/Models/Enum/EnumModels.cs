@@ -31,13 +31,29 @@ namespace API.Models.Enum
         {
             Pending = 0,
             Rejected = 1,
-            Approved = 2
+            Approved = 2,
+            Cancelled = 3
+        }
+
+        public enum InventoryAdjustmentType
+        {
+            Breakage = 0,
+            Spoilage = 1,
+            Stocktake = 2,
+            Discrepancy = 3,
+            Return = 4,
+            Error = 5,
+            Damaged = 6,
+            Theft = 7,
+            Audit = 8,
+            Waste = 9
         }
 
         public enum RcvStatus
         {
             Unreceived = 0,
             Received = 1,
+            Partial=2
         }
         public enum AdjustmentAction
         {

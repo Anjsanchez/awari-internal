@@ -237,12 +237,15 @@ namespace API.Controllers.inventory
         {
             var datas = await _repo.GetInventoryAdjustments(id);
             var data = datas.FirstOrDefault();
+
+            var headerMap = _map.Map<InventoryAdjustment, InventoryAdjustmentHeaderReadDto>(data);
+            
             var lines = await _repo.GetInvAdjLinesByInvAdjustment(id);
             var map = _map.Map<List<InventoryAdjustmentLines>, List<InvAdjustmentLinesReadDto>>(lines);
 
             var da = new InventoryAdjustmentReadDto()
             {
-                Header = data,
+                Header = headerMap,
                 Lines = map
             };
 

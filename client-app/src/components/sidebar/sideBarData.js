@@ -203,7 +203,7 @@ export const sideBarData = [
             id: 27,
           },
           {
-            title: "Purchase Requisition",
+            title: "Supply Requisition",
             path: "/a/inventory-management/purchase-requisition",
             id: 25,
           },

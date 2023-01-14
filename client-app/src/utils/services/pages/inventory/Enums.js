@@ -3,6 +3,7 @@ const Enums = {
     Pending: "Pending",
     Rejected: "Rejected",
     Approved: "Approved",
+    Cancelled: "Cancelled",
     Action: "Action",
     All: "All",
   },
@@ -19,6 +20,18 @@ const Enums = {
   InventoryLocation: {
     Main: "Main",
     Production: "Production",
+  },
+  InventoryAdjustmentType: {
+    Audit: "Audit",
+    Breakage: "Breakage",
+    Damaged: "Damaged",
+    Discrepancy: "Discrepancy",
+    Error: "Error",
+    Spoilage: "Spoilage",
+    Stocktake: "Stocktake",
+    Return: "Return",
+    Theft: "Theft",
+    Waste: "Waste",
   },
 };
 

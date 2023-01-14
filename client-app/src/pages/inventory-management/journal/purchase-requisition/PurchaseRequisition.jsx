@@ -30,7 +30,7 @@ export default function PurchaseOrder() {
   const tableColumns = [
     {
       field: "purchaseRequisitionNumber",
-      headerName: "Purchase Requisition #",
+      headerName: "Supply Requisition #",
       width: 230,
       type: "number",
     },
@@ -42,7 +42,7 @@ export default function PurchaseOrder() {
     },
     {
       field: "requester",
-      headerName: "Requester",
+      headerName: "Requested By",
       width: 200,
       sortable: false,
     },
@@ -166,9 +166,9 @@ export default function PurchaseOrder() {
   return (
     <div className="container__wrapper">
       <FormHeader
-        header="Purchase Requisition"
+        header="Supply Requisition"
         second="Inventory Management"
-        third="Purchase Requisition"
+        third="Supply Requisition"
         navigate="/"
         SecondIcon={RiShoppingBag2Fill}
         isVisibleBtn={false}
@@ -182,7 +182,7 @@ export default function PurchaseOrder() {
               { name: "Pending", _id: Enums.ApprovalStatus.Pending },
               { name: "All", _id: Enums.ApprovalStatus.All },
             ]}
-            label="PR Status filter"
+            label="SR Status Filter"
             value={mockData.filter || Enums.ApprovalStatus.Pending}
             name="filter"
             onChange={(e) => setValue(e)}

@@ -307,6 +307,19 @@ namespace API.Repository.pages.inventory
         {
             try
             {
+
+                if(data.ApprovalStatus == Models.Enum.EnumModels.PurchaseOrderStatus.Cancelled)
+                {
+                    //do checking kung yung ica-cancel ay may lines ng approved
+                    var lineData = await GetPurchaseOrderLinesByPurchOrder(data._id);
+                    foreach (var item in lineData)
+                    {
+                        if (item.LineStatus != Models.Enum.EnumModels.RcvStatus.Unreceived)
+                            throw new Exception("Cancellation error: One of the lines is already received.");
+                    }
+                };
+
+
                 data.ApprovedDate = DateTime.Now;
                 _db.PurchaseOrders.Update(data).Property(x => x.PurchaseOrderNumber).IsModified = false;
                 await _db.SaveChangesAsync();
@@ -550,15 +563,15 @@ namespace API.Repository.pages.inventory
             {
 
                 data.ReceivedDate = DateTime.Now;
-                if (data.ReceivedQuantity >= data.LineQuantity)
+                if(data.ReceivedQuantity == 0)
+                    data.LineStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                else if (data.ReceivedQuantity >= data.LineQuantity)
                     data.LineStatus = Models.Enum.EnumModels.RcvStatus.Received;
                 else
-                    data.LineStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                    data.LineStatus = Models.Enum.EnumModels.RcvStatus.Partial;
 
                 _db.PurchaseOrderLines.Update(data);
                 await _db.SaveChangesAsync();
-
-
 
                 var invItem = _db.InventoryMaster.FirstOrDefault(n => n._id == data.InventoryMasterId);
                 invItem.QtyMainInventory -= oldQty;
@@ -566,7 +579,6 @@ namespace API.Repository.pages.inventory
 
                 _db.InventoryMaster.Update(invItem);
                 await _db.SaveChangesAsync();
-
 
                 return new ResultResponse() { result = result.success };
             }
@@ -587,9 +599,29 @@ namespace API.Repository.pages.inventory
                 data.ReceivedByDate = DateTime.Now;
                 data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Received;
                 var lines = await GetPurchaseOrderLinesByPurchOrder(data._id);
+
+                var containsPartial = false;
+                var containsUnreceived = false;
+                var containsReceived = false;
+
                 foreach (var item in lines)
+                {
                     if (item.LineStatus == Models.Enum.EnumModels.RcvStatus.Unreceived)
-                        data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                        containsUnreceived = true;
+                    if (item.LineStatus == Models.Enum.EnumModels.RcvStatus.Partial)
+                        containsPartial = true;
+                    if (item.LineStatus == Models.Enum.EnumModels.RcvStatus.Received)
+                        containsReceived = true;
+                }
+
+                data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Received;
+                if (containsUnreceived)
+                    data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Unreceived;
+                if (containsPartial || containsPartial 
+                    && containsUnreceived || containsReceived 
+                    && containsPartial || containsReceived 
+                    && containsUnreceived)
+                    data.RcvStatus = Models.Enum.EnumModels.RcvStatus.Partial;
 
                 _db.PurchaseOrders.Update(data).Property(x => x.PurchaseOrderNumber).IsModified = false;
                 await _db.SaveChangesAsync();

@@ -38,11 +38,16 @@ export default function InventoryAdjustment() {
       width: 190,
       sortable: true,
     },
-
     {
-      field: "requester",
-      headerName: "Requester",
-      width: 200,
+      field: "approvalStatus",
+      headerName: "Approval Status",
+      width: 190,
+      sortable: true,
+    },
+    {
+      field: "adjustmentType",
+      headerName: "Adjustment Type",
+      width: 250,
       sortable: false,
     },
     {

@@ -8,7 +8,10 @@ import MaterialDataGrid from "../../../../common/MaterialDataGrid";
 import Enums from "../../../../utils/services/pages/inventory/Enums";
 import MaterialTableSelect from "../../../../common/MaterialTableSelect";
 import { toggleLoadingGlobal } from "../../../../utils/store/pages/globalSettings";
-import { GetPurchaseOrders } from "../../../../utils/services/pages/inventory/InventoryService";
+import {
+  GetPurchaseOrders,
+  PatchPurchaseOrdersApproval,
+} from "../../../../utils/services/pages/inventory/InventoryService";
 import { Link } from "react-router-dom";
 
 export default function GoodsReceiving() {
@@ -125,7 +128,7 @@ export default function GoodsReceiving() {
             obj.receivedBy.firstName + " " + obj.receivedBy.lastName,
         }));
         data = data.filter((n) => n.approvalStatus === "Approved");
-        let filteredData = data.filter((n) => n.rcvStatus !== "Received");
+        let filteredData = data.filter((n) => n.rcvStatus === "Unreceived");
         setPurchOrders(data);
         setMockData({ ...mockData, filter: Enums.ReceivedStatus.Unreceived });
         setFilteredPurchOrders(filteredData);
@@ -154,11 +157,36 @@ export default function GoodsReceiving() {
     });
   };
 
-  const HandleValidateReadOnly = () => {
-    //true will disable the textbox.
+  const HandleCancelRecord = () => {
+    if (selectedRecord.rcvStatus != Enums.ReceivedStatus.Unreceived) {
+      enqueueSnackbar("You can only cancel unreceived Purchase Order.", {
+        variant: "error",
+      });
+      return;
+    }
+    store.dispatch(toggleLoadingGlobal(true));
     const currentUser = store.getState().entities.user.user;
-    if (currentUser.role.rolename !== "Administrator") return true;
-    return selectedRecord.rcvStatus === "Received" ? true : false;
+    const obj = {
+      ...selectedRecord,
+      approvalStatus: "Cancelled",
+      approvedById: currentUser.id,
+    };
+    PatchPurchaseOrdersApproval(obj)
+      .then((resp) => {
+        setSelectedRecord({});
+        _handleGetPurchOrder();
+        enqueueSnackbar(`Cancellation of Purcahse Order SUCCESS`, {
+          variant: "success",
+        });
+      })
+      .catch((er) => {
+        enqueueSnackbar(`PatchPurchaseOrdersApproval: ${er.data}`, {
+          variant: "error",
+        });
+      })
+      .finally(() => {
+        store.dispatch(toggleLoadingGlobal(false));
+      });
   };
 
   return (
@@ -177,6 +205,7 @@ export default function GoodsReceiving() {
             data={[
               { name: "Received", _id: Enums.ReceivedStatus.Received },
               { name: "Unreceived", _id: Enums.ReceivedStatus.Unreceived },
+              { name: "Partial", _id: Enums.ReceivedStatus.Partial },
               { name: "All", _id: Enums.ReceivedStatus.All },
             ]}
             label="Received Status Filter"
@@ -189,19 +218,32 @@ export default function GoodsReceiving() {
         </div>
         <div className="po-approvalFilter__wrapper rcv">
           {Object.keys(selectedRecord).length > 0 && (
-            <Link
-              to={`/a/inventory-management/goods-receiving/${selectedRecord._id}&fromPage=rcv`}
-              className="link"
-            >
-              <Button
-                type="button"
-                variant="outlined"
-                color="primary"
-                style={{ marginLeft: 5 }}
+            <>
+              <Link
+                to={`/a/inventory-management/goods-receiving/${selectedRecord._id}&fromPage=rcv`}
+                className="link"
               >
-                {selectedRecord.rcvStatus === "Received" ? "View" : "Receive"}
-              </Button>
-            </Link>
+                <Button
+                  type="button"
+                  variant="outlined"
+                  color="primary"
+                  style={{ marginLeft: 5 }}
+                >
+                  {selectedRecord.rcvStatus === "Received" ? "View" : "Receive"}
+                </Button>
+              </Link>
+              <Link to="#" className="link">
+                <Button
+                  type="button"
+                  variant="outlined"
+                  color="secondary"
+                  style={{ marginLeft: 5 }}
+                  onClick={() => HandleCancelRecord()}
+                >
+                  Cancel
+                </Button>
+              </Link>
+            </>
           )}
         </div>
       </div>
