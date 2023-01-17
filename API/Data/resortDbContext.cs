@@ -43,8 +43,8 @@ namespace API.Data
 
         public DbSet<InventoryAdjustment> InventoryAdjustments { get; set; }
         public DbSet<InventoryAdjustmentLines> InventoryAdjustmentLines { get; set; }
-        
 
+        public DbSet<WorkOrder> WorkOrder { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderLines> PurchaseOrderLines { get; set; }
         public DbSet<PurchaseReq> PurchaseReq { get; set; }

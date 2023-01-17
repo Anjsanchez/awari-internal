@@ -58,6 +58,13 @@ export function GetInventoryAdjustments() {
   http.SetJwt();
   return http.get(apiEndpoint + "/GetInventoryAdjustments");
 }
+export function GetWorkOrders(Guid = null) {
+  http.SetJwt();
+
+  let endPoint = apiEndpoint + `/GetWorkOrders`;
+  if (Guid != null) endPoint = apiEndpoint + `/GetWorkOrders?id=${Guid}`;
+  return http.get(endPoint);
+}
 
 export function GetPurchaseRequisition() {
   http.SetJwt();
@@ -76,6 +83,12 @@ export function PatchInvAdjApproval(data) {
 
   const body = { ...data };
   return http.put(`${apiEndpoint}/PatchInvAdjApproval`, body);
+}
+export function PatchWorkOrderApproval(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.put(`${apiEndpoint}/PatchWorkOrderApproval`, body);
 }
 export function PatchPurchaseOrdersReceive(data) {
   http.SetJwt();
@@ -114,6 +127,12 @@ export function PostInvAdjLines(data) {
 
   const body = { ...data };
   return http.post(`${apiEndpoint}/PostInvAdjLines`, body);
+}
+export function PostWorkOrder(data) {
+  http.SetJwt();
+
+  const body = { ...data };
+  return http.post(`${apiEndpoint}/PostWorkOrder`, body);
 }
 
 export function PatchPurchaseLineReceive(data) {

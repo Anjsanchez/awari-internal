@@ -33,6 +33,30 @@ const Enums = {
     Theft: "Theft",
     Waste: "Waste",
   },
+  TypeOfWork: {
+    Repair: "Repair",
+    Maintenance: "Maintenance",
+    Damaged: "Damaged",
+    General: "General",
+    Landscaping: "Landscaping",
+    Pool: "Pool",
+    Electrical: "Electrical",
+    Plumbing: "Plumbing",
+    Carpentry: "Carpentry",
+    Cleaning: "Cleaning",
+  },
+  Location: {
+    Lobby: "Lobby",
+    Pool: "Pool",
+    SeaSide: "SeaSide",
+    Admin: "Admin",
+    Restroom: "Restroom",
+    Guest: "Guest",
+    Staff: "Staff",
+    Receiving: "Receiving",
+    Reception: "Reception",
+    Restaurant: "Restaurant",
+  },
 };
 
 // Lock object to prevent modification (true static).

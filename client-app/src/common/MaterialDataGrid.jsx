@@ -21,6 +21,7 @@ export default function MaterialDataGrid({
   HandleDeleteRecord,
   HandleRefreshRecord,
   HandlePrintRecord,
+  printLink = "",
   onSelectedRow,
   GridHeight = 650,
   ViewRecordTitle = "View Selected Record",
@@ -108,13 +109,16 @@ export default function MaterialDataGrid({
                 Icon={DeleteIcon}
               />
             )}
-            {HandlePrintRecord !== undefined && (
-              <ToolTipWithIcon
-                style
-                title="Print the selected Record"
-                onClick={HandlePrintRecord}
-                Icon={PrintIcon}
-              />
+            {printLink !== "" && (
+              <>
+                <Link to={printLink} className="link">
+                  <ToolTipWithIcon
+                    style
+                    title="Print the selected Record"
+                    Icon={PrintIcon}
+                  />
+                </Link>
+              </>
             )}
           </div>
         </div>

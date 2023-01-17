@@ -12,6 +12,7 @@ namespace API.Dto.inventory
     public class PurchaseReqReadDto
     {
         public PurchaseReq Header { get; set; }
+        public PurchaseReqHeaderReadDto HeaderDto { get; set; }
         public List<PurchaseReqLines> Lines { get; set; }
     }
 

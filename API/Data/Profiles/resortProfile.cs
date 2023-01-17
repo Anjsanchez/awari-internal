@@ -102,7 +102,9 @@ namespace API.Data.Profiles
             CreateMap<reservationPaymentUpdateDto, ReservationPayment>().ReverseMap();
             CreateMap<reservationPaymentCreateDto, ReservationPayment>().ReverseMap();
 
-
+            CreateMap<WorkOrder, WorkOrderReadDto>().ReverseMap();
+            CreateMap<WorkOrderUpdateDto, WorkOrder>().ReverseMap();
+            CreateMap<WorkOrderCreateDto, WorkOrder>().ReverseMap();
             //
             CreateMap<InventoryAdjustment, InventoryAdjustmentHeaderReadDto>().ReverseMap();
             CreateMap<InventoryAdjustmentLines, InvAdjustmentLinesReadDto>().ReverseMap();

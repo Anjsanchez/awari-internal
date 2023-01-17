@@ -35,6 +35,35 @@ namespace API.Models.Enum
             Cancelled = 3
         }
 
+        public enum TypeOfWork
+        {
+            Repair =0,
+            Maintenance =1,
+            Damaged = 2,
+            General = 3,
+            Landscaping = 4,
+            Pool = 5,
+            Electrical = 6,
+            Plumbing = 7,
+            Carpentry = 8,
+            Cleaning = 9
+        }
+
+        public enum Location
+        {
+            Lobby,
+            Pool,
+            [Description("Sea Side")]
+            SeaSide,
+            Admin,
+            Restroom,
+            Guest,
+            Staff,
+            Receiving,
+            Reception,
+            Restaurant,
+        }
+
         public enum InventoryAdjustmentType
         {
             Breakage = 0,
@@ -55,6 +84,13 @@ namespace API.Models.Enum
             Received = 1,
             Partial=2
         }
+        public enum WorkStatus
+        {
+            Ongoing = 0,
+            Finished = 1,
+            Suspended = 2,
+        }
+
         public enum AdjustmentAction
         {
             Decrease = 0,

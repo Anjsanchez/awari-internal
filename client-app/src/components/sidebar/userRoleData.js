@@ -140,4 +140,9 @@ export const resortMgmtPagesData = [
     title: "Inventory Adjustment",
     description: "Inventory Adjustment",
   },
+  {
+    key: 29,
+    title: "Work Order",
+    description: "Work Order",
+  },
 ];

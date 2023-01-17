@@ -95,7 +95,6 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
 
   const renderBtnLateCheckOut = () => {
     const { name } = typeInStore.header.reservationType;
-    console.log(typeInStore.header);
     if (name === "Restaurant" || name === "Day Tour") return null;
     return (
       <Button

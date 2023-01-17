@@ -108,6 +108,9 @@ namespace API.Controllers.inventory
         public async Task<ActionResult> GetPurchaseReqHeaderAndLine(Guid? id)
         {
             var data = await _repo.GetPurchaseReqHeaderAndLine(id);
+
+            data.HeaderDto = _map.Map<PurchaseReq, PurchaseReqHeaderReadDto>(data.Header);
+            
             return Ok(new GenericResponse<PurchaseReqReadDto>()
             {
                 singleRecord = data,
@@ -182,6 +185,26 @@ namespace API.Controllers.inventory
             }
         }
 
+        [HttpGet("GetWorkOrders")]
+        public async Task<ActionResult> GetWorkOrders(Guid? id)
+        {
+            var data = await _repo.GetWorkOrders(id);
+            var map = _map.Map<List<WorkOrder>, List<WorkOrderReadDto>>(data);
+
+            var mapSingleData = new WorkOrderReadDto();
+            if (id != null)
+            {
+                var singleData = data.FirstOrDefault();
+                mapSingleData = _map.Map<WorkOrder, WorkOrderReadDto>(singleData);
+            }
+
+            return Ok(new GenericResponse<WorkOrderReadDto>()
+            {
+                listRecords = map,
+                singleRecord = mapSingleData,
+                Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+            });
+        }
 
         [HttpGet("GetInventoryAdjustments")]
         public async Task<ActionResult> GetInventoryAdjustments(Guid? id)
@@ -219,9 +242,10 @@ namespace API.Controllers.inventory
             var lines = await _repo.GetPurchaseOrderLinesByPurchOrder(id);
             var map = _map.Map<List<PurchaseOrderLines>, List<PurchaseOrderLinesReadDto>>(lines);
 
+            var headerMap = _map.Map<PurchaseOrder, PurchaseOrderHeaderReadDto>(poHeader);
             var da = new PurchaseOrderReadDto()
             {
-                Header = poHeader,
+                Header = headerMap,
                 Lines = map
             };
 
@@ -255,6 +279,7 @@ namespace API.Controllers.inventory
                 Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
             });
         }
+ 
 
         [HttpPut("PatchPurchaseLineReceive")]
         public async Task<ActionResult> PatchPurchaseLineReceive([FromBody] PurchaseOrderLineApprovalUpdateDto dto)
@@ -341,6 +366,34 @@ namespace API.Controllers.inventory
             }
         }
 
+        [HttpPut("PatchWorkOrderApproval")]
+        public async Task<ActionResult> PatchWorkOrderApproval([FromBody] WorkOrderUpdateDto dto)
+        {
+            try
+            {
+                var data = await _repo.GetWorkOrders(dto._id);
+
+                var singleData = data.FirstOrDefault();
+                _map.Map(dto, singleData);
+
+                var result = await _repo.UpsertWorkOrderApproval(singleData);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<WorkOrderReadDto>()
+                {
+                    listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
 
         [HttpPut("PatchInvAdjApproval")]
         public async Task<ActionResult> PatchInvAdjApproval([FromBody] InvAdjApprovalUpdateDto dto)
@@ -361,6 +414,31 @@ namespace API.Controllers.inventory
                 return Ok(new GenericResponse<InventoryAdjustmentHeaderReadDto>()
                 {
                     listRecords = null,
+                    Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
+                });
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPost("PostWorkOrder")]
+        public async Task<ActionResult> PostWorkOrder([FromBody] WorkOrderCreateDto dto)
+        {
+            try
+            {
+                var headerMdl = _map.Map<WorkOrderCreateDto, WorkOrder>(dto);
+
+                var result = await _repo.PostWorkOrder(headerMdl);
+
+                if (result.result == Data.ApiResponse.result.error)
+                    return BadRequest(result.message);
+
+                return Ok(new GenericResponse<InventoryMaster>()
+                {
+                    singleRecord = null,
                     Token = globalFunctionalityHelper.GenerateJwtToken(_jwtConfig.Secret)
                 });
             }

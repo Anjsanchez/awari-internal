@@ -56,6 +56,11 @@ import GoodsReceiving from "./pages/inventory-management/journal/goods-receiving
 import GoodReceivingForm from "./pages/inventory-management/journal/goods-receiving/GoodReceivingForm";
 import InventoryAdjustment from "./pages/inventory-management/journal/inventory-adjustment/InventoryAdjustment";
 import InventoryAdjustmentForm from "./pages/inventory-management/journal/inventory-adjustment/InventoryAdjustmentForm";
+import WorkOrder from "./pages/inventory-management/journal/work-order/WorkOrder";
+import WorkOrderForm from "./pages/inventory-management/journal/work-order/WorkOrderForm";
+import PrintPurchaseOrder from "./components/Prints/Inventory/PrintPurchaseOrder";
+import PrintPurchaseRequisition from "./components/Prints/Inventory/PrintPurchaseRequisition";
+import PrintInventoryAdjustment from "./components/Prints/Inventory/PrintInventoryAdjustment";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -280,6 +285,16 @@ function App() {
                 keyId="28"
               />
               <ProtectedRoute
+                path="/a/inventory-management/work-order/:id"
+                component={WorkOrderForm}
+                keyId="29"
+              />
+              <ProtectedRoute
+                path="/a/inventory-management/work-order"
+                component={WorkOrder}
+                keyId="29"
+              />
+              <ProtectedRoute
                 path="/a/inventory-management/goods-receiving"
                 component={GoodsReceiving}
                 keyId="27"
@@ -289,9 +304,20 @@ function App() {
                 component={Vendors}
                 keyId="26"
               />
+
               <ProtectedRoute
-                path="/a/reports/SOA/:id&isTrans=:isTrans&isCategorized=:isCategorized"
-                component={SOA}
+                path="/a/reports/PO/:id"
+                component={PrintPurchaseOrder}
+                keyId="2"
+              />
+              <ProtectedRoute
+                path="/a/reports/PR/:id"
+                component={PrintPurchaseRequisition}
+                keyId="2"
+              />
+              <ProtectedRoute
+                path="/a/reports/IA/:id"
+                component={PrintInventoryAdjustment}
                 keyId="2"
               />
               <ProtectedRoute

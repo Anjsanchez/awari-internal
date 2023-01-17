@@ -14,6 +14,13 @@ export default function MaterialTableSelect({
   displayKey,
   required = true,
 }) {
+  const ClassProps = {
+    PaperProps: {
+      style: {
+        maxHeight: 250,
+      },
+    },
+  };
   const RenderDisplay = (n) => {
     if (displayKey !== undefined) {
       return (
@@ -46,6 +53,7 @@ export default function MaterialTableSelect({
           label="Shadow Database *"
           onChange={onChange}
           value={value || ""}
+          MenuProps={ClassProps}
         >
           {data && data.map((n) => RenderDisplay(n))}
         </Select>

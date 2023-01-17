@@ -426,6 +426,7 @@ namespace API.Repository.pages.inventory
             var POHeaders = await GetPurchaseRequisition(id);
             var poHeader = POHeaders.FirstOrDefault();
 
+
             var poLines = _db.PurchaseReqLines
                 .Include(n => n.InventoryMaster)
                 .Include(n => n.InventoryMaster.InventoryUnit)
@@ -722,6 +723,68 @@ namespace API.Repository.pages.inventory
                 data.RequestDate = DateTime.Now;
                 data.CreatedDate = DateTime.Now;
                 _db.InventoryAdjustments.Update(data);
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success, message = data._id.ToString() };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<List<WorkOrder>> GetWorkOrders(Guid? id = null)
+        {
+            try
+            {
+                var datas = await _db.WorkOrder
+                        .Include(n => n.ApprovedBy)
+                        .Include(n => n.CreatedBy)
+                        .Include(n => n.RequestedBy)
+                        .ToListAsync();
+
+                if (id != null)
+                    datas = datas.Where(n => n._id == id).ToList();
+
+                return datas;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ResultResponse> UpsertWorkOrderApproval(WorkOrder data)
+        {
+            try
+            {
+                data.ApprovedDate = DateTime.Now;
+                _db.WorkOrder.Update(data).Property(x => x.WorkOrderNumber).IsModified = false;
+                await _db.SaveChangesAsync();
+
+                return new ResultResponse() { result = result.success };
+            }
+            catch (System.Exception ex)
+            {
+                return new ResultResponse()
+                {
+                    message = ex.Message,
+                    result = result.error
+                };
+            }
+        }
+
+        public async Task<ResultResponse> PostWorkOrder(WorkOrder data)
+        {
+            try
+            {
+                data.RequestDate = DateTime.Now;
+                data.CreatedDate = DateTime.Now;
+                _db.WorkOrder.Update(data);
                 await _db.SaveChangesAsync();
 
                 return new ResultResponse() { result = result.success, message = data._id.ToString() };

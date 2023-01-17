@@ -10,14 +10,16 @@ import MaterialTableSelect from "../../../../common/MaterialTableSelect";
 import { toggleLoadingGlobal } from "../../../../utils/store/pages/globalSettings";
 import {
   GetInventoryAdjustments,
+  GetWorkOrders,
   PatchInvAdjApproval,
+  PatchWorkOrderApproval,
 } from "../../../../utils/services/pages/inventory/InventoryService";
 
-export default function InventoryAdjustment() {
+export default function WorkOrder() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const [invAdjustments, setInvAdjustments] = useState([]);
-  const [filteredInvAdjustments, setFilteredInvAdjustments] = useState([]);
+  const [workOrders, setWorkOrders] = useState([]);
+  const [filteredWorkOrders, setFilteredWorkOrders] = useState([]);
 
   const [selectedRecord, setSelectedRecord] = useState({});
   const [mockData, setMockData] = useState({
@@ -27,27 +29,45 @@ export default function InventoryAdjustment() {
 
   const tableColumns = [
     {
-      field: "journalNumber",
-      headerName: "Inventory Journal #",
-      width: 200,
+      field: "workOrderNumber",
+      headerName: "Work Order #",
+      width: 170,
       type: "number",
     },
     {
       field: "approvalStatus",
       headerName: "Approval Status",
-      width: 190,
+      width: 180,
       sortable: true,
     },
     {
-      field: "approvalStatus",
-      headerName: "Approval Status",
-      width: 190,
+      field: "typeOfWork",
+      headerName: "Work Type",
+      width: 160,
+      sortable: false,
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      width: 160,
       sortable: true,
     },
     {
-      field: "adjustmentType",
-      headerName: "Adjustment Type",
+      field: "typeOfWork",
+      headerName: "Work Type",
+      width: 160,
+      sortable: false,
+    },
+    {
+      field: "targetWorkDate",
+      headerName: "Target Start Date",
       width: 250,
+      sortable: true,
+    },
+    {
+      field: "requester",
+      headerName: "Requested By",
+      width: 200,
       sortable: false,
     },
     {
@@ -69,24 +89,24 @@ export default function InventoryAdjustment() {
       sortable: true,
     },
     {
-      field: "reason",
-      headerName: "Reason",
-      width: 500,
+      field: "createdBy",
+      headerName: "Created By",
+      width: 200,
       sortable: false,
     },
   ];
 
   useEffect(() => {
-    _handleGetAdjustments();
+    _handleGetRecords();
   }, []);
 
   useEffect(() => {
     let filteredData =
       mockData.filter === Enums.ApprovalStatus.All
-        ? [...invAdjustments]
-        : invAdjustments.filter((n) => n.approvalStatus === mockData.filter);
+        ? [...workOrders]
+        : workOrders.filter((n) => n.approvalStatus === mockData.filter);
 
-    setFilteredInvAdjustments(filteredData);
+    setFilteredWorkOrders(filteredData);
   }, [mockData.filter]);
 
   useEffect(() => {
@@ -106,12 +126,12 @@ export default function InventoryAdjustment() {
       approvalStatus: mockData.action,
       approvedById: currentUser.id,
     };
-    PatchInvAdjApproval(obj)
+    PatchWorkOrderApproval(obj)
       .then((resp) => {
-        _handleGetAdjustments();
+        _handleGetRecords();
       })
       .catch(() => {
-        enqueueSnackbar("PatchInvAdjApproval: ERROR", {
+        enqueueSnackbar("PatchWorkOrderApproval: ERROR", {
           variant: "error",
         });
       })
@@ -119,25 +139,27 @@ export default function InventoryAdjustment() {
         store.dispatch(toggleLoadingGlobal(false));
       });
   };
-  const _handleGetAdjustments = () => {
+  const _handleGetRecords = () => {
     //
     store.dispatch(toggleLoadingGlobal(true));
 
-    GetInventoryAdjustments()
+    GetWorkOrders()
       .then((resp) => {
+        console.log(resp.data.listRecords);
         const data = resp.data.listRecords.map((obj) => ({
           ...obj,
           id: obj._id,
           requester: obj.requestedBy.firstName + " " + obj.requestedBy.lastName,
+          createdBy: obj.createdBy.firstName + " " + obj.createdBy.lastName,
           approver:
             obj.approvedBy &&
             obj.approvedBy.firstName + " " + obj.approvedBy.lastName,
         }));
 
-        setInvAdjustments(data);
+        setWorkOrders(data);
         setMockData({ ...mockData, filter: Enums.ApprovalStatus.Pending });
         let filteredData = data.filter((n) => n.approvalStatus === "Pending");
-        setFilteredInvAdjustments(filteredData);
+        setFilteredWorkOrders(filteredData);
       })
       .catch(() => {
         enqueueSnackbar("GetInventoryAdjustments: ERROR", {
@@ -170,9 +192,9 @@ export default function InventoryAdjustment() {
   return (
     <div className="container__wrapper">
       <FormHeader
-        header="Inventory Adjustment"
+        header="Work Order"
         second="Inventory Management"
-        third="Inventory Adjustment"
+        third="Work Order"
         navigate="/"
         SecondIcon={RiShoppingBag2Fill}
         isVisibleBtn={false}
@@ -186,7 +208,7 @@ export default function InventoryAdjustment() {
               { name: "Pending", _id: Enums.ApprovalStatus.Pending },
               { name: "All", _id: Enums.ApprovalStatus.All },
             ]}
-            label="Adjustment Status filter"
+            label="Order filter"
             value={mockData.filter || Enums.ApprovalStatus.Pending}
             name="filter"
             onChange={(e) => setValue(e)}
@@ -222,20 +244,15 @@ export default function InventoryAdjustment() {
       </div>
 
       <MaterialDataGrid
-        printLink={
-          Object.keys(selectedRecord).length > 0
-            ? `/a/reports/IA/${selectedRecord._id}`
-            : ""
-        }
-        addLink="/a/inventory-management/inventory-adjustment/new"
-        modifyLink={`/a/inventory-management/inventory-adjustment/${selectedRecord._id}`}
+        addLink="/a/inventory-management/work-order/new"
+        modifyLink={`/a/inventory-management/work-order/${selectedRecord._id}`}
         onSelectedRow={HandleSelectedRowChange}
         HandleViewRecord={
           Object.keys(selectedRecord).length > 0 ? GenericFunc : undefined
         }
         HandleAddRecord={GenericFunc}
-        HandleRefreshRecord={_handleGetAdjustments}
-        tableData={filteredInvAdjustments}
+        HandleRefreshRecord={_handleGetRecords}
+        tableData={filteredWorkOrders}
         tableColumns={tableColumns}
         sortModel={[{ field: "requestDate", sort: "desc" }]}
       />

@@ -14,6 +14,8 @@ namespace API.Contracts.pages.inventory
         Task<List<InventoryMaster>> GetInventoryMaster(bool isActiveOnly = false);
         Task<List<PurchaseOrder>> GetPurchaseOrders(Guid? id = null);
         Task<List<InventoryAdjustment>> GetInventoryAdjustments(Guid? id = null);
+
+        Task<List<WorkOrder>> GetWorkOrders(Guid? id = null);
         Task<List<PurchaseReq>> GetPurchaseRequisition(Guid? id = null);
         Task<PurchaseOrderLines> GetPurchaseOrderLinesById(Guid? id = null);
         Task<List<PurchaseOrderLines>> GetPurchaseOrderLinesByPurchOrder(Guid? id = null);
@@ -21,6 +23,8 @@ namespace API.Contracts.pages.inventory
         Task<PurchaseReqReadDto> GetPurchaseReqHeaderAndLine(Guid? id = null);
         Task<ResultResponse> UpsertPurchaseOrderApproval(PurchaseOrder data);
         Task<ResultResponse> UpsertInvAdjApproval(InventoryAdjustment data);
+
+        Task<ResultResponse> UpsertWorkOrderApproval(WorkOrder data);
         Task<ResultResponse> PatchPurchaseOrdersReceive(PurchaseOrder data);
         Task<ResultResponse> UpsertPurchaseLineReceive(PurchaseOrderLines data, float oldQty);
         Task<ResultResponse> UpsertPurchaseReqApproval(PurchaseReq data);
@@ -29,6 +33,7 @@ namespace API.Contracts.pages.inventory
         Task<ResultResponse> PostPurchaseReqLines(List<PurchaseReqLines> data);
         Task<ResultResponse> PostPurchaseOrderHeader(PurchaseOrder data);
         Task<ResultResponse> PostInvAdjHeader(InventoryAdjustment data);
+        Task<ResultResponse> PostWorkOrder(WorkOrder data);
 
         Task<ResultResponse> PostPurchaseReqHeader(PurchaseReq data);
 

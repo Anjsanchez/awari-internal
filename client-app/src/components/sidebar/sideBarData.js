@@ -212,6 +212,11 @@ export const sideBarData = [
             path: "/a/inventory-management/inventory-adjustment",
             id: 28,
           },
+          {
+            title: "Work Order",
+            path: "/a/inventory-management/work-order",
+            id: 29,
+          },
         ],
       },
     ],

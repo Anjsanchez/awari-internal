@@ -220,10 +220,15 @@ export default function PurchaseOrder() {
       <MaterialDataGrid
         addLink="/a/inventory-management/purchase-requisition/new"
         modifyLink={`/a/inventory-management/purchase-requisition/${selectedRecord._id}`}
-        ViewRecordTitle="View Purchase Order"
+        ViewRecordTitle="View Purchase Requisition"
         onSelectedRow={HandleSelectedRowChange}
         HandleViewRecord={
           Object.keys(selectedRecord).length > 0 ? GenericFunc : undefined
+        }
+        printLink={
+          Object.keys(selectedRecord).length > 0
+            ? `/a/reports/PR/${selectedRecord._id}`
+            : ""
         }
         HandlePrintRecord={GenericFunc}
         HandleAddRecord={GenericFunc}

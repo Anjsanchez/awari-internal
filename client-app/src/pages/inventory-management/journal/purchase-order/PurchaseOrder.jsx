@@ -236,7 +236,6 @@ export default function PurchaseOrder() {
           </Button>
         </div>
       </div>
-
       <MaterialDataGrid
         addLink="/a/inventory-management/purchase-order/new&fromPage=po"
         modifyLink={`/a/inventory-management/purchase-order/${selectedRecord._id}&fromPage=po`}
@@ -245,7 +244,11 @@ export default function PurchaseOrder() {
         HandleViewRecord={
           Object.keys(selectedRecord).length > 0 ? GenericFunc : undefined
         }
-        HandlePrintRecord={GenericFunc}
+        printLink={
+          Object.keys(selectedRecord).length > 0
+            ? `/a/reports/PO/${selectedRecord._id}`
+            : ""
+        }
         HandleAddRecord={GenericFunc}
         HandleRefreshRecord={_handleGetPurchOrder}
         tableData={filteredPurchOrders}

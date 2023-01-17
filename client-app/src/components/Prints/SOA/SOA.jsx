@@ -833,7 +833,7 @@ const SOAe = ({
   };
 
   return (
-    <Document title="Guest Folio">
+    <Document title="Guest FolioX">
       <Page size="A4" style={styles.body}>
         <View>
           <View style={styles.rowResort}>

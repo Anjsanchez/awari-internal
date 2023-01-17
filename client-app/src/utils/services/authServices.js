@@ -17,7 +17,6 @@ export function IsLoggedIn() {
 }
 
 export async function login(username, password) {
-  console.log(apiEndpoint);
   let endPoint = `${apiEndpoint}/login`;
 
   const { data } = await http.post(endPoint, {
