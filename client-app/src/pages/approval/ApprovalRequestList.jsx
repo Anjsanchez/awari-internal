@@ -29,7 +29,7 @@ const ApprovalRequestList = ({ approvalRequests, onUpdateApprovals }) => {
       ),
     },
     {
-      title: "Requester",
+      title: "Requested By",
       dataIndex: "Requester",
       width: "20%",
       fixed: "top",

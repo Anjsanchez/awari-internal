@@ -186,7 +186,7 @@ export default function InventoryAdjustment() {
               { name: "Pending", _id: Enums.ApprovalStatus.Pending },
               { name: "All", _id: Enums.ApprovalStatus.All },
             ]}
-            label="Adjustment Status filter"
+            label="Adjustment Status Filter"
             value={mockData.filter || Enums.ApprovalStatus.Pending}
             name="filter"
             onChange={(e) => setValue(e)}

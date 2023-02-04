@@ -159,6 +159,12 @@ export default function PurchaseOrderForm() {
       lines: [...reqLines],
     };
 
+    if (obj.lines.length === 0) {
+      enqueueSnackbar("Please add lines in the form.", {
+        variant: "warning",
+      });
+      return;
+    }
     store.dispatch(toggleLoadingGlobal(true));
 
     const promises = [

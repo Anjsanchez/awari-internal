@@ -53,7 +53,7 @@ export default function GoodsReceiving() {
     },
     {
       field: "requester",
-      headerName: "Requester",
+      headerName: "Requested By",
       width: 200,
       sortable: false,
     },
