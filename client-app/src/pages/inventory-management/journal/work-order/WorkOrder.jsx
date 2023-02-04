@@ -250,6 +250,11 @@ export default function WorkOrder() {
         HandleViewRecord={
           Object.keys(selectedRecord).length > 0 ? GenericFunc : undefined
         }
+        printLink={
+          Object.keys(selectedRecord).length > 0
+            ? `/a/reports/WO/${selectedRecord._id}`
+            : ""
+        }
         HandleAddRecord={GenericFunc}
         HandleRefreshRecord={_handleGetRecords}
         tableData={filteredWorkOrders}

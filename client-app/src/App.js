@@ -61,6 +61,7 @@ import WorkOrderForm from "./pages/inventory-management/journal/work-order/WorkO
 import PrintPurchaseOrder from "./components/Prints/Inventory/PrintPurchaseOrder";
 import PrintPurchaseRequisition from "./components/Prints/Inventory/PrintPurchaseRequisition";
 import PrintInventoryAdjustment from "./components/Prints/Inventory/PrintInventoryAdjustment";
+import PrintWorkOrder from "./components/Prints/Inventory/PrintWorkOrder";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -313,6 +314,11 @@ function App() {
               <ProtectedRoute
                 path="/a/reports/PR/:id"
                 component={PrintPurchaseRequisition}
+                keyId="2"
+              />
+              <ProtectedRoute
+                path="/a/reports/WO/:id"
+                component={PrintWorkOrder}
                 keyId="2"
               />
               <ProtectedRoute
