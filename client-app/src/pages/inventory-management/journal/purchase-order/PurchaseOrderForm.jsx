@@ -183,6 +183,12 @@ export default function PurchaseOrderForm() {
       lines: [...poLines],
     };
 
+    if (obj.lines.length === 0) {
+      enqueueSnackbar("Please create a lines first.", {
+        variant: "warning",
+      });
+      return;
+    }
     store.dispatch(toggleLoadingGlobal(true));
 
     const promises = [
