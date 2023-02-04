@@ -156,7 +156,7 @@ namespace API.Repository.pages.inventory
                 {
                     res.IsActive = data.IsActive;
                     res.Name = data.Name;
-
+                    res.Note = data.Note;
                     res.InventoryTypeId = data.InventoryTypeId;
                     res.QtyMainInventory = data.QtyMainInventory;
                     res.ProductCategoryId = data.ProductCategoryId;
