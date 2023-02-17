@@ -189,10 +189,11 @@ const BookingHistoryByHeader = () => {
       return selectedCustomer.includes(item.customer._id);
     });
 
+    //hardcoded by to profit because the maximum is only 500,000k only
     const filteredPrices = filteredCustomer.filter((item) => {
       return (
         Math.trunc(selectedProfit.from) <= Math.trunc(item.netAmount) &&
-        Math.trunc(selectedProfit.to) >= Math.trunc(item.netAmount)
+        Math.trunc(10000000) >= Math.trunc(item.netAmount)
       );
     });
 
