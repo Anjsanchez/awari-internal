@@ -85,11 +85,21 @@ namespace API.Repository.pages.trans
                   .FirstOrDefaultAsync(n => n._id == id);
         }
 
-        public async Task<List<TransLine>> GetTransByHeaderId(Guid headerId)
+        public  async Task<List<TransLine>> GetTransByHeaderId(Guid headerId)
         {
-            var datas = await FindAll();
+            var datas =  await _db.TransLines
+             .Include(n => n.discount)
+             .Include(n => n.product)
+             .Include(n => n.product.productCategory)
+             .Include(n => n.transHeader)
+             .Include(n => n.transRoom.room)
+             .Include(n => n.transHeader.reservationType)
+             .Include(n => n.transHeader.Customer)
 
-            return datas.Where(n => n.transHeaderId == headerId).ToList();
+             .Include(n => n.transRoom)
+             .Include(n => n.user)
+             .Where(n => n.transHeaderId == headerId).ToListAsync();
+            return datas;
         }
 
         public async Task<bool> Save()

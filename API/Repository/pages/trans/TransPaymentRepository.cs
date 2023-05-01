@@ -65,11 +65,13 @@ namespace API.Repository.pages.trans
 
         public async Task<List<TransPayment>> GetPaymentByHeaderId(Guid headerId)
         {
-            var xpayments = await FindAll();
+            var xpayments = await _db.TransPayments
+                        .Include(n => n.transHeader)
+                        .Include(n => n.payment)
+                        .Include(n => n.user).Where(n => n.transHeaderId == headerId)
+                        .ToListAsync();
 
-            var z = xpayments.Where(n => n.transHeaderId == headerId).ToList();
-
-            return z;
+            return xpayments;
         }
 
 

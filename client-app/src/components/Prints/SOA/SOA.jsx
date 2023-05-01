@@ -1274,7 +1274,7 @@ const SOAe = ({
 
 const SOA = () => {
   const isMounted = useMountedState();
-  const { id: headerId, isTrans, isCategorized } = useParams();
+  const { id: headerId, istrans, isCategorized } = useParams();
   const [rooms, setRooms] = useState([]);
   const [trans, setTrans] = useState([]);
   const [header, setHeader] = useState({});
@@ -1329,7 +1329,6 @@ const SOA = () => {
       try {
         const { data } = await GetTransWithFullDetails(headerId);
         const { token, header, payments, rooms, trans } = data;
-
         store.dispatch(writeToken({ token }));
 
         if (isMounted()) {
@@ -1354,7 +1353,7 @@ const SOA = () => {
     setCurrentUser(store.getState().entities.user.user);
 
     fetchProductDetails();
-    if (isTrans === "true") fetchDataTrans();
+    if (istrans === "true") fetchDataTrans();
     else fetchData();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -1374,7 +1373,7 @@ const SOA = () => {
         header={header}
         trans={trans}
         payments={payments}
-        isTrans={isTrans}
+        isTrans={istrans}
         isCategorized={isCategorized}
         user={currentUser}
         productCategories={productCategories}

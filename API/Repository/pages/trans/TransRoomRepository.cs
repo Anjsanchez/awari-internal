@@ -76,11 +76,15 @@ namespace API.Repository.pages.trans
 
         public async Task<List<TransRoom>> GetLineByHeaderId(Guid headerId)
         {
-            var xlines = await FindAll();
+            var ww = await _db.TransRooms.Include(n => n.roomPricing)
+                        .Include(n => n.room)
+                        .Include(n => n.discount)
+                        .Include(n => n.transHeader.Customer)
+                        .Include(n => n.transHeader.reservationType)
+                        .Include(n => n.transHeader)
+                        .Include(n => n.room.RoomVariant).Where(n => n.transHeaderId == headerId).ToListAsync();
 
-            var z = xlines.Where(n => n.transHeaderId == headerId).ToList();
-
-            return z;
+            return ww;
         }
 
         public async Task<bool> Save()
