@@ -489,7 +489,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.adultPax * 1760)}
+              {formatNumber(roomsx.adultPax * 1880)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -514,7 +514,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.seniorPax * 1760)}
+              {formatNumber(roomsx.seniorPax * 1880)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -541,7 +541,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.childrenPax * 880)}
+              {formatNumber(roomsx.childrenPax * 990)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
