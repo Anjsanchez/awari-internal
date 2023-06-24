@@ -131,21 +131,6 @@ namespace API
                };
            });
 
-            services.AddCors(opt =>
-            {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins(new string[] {
-                        "http://localhost:3000",  //DEV
-                        "http://10.32.33.193:9191", "http://10.32.33.1:9191",
-                        "http://10.32.33.32:9090","http://10.32.34.254:9090",
-                        "http://anilaointernal.com:9090", "http://localhost:9090",  // UAT
-                        "http://10.32.33.193:9090",  // PROD
-                        "http://10.130.0.10:9090", "http://localhost:3001" ,
-                        "http://192.168.1.2:9090", "http://localhost:9090",
-                        });//ADRIAN
-                });
-            });
 
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -201,6 +186,9 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
+
+            
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             app.UseStaticFiles(new StaticFileOptions
             {

@@ -3,6 +3,7 @@ using resortPrintWorker.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -174,10 +175,32 @@ namespace resortPrintWorker.Controller
 
                      executeUpdateRecord(item[0].reservationHeaderId, item[0].productCategoryId);
                 }
+
+                CheckIfAnydeskIsRunning();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+            }
+        }
+        static bool IsProcessRunning(string processName)
+        {
+            Process[] processes = Process.GetProcessesByName(processName);
+            return processes.Length > 0;
+        }
+        private void CheckIfAnydeskIsRunning()
+        {
+            try
+            {
+                if (!IsProcessRunning("AnyDesk"))
+                {
+                    string anyDeskPath = @"C:\Program Files (x86)\AnyDesk\AnyDesk.exe";
+                    Process.Start(anyDeskPath);
+                }
+            }
+            catch (Exception)
+            {
+                //dont throw any exception
             }
         }
 
