@@ -166,7 +166,7 @@ namespace API.Controllers.reservation
             //Calculate discount.
             //Una ang 12%, then 20%
 
-            discSeniorAmt = (float)Math.Floor((((adultPrice * lineDto.seniorPax) / (float)1.12)) * (float)0.80);
+            discSeniorAmt = (float)Math.Round((((adultPrice * lineDto.seniorPax) / (float)1.12)) * (float)0.80);
             //float discAmount12 = (adultPrice * lineDto.seniorPax) * (float)0.12;
             //float discAmount20 = ((adultPrice * lineDto.seniorPax) - discAmount12) * (float)0.20;
 
