@@ -26,7 +26,6 @@ import {
 } from "@material-ui/core";
 
 const ReservationDetailsLeftTab = () => {
-  console.log("c");
   const hist = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [totalHeads, setTotalHeads] = useState(0);
@@ -44,7 +43,6 @@ const ReservationDetailsLeftTab = () => {
   const { firstName, lastName, mobile, emailAddress } = header.customer;
 
   useEffect(() => {
-    console.log("b");
     const heads = rooms.reduce(
       (a, b) => a + (b.adultPax + b.seniorPax + b.childrenPax),
       0
@@ -57,7 +55,6 @@ const ReservationDetailsLeftTab = () => {
       header.reservationType.name === "Night Tour"
     )
       totalRoom = 0;
-    console.log("a");
     setTotalTrans(trans.length);
     setTotalRooms(totalRoom);
     setTotalHeads(heads);
@@ -73,7 +70,6 @@ const ReservationDetailsLeftTab = () => {
     setAskCheckOutConfirmation(false);
   };
   const handleCheckInCheckOut = () => {
-    console.log("d");
     if (!header.isActive) return setAskConfirmation(true);
 
     const { netAmount, netPayment } = totals;
@@ -91,7 +87,6 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const handleCheckOut = async () => {
-    console.log("e");
     setAskCheckOutConfirmation(false);
 
     try {
@@ -118,7 +113,6 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const handleOk = async () => {
-    console.log("f");
     if (askCheckOutConfirmation) return handleCheckOut();
 
     setAskConfirmation(false);
@@ -134,7 +128,6 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const renderStatus = () => {
-    console.log("g");
     if (isTrans) return <ActiveButton value={true} textTrue="Completed" />;
     if (header.isActive) return <ActiveButton value={true} textTrue="In" />;
 
@@ -153,7 +146,6 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const soaButton = () => {
-    console.log("h");
     return (
       <>
         <div className="cd-button__container rdltBtn">
@@ -173,7 +165,6 @@ const ReservationDetailsLeftTab = () => {
   };
 
   const renderButton = () => {
-    console.log("i");
     if (isTrans) {
       return <>{soaButton()}</>;
     }
@@ -251,7 +242,6 @@ const ReservationDetailsLeftTab = () => {
                 </>
               )}
 
-              {console.log("WW", header.reservationType)}
               {(header.reservationType.name !== "Restaurant" &&
                 header.reservationType.name !== "Day Tour") ||
                 (header.reservationType.name !== "Night Tour" && (

@@ -478,7 +478,7 @@ const SOAe = ({
     if (dayTourType !== "Day Tour" && dayTourType !== "Night Tour") return null;
 
     let adultPrice = 1880;
-    if (dayTourType === "night tour") adultPrice = 1990;
+    if (dayTourType === "Night Tour") adultPrice = 1990;
 
     return (
       <>
@@ -564,7 +564,6 @@ const SOAe = ({
 
   const RenderSolAndLunaName = (trip) => {
     let tripName = trip.toLowerCase();
-
     if (tripName == "day tour") return "Sol Trip";
     if (tripName == "night tour") return "Luna Trip";
     return trip;
