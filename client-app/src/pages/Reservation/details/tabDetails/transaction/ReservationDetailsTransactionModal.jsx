@@ -77,7 +77,8 @@ const ReservationDetailsTransactionModal = (props) => {
 
     if (
       reservationHeader.reservationType.name === "Day Tour" ||
-      reservationHeader.reservationType.name === "Restaurant"
+      reservationHeader.reservationType.name === "Restaurant" ||
+      reservationHeader.reservationType.name === "Night Tour"
     )
       setIsDayTour(true);
   }, [reservationHeader]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -67,6 +67,8 @@ namespace resortPrintWorker.Controller
             try
             {
 
+                CheckIfAnydeskIsRunning();
+
                 var query = @"SELECT 
                     TR.reservationHeaderId,
                     P.productCategoryId,
@@ -176,7 +178,6 @@ namespace resortPrintWorker.Controller
                      executeUpdateRecord(item[0].reservationHeaderId, item[0].productCategoryId);
                 }
 
-                CheckIfAnydeskIsRunning();
             }
             catch (Exception ex)
             {

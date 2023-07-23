@@ -76,6 +76,11 @@ namespace API
                     services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
                                 (_config.GetConnectionString("laptopDevConnection")));
                 }
+                else if (Environment.MachineName.ToLower().Contains("doggoknight"))
+                {
+                    services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer
+                                (_config.GetConnectionString("doggoConnection")));
+                }
                 else if (Environment.MachineName == "PHESL51318")
                 {
                     services.AddDbContext<resortDbContext>(opt => opt.UseSqlServer

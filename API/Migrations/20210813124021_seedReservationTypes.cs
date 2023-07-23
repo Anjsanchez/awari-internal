@@ -16,6 +16,7 @@ namespace API.Migrations
                     { Guid.NewGuid(), "Website" },
                     { Guid.NewGuid(), "Restaurant" },
                     { Guid.NewGuid(), "Day Tour" },
+                    { Guid.NewGuid(), "Night Tour" },
                     { Guid.NewGuid(), "OTA/Travel Agency" }
                 });
         }

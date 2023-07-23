@@ -275,7 +275,9 @@ namespace API.Controllers.reservation
             var withUser = await _repo.FindById(cmdMdl._id);
             var mappedData = _map.Map<ReservationHeader, reservationHeaderReadDto>(withUser);
 
-            if (mappedData.reservationType.name.ToLower() == "day tour" ||
+            if (
+                mappedData.reservationType.name.ToLower() == "day tour" ||
+                mappedData.reservationType.name.ToLower() == "night tour" ||
                 mappedData.reservationType.name.ToLower() == "restaurant")
             {
 
@@ -306,12 +308,23 @@ namespace API.Controllers.reservation
                 int totalAmount = 1880;
                 int grossAmount = 1880;
 
+                if (header.reservationType.name.Contains("night"))
+                {
+                    totalAmount = 1990;
+                    grossAmount = 1990;
+                }
+
                 var today = DateTime.Today;
                 var age = today.Year - header.Customer.birthday.Year;
 
                 if (age >= 60)
                 {
-                    totalAmount = 1408;
+                    totalAmount = 1342;
+                    if (header.reservationType.name.Contains("night"))
+                    {
+                        totalAmount = 1421;
+                    }
+
                     seniorPax = 1;
                     adultPax = 0;
                 }

@@ -82,7 +82,8 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
 
   const renderLateChecKout = () => {
     const { name } = typeInStore.header.reservationType;
-    if (name === "Restaurant" || name === "Day Tour") return null;
+    if (name === "Restaurant" || name === "Day Tour" || name === "Night Tour")
+      return null;
 
     return (
       <ReservationDetailsLeftTabLateCheckOut
@@ -95,7 +96,8 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
 
   const renderBtnLateCheckOut = () => {
     const { name } = typeInStore.header.reservationType;
-    if (name === "Restaurant" || name === "Day Tour") return null;
+    if (name === "Restaurant" || name === "Day Tour" || name === "Night Tour")
+      return null;
     return (
       <Button
         onClick={() => setIsVisibleLateCheckOut(true)}
@@ -110,7 +112,8 @@ const ReservationDetailsLeftTabActions = ({ typeInStore }) => {
 
   const renderBtnForfeitedBookingWithPayment = () => {
     const { name } = typeInStore.header.reservationType;
-    if (name === "Restaurant" || name === "Day Tour") return null;
+    if (name === "Restaurant" || name === "Day Tour" || name === "Night Tour")
+      return null;
     if (typeInStore.header.isActive) return null;
 
     return (

@@ -105,6 +105,7 @@ namespace API.helpers.api
         public static int getTotalNumberOfRooms(List<ReservationRoomLine> roomData, string type)
         {
             if (type.ToLower() == "day tour" ||
+                 type.ToLower() == "night tour" ||
                  type.ToLower() == "restaurant")
                 return 0;
 

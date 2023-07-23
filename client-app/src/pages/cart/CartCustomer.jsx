@@ -25,6 +25,7 @@ const CartCustomer = ({ showModal, handleCancelModal, handleConfirmOrder }) => {
   );
   const isDayTour =
     createTransaction.customer.type === "Day Tour" ||
+    createTransaction.customer.type === "Night Tour" ||
     createTransaction.customer.type === "Restaurant"
       ? true
       : false;

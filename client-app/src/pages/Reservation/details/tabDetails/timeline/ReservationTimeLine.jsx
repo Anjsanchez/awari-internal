@@ -20,7 +20,7 @@ const ReservationTimeLine = () => {
     });
   }
 
-  if (name !== "Restaurant" && name !== "Day Tour") {
+  if (name !== "Restaurant" && name !== "Day Tour" && name !== "Night Tour") {
     typeInStore.rooms.map((n) =>
       data.push({
         type: "R",

@@ -147,15 +147,27 @@ namespace API.Controllers.reservation
             float discSeniorAmt = 0f;
             float netAmount = 0f;
 
+            float adultPrice = 0f;
+            float kidPrice = 0f;
+            if(reservationRoomLine.reservationHeader.reservationType.name.ToLower() == "day tour")
+            {
+                adultPrice = 1880;
+                kidPrice = 990;
+            }
+            if (reservationRoomLine.reservationHeader.reservationType.name.ToLower() == "night tour")
+            {
+                adultPrice = 1990;
+                kidPrice = 990;
+            }
 
-            childAmount = 990 * lineDto.childrenPax;
-            grossAmount = 1880 * (lineDto.adultPax + lineDto.seniorPax) + childAmount;
+            childAmount = kidPrice * lineDto.childrenPax;
+            grossAmount = adultPrice * (lineDto.adultPax + lineDto.seniorPax) + childAmount;
 
             //Calculate discount.
             //Una ang 12%, then 20%
 
-            float discAmount12 = (1880 * lineDto.seniorPax) * (float)0.12;
-            float discAmount20 = ((1880 * lineDto.seniorPax) - discAmount12) * (float)0.20;
+            float discAmount12 = (adultPrice* lineDto.seniorPax) * (float)0.12;
+            float discAmount20 = ((adultPrice * lineDto.seniorPax) - discAmount12) * (float)0.20;
 
             discSeniorAmt = discAmount20 + discAmount12;
 

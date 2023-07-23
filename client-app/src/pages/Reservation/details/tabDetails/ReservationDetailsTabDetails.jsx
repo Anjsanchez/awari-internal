@@ -17,7 +17,8 @@ const ReservationDetailsTabDetails = () => {
 
   const type = typeInStore.header.reservationType.name.toLowerCase();
 
-  if (type === "day tour" || type === "restaurant") isWalkIn = true;
+  if (type === "night tour" || type === "day tour" || type === "restaurant")
+    isWalkIn = true;
 
   const renderRoomTab = () => {
     if (isWalkIn)

@@ -420,7 +420,11 @@ const SOAe = ({
   };
 
   const renderTotalPax = () => {
-    if (dayTourType === "Day Tour") return null;
+    if (
+      dayTourType.toLowerCase() == "day tour" ||
+      dayTourType.toLowerCase() == "night tour"
+    )
+      return null;
 
     if (isDayTour) {
       return rooms.reduce(
@@ -471,7 +475,10 @@ const SOAe = ({
   };
 
   const renderDayTourLine = (roomsx) => {
-    if (dayTourType !== "Day Tour") return null;
+    if (dayTourType !== "Day Tour" && dayTourType !== "Night Tour") return null;
+
+    let adultPrice = 1880;
+    if (dayTourType === "night tour") adultPrice = 1990;
 
     return (
       <>
@@ -489,7 +496,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.adultPax * 1880)}
+              {formatNumber(roomsx.adultPax * adultPrice)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -514,7 +521,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol]}>
             <Text style={[styles.tableRowText, styles.tableColSub]}>
-              {formatNumber(roomsx.seniorPax * 1880)}
+              {formatNumber(roomsx.seniorPax * adultPrice)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -555,14 +562,25 @@ const SOAe = ({
     );
   };
 
-  const renderRoom = (roomsx) => {
-    const netDisc =
-      dayTourType === "Day Tour" ? null : formatNumber(roomsx.totalDiscount);
+  const RenderSolAndLunaName = (trip) => {
+    let tripName = trip.toLowerCase();
 
-    const total =
-      dayTourType === "Day Tour"
-        ? null
-        : formatNumber(roomsx.grossAmount - roomsx.mattress * 2420);
+    if (tripName == "day tour") return "Sol Trip";
+    if (tripName == "night tour") return "Luna Trip";
+    return trip;
+  };
+  const renderRoom = (roomsx) => {
+    var isDayTourAndNightTour =
+      dayTourType.toLowerCase() == "day tour" ||
+      dayTourType.toLowerCase() == "night tour";
+
+    const netDisc = isDayTourAndNightTour
+      ? null
+      : formatNumber(roomsx.totalDiscount);
+
+    const total = isDayTourAndNightTour
+      ? null
+      : formatNumber(roomsx.grossAmount - roomsx.mattress * 2420);
 
     if (isDayTour)
       return (
@@ -574,7 +592,7 @@ const SOAe = ({
           </View>
           <View style={[styles.tableCol, styles.tableColDescription]}>
             <Text style={[styles.tableRowText]}>
-              {header.reservationType.name}
+              {RenderSolAndLunaName(header.reservationType.name)}
             </Text>
           </View>
           <View style={[styles.tableCol]}>
@@ -1360,6 +1378,7 @@ const SOA = () => {
   if (!initialLoading) return null;
   const isDayTour =
     header.reservationType.name === "Day Tour" ||
+    header.reservationType.name === "Night Tour" ||
     header.reservationType.name === "Restaurant"
       ? true
       : false;

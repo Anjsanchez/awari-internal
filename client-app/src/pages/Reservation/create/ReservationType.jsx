@@ -139,6 +139,7 @@ const ReservationType = React.memo(() => {
 
     if (
       typeInlower === "day tour" ||
+      typeInlower === "night tour" ||
       typeInlower === "walk in" ||
       typeInlower === "restaurant"
     )

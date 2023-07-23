@@ -16,7 +16,7 @@ const CommerceTimeline = ({ visible = false, setOnVisible, trans }) => {
 
     let lbl = "";
     const { name } = d.reservationHeader.reservationType;
-    if (name === "Restaurant" || name === "Day Tour") {
+    if (name === "Restaurant" || name === "Day Tour" || name === "Night Tour") {
       lbl = name;
     } else lbl = d.reservationRoomLine.room.roomLongName;
 

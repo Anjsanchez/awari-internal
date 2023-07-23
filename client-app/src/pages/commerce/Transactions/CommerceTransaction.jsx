@@ -51,7 +51,7 @@ const CommerceTransaction = ({
   trans.map((n, i) => {
     let lbl = "";
     const { name } = n.reservationHeader.reservationType;
-    if (name === "Restaurant" || name === "Day Tour") {
+    if (name === "Restaurant" || name === "Day Tour" || name === "Night Tour") {
       let typeName = name;
       if (typeName === "Restaurant") typeName = "Resto";
       lbl = typeName + " - " + n.reservationHeader.customer.firstName;

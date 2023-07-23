@@ -124,7 +124,12 @@ const ReservationSteps = () => {
       if (name === null || name === "") return true;
 
       const rType = name.toLowerCase();
-      if (rType === "day tour" || rType === "walk in" || rType === "restaurant")
+      if (
+        rType === "day tour" ||
+        rType === "night tour" ||
+        rType === "walk in" ||
+        rType === "restaurant"
+      )
         return false;
 
       if (voucher === null || voucher === "") return true;
@@ -146,7 +151,11 @@ const ReservationSteps = () => {
   const renderSpanLabel = () => {
     const typeInlower = type.name.toLowerCase();
 
-    if (typeInlower === "day tour" || typeInlower === "restaurant")
+    if (
+      typeInlower === "day tour" ||
+      typeInlower === "night tour" ||
+      typeInlower === "restaurant"
+    )
       return "This may now proceed with adding of the transactions.";
 
     return "You can now proceed with adding a room in the reservation.";
