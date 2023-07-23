@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "d0ae31a9-ebcb-4c18-b92e-123a4a26c0b5": {
+      "ProjectGuid": "d0ae31a9-ebcb-4c18-b92e-123a4a26c0b5",
+      "DisplayName": "printer-worker",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
