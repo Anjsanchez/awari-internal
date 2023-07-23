@@ -185,11 +185,17 @@ namespace API.Controllers.reservation
                 if (x.roleName.ToLower() != "administrator")
                     if (x.discount != null)
                     {
-                        if (x.discount.isRequiredApproval)
+                        if (x.discount != null && x.discount.isRequiredApproval)
                         {
                             x.approvalStatus = Status.Pending;
                             x.discount = null;
                         }
+
+                    }else if (x.seniorPax != 0) //for senior discounts
+                    {
+
+                        x.approvalStatus = Status.Pending;
+                        //x.seniorPax = 0;
                     }
 
                 x.discount = null;

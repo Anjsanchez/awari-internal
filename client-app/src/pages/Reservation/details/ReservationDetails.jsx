@@ -70,7 +70,7 @@ const ReservationDetails = () => {
   return (
     <div className="container__wrapper">
       <FormHeader
-        header="Booking Details"
+        header="Booking Detail"
         second="Reservation Management"
         third="Bookings"
         navigate="/"
