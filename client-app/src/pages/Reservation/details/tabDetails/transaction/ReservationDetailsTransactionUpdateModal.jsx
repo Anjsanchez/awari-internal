@@ -151,16 +151,14 @@ const ReservationDetailsTransactionUpdateModal = ({
 
     if (senior === 0 && _id === 0) return setNetDiscount(0);
 
+    console.log("TEST");
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
 
-      const discAmount12 = Math.round(amtMulSenior * 0.12);
+      const discAmount12 = Math.round(amtMulSenior / 1.12);
+      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.8);
 
-      const amountToBeDiscountedBy20 = amtMulSenior - discAmount12;
-
-      const discAmount20 = Math.round(amountToBeDiscountedBy20 * 0.2);
-
-      accumulatedDisc += Math.round(discAmount20 + discAmount12);
+      accumulatedDisc += Math.round(discAmount20);
     }
 
     if (_id !== 0) {

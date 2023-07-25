@@ -145,7 +145,6 @@ export default function WorkOrder() {
 
     GetWorkOrders()
       .then((resp) => {
-        console.log(resp.data.listRecords);
         const data = resp.data.listRecords.map((obj) => ({
           ...obj,
           id: obj._id,
