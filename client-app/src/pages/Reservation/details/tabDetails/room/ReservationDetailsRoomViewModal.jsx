@@ -81,6 +81,20 @@ const ReservationDetailsRoomViewModal = ({ selectedRoom }) => {
 
     let accumulatedDisc = 0;
 
+    //mare-replicate to sa pag tingin ng past ROOM transactions
+    //Vat Free Discount Calculation
+    if (discount !== null && discount.name.toLowerCase().includes("vat free")) {
+      const discAmount12 = Math.round(cGrossAmt / 1.12);
+      const discAmount20 = Math.round(cGrossAmt - discAmount12 * 0.88);
+
+      accumulatedDisc += Math.round(discAmount20);
+
+      setCNetDiscount(accumulatedDisc);
+      // we return it out of the function because theorically, no vat and senior discount can go all at the same time
+      return;
+    }
+
+    //Senior Discount Calculation
     if (seniorPax !== 0) {
       const amtMulSenior = amtHalf * seniorPax;
 

@@ -85,13 +85,29 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     const totalHeadsForDiscount = numberOfServing * quantity;
     const grossAmount = quantity * sellingPrice;
     //..NET DISCOUNT
-    const { _id, value } = selectedDiscount;
+    const { _id, value, name } = selectedDiscount;
 
     const amtHalf = grossAmount / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
 
     if (senior === 0 && _id === 0) return setNetDiscount(0);
+
+    //Vat Free Discount Calculation
+    if (
+      (selectedDiscount !== null || _id !== 0) &&
+      (selectedDiscount.name != undefined || selectedDiscount.name != null) &&
+      selectedDiscount.name.toLowerCase().includes("vat free")
+    ) {
+      const discAmount12 = Math.round(grossAmount / 1.12);
+      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.88);
+
+      accumulatedDisc += Math.round(discAmount20);
+
+      setNetDiscount(accumulatedDisc);
+      // we return it out of the function because theorically, no vat and senior discount can go all at the same time
+      return;
+    }
 
     //Senior Discount Calculation
     if (senior !== 0) {

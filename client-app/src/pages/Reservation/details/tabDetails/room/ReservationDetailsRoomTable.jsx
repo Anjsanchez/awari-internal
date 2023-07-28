@@ -299,7 +299,6 @@ const ReservationDetailsRoomTable = (props) => {
       />
     );
   };
-
   return (
     <>
       {renderModal()}

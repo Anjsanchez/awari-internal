@@ -93,7 +93,7 @@ const ReservationConfirmation = () => {
   //..NET DISCOUNT
   useEffect(() => {
     const { adult, senior } = storeData.heads;
-    const { _id, value } = storeData.discount;
+    const { _id, value, name } = storeData.discount;
     const totalHeadsForDiscount = adult + senior;
     const amtHalf = cGrossAmt / totalHeadsForDiscount;
 
@@ -101,6 +101,19 @@ const ReservationConfirmation = () => {
 
     if (senior === 0 && _id === 0) return setCNetDiscount(0);
 
+    //Vat Free Discount Calculation
+    if (_id !== 0 && name.toLowerCase().includes("vat free")) {
+      const discAmount12 = Math.round(cGrossAmt / 1.12);
+      const discAmount20 = Math.round(cGrossAmt - discAmount12 * 0.88);
+
+      accumulatedDisc += Math.round(discAmount20);
+
+      setCNetDiscount(accumulatedDisc);
+      // we return it out of the function because theorically, no vat and senior discount can go all at the same time
+      return;
+    }
+
+    //Senior Discount Calculation
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
 

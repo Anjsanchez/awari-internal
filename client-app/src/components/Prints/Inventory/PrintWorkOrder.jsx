@@ -194,8 +194,6 @@ const DocumentBody = ({ header }) => {
     workOrderNumber,
   } = header;
 
-  console.log(header);
-
   return (
     <Document title="Guest Folio">
       <Page size="A4" orientation="portrait" style={styles.body}>

@@ -151,7 +151,23 @@ const ReservationDetailsTransactionUpdateModal = ({
 
     if (senior === 0 && _id === 0) return setNetDiscount(0);
 
-    console.log("TEST");
+    //mare-replicate to sa pag tingin ng past ITEMS transactions
+    //Vat Free Discount Calculation
+    if (
+      selectedDiscount !== null &&
+      selectedDiscount.name.toLowerCase().includes("vat free")
+    ) {
+      const discAmount12 = Math.round(grossAmount / 1.12);
+      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.88);
+
+      accumulatedDisc += Math.round(discAmount20);
+
+      setNetDiscount(accumulatedDisc);
+      // we return it out of the function because theorically, no vat and senior discount can go all at the same time
+      return;
+    }
+
+    //Senior Discount Calculation
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
 
