@@ -98,9 +98,9 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
       (selectedDiscount.name != undefined || selectedDiscount.name != null) &&
       selectedDiscount.name.toLowerCase().includes("vat free")
     ) {
-      const discAmount12 = Math.round(grossAmount / 1.12);
+      const discAmount12 = grossAmount / 1.12;
       const netDisc = grossAmount - discAmount12;
-      accumulatedDisc += Math.round(netDisc);
+      accumulatedDisc += netDisc;
 
       setNetDiscount(accumulatedDisc);
       // we return it out of the function because theorically, no vat and senior discount can go all at the same time
@@ -116,13 +116,13 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
       const total = pricePerServing * regularServing + vatExmptAnd20;
       const discTotal = grossAmount - total;
 
-      accumulatedDisc += Math.round(discTotal);
+      accumulatedDisc += discTotal;
     }
 
     if (_id !== 0) {
       const totalHeadsNoSenr =
         (numberOfServing * quantity - senior) * pricePerServing;
-      accumulatedDisc += Math.round(totalHeadsNoSenr * (value / 100));
+      accumulatedDisc += totalHeadsNoSenr * (value / 100);
     }
 
     setNetDiscount(accumulatedDisc);

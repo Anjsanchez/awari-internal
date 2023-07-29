@@ -103,9 +103,9 @@ const ReservationConfirmation = () => {
 
     //Vat Free Discount Calculation
     if (_id !== 0 && name.toLowerCase().includes("vat free")) {
-      const discAmount12 = Math.round(cGrossAmt / 1.12);
+      const discAmount12 = cGrossAmt / 1.12;
       const netDisc = cGrossAmt - discAmount12;
-      accumulatedDisc += Math.round(netDisc);
+      accumulatedDisc += netDisc;
       setCNetDiscount(accumulatedDisc);
       // we return it out of the function because theorically, no vat and senior discount can go all at the same time
       return;
@@ -115,16 +115,16 @@ const ReservationConfirmation = () => {
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
 
-      const discAmount12 = Math.round(amtMulSenior / 1.12);
-      const discAmount20 = Math.round(discAmount12 * 0.8);
+      const discAmount12 = amtMulSenior / 1.12;
+      const discAmount20 = discAmount12 * 0.8;
 
-      accumulatedDisc += Math.round(amtMulSenior - discAmount20);
+      accumulatedDisc += amtMulSenior - discAmount20;
     }
 
     if (_id !== 0) {
       let amtMulAdult = amtHalf * adult;
       amtMulAdult += cMattressAmt;
-      accumulatedDisc += Math.round(amtMulAdult * (value / 100));
+      accumulatedDisc += amtMulAdult * (value / 100);
     }
 
     setCNetDiscount(accumulatedDisc);
