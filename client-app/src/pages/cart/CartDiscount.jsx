@@ -112,7 +112,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     if (senior !== 0) {
       //..
       const pricePerPwdServing = pricePerServing * senior;
-      const regularServing = numberOfServing - senior;
+      const regularServing = totalHeadsForDiscount - senior;
       const vatExmptAnd20 = (pricePerPwdServing / 1.12) * 0.8;
       const total = pricePerServing * regularServing + vatExmptAnd20;
       const discTotal = grossAmount - total;
