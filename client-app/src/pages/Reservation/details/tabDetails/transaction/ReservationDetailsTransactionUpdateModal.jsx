@@ -174,8 +174,8 @@ const ReservationDetailsTransactionUpdateModal = ({
       const regularServing = product.numberOfServing - senior;
       const vatExmptAnd20 = (pricePerPwdServing / 1.12) * 0.8;
       const total = pricePerServing * regularServing + vatExmptAnd20;
-
-      accumulatedDisc += Math.round(total);
+      const discTotal = grossAmount - total;
+      accumulatedDisc += Math.round(discTotal);
     }
 
     if (_id !== 0) {

@@ -115,8 +115,9 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
       const regularServing = numberOfServing - senior;
       const vatExmptAnd20 = (pricePerPwdServing / 1.12) * 0.8;
       const total = pricePerServing * regularServing + vatExmptAnd20;
+      const discTotal = grossAmount - total;
 
-      accumulatedDisc += Math.round(total);
+      accumulatedDisc += Math.round(discTotal);
     }
 
     if (_id !== 0) {
