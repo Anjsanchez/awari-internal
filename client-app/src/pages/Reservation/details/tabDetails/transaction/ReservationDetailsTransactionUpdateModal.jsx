@@ -145,7 +145,7 @@ const ReservationDetailsTransactionUpdateModal = ({
     //..NET DISCOUNT
     const { _id, value } = selectedDiscount;
 
-    const amtHalf = grossAmount / totalHeadsForDiscount;
+    const pricePerServing = grossAmount / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
 
@@ -169,17 +169,18 @@ const ReservationDetailsTransactionUpdateModal = ({
 
     //Senior Discount Calculation
     if (senior !== 0) {
-      const amtMulSenior = amtHalf * senior;
+      //..
+      const pricePerPwdServing = pricePerServing * senior;
+      const regularServing = product.numberOfServing - senior;
+      const vatExmptAnd20 = (pricePerPwdServing / 1.12) * 0.8;
+      const total = pricePerServing * regularServing + vatExmptAnd20;
 
-      const discAmount12 = Math.round(amtMulSenior / 1.12);
-      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.8);
-
-      accumulatedDisc += Math.round(discAmount20);
+      accumulatedDisc += Math.round(total);
     }
 
     if (_id !== 0) {
       const totalHeadsNoSenr =
-        (product.numberOfServing * quantity - senior) * amtHalf;
+        (product.numberOfServing * quantity - senior) * pricePerServing;
       accumulatedDisc += Math.round(totalHeadsNoSenr * (value / 100));
     }
 

@@ -86,8 +86,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     const grossAmount = quantity * sellingPrice;
     //..NET DISCOUNT
     const { _id, value, name } = selectedDiscount;
-
-    const amtHalf = grossAmount / totalHeadsForDiscount;
+    const pricePerServing = grossAmount / totalHeadsForDiscount;
 
     let accumulatedDisc = 0;
 
@@ -99,7 +98,6 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
       (selectedDiscount.name != undefined || selectedDiscount.name != null) &&
       selectedDiscount.name.toLowerCase().includes("vat free")
     ) {
-      console.log("VAT");
       const discAmount12 = Math.round(grossAmount / 1.12);
       const discAmount20 = Math.round(grossAmount - discAmount12 * 0.88);
 
@@ -112,15 +110,18 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
 
     //Senior Discount Calculation
     if (senior !== 0) {
-      const amtMulSenior = amtHalf * senior;
-      const discAmount12 = Math.round(amtMulSenior / 1.12);
-      const discAmount20 = Math.round(discAmount12 * 0.8);
+      //..
+      const pricePerPwdServing = pricePerServing * senior;
+      const regularServing = numberOfServing - senior;
+      const vatExmptAnd20 = (pricePerPwdServing / 1.12) * 0.8;
+      const total = pricePerServing * regularServing + vatExmptAnd20;
 
-      accumulatedDisc += Math.round(discAmount20);
+      accumulatedDisc += Math.round(total);
     }
 
     if (_id !== 0) {
-      const totalHeadsNoSenr = (numberOfServing * quantity - senior) * amtHalf;
+      const totalHeadsNoSenr =
+        (numberOfServing * quantity - senior) * pricePerServing;
       accumulatedDisc += Math.round(totalHeadsNoSenr * (value / 100));
     }
 
