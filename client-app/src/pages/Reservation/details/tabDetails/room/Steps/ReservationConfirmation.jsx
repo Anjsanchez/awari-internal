@@ -104,10 +104,8 @@ const ReservationConfirmation = () => {
     //Vat Free Discount Calculation
     if (_id !== 0 && name.toLowerCase().includes("vat free")) {
       const discAmount12 = Math.round(cGrossAmt / 1.12);
-      const discAmount20 = Math.round(cGrossAmt - discAmount12 * 0.88);
-
-      accumulatedDisc += Math.round(discAmount20);
-
+      const netDisc = cGrossAmt - discAmount12;
+      accumulatedDisc += Math.round(netDisc);
       setCNetDiscount(accumulatedDisc);
       // we return it out of the function because theorically, no vat and senior discount can go all at the same time
       return;

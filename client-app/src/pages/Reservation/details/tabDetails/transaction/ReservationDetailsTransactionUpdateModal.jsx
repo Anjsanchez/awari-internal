@@ -158,9 +158,8 @@ const ReservationDetailsTransactionUpdateModal = ({
       selectedDiscount.name.toLowerCase().includes("vat free")
     ) {
       const discAmount12 = Math.round(grossAmount / 1.12);
-      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.88);
-
-      accumulatedDisc += Math.round(discAmount20);
+      const netDisc = grossAmount - discAmount12;
+      accumulatedDisc += Math.round(netDisc);
 
       setNetDiscount(accumulatedDisc);
       // we return it out of the function because theorically, no vat and senior discount can go all at the same time
