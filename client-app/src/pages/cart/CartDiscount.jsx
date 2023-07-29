@@ -99,6 +99,7 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
       (selectedDiscount.name != undefined || selectedDiscount.name != null) &&
       selectedDiscount.name.toLowerCase().includes("vat free")
     ) {
+      console.log("VAT");
       const discAmount12 = Math.round(grossAmount / 1.12);
       const discAmount20 = Math.round(grossAmount - discAmount12 * 0.88);
 
@@ -112,9 +113,8 @@ const CartDiscount = ({ showModal, handleCancelModal, selectedProduct }) => {
     //Senior Discount Calculation
     if (senior !== 0) {
       const amtMulSenior = amtHalf * senior;
-
       const discAmount12 = Math.round(amtMulSenior / 1.12);
-      const discAmount20 = Math.round(grossAmount - discAmount12 * 0.8);
+      const discAmount20 = Math.round(discAmount12 * 0.8);
 
       accumulatedDisc += Math.round(discAmount20);
     }
