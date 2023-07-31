@@ -77,11 +77,16 @@ const ReservationDetailsRoomTableRow = (props) => {
   };
 
   const renderTotalAmountRows = (row) => {
+    return row.totalAmount;
     if (row.lateCheckOutPenalty === 0) return row.totalAmount;
     if (row.roomPricing === null) return row.totalAmount;
-
+    console.log(row);
+    //TODO
     const lateCheckOut =
       row.roomPricing.sellingPrice * (row.lateCheckOutPenalty / 100);
+    // console.log(lateCheckOut);
+    // console.log(row.totalAmount);
+    // console.log(row.totalAmount + lateCheckOut);
     return Number(row.totalAmount + lateCheckOut).toFixed(2);
   };
 
