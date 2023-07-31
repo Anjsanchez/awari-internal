@@ -77,17 +77,51 @@ const ReservationDetailsRoomTableRow = (props) => {
   };
 
   const renderTotalAmountRows = (row) => {
+    const { adultPax, seniorPax } = row;
+    const totalHeadsForDiscount = adultPax + seniorPax;
+
+    let grossAmount = row.grossAmount;
+    let netDiscount = 0;
+    let lateCheckOutAmount = 0;
+
+    //check kung may latediscount ung room
+    if (row.lateCheckOutPenalty != 0) {
+      lateCheckOutAmount =
+        row.roomPricing.sellingPrice * (row.lateCheckOutPenalty / 100);
+      grossAmount += lateCheckOutAmount;
+    }
+
+    const amtHalf = grossAmount / totalHeadsForDiscount;
+
+    if (seniorPax === 0 && row.discount !== null && row.discount._id === 0)
+      return row.totalAmount;
+
+    //Vat Free Discount Calculation
+    if (
+      row.discount !== null &&
+      row.discount._id !== 0 &&
+      row.discount.name.toLowerCase().includes("vat free")
+    ) {
+      const discAmount12 = grossAmount / 1.12;
+      const netDisc = grossAmount - discAmount12;
+      netDiscount += netDisc;
+    } else if (seniorPax !== 0) {
+      const amtMulSenior = amtHalf * seniorPax;
+
+      const discAmount12 = amtMulSenior / 1.12;
+      const discAmount20 = discAmount12 * 0.8;
+
+      netDiscount += amtMulSenior - discAmount20;
+    } else if (row.discount !== null && row.discount._id !== 0) {
+      let amtMulAdult = amtHalf * adultPax;
+      amtMulAdult += row.mattress;
+      netDiscount += amtMulAdult * (row.discount.value / 100);
+    }
+
     if (row.lateCheckOutPenalty === 0) return row.totalAmount;
     if (row.roomPricing === null) return row.totalAmount;
-    //TODO
-    console.log("ROW", row);
-    // return row.totalAmount;
-    const lateCheckOut =
-      row.roomPricing.sellingPrice * (row.lateCheckOutPenalty / 100);
-    // console.log(lateCheckOut);
-    // console.log(row.totalAmount);
-    // console.log(row.totalAmount + lateCheckOut);
-    return Number(row.totalAmount + lateCheckOut).toFixed(2);
+
+    return Number(grossAmount - netDiscount).toFixed(2);
   };
 
   return (
