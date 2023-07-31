@@ -101,6 +101,13 @@ namespace API.Controllers.reservation
             if (reservationRoomLine == null)
                 return NotFound("ReservationRoomLine not found in the database");
 
+            if(reservationRoomLine.lateCheckOutPenalty != 0)
+            {
+                var lateCheckOut = (float)reservationRoomLine.lateCheckOutPenalty / 100;
+                var qweqwe = reservationRoomLine.roomPricing.sellingPrice * lateCheckOut;
+                ReservationRoomLineUpdateDto.grossAmount -= qweqwe;
+                ReservationRoomLineUpdateDto.totalAmount -= qweqwe;
+            }
             _map.Map(ReservationRoomLineUpdateDto, reservationRoomLine);
             await _repo.Update(reservationRoomLine);
             await _repo.Save();
@@ -166,7 +173,8 @@ namespace API.Controllers.reservation
             //Calculate discount.
             //Una ang 12%, then 20%
 
-            discSeniorAmt = (float)Math.Round((((adultPrice * lineDto.seniorPax) / (float)1.12)) * (float)0.80);
+            discSeniorAmt = (float)(((adultPrice * lineDto.seniorPax) / (float)1.12)) * (float)0.80;
+            //discSeniorAmt = (float)Math.Round((((adultPrice * lineDto.seniorPax) / (float)1.12)) * (float)0.80);
             //float discAmount12 = (adultPrice * lineDto.seniorPax) * (float)0.12;
             //float discAmount20 = ((adultPrice * lineDto.seniorPax) - discAmount12) * (float)0.20;
 

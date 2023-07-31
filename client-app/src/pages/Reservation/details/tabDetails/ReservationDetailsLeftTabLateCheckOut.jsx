@@ -134,6 +134,8 @@ const ReservationDetailsLeftTabLateCheckOut = ({
         enqueueSnackbar("Successfully updated records!", {
           variant: "success",
         });
+
+        window.location.reload(false);
       }, 50);
     } catch (ex) {
       if (ex && ex.status === 400)
