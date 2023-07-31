@@ -103,6 +103,7 @@ const ReservationDetailsRoomTableRow = (props) => {
       row.discount.name.toLowerCase().includes("vat free")
     ) {
       const discAmount12 = grossAmount / 1.12;
+
       const netDisc = grossAmount - discAmount12;
       netDiscount += netDisc;
     } else if (seniorPax !== 0) {
@@ -117,10 +118,6 @@ const ReservationDetailsRoomTableRow = (props) => {
       amtMulAdult += row.mattress;
       netDiscount += amtMulAdult * (row.discount.value / 100);
     }
-
-    if (row.lateCheckOutPenalty === 0) return row.totalAmount;
-    if (row.roomPricing === null) return row.totalAmount;
-
     return Number(grossAmount - netDiscount).toFixed(2);
   };
 
